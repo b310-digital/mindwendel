@@ -17,4 +17,12 @@ defmodule MindwendelWeb.StaticPageController do
       changeset: Brainstormings.change_brainstorming(%Brainstorming{}, %{})
     )
   end
+
+  def legal(conn, _params) do
+    render(conn, "legal.html")
+  end
+
+  def privacy(conn, _params) do
+    render(conn, "privacy.html")
+  end
 end

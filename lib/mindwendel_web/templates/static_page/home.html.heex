@@ -13,7 +13,7 @@
 
     <div class="row">
       <div class="col-md-12 col-lg-5 mt-2">
-        <%= form_for @changeset, Routes.brainstorming_path(@conn, :create), fn f -> %>
+        <%= f = form_for @changeset, Routes.brainstorming_path(@conn, :create) %>
           <div class="input-group">
             <%= text_input f, :name, class: "form-control", placeholder: gettext("How might we ..."), autofocus: true %>
             <%= if message = f.errors[:name] do %>
@@ -21,7 +21,7 @@
             <% end %>
             <%= submit gettext("Create!"), class: "btn btn-primary fw-bold" %>
           </div>
-        <% end %>
+        </form>
         <small class="text-muted">
           <%= gettext("Brainstormings will be deleted after %{days} days.", days: Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]) %>
         </small>
@@ -46,6 +46,6 @@
   </main>
 
   <footer class="mt-auto">
-    <p> Made with &hearts; by Gerardo, Jannik and Nicho</p>
+    <p> Made with &hearts; by Gerardo, Jannik and Nicho <%= link("Legal Disclosure", to: "/legal") %> | <%= link("Privacy", to: "/privacy") %></p>
   </footer>
 </div>
