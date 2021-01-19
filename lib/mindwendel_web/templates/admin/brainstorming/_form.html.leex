@@ -1,0 +1,14 @@
+<%= f = form_for @changeset, @path %>
+  <div class="form-group mb-2 mt-2">
+    <%= label f, :name %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= if message = f.errors[:name] do %>
+      <span><%= translate_error(message) %></span>
+    <% end %>
+  </div>
+  <div class="row">
+    <div class="col-md-12 col-lg-2 d-grid gap-2">
+      <%= submit @button_title, class: "btn btn-primary btn-block" %>
+    </div>
+  </div>
+</form>

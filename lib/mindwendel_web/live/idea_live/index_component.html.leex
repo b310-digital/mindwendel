@@ -1,0 +1,56 @@
+<div>
+  <div id="ideas" class="row mb-5">
+    <%= for idea <- @ideas do %>
+      <div class="col-md-6">
+        <div class="card mt-3 shadow-sm p-2 bg-white rounded" id="idea-<%= idea.id %>">
+          <div class="card-body-mindwendel-idea">
+            <%= link to: "#", class: "float-end ms-3 mb-3", phx_click: "delete", phx_target: @myself, phx_value_id: idea.id, title: 'Delete', data: [confirm: "Are you sure you want to delete this idea?"] do %>
+              <i class="bi bi-x text-secondary"></i>
+            <% end %>
+
+            <%= text_to_html(idea.body) %>
+
+            <%= if idea.link do %>
+              <hr />
+              <div class="row">
+                <div class="col-md-3">
+                  <%= img_tag idea.link.img_preview_url, style: "width: 100px; margin: auto; display: block;" %>
+                </div>
+                <div class="col-md-9">
+                  <%= content_tag :p, idea.link.title, class: "fw-bold" %>
+                  <%= content_tag :p, idea.link.description %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <div class="card-footer-mindwendel-idea">
+            <small class="text-muted">
+              By <%= idea.username %> <%= Timex.format!(idea.inserted_at, "{relative}", :relative) %>
+            </small>
+            <div class="float-end">
+              <span class="me-1"><%= length(idea.likes) %></span>
+              <%= unless Mindwendel.Brainstormings.exists_like_for_idea?(idea.id, @current_user.id) do %>
+                <%= link to: "#", phx_click: "like", phx_target: @myself, phx_value_id: idea.id, title: 'Like' do %>
+                <i class="bi bi-arrow-up-circle"></i>
+                <% end %>
+              <% else %>
+                <a href="#">
+                  <i class="bi bi-arrow-up-circle-fill"></i>
+                </a>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%= if Enum.empty?(@ideas) do %>
+      <div class="row mt-4">
+        <div class="col-12 text-center">
+          <i class="bi bi-lightbulb text-secondary" style="font-size: 5rem;"></i>
+          <p>No ideas brainstormed</p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

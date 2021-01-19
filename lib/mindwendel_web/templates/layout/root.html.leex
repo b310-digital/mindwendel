@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' >
+    <%= csrf_meta_tag() %>
+    <%= live_title_tag assigns[:page_title] || "Mindwendel" %>
+    <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+  </head>
+
+  <body class="bg-light">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white border-bottom mb-2">
+      <div class="container">
+        <a class="navbar-brand mb-0 h1" href="#">
+          <%= img_tag(Routes.static_path(@conn, "/images/mindwendel_logo_small.png")) %>
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarDropdownToggler"
+          aria-controls="navbarDropdownToggler"
+          aria-expanded="false"
+          aria-label="Toggle navigation" >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarDropdownToggler">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/">New brainstorming</a>
+            </li>
+
+            <%= if assigns[:current_user] do %>
+              <li class="nav-item dropdown d-none d-lg-block">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                  Your brainstormings
+                </a>
+                <ul class="dropdown-menu">
+                  <%= for brainstorming <- @current_user.brainstormings do %>
+                    <a class="dropdown-item <%= if assigns[:brainstorming].id == brainstorming.id, do: "active", else: "" %>" href="<%= Routes.brainstorming_show_path(@conn, :show, brainstorming) %>">
+                      <%= brainstorming.name %>
+                    </a>
+                  <% end %>
+                </ul>
+              </li>
+
+              <%# The following tags are invisible on larger screens due to .d-lg-none %>
+              <%# We do this to avoid a second level dropdown menu when the navbar is collapsed %>
+              <div class="dropdown-divider d-lg-none"></div>
+              <%= for brainstorming <- @current_user.brainstormings |> Enum.sort_by(&(&1.inserted_at), {:desc, Time}) do %>
+                <li class="nav-item d-lg-none">
+                  <a class="nav-link <%= if assigns[:brainstorming].id == brainstorming.id, do: "active", else: "" %>" href="<%= Routes.brainstorming_show_path(@conn, :show, brainstorming) %>">
+                    <%= brainstorming.name %>
+                  </a>
+                </li>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <%= @inner_content %>
+  </body>
+</html>

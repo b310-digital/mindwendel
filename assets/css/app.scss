@@ -1,0 +1,58 @@
+/* This file is for your main application css. */
+@import "../node_modules/nprogress/nprogress.css";
+@import "_bootstrap_custom.scss";
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+
+.footer {
+  height: 40px;
+}
+
+// Taken from the examples shown:
+// https://icons.getbootstrap.com/icons/arrow-up-circle/
+button .bi, a .bi {
+  vertical-align: .1em;
+}
+
+.bg-mindwendel {
+  background-image: url("../static/images/mindwendel.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* LiveView specific classes for your customizations */
+.phx-no-feedback.invalid-feedback,
+.phx-no-feedback .invalid-feedback {
+  display: none;
+}
+
+.phx-click-loading {
+  opacity: 0.5;
+  transition: opacity 1s ease-out;
+}
+
+.phx-disconnected{
+  cursor: wait;
+}
+.phx-disconnected *{
+  pointer-events: none;
+}
+
+.phx-modal-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.phx-modal-close:hover,
+.phx-modal-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+/* Alerts and form errors */
+.alert:empty {
+  display: none;
+}
