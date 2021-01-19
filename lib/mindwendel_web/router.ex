@@ -38,7 +38,9 @@ defmodule MindwendelWeb.Router do
   scope "/", MindwendelWeb do
     pipe_through(:browser)
 
-    get("/", StaticPageController, :home)
+    get "/", StaticPageController, :home
+    get "/privacy", StaticPageController, :privacy
+    get "/legal", StaticPageController, :legal
 
     scope "/admin", Admin, as: :admin do
       delete("/brainstormings/:id", BrainstormingController, :delete)
