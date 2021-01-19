@@ -19,6 +19,8 @@ defmodule MindwendelWeb.Router do
     pipe_through :browser
 
     get "/", StaticPageController, :home
+    get "/privacy", StaticPageController, :privacy
+    get "/legal", StaticPageController, :legal
 
     scope "/admin", Admin, as: :admin do
       resources "/brainstormings", BrainstormingController, except: [:index, :show, :new, :create]
