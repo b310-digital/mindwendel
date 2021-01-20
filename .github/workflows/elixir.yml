@@ -7,25 +7,108 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build_deps:
+    runs-on: ubuntu-latest
+    
+    container: bitwalker/alpine-elixir-phoenix:latest
+    
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      
+      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
+      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
+      # This is why we need to install it
+      - run: apk add --no-cache tar
+      - uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-v4
+      
+      - run: mix deps.get
+        if: steps.cache.outputs.cache-hit != 'true'
 
+  build:
     name: Build and test
+    needs: build_deps
+    # Containers must run in Linux based operating systems
+    runs-on: ubuntu-latest
+    # Docker Hub image that `container-job` executes in
+    container: bitwalker/alpine-elixir-phoenix:latest
+
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres:latest
+        # Provide the password for postgres
+        env:
+          # These env variables are required by the postgres service (see above)
+          POSTGRES_DB: gluehbirne_gitlab_ci_test
+          POSTGRES_HOST: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # These env vars are required by our application
+      TEST_DATABASE_HOST: postgres
+      TEST_DATABASE_NAME: gluehbirne_gitlab_ci_test
+      TEST_DATABASE_USER: postgres
+      TEST_DATABASE_USER_PASSWORD: postgres
+      MIX_ENV: "test"
+    
+    steps:
+      # Downloads a copy of the code in your repository before running CI tests
+      - name: Check out repository code
+        uses: actions/checkout@v2
+    
+      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
+      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
+      # This is why we need to install it
+      - run: apk add --no-cache tar
+      - uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-v4
+      
+      - name: Create database
+        run: mix ecto.create
+      
+      - name: Migrate database
+        run: mix ecto.migrate
+      
+      - name: Run tests
+        run: mix test
+
+  validation_format:
+    needs: build_deps
     runs-on: ubuntu-latest
 
+    container: bitwalker/alpine-elixir-phoenix:latest
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Elixir
-      uses: actions/setup-elixir@v1
-      with:
-        elixir-version: '1.10.3' # Define the elixir version [required]
-        otp-version: '23.1' # Define the OTP version [required]
-    - name: Restore dependencies cache
-      uses: actions/cache@v2
-      with:
-        path: deps
-        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-        restore-keys: ${{ runner.os }}-mix-
-    - name: Install dependencies
-      run: mix deps.get
-    - name: Run tests
-      run: mix test
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
+      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
+      # This is why we need to install it
+      - run: apk add --no-cache tar
+      - uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-v4
+      
+      - name: Check mix format
+        run: mix format --check-formatted
