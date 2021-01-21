@@ -3,14 +3,22 @@ name: Elixir CI
 on:
   push:
     branches: [ master ]
+  # See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestbranchestags
   pull_request:
+    # Only branches and tags on the base are evaluated
     branches: [ master ]
+
+# See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#defaults
+defaults:
+  # Containers must run in Linux based operating systems
+  runs-on: ubuntu-latest
+  # Docker Hub image that `container-job` executes in
+  container: bitwalker/alpine-elixir-phoenix:latest
 
 jobs:
   build_deps:
-    runs-on: ubuntu-latest
-    
-    container: bitwalker/alpine-elixir-phoenix:latest
+    # runs-on: ubuntu-latest
+    # container: bitwalker/alpine-elixir-phoenix:latest
     
     steps:
       - name: Check out repository code
@@ -31,19 +39,18 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
 
   check_mix_test:
-    # Containers must run in Linux based operating systems
-    runs-on: ubuntu-latest
-    # Docker Hub image that `container-job` executes in
-    container: bitwalker/alpine-elixir-phoenix:latest
+    # # Containers must run in Linux based operating systems
+    # runs-on: ubuntu-latest
+    # # Docker Hub image that `container-job` executes in
+    # container: bitwalker/alpine-elixir-phoenix:latest
+    
     needs: build_deps
 
     # Service containers to run with `container-job`
     services:
       # Label used to access the service container
       postgres:
-        # Docker Hub image
         image: postgres:latest
-        # Provide the password for postgres
         env:
           # These env variables are required by the postgres service (see above)
           POSTGRES_DB: gluehbirne_gitlab_ci_test
@@ -60,6 +67,7 @@ jobs:
 
     env:
       # These env vars are required by our application
+      # Unfortunately, github workflow does not support yaml anchors
       TEST_DATABASE_HOST: postgres
       TEST_DATABASE_NAME: gluehbirne_gitlab_ci_test
       TEST_DATABASE_USER: postgres
@@ -81,20 +89,16 @@ jobs:
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
-      - name: Create database
-        run: mix ecto.create
-      
-      - name: Migrate database
-        run: mix ecto.migrate
-      
-      - name: Run tests
-        run: mix test
+      - run: mix compile
+      - run: mix ecto.create
+      - run: mix ecto.migrate
+      - run: mix test
 
   check_mix_format:
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    # container: bitwalker/alpine-elixir-phoenix:latest
     needs: build_deps
 
-    container: bitwalker/alpine-elixir-phoenix:latest
 
     steps:
       - name: Check out repository code
@@ -110,8 +114,7 @@ jobs:
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
-      - name: Check mix format
-        run: mix format --check-formatted
+      - run: mix format --check-formatted
 
 
   deploy_gigalixir:
