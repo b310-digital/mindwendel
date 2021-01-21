@@ -123,6 +123,7 @@ jobs:
     #   - check_mix_format
     # if: github.ref == 'refs/heads/master'
     steps:
+      - uses: actions/checkout@v2
       - name: Deploy git push to gigalixir
         env:
           GIGALIXIR_EMAIL: ${{ secrets.GIGALIXIR_EMAIL }}
