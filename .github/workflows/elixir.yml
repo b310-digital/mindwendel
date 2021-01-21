@@ -2,48 +2,42 @@ name: Elixir CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   # See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestbranchestags
   pull_request:
     # Only branches and tags on the base are evaluated
-    branches: [ master ]
-
-# See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#defaults
-defaults:
-  # Containers must run in Linux based operating systems
-  runs-on: ubuntu-latest
-  # Docker Hub image that `container-job` executes in
-  container: bitwalker/alpine-elixir-phoenix:latest
+    branches: [master]
 
 jobs:
   build_deps:
-    # runs-on: ubuntu-latest
-    # container: bitwalker/alpine-elixir-phoenix:latest
-    
+    runs-on: ubuntu-latest
+    container: bitwalker/alpine-elixir-phoenix:latest
+
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      
-      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
-      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
-      # This is why we need to install it
+      # See https://github.com/actions/checkout
+      - uses: actions/checkout@v2
+
+      # The following step `actions/cache@v2` needs a tar command that requires the option `--posix` .
+      # The alpine-based docker container that we are using contains a tar command but wihtout a `--posix` option.
+      # This is why we need to install it.
       - run: apk add tar
+      # See https://github.com/actions/checkout
       - uses: actions/cache@v2
         id: cache
         with:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
+
       - run: mix deps.get
         if: steps.cache.outputs.cache-hit != 'true'
 
   check_mix_test:
-    # # Containers must run in Linux based operating systems
-    # runs-on: ubuntu-latest
-    # # Docker Hub image that `container-job` executes in
-    # container: bitwalker/alpine-elixir-phoenix:latest
-    
+    # Containers must run in Linux based operating systems
+    runs-on: ubuntu-latest
+    # Docker Hub image that `container-job` executes in
+    container: bitwalker/alpine-elixir-phoenix:latest
+
     needs: build_deps
 
     # Service containers to run with `container-job`
@@ -67,18 +61,17 @@ jobs:
 
     env:
       # These env vars are required by our application
-      # Unfortunately, github workflow does not support yaml anchors
+      # Unfortunately, github workflow does not support yaml anchors ;-(
       TEST_DATABASE_HOST: postgres
       TEST_DATABASE_NAME: gluehbirne_gitlab_ci_test
       TEST_DATABASE_USER: postgres
       TEST_DATABASE_USER_PASSWORD: postgres
       MIX_ENV: "test"
-    
+
     steps:
       # Downloads a copy of the code in your repository before running CI tests
-      - name: Check out repository code
-        uses: actions/checkout@v2
-    
+      - uses: actions/checkout@v2
+
       # The following step `actions/cache@v2` needs a tar command that requires the option --posix
       # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
       # This is why we need to install it
@@ -88,17 +81,17 @@ jobs:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
+
       - run: mix compile
       - run: mix ecto.create
       - run: mix ecto.migrate
       - run: mix test
 
   check_mix_format:
-    # runs-on: ubuntu-latest
-    # container: bitwalker/alpine-elixir-phoenix:latest
-    needs: build_deps
+    runs-on: ubuntu-latest
+    container: bitwalker/alpine-elixir-phoenix:latest
 
+    needs: build_deps
 
     steps:
       - name: Check out repository code
@@ -113,9 +106,8 @@ jobs:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
-      - run: mix format --check-formatted
 
+      - run: mix format --check-formatted
 
   deploy_gigalixir:
     runs-on: ubuntu-latest
@@ -127,15 +119,15 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
-      
+
       # The gigalixir-related env vars are defined in https://gitlab.com/beyond310/gluehbirne-brainstorming-web/-/settings/ci_cd
       # E.g. GIGALIXIR_EMAIL, GIGALIXIR_API_KEY, GIGALIXIR_APP_NAME
-      # 
+      #
       # Note:
       # If you want to test this pipeline branches other than master
       # you will need to unprotect these env vars in Gitlab's CI/CD pipeline settings.
       # Otherwise they will not be included.
-      # 
+      #
       # In case you need to run ecto migration after successful deploy, you can:
       # 1. Install gigalixir cli, see https://gigalixir.readthedocs.io/en/latest/deploy.html#how-to-set-up-continuous-integration-ci-cd
       # 2. You can also override the default web command in the Procfile, see https://dev.to/edwinthinks/setting-up-automated-testing-and-deployment-to-gigalixir-for-a-phoenix-application-using-gitlab-3oe5
@@ -145,5 +137,5 @@ jobs:
           GIGALIXIR_API_KEY: ${{ secrets.GIGALIXIR_API_KEY }}
           GIGALIXIR_APP_NAME: ${{ secrets.GIGALIXIR_APP_NAME }}
         run: git remote add gigalixir https://$GIGALIXIR_EMAIL:$GIGALIXIR_API_KEY@git.gigalixir.com/$GIGALIXIR_APP_NAME.git
-      
+
       - run: git push -f gigalixir HEAD:refs/heads/master
