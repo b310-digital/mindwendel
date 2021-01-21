@@ -129,6 +129,7 @@ jobs:
           GIGALIXIR_EMAIL: ${{ secrets.GIGALIXIR_EMAIL }}
           GIGALIXIR_API_KEY: ${{ secrets.GIGALIXIR_API_KEY }}
           GIGALIXIR_APP_NAME: ${{ secrets.GIGALIXIR_APP_NAME }}
+          FIRST_NAME: Mona
         # The gigalixir-related env vars are defined in https://gitlab.com/beyond310/gluehbirne-brainstorming-web/-/settings/ci_cd
         # E.g. GIGALIXIR_EMAIL, GIGALIXIR_API_KEY, GIGALIXIR_APP_NAME
         # 
@@ -137,6 +138,7 @@ jobs:
         # you will need to unprotect these env vars in Gitlab's CI/CD pipeline settings.
         # Otherwise they will not be included.
         run: | 
+          echo $FIRST_NAME
           echo $GIGALIXIR_EMAIL
           echo "$GIGALIXIR_EMAIL"
           echo $GIGALIXIR_API_KEY
