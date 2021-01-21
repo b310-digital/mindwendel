@@ -7,120 +7,120 @@ on:
     branches: [ master ]
 
 jobs:
-  build_deps:
-    runs-on: ubuntu-latest
+  # build_deps:
+  #   runs-on: ubuntu-latest
     
-    container: bitwalker/alpine-elixir-phoenix:latest
+  #   container: bitwalker/alpine-elixir-phoenix:latest
     
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Check out repository code
+  #       uses: actions/checkout@v2
       
-      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
-      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
-      # This is why we need to install it
-      - run: apk add tar
-      - uses: actions/cache@v2
-        id: cache
-        with:
-          path: deps
-          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
-          restore-keys: ${{ runner.os }}-mix-v4
+  #     # The following step `actions/cache@v2` needs a tar command that requires the option --posix
+  #     # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
+  #     # This is why we need to install it
+  #     - run: apk add tar
+  #     - uses: actions/cache@v2
+  #       id: cache
+  #       with:
+  #         path: deps
+  #         key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+  #         restore-keys: ${{ runner.os }}-mix-v4
       
-      - run: mix deps.get
-        if: steps.cache.outputs.cache-hit != 'true'
+  #     - run: mix deps.get
+  #       if: steps.cache.outputs.cache-hit != 'true'
 
-  check_mix_test:
-    # Containers must run in Linux based operating systems
-    runs-on: ubuntu-latest
-    # Docker Hub image that `container-job` executes in
-    container: bitwalker/alpine-elixir-phoenix:latest
-    needs: build_deps
+  # check_mix_test:
+  #   # Containers must run in Linux based operating systems
+  #   runs-on: ubuntu-latest
+  #   # Docker Hub image that `container-job` executes in
+  #   container: bitwalker/alpine-elixir-phoenix:latest
+  #   needs: build_deps
 
-    # Service containers to run with `container-job`
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgres:latest
-        # Provide the password for postgres
-        env:
-          # These env variables are required by the postgres service (see above)
-          POSTGRES_DB: gluehbirne_gitlab_ci_test
-          POSTGRES_HOST: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+  #   # Service containers to run with `container-job`
+  #   services:
+  #     # Label used to access the service container
+  #     postgres:
+  #       # Docker Hub image
+  #       image: postgres:latest
+  #       # Provide the password for postgres
+  #       env:
+  #         # These env variables are required by the postgres service (see above)
+  #         POSTGRES_DB: gluehbirne_gitlab_ci_test
+  #         POSTGRES_HOST: postgres
+  #         POSTGRES_USER: postgres
+  #         POSTGRES_PASSWORD: postgres
 
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+  #       # Set health checks to wait until postgres has started
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
 
-    env:
-      # These env vars are required by our application
-      TEST_DATABASE_HOST: postgres
-      TEST_DATABASE_NAME: gluehbirne_gitlab_ci_test
-      TEST_DATABASE_USER: postgres
-      TEST_DATABASE_USER_PASSWORD: postgres
-      MIX_ENV: "test"
+  #   env:
+  #     # These env vars are required by our application
+  #     TEST_DATABASE_HOST: postgres
+  #     TEST_DATABASE_NAME: gluehbirne_gitlab_ci_test
+  #     TEST_DATABASE_USER: postgres
+  #     TEST_DATABASE_USER_PASSWORD: postgres
+  #     MIX_ENV: "test"
     
-    steps:
-      # Downloads a copy of the code in your repository before running CI tests
-      - name: Check out repository code
-        uses: actions/checkout@v2
+  #   steps:
+  #     # Downloads a copy of the code in your repository before running CI tests
+  #     - name: Check out repository code
+  #       uses: actions/checkout@v2
     
-      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
-      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
-      # This is why we need to install it
-      - run: apk add tar
-      - uses: actions/cache@v2
-        with:
-          path: deps
-          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
-          restore-keys: ${{ runner.os }}-mix-v4
+  #     # The following step `actions/cache@v2` needs a tar command that requires the option --posix
+  #     # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
+  #     # This is why we need to install it
+  #     - run: apk add tar
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: deps
+  #         key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+  #         restore-keys: ${{ runner.os }}-mix-v4
       
-      - name: Create database
-        run: mix ecto.create
+  #     - name: Create database
+  #       run: mix ecto.create
       
-      - name: Migrate database
-        run: mix ecto.migrate
+  #     - name: Migrate database
+  #       run: mix ecto.migrate
       
-      - name: Run tests
-        run: mix test
+  #     - name: Run tests
+  #       run: mix test
 
-  check_mix_format:
-    runs-on: ubuntu-latest
-    needs: build_deps
+  # check_mix_format:
+  #   runs-on: ubuntu-latest
+  #   needs: build_deps
 
-    container: bitwalker/alpine-elixir-phoenix:latest
+  #   container: bitwalker/alpine-elixir-phoenix:latest
 
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Check out repository code
+  #       uses: actions/checkout@v2
 
-      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
-      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
-      # This is why we need to install it
-      - run: apk add tar
-      - uses: actions/cache@v2
-        with:
-          path: deps
-          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
-          restore-keys: ${{ runner.os }}-mix-v4
+  #     # The following step `actions/cache@v2` needs a tar command that requires the option --posix
+  #     # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
+  #     # This is why we need to install it
+  #     - run: apk add tar
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: deps
+  #         key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+  #         restore-keys: ${{ runner.os }}-mix-v4
       
-      - name: Check mix format
-        run: mix format --check-formatted
+  #     - name: Check mix format
+  #       run: mix format --check-formatted
 
 
   deploy_gigalixir:
     runs-on: ubuntu-latest
     container: bitwalker/alpine-elixir-phoenix:latest
 
-    needs:
-      - check_mix_test
-      - check_mix_format
+    # needs:
+    #   - check_mix_test
+    #   - check_mix_format
     # if: github.ref == 'refs/heads/master'
     steps:
       - name: Deploy git push to gigalixir
