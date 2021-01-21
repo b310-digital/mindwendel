@@ -30,7 +30,7 @@ jobs:
       - run: mix deps.get
         if: steps.cache.outputs.cache-hit != 'true'
 
-  validation_mix_test:
+  check_mix_test:
     needs: build_deps
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
@@ -90,7 +90,7 @@ jobs:
       - name: Run tests
         run: mix test
 
-  validation_mix_format:
+  check_mix_format:
     needs: build_deps
     runs-on: ubuntu-latest
 
@@ -112,3 +112,26 @@ jobs:
       
       - name: Check mix format
         run: mix format --check-formatted
+
+
+    deploy_gigalixir:
+      needs:
+        - check_mix_test
+        - check_mix_format
+      if: github.ref == 'refs/heads/master'
+      steps:
+        - name: Deploy git push to gigalixir
+          # The gigalixir-related env vars are defined in https://gitlab.com/beyond310/gluehbirne-brainstorming-web/-/settings/ci_cd
+          # E.g. GIGALIXIR_EMAIL, GIGALIXIR_API_KEY, GIGALIXIR_APP_NAME
+          # 
+          # Note:
+          # If you want to test this pipeline branches other than master
+          # you will need to unprotect these env vars in Gitlab's CI/CD pipeline settings.
+          # Otherwise they will not be included.
+          run: | 
+            git remote add gigalixir https://$GIGALIXIR_EMAIL:$GIGALIXIR_API_KEY@git.gigalixir.com/$GIGALIXIR_APP_NAME.git
+            git push -f gigalixir HEAD:refs/heads/master
+            
+          # In case you need to run ecto migration after successful deploy, you can:
+          # 1. Install gigalixir cli, see https://gigalixir.readthedocs.io/en/latest/deploy.html#how-to-set-up-continuous-integration-ci-cd
+          # 2. You can also override the default web command in the Procfile, see https://dev.to/edwinthinks/setting-up-automated-testing-and-deployment-to-gigalixir-for-a-phoenix-application-using-gitlab-3oe5
