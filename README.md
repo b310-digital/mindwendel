@@ -1,6 +1,6 @@
 # mindwendel
 
-![Workflow Status Badge](https://github.com/mindwendel/mindwendel/workflows/Elixir%20CI/badge.svg)
+![Workflow Status Badge](https://github.com/mindwendel/mindwendel/workflows/ci_cd/badge.svg)
 
 Grab your post-its. Ready? Brainstorm. mindwendel helps you to easily brainstorm and upvote ideas and thoughts within your team. Built from scratch with [Phoenix](https://www.phoenixframework.org).
 

@@ -1,4 +1,5 @@
-name: Elixir CI
+# Do not forget to change status badge in ./README.md
+name: ci_cd
 
 on:
   push:
