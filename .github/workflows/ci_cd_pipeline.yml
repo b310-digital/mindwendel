@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
 
       # The following step `actions/cache@v2` needs a tar command that requires the option `--posix` .
-      # The alpine-based docker container that we are using contains a tar command but wihtout a `--posix` option.
+      # The alpine-based docker container that we are using contains a tar command but without a `--posix` option.
       # This is why we need to install it.
       - run: apk add tar
       # See https://github.com/actions/checkout
@@ -108,36 +108,3 @@ jobs:
           restore-keys: ${{ runner.os }}-mix-v4
 
       - run: mix format --check-formatted
-
-  deploy_gigalixir:
-    runs-on: ubuntu-latest
-    container: bitwalker/alpine-elixir-phoenix:latest
-
-    needs:
-      - check_mix_test
-      - check_mix_format
-
-    if: github.ref == 'refs/heads/master'
-
-    steps:
-      - uses: actions/checkout@v2
-
-      # The gigalixir-related env vars are defined in https://gitlab.com/beyond310/gluehbirne-brainstorming-web/-/settings/ci_cd
-      # E.g. GIGALIXIR_EMAIL, GIGALIXIR_API_KEY, GIGALIXIR_APP_NAME
-      #
-      # Note:
-      # If you want to test this pipeline branches other than master
-      # you will need to unprotect these env vars in Gitlab's CI/CD pipeline settings.
-      # Otherwise they will not be included.
-      #
-      # In case you need to run ecto migration after successful deploy, you can:
-      # 1. Install gigalixir cli, see https://gigalixir.readthedocs.io/en/latest/deploy.html#how-to-set-up-continuous-integration-ci-cd
-      # 2. You can also override the default web command in the Procfile, see https://dev.to/edwinthinks/setting-up-automated-testing-and-deployment-to-gigalixir-for-a-phoenix-application-using-gitlab-3oe5
-      - name: Deploy git push to gigalixir
-        env:
-          GIGALIXIR_EMAIL: ${{ secrets.GIGALIXIR_EMAIL }}
-          GIGALIXIR_API_KEY: ${{ secrets.GIGALIXIR_API_KEY }}
-          GIGALIXIR_APP_NAME: ${{ secrets.GIGALIXIR_APP_NAME }}
-        run: git remote add gigalixir https://$GIGALIXIR_EMAIL:$GIGALIXIR_API_KEY@git.gigalixir.com/$GIGALIXIR_APP_NAME.git
-
-      - run: git push -f gigalixir HEAD:refs/heads/master
