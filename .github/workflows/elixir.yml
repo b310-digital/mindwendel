@@ -137,6 +137,12 @@ jobs:
         # you will need to unprotect these env vars in Gitlab's CI/CD pipeline settings.
         # Otherwise they will not be included.
         run: | 
+          echo $GIGALIXIR_EMAIL
+          echo "$GIGALIXIR_EMAIL"
+          echo $GIGALIXIR_API_KEY
+          echo "$GIGALIXIR_API_KEY"
+          echo $GIGALIXIR_APP_NAME
+          echo "$GIGALIXIR_APP_NAME"
           git remote add gigalixir https://$GIGALIXIR_EMAIL:$GIGALIXIR_API_KEY@git.gigalixir.com/$GIGALIXIR_APP_NAME.git
           git push -f gigalixir HEAD:refs/heads/master
           
