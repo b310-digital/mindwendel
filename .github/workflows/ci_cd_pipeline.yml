@@ -116,7 +116,9 @@ jobs:
     needs:
       - check_mix_test
       - check_mix_format
+
     if: github.ref == 'refs/heads/master'
+
     steps:
       - uses: actions/checkout@v2
 
