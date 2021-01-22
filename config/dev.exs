@@ -19,7 +19,7 @@ config :mindwendel, MindwendelWeb.Endpoint,
   # Use this when you want to allow external requests
   # http: [ip: {0, 0, 0, 0}, port: 4000],
   http: [port: 4000],
-  debug_errors: false,
+  debug_errors: true,
   code_reloader: true,
   check_origin: false,
   watchers: [
