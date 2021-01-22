@@ -41,16 +41,5 @@ defmodule Mindwendel.AccountsTest do
       {:ok, updated_user} = Accounts.update_user(existing_user, %{username: "test"})
       assert updated_user.username == "test"
     end
-
-    test "limits the username to 50 characters", %{user: existing_user} do
-      {:ok, updated_user} =
-        Accounts.update_user(existing_user, %{username: String.duplicate("a", 51)})
-
-      assert updated_user.username == String.duplicate("a", 50)
-    end
-
-    test "username must have at least 1 character", %{user: existing_user} do
-      {:error, updated_user} = Accounts.update_user(existing_user, %{username: ""})
-    end
   end
 end
