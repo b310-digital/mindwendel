@@ -48,7 +48,7 @@ jobs:
         image: postgres:latest
         env:
           # These env variables are required by the postgres service (see above)
-          POSTGRES_DB: gluehbirne_gitlab_ci_test
+          POSTGRES_DB: mindwendel_test
           POSTGRES_HOST: postgres
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -64,7 +64,7 @@ jobs:
       # These env vars are required by our application
       # Unfortunately, github workflow does not support yaml anchors ;-(
       TEST_DATABASE_HOST: postgres
-      TEST_DATABASE_NAME: gluehbirne_gitlab_ci_test
+      TEST_DATABASE_NAME: mindwendel_test
       TEST_DATABASE_USER: postgres
       TEST_DATABASE_USER_PASSWORD: postgres
       MIX_ENV: "test"
@@ -74,7 +74,7 @@ jobs:
       - uses: actions/checkout@v2
 
       # The following step `actions/cache@v2` needs a tar command that requires the option --posix
-      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
+      # The alpine-based docker container that we are using contains a tar command but without a `--posix` option.
       # This is why we need to install it
       - run: apk add tar
       - uses: actions/cache@v2

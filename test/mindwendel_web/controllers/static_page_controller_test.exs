@@ -6,7 +6,7 @@ defmodule MindwendelWeb.StaticPageControllerTest do
   describe "home without current_user_id in session" do
     test "contains text", %{conn: conn} do
       conn = get(conn, Routes.static_page_path(conn, :home))
-      assert html_response(conn, 200) =~ "Glühbirne"
+      assert html_response(conn, 200) =~ "mindwendel"
       assert html_response(conn, 200) =~ "Brainstorm"
     end
 
