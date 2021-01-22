@@ -3,6 +3,7 @@ defmodule Mindwendel.Brainstormings.Like do
 
   import Ecto.Changeset
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Accounts.User
 
   schema "likes" do
     belongs_to :idea, Idea, type: :binary_id
