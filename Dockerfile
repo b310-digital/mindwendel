@@ -2,7 +2,7 @@ FROM elixir:1.11-alpine
 
 RUN apk add --update-cache \
     postgresql-client \
-    nodejs nodejs-npm
+    nodejs npm
 
 WORKDIR /app
 

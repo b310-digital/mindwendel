@@ -51,7 +51,12 @@ Grab your post-its. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 ### For docker development
 
 `docker-compose build`
+
 `docker-compose up`
+
+To browse the container, use e.g.:
+
+`docker exec -it mindwendel sh`
 
 ## Usage example
 
