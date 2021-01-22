@@ -7,9 +7,18 @@ defmodule MindwendelWeb.ErrorView do
   #   "Internal Server Error"
   # end
 
-  # By default, Phoenix returns the status message from
-  # the template name. For example, "404.html" becomes
-  # "Not Found".
+  def render("400.html", assigns) do
+    render("general_error_page.html", assigns)
+  end
+
+  def render("404.html", assigns) do
+    render("general_error_page.html", assigns)
+  end
+
+  def render("500.html", assigns) do
+    render("general_error_page.html", assigns)
+  end
+
   def template_not_found(template, _assigns) do
     Phoenix.Controller.status_message_from_template(template)
   end
