@@ -1,0 +1,111 @@
+# Do not forget to change status badge in ./README.md
+name: ci_cd
+
+on:
+  push:
+    branches: [master]
+  # See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestbranchestags
+  pull_request:
+    # Only branches and tags on the base are evaluated
+    branches: [master]
+
+jobs:
+  build_deps:
+    runs-on: ubuntu-latest
+    container: bitwalker/alpine-elixir-phoenix:latest
+
+    steps:
+      # See https://github.com/actions/checkout
+      - uses: actions/checkout@v2
+
+      # The following step `actions/cache@v2` needs a tar command that requires the option `--posix` .
+      # The alpine-based docker container that we are using contains a tar command but without a `--posix` option.
+      # This is why we need to install it.
+      - run: apk add tar
+      # See https://github.com/actions/checkout
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-v4
+
+      - run: mix deps.get
+        if: steps.cache.outputs.cache-hit != 'true'
+
+  check_mix_test:
+    # Containers must run in Linux based operating systems
+    runs-on: ubuntu-latest
+    # Docker Hub image that `container-job` executes in
+    container: bitwalker/alpine-elixir-phoenix:latest
+
+    needs: build_deps
+
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        image: postgres:latest
+        env:
+          # These env variables are required by the postgres service (see above)
+          POSTGRES_DB: gluehbirne_gitlab_ci_test
+          POSTGRES_HOST: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # These env vars are required by our application
+      # Unfortunately, github workflow does not support yaml anchors ;-(
+      TEST_DATABASE_HOST: postgres
+      TEST_DATABASE_NAME: gluehbirne_gitlab_ci_test
+      TEST_DATABASE_USER: postgres
+      TEST_DATABASE_USER_PASSWORD: postgres
+      MIX_ENV: "test"
+
+    steps:
+      # Downloads a copy of the code in your repository before running CI tests
+      - uses: actions/checkout@v2
+
+      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
+      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
+      # This is why we need to install it
+      - run: apk add tar
+      - uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-v4
+
+      - run: mix compile
+      - run: mix ecto.create
+      - run: mix ecto.migrate
+      - run: mix test
+
+  check_mix_format:
+    runs-on: ubuntu-latest
+    container: bitwalker/alpine-elixir-phoenix:latest
+
+    needs: build_deps
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
+      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
+      # This is why we need to install it
+      - run: apk add tar
+      - uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-v4
+
+      - run: mix format --check-formatted

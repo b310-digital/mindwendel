@@ -1,6 +1,6 @@
 # mindwendel
 
-[![Build Status][travis-image]][travis-url]
+![Workflow Status Badge](https://github.com/mindwendel/mindwendel/workflows/ci_cd/badge.svg)
 
 Grab your post-its. Ready? Brainstorm. mindwendel helps you to easily brainstorm and upvote ideas and thoughts within your team. Built from scratch with [Phoenix](https://www.phoenixframework.org).
 
@@ -15,7 +15,7 @@ Grab your post-its. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 - [Phoenix Framework](https://hexdocs.pm/phoenix/installation.html#phoenix)
 - [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_view)
 - [PostgreSQL](https://www.postgresql.org)
-  
+
 ### For local setup and development
 
 - Clone the repo
@@ -34,7 +34,7 @@ Grab your post-its. Ready? Brainstorm. mindwendel helps you to easily brainstorm
   ```sh
   source .env
   ```
-- Create and migrate your database with 
+- Create and migrate your database with
   ```ah
   mix ecto.setup
   ```
@@ -54,7 +54,6 @@ Grab your post-its. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 `docker-compose up`
 
 ## Usage example
-
 
 ## Development setup
 
