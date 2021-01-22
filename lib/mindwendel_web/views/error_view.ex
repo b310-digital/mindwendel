@@ -8,15 +8,15 @@ defmodule MindwendelWeb.ErrorView do
   # end
 
   def render("400.html", assigns) do
-    render("general_error_page.html", assigns)
+    render("error_page.html", assigns)
   end
 
   def render("404.html", assigns) do
-    render("general_error_page.html", assigns)
+    render("error_page.html", assigns)
   end
 
   def render("500.html", assigns) do
-    render("general_error_page.html", assigns)
+    render("error_page.html", assigns)
   end
 
   def template_not_found(template, _assigns) do

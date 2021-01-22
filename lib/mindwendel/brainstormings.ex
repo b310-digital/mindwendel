@@ -176,17 +176,21 @@ defmodule Mindwendel.Brainstormings do
 
   ## Examples
 
-      iex> get_brainstorming!(123)
-      %Brainstorming{}
+      iex> get_brainstorming!("0323906b-b496-4778-ae67-1dd779d3de3c")
+      %Brainstorming{ ... }
 
-      iex> get_brainstorming!(456)
+      iex> get_brainstorming!("0323906b-b496-4778-ae67-1dd779d3de3c")
       ** (Ecto.NoResultsError)
+
+      iex> get_brainstorming!("not_a_valid_uuid_string")
+      ** (Ecto.Query.CastError)
 
   """
   # TODO: Handle CastError when wrong uuid is given
   # See https://stackoverflow.com/questions/53802091/elixir-uuid-how-to-handle-500-error-when-uuid-doesnt-match
-  def get_brainstorming!(id),
-    do: Repo.get!(Brainstorming, id) |> Repo.preload([:users, ideas: [:link, :likes]])
+  def get_brainstorming!(id) do
+    Repo.get!(Brainstorming, id) |> Repo.preload([:users, ideas: [:link, :likes]])
+  end
 
   @doc """
   Gets a single brainstorming with the admin url id
