@@ -31,7 +31,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       {:ok, _show_live, html} =
         live(conn, Routes.brainstorming_show_path(conn, :new_idea, brainstorming))
 
-      assert html =~ "Anonym"
+      assert html =~ "Anonymous"
     end
   end
 end
