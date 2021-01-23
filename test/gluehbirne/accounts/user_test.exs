@@ -6,7 +6,7 @@ defmodule Mindwendel.Accounts.UserTest do
   describe "changeset" do
     test "username is set to Anonym when empty" do
       user = User.changeset(%User{}, %{username: ""}) |> Repo.insert!()
-      assert user.username == "Anonym"
+      assert user.username == "Anonymous"
     end
 
     test "limits the username to 50 characters" do

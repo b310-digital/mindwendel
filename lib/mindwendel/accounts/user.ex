@@ -7,7 +7,7 @@ defmodule Mindwendel.Accounts.User do
   alias Mindwendel.Accounts.BrainstormingUser
 
   schema "users" do
-    field :username, :string, default: "Anonym"
+    field :username, :string, default: "Anonymous"
     many_to_many :brainstormings, Brainstorming, join_through: BrainstormingUser
 
     timestamps()
