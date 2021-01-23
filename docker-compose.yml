@@ -15,7 +15,7 @@ services:
       - "4000:4000"
     depends_on:
       - db
-    # Mount the app folder to increase development speed. Ignore compiled and built folders.
+    # Mount the app folder to increase development speed. Ignore compiled and build folders.
     volumes:
       - .:/app
       - /app/deps/
