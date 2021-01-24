@@ -1,5 +1,17 @@
 <div phx-window-keyup="handle_hotkey_i" phx-key="i"></div>
 
+<%= if @technique do %>
+  <a data-bs-toggle="collapse" href="#brainstorming-technique" role="button" aria-expanded="false">
+    <i class="bi bi-question-circle"></i> Got stuck? Maybe try a new technique to generate ideas!
+  </a><br /><br />
+  <div class="alert alert-info collapse" id="brainstorming-technique">
+    <p>
+      <span class="fw-bold"><%= @technique.title %></span><br />
+      <%= @technique.description %>
+    </p>
+  </div>
+<% end %>
+
 <div id="brainstorming-details">
   <div class="d-flex bd-highlight">
     <h2 id="brainstorming-title" class="flex-grow-1"><%= @brainstorming.name %></h2>
@@ -17,9 +29,9 @@
       </button>
     </div>
     <div>
-      <a class="btn btn-secondary m-1" href="<%= Routes.admin_brainstorming_path(@socket, :edit, @brainstorming.admin_url_id) %>">
+      <%= link to: Routes.admin_brainstorming_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary m-1" do %>
         <i class="bi-gear-fill"></i>
-      </a>
+      <% end %>
     </div>
   </div>
 
@@ -51,7 +63,6 @@
       idea: @idea,
       return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming) %>
   <% end %>
-
 
   <%= live_component @socket, MindwendelWeb.IdeaLive.IndexComponent, ideas: @ideas, id: @brainstorming.id, current_user: @current_user %>
 

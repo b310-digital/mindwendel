@@ -6,13 +6,14 @@ defmodule Mindwendel.Help.BrainstormingTechnique do
   schema "brainstorming_techniques" do
     field :title, :string
     field :description, :string
+    field :language, :string
     timestamps()
   end
 
-    @doc false
-    def changeset(technique, attrs) do
-      technique
-      |> cast(attrs, [:title, :description, :language])
-      |> unique_constraint(:title)
-    end
+  @doc false
+  def changeset(technique, attrs) do
+    technique
+    |> cast(attrs, [:title, :description, :language])
+    |> unique_constraint(:title)
+  end
 end

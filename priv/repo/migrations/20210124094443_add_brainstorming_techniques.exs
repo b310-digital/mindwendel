@@ -10,6 +10,7 @@ defmodule Mindwendel.Repo.Migrations.AddBrainstormingTechniques do
 
       timestamps()
     end
+
     create unique_index(:brainstorming_techniques, [:title])
   end
 end
