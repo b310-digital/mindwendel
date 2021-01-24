@@ -8,9 +8,15 @@ defmodule MindwendelWeb.ErrorViewTest do
     # When rendering the error_page.html.eex the connection is necesary, e.g. because of
     # <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     #
-    # Although this MindwendelWeb.ConnCase sets the endpoint, is not avail in the tests. As a fix, I needed to set endpoint explicitely
+    # Unfortunately, the endpoint is not set in the connection although it is set in MindwendelWeb.ConnCase.
+    # As a fix, it is necessary to set the endpoint explicitely.
     # See here https://www.munich-made.com/2020/03/20200304220507-testing-custom-errorview-in-phoenix/
     %{conn: conn |> Plug.Conn.put_private(:phoenix_endpoint, MindwendelWeb.Endpoint)}
+  end
+
+  test "renders 400.html", %{conn: conn} do
+    assert render_to_string(MindwendelWeb.ErrorView, "400.html", %{conn: conn, status: 400}) =~
+             "Try again from home"
   end
 
   test "renders 404.html", %{conn: conn} do

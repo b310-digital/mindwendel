@@ -34,18 +34,4 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       assert html =~ "Anonymous"
     end
   end
-
-  describe "Show - Not found" do
-    test "because of non-existing record", %{conn: conn} do
-      assert_raise Ecto.NoResultsError, fn ->
-        live(conn, Routes.brainstorming_show_path(conn, :show, Ecto.UUID.generate()))
-      end
-    end
-
-    test "because of invalid uuid string", %{conn: conn} do
-      assert_raise Ecto.Query.CastError, fn ->
-        live(conn, Routes.brainstorming_show_path(conn, :show, "Ecto.UUID.generate()"))
-      end
-    end
-  end
 end
