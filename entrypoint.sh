@@ -9,6 +9,7 @@ done
 if [[ -z `psql -Atqc "\\list $DATABASE_NAME"` ]]; then
   mix ecto.create
   mix ecto.migrate
+  mix run priv/repo/seeds.exs
   echo "Database $DATABASE_NAME created."
 fi
 
