@@ -1,13 +1,12 @@
 <div phx-window-keyup="handle_hotkey_i" phx-key="i"></div>
 
-<%= if @technique do %>
-  <a data-bs-toggle="collapse" href="#brainstorming-technique" role="button" aria-expanded="false">
-    <i class="bi bi-question-circle"></i> Got stuck? Maybe try a new technique to generate ideas!
+<%= if @inspiration do %>
+  <a data-bs-toggle="collapse" href="#inspiration" role="button" aria-expanded="false">
+    <i class="bi bi-question-circle"></i> Got stuck? Maybe try a new inspiration to generate ideas!
   </a><br /><br />
-  <div class="alert alert-info collapse" id="brainstorming-technique">
+  <div class="alert alert-info collapse" id="inspiration">
     <p>
-      <span class="fw-bold"><%= @technique.title %></span><br />
-      <%= @technique.description %>
+      <%= @inspiration.title %>
     </p>
   </div>
 <% end %>

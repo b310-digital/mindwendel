@@ -4,7 +4,7 @@ defmodule Mindwendel.Factory do
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Accounts.User
-  alias Mindwendel.Help.BrainstormingTechnique
+  alias Mindwendel.Help.Inspiration
 
   def build(:user) do
     %User{}
@@ -26,8 +26,8 @@ defmodule Mindwendel.Factory do
     %Like{}
   end
 
-  def build(:brainstorming_technique) do
-    %BrainstormingTechnique{title: "Hi", description: "test"}
+  def build(:inspiration) do
+    %Inspiration{title: "Hi", type: "test"}
   end
 
   def build(:brainstorming, :with_users) do

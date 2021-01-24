@@ -4,13 +4,13 @@ defmodule Mindwendel.HelpTest do
   alias Mindwendel.Help
 
   setup do
-    %{technique: Factory.insert!(:brainstorming_technique)}
+    %{inspiration: Factory.insert!(:inspiration)}
   end
 
-  describe "random_brainstorming_technique" do
-    test "retrieve a technique" do
-      technique = Help.random_brainstorming_technique()
-      assert !is_nil(technique)
+  describe "random_inspiration" do
+    test "retrieve an inspiration" do
+      inspiration = Help.random_inspiration()
+      assert !is_nil(inspiration)
     end
   end
 end

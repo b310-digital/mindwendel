@@ -5,9 +5,9 @@ defmodule Mindwendel.Help do
 
   import Ecto.Query, warn: false
   alias Mindwendel.Repo
-  alias Mindwendel.Help.BrainstormingTechnique
+  alias Mindwendel.Help.Inspiration
 
-  def random_brainstorming_technique do
-    Repo.one(from t in BrainstormingTechnique, order_by: fragment("RANDOM()"), limit: 1)
+  def random_inspiration do
+    Repo.one(from t in Inspiration, order_by: fragment("RANDOM()"), limit: 1)
   end
 end

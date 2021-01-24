@@ -22,7 +22,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
       socket
       |> assign(:brainstorming, brainstorming)
       |> assign(:current_user, current_user)
-      |> assign(:technique, Mindwendel.Help.random_brainstorming_technique())
+      |> assign(:inspiration, Mindwendel.Help.random_inspiration())
     }
   end
 
