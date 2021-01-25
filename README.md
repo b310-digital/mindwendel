@@ -2,7 +2,12 @@
 
 ![Workflow Status Badge](https://github.com/mindwendel/mindwendel/workflows/ci_cd/badge.svg)
 
-Grab your post-its. Ready? Brainstorm. mindwendel helps you to easily brainstorm and upvote ideas and thoughts within your team. Built from scratch with [Phoenix](https://www.phoenixframework.org).
+Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm and upvote ideas and thoughts within your team. Built from scratch with [Phoenix](https://www.phoenixframework.org).
+
+## Features
+- Anonymously invite people to your brainstorming - no registration needed. Usernames are optional.
+- Easily create and upvote ideas, with live updates from your companions.
+- Preview of links to ease URL sharing
 
 ![](docs/screenshot.png)
 ![](docs/screenshot2.png)
@@ -38,7 +43,7 @@ Grab your post-its. Ready? Brainstorm. mindwendel helps you to easily brainstorm
   ```sh
   mix ecto.setup
   ```
-  Add seeds with
+- Add seeds with
   ```sh
   mix run priv/repo/seeds.exs
   ```
