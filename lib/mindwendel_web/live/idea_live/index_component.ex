@@ -18,4 +18,11 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
 
     {:noreply, socket}
   end
+
+  @impl true
+  def handle_event("unlike", %{"id" => id}, socket) do
+    Brainstormings.delete_like(id, socket.assigns.current_user.id)
+
+    {:noreply, socket}
+  end
 end

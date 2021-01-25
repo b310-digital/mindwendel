@@ -302,6 +302,23 @@ defmodule Mindwendel.Brainstormings do
   end
 
   @doc """
+  Deletes a like for an idea by a given user
+
+  ## Examples
+
+      iex> add_like(1, 2)
+      {:ok, %Idea{}}
+
+  """
+  def delete_like(idea_id, user_id) do
+    Repo.delete_all(
+      from like in Like, where: like.user_id == ^user_id and like.idea_id == ^idea_id
+    )
+
+    {:ok, get_idea!(idea_id)} |> broadcast(:idea_updated)
+  end
+
+  @doc """
   Returns a subscibe result.
 
   ## Examples

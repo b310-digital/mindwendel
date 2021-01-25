@@ -34,9 +34,9 @@
                 <i class="bi bi-arrow-up-circle"></i>
                 <% end %>
               <% else %>
-                <a href="#">
+                <%= link to: "#", phx_click: "unlike", phx_target: @myself, phx_value_id: idea.id, title: 'Unlike' do %>
                   <i class="bi bi-arrow-up-circle-fill"></i>
-                </a>
+                <% end%>
               <% end %>
             </div>
           </div>

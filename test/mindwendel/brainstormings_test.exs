@@ -92,4 +92,20 @@ defmodule Mindwendel.BrainstormingsTest do
       assert count == 1
     end
   end
+
+  describe "delete_likes" do
+    test "deletes a like", %{idea: idea, user: user} do
+      # add a like first:
+      Brainstormings.add_like(idea.id, user.id)
+
+      count = idea |> assoc(:likes) |> Repo.aggregate(:count, :id)
+      assert count == 1
+
+      # delete like:
+      Brainstormings.delete_like(idea.id, user.id)
+
+      count = idea |> assoc(:likes) |> Repo.aggregate(:count, :id)
+      assert count == 0
+    end
+  end
 end
