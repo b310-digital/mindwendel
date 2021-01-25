@@ -15,7 +15,7 @@ alias Mindwendel.Repo
 
 Repo.insert(
   %Inspiration{
-    title: "What if superman would face this problem?",
+    title: "What if a super hero would face this problem?",
     type: "What if",
     language: "en"
   },
@@ -33,7 +33,7 @@ Repo.insert(
 
 Repo.insert(
   %Inspiration{
-    title: "What would James Bond do?",
+    title: "What would a royal secret agent do?",
     type: "What if",
     language: "en"
   },
@@ -42,7 +42,7 @@ Repo.insert(
 
 Repo.insert(
   %Inspiration{
-    title: "What would Elon Musk do?",
+    title: "What would a rich tech entrepreneur do?",
     type: "What if",
     language: "en"
   },
