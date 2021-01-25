@@ -35,8 +35,12 @@ Grab your post-its. Ready? Brainstorm. mindwendel helps you to easily brainstorm
   source .env
   ```
 - Create and migrate your database with
-  ```ah
+  ```sh
   mix ecto.setup
+  ```
+  Add seeds with
+  ```sh
+  mix run priv/repo/seeds.exs
   ```
 - Install NPM packages
   ```sh
