@@ -9,7 +9,7 @@ defmodule Mindwendel.Brainstormings.Idea do
 
   schema "ideas" do
     field :body, :string
-    field :username, :string, default: "Anonym"
+    field :username, :string, default: "Anonymous"
     has_one :link, Link
     has_many :likes, Like
     belongs_to :brainstorming, Brainstorming, foreign_key: :brainstorming_id, type: :binary_id
