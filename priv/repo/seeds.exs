@@ -24,7 +24,7 @@ Repo.insert(
 
 Repo.insert(
   %Inspiration{
-    title: "How would Leonardo DaVinci solve this problem?",
+    title: "How would a gifted artist and inventor solve this problem?",
     type: "What if",
     language: "en"
   },
