@@ -38,6 +38,10 @@ Grab your post-its. Ready? Brainstorm. mindwendel helps you to easily brainstorm
   ```ah
   mix ecto.setup
   ```
+  Add seeds with
+  ```
+  mix run priv/repo/seeds.exs
+  ```
 - Install NPM packages
   ```sh
   npm --prefix assets install
