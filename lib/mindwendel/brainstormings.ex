@@ -63,7 +63,7 @@ defmodule Mindwendel.Brainstormings do
       ** (Ecto.NoResultsError)
 
   """
-  def get_idea!(id), do: Repo.get!(Idea, id) |> Repo.preload([:link, :likes])
+  def get_idea!(id), do: Repo.get!(Idea, id)
 
   @doc """
   Creates a idea.
