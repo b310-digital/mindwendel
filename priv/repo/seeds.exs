@@ -42,6 +42,15 @@ Repo.insert(
 
 Repo.insert(
   %Inspiration{
+    title: "What would your most challening customer want you to do?",
+    type: "What if",
+    language: "en"
+  },
+  on_conflict: :nothing
+)
+
+Repo.insert(
+  %Inspiration{
     title: "What would a rich tech entrepreneur do?",
     type: "What if",
     language: "en"
