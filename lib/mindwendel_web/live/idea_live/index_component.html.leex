@@ -39,6 +39,19 @@
                 <% end %>
               <% end %>
             </div>
+            <div>
+              <%= for label <- Ecto.Enum.values(Mindwendel.Brainstormings.Idea, :label) do %>
+                <%= if idea.label == label do %>
+                  <%= link to: "", phx_click: "unlabel", phx_target: @myself, phx_value_id: idea.id, title: "unlabel #{label}" do %>
+                    <i class="IndexComponent__IdeaLabel--<%= label %>--active"></i>
+                  <% end %>
+                <% else %>
+                  <%= link to: "", phx_click: "label", phx_target: @myself, phx_value_id: idea.id, phx_value_label: label, title: "label #{label}" do %>
+                    <i class="IndexComponent__IdeaLabel--<%= label %>"></i>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>

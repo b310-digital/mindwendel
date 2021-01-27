@@ -7,9 +7,12 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Attachments.Link
   alias Mindwendel.UrlPreview
 
+  @label_values [:red, :blue, :orange, :green, :pink]
+
   schema "ideas" do
     field :body, :string
     field :username, :string, default: "Anonymous"
+    field :label, Ecto.Enum, values: @label_values
     has_one :link, Link
     has_many :likes, Like
     belongs_to :brainstorming, Brainstorming, foreign_key: :brainstorming_id, type: :binary_id
@@ -20,9 +23,10 @@ defmodule Mindwendel.Brainstormings.Idea do
   @doc false
   def changeset(idea, attrs) do
     idea
-    |> cast(attrs, [:username, :body, :brainstorming_id])
+    |> cast(attrs, [:username, :body, :brainstorming_id, :label])
     |> validate_required([:username, :body, :brainstorming_id])
     |> validate_length(:body, min: 2, max: 1023)
+    |> validate_inclusion(:label, @label_values)
   end
 
   def build_link(idea) do
