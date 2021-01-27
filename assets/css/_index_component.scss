@@ -36,47 +36,31 @@
 }
 
 .IndexComponent__IdeaLabel {
-  &--red {
-    @extend %bi-icon-before;
-    @extend %bi-circle-fill-before;
-
-    color: red;
-
-    &:hover {
-      @extend %bi-plus-circle-fill-before;
-    }
-
-    &--active {
+  @mixin ideaLabel($label) {
+    &--#{$label} {
       @extend %bi-icon-before;
-      @extend %bi-check-circle-fill-before;
-      color: red;
+      @extend %bi-circle-fill-before;
+
+      color: $label;
+
       &:hover {
-        @extend %bi-x-circle-fill-before;
+        @extend %bi-plus-circle-fill-before;
+      }
+
+      &--active {
+        @extend %bi-icon-before;
+        @extend %bi-check-circle-fill-before;
+        color: $label;
+        &:hover {
+          @extend %bi-x-circle-fill-before;
+        }
       }
     }
   }
 
-  &--blue {
-    // @extend .bi-plus-circle-fill;
-    color: blue;
-  }
-
-  &--orange {
-    // @extend .bi-plus-circle-fill;
-    color: orange;
-  }
-
-  &--green {
-    // @extend .bi-plus-circle-fill;
-    color: green;
-  }
-
-  &--pink {
-    // @extend .bi-plus-circle-fill;
-    color: pink;
-    &:hover {
-      // @extend .bi-arrow-up-circle-fill;
-      font-size: 1.5rem;
-    }
-  }
+  @include ideaLabel(red);
+  @include ideaLabel(blue);
+  @include ideaLabel(orange);
+  @include ideaLabel(green);
+  @include ideaLabel(pink);
 }
