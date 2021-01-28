@@ -7,7 +7,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Attachments.Link
   alias Mindwendel.UrlPreview
 
-  @label_values [:red, :blue, :orange, :green, :pink]
+  @label_values [:label_1, :label_2, :label_3, :label_4, :label_5]
 
   schema "ideas" do
     field :body, :string

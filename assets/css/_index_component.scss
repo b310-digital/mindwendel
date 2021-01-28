@@ -36,12 +36,12 @@
 }
 
 .IndexComponent__IdeaLabel {
-  @mixin ideaLabel($label) {
+  @mixin ideaLabel($label, $label_color) {
     &--#{$label} {
       @extend %bi-icon-before;
       @extend %bi-circle-fill-before;
 
-      color: $label;
+      color: $label_color;
 
       &:hover {
         @extend %bi-plus-circle-fill-before;
@@ -50,7 +50,7 @@
       &--active {
         @extend %bi-icon-before;
         @extend %bi-check-circle-fill-before;
-        color: $label;
+        color: $label_color;
         &:hover {
           @extend %bi-x-circle-fill-before;
         }
@@ -58,9 +58,9 @@
     }
   }
 
-  @include ideaLabel(red);
-  @include ideaLabel(blue);
-  @include ideaLabel(orange);
-  @include ideaLabel(green);
-  @include ideaLabel(pink);
+  @include ideaLabel(label_1, red);
+  @include ideaLabel(label_2, blue);
+  @include ideaLabel(label_3, orange);
+  @include ideaLabel(label_4, green);
+  @include ideaLabel(label_5, pink);
 }

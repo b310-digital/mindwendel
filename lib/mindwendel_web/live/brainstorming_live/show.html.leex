@@ -21,6 +21,9 @@
       <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort", phx_value_id: @brainstorming.id do %>
         <i class="bi-sort-numeric-up-alt"></i>
       <% end %>
+      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_label", phx_value_id: @brainstorming.id do %>
+        <i class="bi-sort-numeric-down-alt"></i>
+      <% end %>
     </div>
     <div>
       <button class="btn btn-secondary m-1" id="btn-share" phx-hook="ShareBrainstormingLinkButton">
@@ -32,6 +35,9 @@
         <i class="bi-gear-fill"></i>
       <% end %>
     </div>
+    sorting is missing
+            sorting is missing
+            sorting is missing
   </div>
 
   <div class="input-group mb-3" id="brainstorming-sharing-link-block" style="display:none;">
