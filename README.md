@@ -25,7 +25,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 
 - Clone the repo
   ```sh
-  git clone https://github.com/github_username/repo_name.git
+  git clone https://github.com/mindwendel/mindwendel.git
   ```
 - Install dependencies with
   ```sh
@@ -55,7 +55,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
   ```sh
   mix phx.server
   ```
-- Go to [http://localhost:4000/]
+- Go to http://localhost:4000/
 
 ### For docker development
 
