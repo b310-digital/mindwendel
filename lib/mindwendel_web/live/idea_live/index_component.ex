@@ -34,10 +34,7 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
     {:noreply, socket}
   end
 
-  def handle_event("unlabel", %{"id" => id}, socket) do
-    Brainstormings.get_idea!(id)
-    |> Brainstormings.update_idea(%{label: nil})
-
-    {:noreply, socket}
+  def handle_event("label", %{"id" => id}, socket) do
+    handle_event("label", %{"id" => id, "label" => nil}, socket)
   end
 end
