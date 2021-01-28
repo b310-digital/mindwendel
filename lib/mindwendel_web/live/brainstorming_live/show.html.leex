@@ -12,17 +12,17 @@
 <% end %>
 
 <div id="brainstorming-details">
-  <div class="d-flex bd-highlight">
+  <div class="d-flex bd-highlight flex-wrap">
     <h2 id="brainstorming-title" class="flex-grow-1"><%= @brainstorming.name %></h2>
     <div>
       <%= live_patch "New Idea", to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming), class: "btn btn-primary m-1 d-none d-lg-inline-block", title: "New idea page (Hotkey: i)", style: "width: 100px;" %>
     </div>
     <div>
-      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort", phx_value_id: @brainstorming.id do %>
-        <i class="bi-sort-numeric-up-alt"></i>
+      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort", phx_value_id: @brainstorming.id, title: "Sort by likes"do %>
+        <i class="bi-sort-numeric-up-alt"></i> Sort by likes
       <% end %>
-      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_label", phx_value_id: @brainstorming.id do %>
-        <i class="bi-sort-numeric-down-alt"></i>
+      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_label", title: "Sort by label" do %>
+        <i class="bi-sort-alpha-up-alt"></i> Sort by label
       <% end %>
     </div>
     <div>
@@ -35,9 +35,6 @@
         <i class="bi-gear-fill"></i>
       <% end %>
     </div>
-    sorting is missing
-            sorting is missing
-            sorting is missing
   </div>
 
   <div class="input-group mb-3" id="brainstorming-sharing-link-block" style="display:none;">

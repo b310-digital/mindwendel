@@ -64,3 +64,18 @@
   @include ideaLabel(label_4, green);
   @include ideaLabel(label_5, pink);
 }
+
+.IndexComponent__IdeaCard {
+  @mixin labelled($label, $label_color) {
+    &--labelled-#{$label} {
+      border-color: $label_color;
+      border-width: 2px;
+    }
+  }
+
+  @include labelled(label_1, red);
+  @include labelled(label_2, blue);
+  @include labelled(label_3, orange);
+  @include labelled(label_4, green);
+  @include labelled(label_5, pink);
+}
