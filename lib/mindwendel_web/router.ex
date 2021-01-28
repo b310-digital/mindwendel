@@ -2,7 +2,7 @@ defmodule MindwendelWeb.Router do
   use MindwendelWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
+    plug :accepts, ["html", "csv"]
     plug :fetch_session
     plug :fetch_live_flash
     plug :put_root_layout, {MindwendelWeb.LayoutView, :root}
@@ -22,6 +22,7 @@ defmodule MindwendelWeb.Router do
 
     scope "/admin", Admin, as: :admin do
       resources "/brainstormings", BrainstormingController, except: [:index, :show, :new, :create]
+      get "/brainstormings/:id/export", BrainstormingController, :export
     end
 
     post "/brainstormings", BrainstormingController, :create
