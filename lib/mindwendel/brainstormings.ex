@@ -65,6 +65,8 @@ defmodule Mindwendel.Brainstormings do
   """
   def get_idea!(id), do: Repo.get!(Idea, id)
 
+  def count_likes_for_idea(idea), do: idea |> Ecto.assoc(:likes) |> Repo.aggregate(:count, :id)
+
   @doc """
   Creates a idea.
 

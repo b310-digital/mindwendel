@@ -62,7 +62,8 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   end
 
   defp export_brainstorming(brainstorming_admin_id) do
-    Brainstormings.get_brainstorming_by!(%{admin_url_id: brainstorming_admin_id}).ideas
+    Brainstormings.get_brainstorming_by!(%{admin_url_id: brainstorming_admin_id}).id
+    |> Brainstormings.list_ideas_for_brainstorming()
     |> BrainstormingCSVFormatter.write()
   end
 end
