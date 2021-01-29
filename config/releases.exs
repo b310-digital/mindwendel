@@ -7,34 +7,34 @@ import Config
 database_host =
   System.get_env("DATABASE_HOST") ||
     raise """
-    Environment variable DATABASE_URL is missing.
+    Environment variable DATABASE_HOST is missing.
     For example: ecto://USER:PASS@HOST/DATABASE
     """
 
 database_name =
   System.get_env("DATABASE_NAME") ||
     raise """
-    Environment variable DATABASE_URL is missing.
-    For example: ecto://USER:PASS@HOST/DATABASE
+    Environment variable DATABASE_NAME is missing.
+    For example: mindwendel
     """
 
 database_user =
   System.get_env("DATABASE_USER") ||
     raise """
-    Environment variable DATABASE_URL is missing.
-    For example: ecto://USER:PASS@HOST/DATABASE
+    Environment variable DATABASE_USER is missing.
+    For example: mindwendel_user
     """
 
 database_user_password =
   System.get_env("DATABASE_USER_PASSWORD") ||
     raise """
-    Environment variable DATABASE_URL is missing.
-    For example: ecto://USER:PASS@HOST/DATABASE
+    Environment variable DATABASE_USER_PASSWORD is missing.
+    For example: password
     """
 
 config :mindwendel, Mindwendel.Repo,
   # ssl: true,
-  host: database_host,
+  hostname: database_host,
   username: database_user,
   password: database_user_password,
   database: database_name,
