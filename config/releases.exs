@@ -2,10 +2,31 @@
 # from environment variables. You can also hardcode secrets,
 # although such is generally not recommended and you have to
 # remember to add this file to your .gitignore.
-use Mix.Config
+import Config
 
-database_url =
-  System.get_env("DATABASE_URL") ||
+database_host =
+  System.get_env("DATABASE_HOST") ||
+    raise """
+    Environment variable DATABASE_URL is missing.
+    For example: ecto://USER:PASS@HOST/DATABASE
+    """
+
+database_name =
+  System.get_env("DATABASE_NAME") ||
+    raise """
+    Environment variable DATABASE_URL is missing.
+    For example: ecto://USER:PASS@HOST/DATABASE
+    """
+
+database_user =
+  System.get_env("DATABASE_USER") ||
+    raise """
+    Environment variable DATABASE_URL is missing.
+    For example: ecto://USER:PASS@HOST/DATABASE
+    """
+
+database_user_password =
+  System.get_env("DATABASE_USER_PASSWORD") ||
     raise """
     Environment variable DATABASE_URL is missing.
     For example: ecto://USER:PASS@HOST/DATABASE
@@ -13,7 +34,10 @@ database_url =
 
 config :mindwendel, Mindwendel.Repo,
   # ssl: true,
-  url: database_url,
+  host: database_host,
+  username: database_user,
+  password: database_user_password,
+  database: database_name,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
 secret_key_base =
@@ -43,7 +67,7 @@ config :mindwendel, MindwendelWeb.Endpoint,
 # If you are doing OTP releases, you need to instruct Phoenix
 # to start each relevant endpoint:
 #
-#     config :mindwendel, MindwendelWeb.Endpoint, server: true
+config :mindwendel, MindwendelWeb.Endpoint, server: true
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
