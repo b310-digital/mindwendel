@@ -2,7 +2,7 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   use MindwendelWeb, :controller
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
-  alias MindwendelService.BrainstormingCSVFormatter
+  alias Mindwendel.CSVFormatter
 
   def edit(conn, %{"id" => id}) do
     brainstorming = Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
@@ -64,6 +64,6 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   defp export_brainstorming(brainstorming_admin_id) do
     Brainstormings.get_brainstorming_by!(%{admin_url_id: brainstorming_admin_id}).id
     |> Brainstormings.list_ideas_for_brainstorming()
-    |> BrainstormingCSVFormatter.write()
+    |> CSVFormatter.ideas_to_csv()
   end
 end

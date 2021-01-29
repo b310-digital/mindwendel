@@ -5,7 +5,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Attachments.Link
-  alias MindwendelService.UrlPreview
+  alias Mindwendel.UrlPreview
 
   schema "ideas" do
     field :body, :string

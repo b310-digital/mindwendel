@@ -1,7 +1,7 @@
-defmodule MindwendelService.BrainstormingCSVFormatter do
+defmodule Mindwendel.CSVFormatter do
   alias Mindwendel.Brainstormings
 
-  def write(ideas) do
+  def ideas_to_csv(ideas) do
     [["idea", "username", "likes"]]
     |> Stream.concat(
       ideas
