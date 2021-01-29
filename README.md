@@ -8,6 +8,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 - Anonymously invite people to your brainstorming - no registration needed. Usernames are optional.
 - Easily create and upvote ideas, with live updates from your companions.
 - Preview of links to ease URL sharing
+- Export your generated ideas to csv
 
 ![](docs/screenshot.png)
 ![](docs/screenshot2.png)
@@ -59,13 +60,19 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 
 ### For docker development
 
-`docker-compose build`
+```sh
+docker-compose build
+```
 
-`docker-compose up`
+```sh
+docker-compose up
+```
 
 To browse the container, use e.g.:
 
-`docker exec -it mindwendel sh`
+```sh
+docker exec -it mindwendel sh
+```
 
 ## Usage example
 
