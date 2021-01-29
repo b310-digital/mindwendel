@@ -8,7 +8,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 - Anonymously invite people to your brainstorming - no registration needed. Usernames are optional.
 - Easily create and upvote ideas, with live updates from your companions.
 - Preview of links to ease URL sharing
-- Export your generated ideas to csv
+- Export your generated ideas to csv (currently comma separated)
 
 ![](docs/screenshot.png)
 ![](docs/screenshot2.png)

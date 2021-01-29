@@ -7,7 +7,7 @@ defmodule Mindwendel.CSVFormatter do
       ideas
       |> Stream.map(&[&1.body, &1.username, Brainstormings.count_likes_for_idea(&1)])
     )
-    |> CSV.encode(separator: ?;)
+    |> CSV.encode()
     |> Enum.to_list()
   end
 end

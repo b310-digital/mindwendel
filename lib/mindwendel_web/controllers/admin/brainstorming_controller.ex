@@ -44,11 +44,12 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   end
 
   def export(conn, %{"id" => id}) do
+    brainstorming = Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
     send_download(
       conn,
-      {:binary, export_brainstorming(id)},
+      {:binary, export_brainstorming(brainstorming.id)},
       content_type: "application/csv",
-      filename: "download.csv"
+      filename: "#{brainstorming.name}.csv"
     )
   end
 
@@ -61,8 +62,8 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
     |> redirect(to: "/")
   end
 
-  defp export_brainstorming(brainstorming_admin_id) do
-    Brainstormings.get_brainstorming_by!(%{admin_url_id: brainstorming_admin_id}).id
+  defp export_brainstorming(id) do
+    id
     |> Brainstormings.list_ideas_for_brainstorming()
     |> CSVFormatter.ideas_to_csv()
   end
