@@ -1,3 +1,5 @@
+// We would like to use the BEM css naming convention to avoid css collisions, see http://getbem.com/naming/
+
 %bi-icon-before {
   display: inline-block;
   font-family: bootstrap-icons !important;
@@ -58,24 +60,23 @@
     }
   }
 
-  @include ideaLabel(label_1, red);
-  @include ideaLabel(label_2, blue);
-  @include ideaLabel(label_3, orange);
-  @include ideaLabel(label_4, green);
-  @include ideaLabel(label_5, pink);
+  @include ideaLabel(label_1, var(--bs-cyan));
+  @include ideaLabel(label_2, var(--bs-gray-dark));
+  @include ideaLabel(label_3, var(--bs-green));
+  @include ideaLabel(label_4, var(--bs-red));
+  @include ideaLabel(label_5, var(--bs-yellow));
 }
 
 .IndexComponent__IdeaCard {
   @mixin labelled($label, $label_color) {
     &--labelled-#{$label} {
       border-color: $label_color;
-      border-width: 2px;
     }
   }
 
-  @include labelled(label_1, red);
-  @include labelled(label_2, blue);
-  @include labelled(label_3, orange);
-  @include labelled(label_4, green);
-  @include labelled(label_5, pink);
+  @include labelled(label_1, var(--bs-cyan));
+  @include labelled(label_2, var(--bs-gray-dark));
+  @include labelled(label_3, var(--bs-green));
+  @include labelled(label_4, var(--bs-red));
+  @include labelled(label_5, var(--bs-yellow));
 }

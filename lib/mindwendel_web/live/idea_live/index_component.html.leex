@@ -41,7 +41,7 @@
             </div>
             <div>
               <%= for label <- Ecto.Enum.values(Mindwendel.Brainstormings.Idea, :label) do %>
-                <%= link id: "idea-label-#{label}", to: "", phx_click: "label", phx_target: @myself, phx_value_id: idea.id, phx_value_label: (if idea.label == label, do: nil, else: label), title: "label #{label}", class: "text-decoration-none me-1" do %>
+                <%= link id: "idea-label-#{label}", to: "", phx_click: "update_label", phx_target: @myself, phx_value_id: idea.id, phx_value_label: (if idea.label == label, do: nil, else: label), title: "label #{label}", class: "text-decoration-none me-1" do %>
                   <i class="IndexComponent__IdeaLabel--<%= label %><%= if idea.label == label, do:  "--active", else: nil %>"></i>
                 <% end %>
               <% end %>
