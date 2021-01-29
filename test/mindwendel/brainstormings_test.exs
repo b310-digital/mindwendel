@@ -7,7 +7,8 @@ defmodule Mindwendel.BrainstormingsTest do
     %{
       brainstorming: Factory.insert!(:brainstorming),
       idea: Factory.insert!(:idea),
-      user: Factory.insert!(:user)
+      user: Factory.insert!(:user),
+      like: Factory.insert!(:like, :with_idea_and_user)
     }
   end
 
@@ -90,6 +91,20 @@ defmodule Mindwendel.BrainstormingsTest do
       Brainstormings.add_like(idea.id, user.id)
       count = idea |> assoc(:likes) |> Repo.aggregate(:count, :id)
       assert count == 1
+    end
+  end
+
+  describe "delete_likes" do
+    @tag individual_test: "true"
+    test "deletes a like", %{like: like} do
+      count = like.idea |> assoc(:likes) |> Repo.aggregate(:count, :id)
+      assert count == 1
+
+      # delete like:
+      Brainstormings.delete_like(like.idea.id, like.user.id)
+
+      count = like.idea |> assoc(:likes) |> Repo.aggregate(:count, :id)
+      assert count == 0
     end
   end
 end

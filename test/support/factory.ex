@@ -37,6 +37,13 @@ defmodule Mindwendel.Factory do
     }
   end
 
+  def build(:like, :with_idea_and_user) do
+    %Like{
+      user: build(:user),
+      idea: build(:idea)
+    }
+  end
+
   # TODO: extract to helper
   def build(factory_name, attributes) do
     factory_name |> build() |> struct!(attributes)
@@ -44,6 +51,10 @@ defmodule Mindwendel.Factory do
 
   def insert!(:brainstorming, :with_users) do
     build(:brainstorming, :with_users) |> Repo.insert!()
+  end
+
+  def insert!(:like, :with_idea_and_user) do
+    build(:like, :with_idea_and_user) |> Repo.insert!()
   end
 
   def insert!(factory_name, attributes) do
