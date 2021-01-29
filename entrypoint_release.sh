@@ -6,4 +6,5 @@ do
   sleep 2
 done
 
+exec ./bin/mindwendel eval "Mindwendel.Release.migrate"
 exec ./bin/mindwendel start

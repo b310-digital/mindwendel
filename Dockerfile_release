@@ -51,6 +51,5 @@ COPY --from=build --chown=nobody:nobody /app/_build/prod/rel/mindwendel ./
 
 ENV HOME=/app
 
-RUN /app/bin/mindwendel eval "Mindwendel.Release.migrate"
-
-CMD ["bin/mindwendel", "start"]
+ENTRYPOINT ["sh", "./entrypoint_release.sh"]
+# CMD ["bin/mindwendel", "start"]
