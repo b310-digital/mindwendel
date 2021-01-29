@@ -2,7 +2,7 @@
   <div id="ideas" class="row mb-5">
     <%= for idea <- @ideas do %>
       <div class="col-md-6">
-        <div class="card mt-3 shadow-sm p-2 bg-white rounded" id="idea-<%= idea.id %>">
+        <div class="card mt-3 shadow-sm p-2 rounded IndexComponent__IdeaCard--labelled-<%= idea.label %>" id="idea-<%= idea.id %>">
           <div class="card-body-mindwendel-idea">
             <%= link to: "#", class: "float-end ms-3 mb-3", phx_click: "delete", phx_target: @myself, phx_value_id: idea.id, title: 'Delete', data: [confirm: "Are you sure you want to delete this idea?"] do %>
               <i class="bi bi-x text-secondary"></i>
@@ -36,6 +36,13 @@
               <% else %>
                 <%= link to: "#", phx_click: "unlike", phx_target: @myself, phx_value_id: idea.id, title: 'Unlike' do %>
                   <i class="bi bi-arrow-up-circle-fill"></i>
+                <% end %>
+              <% end %>
+            </div>
+            <div>
+              <%= for label <- Ecto.Enum.values(Mindwendel.Brainstormings.Idea, :label) do %>
+                <%= link id: "idea-label-#{label}", to: "", phx_click: "update_label", phx_target: @myself, phx_value_id: idea.id, phx_value_label: (if idea.label == label, do: nil, else: label), title: "label #{label}", class: "text-decoration-none me-1" do %>
+                  <i class="IndexComponent__IdeaLabel--<%= label %><%= if idea.label == label, do:  "--active", else: nil %>"></i>
                 <% end %>
               <% end %>
             </div>

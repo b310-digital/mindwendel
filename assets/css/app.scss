@@ -2,6 +2,7 @@
 @import "../node_modules/nprogress/nprogress.css";
 @import "_bootstrap_custom.scss";
 @import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+@import "live/idea_live/_index_component.scss";
 
 .footer {
   height: 40px;
@@ -9,8 +10,9 @@
 
 // Taken from the examples shown:
 // https://icons.getbootstrap.com/icons/arrow-up-circle/
-button .bi, a .bi {
-  vertical-align: .1em;
+button .bi,
+a .bi {
+  vertical-align: 0.1em;
 }
 
 .bg-mindwendel {
@@ -30,10 +32,10 @@ button .bi, a .bi {
   transition: opacity 1s ease-out;
 }
 
-.phx-disconnected{
+.phx-disconnected {
   cursor: wait;
 }
-.phx-disconnected *{
+.phx-disconnected * {
   pointer-events: none;
 }
 
@@ -50,7 +52,6 @@ button .bi, a .bi {
   text-decoration: none;
   cursor: pointer;
 }
-
 
 /* Alerts and form errors */
 .alert:empty {

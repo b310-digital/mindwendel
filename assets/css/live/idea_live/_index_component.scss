@@ -1,0 +1,82 @@
+// We would like to use the BEM css naming convention to avoid css collisions, see http://getbem.com/naming/
+
+%bi-icon-before {
+  display: inline-block;
+  font-family: bootstrap-icons !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: text-bottom;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+%bi-check-circle-fill-before {
+  &::before {
+    content: "\f26a";
+  }
+}
+
+%bi-plus-circle-fill-before {
+  &::before {
+    content: "\f4d2";
+  }
+}
+
+%bi-circle-fill-before {
+  &::before {
+    content: "\f287";
+  }
+}
+
+%bi-x-circle-fill-before {
+  &::before {
+    content: "\f5e6";
+  }
+}
+
+.IndexComponent__IdeaLabel {
+  @mixin ideaLabel($label, $label_color) {
+    &--#{$label} {
+      @extend %bi-icon-before;
+      @extend %bi-circle-fill-before;
+
+      color: $label_color;
+
+      &:hover {
+        @extend %bi-plus-circle-fill-before;
+      }
+
+      &--active {
+        @extend %bi-icon-before;
+        @extend %bi-check-circle-fill-before;
+        color: $label_color;
+        &:hover {
+          @extend %bi-x-circle-fill-before;
+        }
+      }
+    }
+  }
+
+  @include ideaLabel(label_1, var(--bs-cyan));
+  @include ideaLabel(label_2, var(--bs-gray-dark));
+  @include ideaLabel(label_3, var(--bs-green));
+  @include ideaLabel(label_4, var(--bs-red));
+  @include ideaLabel(label_5, var(--bs-yellow));
+}
+
+.IndexComponent__IdeaCard {
+  @mixin labelled($label, $label_color) {
+    &--labelled-#{$label} {
+      border-color: $label_color;
+    }
+  }
+
+  @include labelled(label_1, var(--bs-cyan));
+  @include labelled(label_2, var(--bs-gray-dark));
+  @include labelled(label_3, var(--bs-green));
+  @include labelled(label_4, var(--bs-red));
+  @include labelled(label_5, var(--bs-yellow));
+}

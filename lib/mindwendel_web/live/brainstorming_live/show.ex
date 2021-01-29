@@ -82,7 +82,11 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   end
 
   @impl true
-  def handle_event("sort", %{"id" => id}, socket) do
+  def handle_event("sort_by_likes", %{"id" => id}, socket) do
     {:noreply, assign(socket, :ideas, Brainstormings.list_ideas_for_brainstorming(id))}
+  end
+
+  def handle_event("sort_by_label", %{"id" => id}, socket) do
+    {:noreply, assign(socket, :ideas, Brainstormings.sort_ideas_by_labels(id))}
   end
 end

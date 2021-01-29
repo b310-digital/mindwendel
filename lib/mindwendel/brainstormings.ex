@@ -49,6 +49,15 @@ defmodule Mindwendel.Brainstormings do
     |> Repo.preload([:link, :likes])
   end
 
+  def sort_ideas_by_labels(brainstorming_id) do
+    Repo.all(
+      from idea in Idea,
+        where: idea.brainstorming_id == ^brainstorming_id,
+        order_by: [asc_nulls_last: idea.label, desc: idea.inserted_at]
+    )
+    |> Repo.preload([:link, :likes])
+  end
+
   @doc """
   Gets a single idea.
 
@@ -135,6 +144,7 @@ defmodule Mindwendel.Brainstormings do
     idea
     |> Idea.changeset(attrs)
     |> Repo.update()
+    |> broadcast(:idea_updated)
   end
 
   @doc """
