@@ -107,4 +107,12 @@ defmodule Mindwendel.BrainstormingsTest do
       assert count == 0
     end
   end
+
+  describe "count_likes_for_idea" do
+    test "count likes", %{like: like} do
+      assert Ecto.assoc(like, :idea)
+             |> Repo.one()
+             |> Brainstormings.count_likes_for_idea() == 1
+    end
+  end
 end

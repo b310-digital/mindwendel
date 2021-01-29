@@ -22,6 +22,7 @@ defmodule MindwendelWeb.Router do
 
     scope "/admin", Admin, as: :admin do
       resources "/brainstormings", BrainstormingController, except: [:index, :show, :new, :create]
+      get "/brainstormings/:id/export", BrainstormingController, :export
     end
 
     post "/brainstormings", BrainstormingController, :create

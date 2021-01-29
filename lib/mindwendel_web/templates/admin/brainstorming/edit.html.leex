@@ -20,7 +20,13 @@
       button_title: "Update"
     %>
 
-    <br/>
+    <br />
+    <h5>Export</h5>
+    <hr />
+    <%= link "Export to CSV", to: Routes.admin_brainstorming_path(@conn, :export, @brainstorming.admin_url_id), class: "fw-bold" %>
+    <br /><br />
+
+
     <h5>Delete Brainstorming</h5>
     <hr />
     <p>Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone</p>

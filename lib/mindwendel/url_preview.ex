@@ -1,4 +1,4 @@
-defmodule MindwendelService.UrlPreview do
+defmodule Mindwendel.UrlPreview do
   def extract_url(string \\ "") do
     match =
       Regex.run(

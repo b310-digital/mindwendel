@@ -1,6 +1,6 @@
 defmodule MindwendelServices.UrlPreviewTest do
   use ExUnit.Case
-  alias MindwendelService.UrlPreview
+  alias Mindwendel.UrlPreview
 
   setup do
     bypass = Bypass.open()
@@ -9,22 +9,21 @@ defmodule MindwendelServices.UrlPreviewTest do
 
   describe "extract_url" do
     test "extracts the url with no other text" do
-      assert "http://jannikstreek.de" = UrlPreview.extract_url("http://jannikstreek.de")
+      assert "http://myname.de" = UrlPreview.extract_url("http://myname.de")
     end
 
     test "extracts the url with wrapping text" do
-      assert "http://jannikstreek.de" =
-               UrlPreview.extract_url("Some text http://jannikstreek.de also here")
+      assert "http://myname.de" = UrlPreview.extract_url("Some text http://myname.de also here")
     end
 
     test "extracts only the first url" do
-      assert "http://jannikstreek.de" =
-               UrlPreview.extract_url("http://jannikstreek.de http://gerardonicho.de")
+      assert "http://myname.de" =
+               UrlPreview.extract_url("http://myname.de http://someothername.de")
     end
 
     test "extracts the url with query params" do
-      assert "http://jannikstreek.de/blog/1234sometest&query=test" =
-               UrlPreview.extract_url("http://jannikstreek.de/blog/1234sometest&query=test")
+      assert "http://myname.de/blog/1234sometest&query=test" =
+               UrlPreview.extract_url("http://myname.de/blog/1234sometest&query=test")
     end
 
     test "extracts empty string if no url is given" do

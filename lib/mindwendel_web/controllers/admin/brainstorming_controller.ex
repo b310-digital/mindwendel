@@ -2,6 +2,7 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   use MindwendelWeb, :controller
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.CSVFormatter
 
   def edit(conn, %{"id" => id}) do
     brainstorming = Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
@@ -42,6 +43,17 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
     end
   end
 
+  def export(conn, %{"id" => id}) do
+    brainstorming = Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
+
+    send_download(
+      conn,
+      {:binary, export_brainstorming(brainstorming.id)},
+      content_type: "application/csv",
+      filename: "#{brainstorming.name}.csv"
+    )
+  end
+
   def delete(conn, %{"id" => id}) do
     Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
     |> Brainstormings.delete_brainstorming()
@@ -49,5 +61,11 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
     conn
     |> put_flash(:info, "Successfully deleted brainstorming.")
     |> redirect(to: "/")
+  end
+
+  defp export_brainstorming(id) do
+    id
+    |> Brainstormings.list_ideas_for_brainstorming()
+    |> CSVFormatter.ideas_to_csv()
   end
 end

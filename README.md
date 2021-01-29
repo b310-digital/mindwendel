@@ -8,6 +8,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 - Anonymously invite people to your brainstorming - no registration needed. Usernames are optional.
 - Easily create and upvote ideas, with live updates from your companions.
 - Preview of links to ease URL sharing
+- Export your generated ideas to csv (currently comma separated)
 
 ![](docs/screenshot.png)
 ![](docs/screenshot2.png)
@@ -25,7 +26,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 
 - Clone the repo
   ```sh
-  git clone https://github.com/github_username/repo_name.git
+  git clone https://github.com/mindwendel/mindwendel.git
   ```
 - Install dependencies with
   ```sh
@@ -55,17 +56,23 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
   ```sh
   mix phx.server
   ```
-- Go to [http://localhost:4000/]
+- Go to http://localhost:4000/
 
 ### For docker development
 
-`docker-compose build`
+```sh
+docker-compose build
+```
 
-`docker-compose up`
+```sh
+docker-compose up
+```
 
 To browse the container, use e.g.:
 
-`docker exec -it mindwendel sh`
+```sh
+docker exec -it mindwendel sh
+```
 
 ## Usage example
 
