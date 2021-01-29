@@ -45,6 +45,7 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
 
   def export(conn, %{"id" => id}) do
     brainstorming = Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
+
     send_download(
       conn,
       {:binary, export_brainstorming(brainstorming.id)},
