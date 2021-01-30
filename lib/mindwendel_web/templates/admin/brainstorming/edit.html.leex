@@ -23,7 +23,8 @@
     <br />
     <h5>Export</h5>
     <hr />
-    <%= link "Export to CSV", to: Routes.admin_brainstorming_path(@conn, :export, @brainstorming.admin_url_id), class: "fw-bold" %>
+    <%= link "Export to CSV", to: Routes.admin_brainstorming_path(@conn, :export, @brainstorming.admin_url_id, _format: "csv"), class: "fw-bold" %><br />
+    <%= link "Export to HTML", to: Routes.admin_brainstorming_path(@conn, :export, @brainstorming.admin_url_id), class: "fw-bold" %>
     <br /><br />
 
 
