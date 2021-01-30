@@ -2,7 +2,7 @@ defmodule MindwendelWeb.Router do
   use MindwendelWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
+    plug :accepts, ["html", "csv"]
     plug :fetch_session
     plug :fetch_live_flash
     plug :put_root_layout, {MindwendelWeb.LayoutView, :root}
