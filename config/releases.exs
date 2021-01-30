@@ -2,9 +2,7 @@
 # from environment variables. You can also hardcode secrets,
 # although such is generally not recommended and you have to
 # remember to add this file to your .gitignore.
-
-# Just used for local production tests, otherwise the releases file is used.
-use Mix.Config
+import Config
 
 database_host =
   System.get_env("DATABASE_HOST") ||
@@ -69,7 +67,7 @@ config :mindwendel, MindwendelWeb.Endpoint,
 # If you are doing OTP releases, you need to instruct Phoenix
 # to start each relevant endpoint:
 #
-#     config :mindwendel, MindwendelWeb.Endpoint, server: true
+config :mindwendel, MindwendelWeb.Endpoint, server: true
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
