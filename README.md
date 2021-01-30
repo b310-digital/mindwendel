@@ -18,8 +18,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 Brainstorm ...
 - ... new business ideas
 - ... solutions for a problem
-- ... what do eat tonight
-- ... which movie to watch
+- ... what to eat tonight
 - ... 
 
 ## Getting Started
