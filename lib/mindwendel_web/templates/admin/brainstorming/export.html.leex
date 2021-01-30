@@ -1,0 +1,5 @@
+<%= for idea <- @ideas do %>
+  <%= idea.body %><br />
+  By <%= idea.username %>, <%= count_likes_for_idea(idea) %> likes
+  <br /><br />
+<% end %>
