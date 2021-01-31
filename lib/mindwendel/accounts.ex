@@ -3,8 +3,6 @@ defmodule Mindwendel.Accounts do
   alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.Brainstorming
 
-  # TODO: Add proper docu for methods
-
   def get_or_create_user(id) do
     Repo.get(User, id) ||
       case %User{id: id} |> Repo.insert() do
@@ -35,7 +33,6 @@ defmodule Mindwendel.Accounts do
 
   def merge_brainstorming_user(%Brainstorming{} = brainstorming, user_id)
       when is_binary(user_id) do
-    # TODO: Convert this to a guard
     case Ecto.UUID.dump(user_id) do
       :error -> brainstorming
       {:ok, _} -> merge_brainstorming_user(brainstorming, get_or_create_user(user_id))
