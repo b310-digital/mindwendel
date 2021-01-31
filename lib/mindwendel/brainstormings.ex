@@ -207,7 +207,6 @@ defmodule Mindwendel.Brainstormings do
       ** (Ecto.Query.CastError)
 
   """
-  # TODO: Handle CastError when wrong uuid is given
   # See https://stackoverflow.com/questions/53802091/elixir-uuid-how-to-handle-500-error-when-uuid-doesnt-match
   def get_brainstorming!(id) do
     Repo.get!(Brainstorming, id) |> Repo.preload([:users, ideas: [:link, :likes]])

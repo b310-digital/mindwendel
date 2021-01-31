@@ -36,7 +36,6 @@
           %>
           <%= for brainstorming <- sorted_brainstorming do %>
             <a href="<%= Routes.brainstorming_show_path(@conn, :show, brainstorming) %>">
-              <%# TODO: Better styling %>
               <h5><%= brainstorming.name %> <span class="badge rounded-pill bg-light text-dark"><%= Timex.format!(brainstorming.inserted_at, "{relative}", :relative) %></span></h5>
             </a>
           <% end %>

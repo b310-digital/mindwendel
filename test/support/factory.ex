@@ -44,7 +44,6 @@ defmodule Mindwendel.Factory do
     }
   end
 
-  # TODO: extract to helper
   def build(factory_name, attributes) do
     factory_name |> build() |> struct!(attributes)
   end
