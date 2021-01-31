@@ -4,6 +4,8 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.CSVFormatter
 
+  plug :fetch_user
+
   def edit(conn, %{"id" => id}) do
     brainstorming = Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
 
@@ -39,7 +41,11 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
         )
 
       {:error, changeset} ->
-        render(conn, "edit.html", brainstorming: brainstorming, changeset: changeset)
+        render(conn, "edit.html",
+          brainstorming: brainstorming,
+          changeset: changeset,
+          uri: Routes.admin_brainstorming_url(conn, :edit, id)
+        )
     end
   end
 
@@ -68,5 +74,12 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
     conn
     |> put_flash(:info, "Successfully deleted brainstorming.")
     |> redirect(to: "/")
+  end
+
+  defp fetch_user(conn, _params) do
+    current_user_id = MindwendelService.SessionService.get_current_user_id(get_session(conn))
+    current_user = Mindwendel.Accounts.get_user(current_user_id)
+
+    assign(conn, :current_user, current_user)
   end
 end

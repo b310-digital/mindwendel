@@ -48,10 +48,9 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
              )
              |> has_element?()
 
-      html =
-        show_live_view
-        |> element("#idea-#{idea.id} a#idea-label-label_1")
-        |> render_click()
+      show_live_view
+      |> element("#idea-#{idea.id} a#idea-label-label_1")
+      |> render_click()
 
       assert Repo.reload(idea).label == :label_1
     end
@@ -69,10 +68,9 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
              )
              |> has_element?()
 
-      html =
-        show_live_view
-        |> element("#idea-#{idea.id} a#idea-label-label_1")
-        |> render_click()
+      show_live_view
+      |> element("#idea-#{idea.id} a#idea-label-label_1")
+      |> render_click()
 
       assert Repo.reload(idea).label == nil
     end

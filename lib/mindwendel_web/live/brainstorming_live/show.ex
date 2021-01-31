@@ -35,16 +35,10 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
      |> apply_action(socket.assigns.live_action, id)}
   end
 
-  def handle_event("handle_hotkey_i", _, socket) do
-    {:noreply,
-     push_patch(socket,
-       to: Routes.brainstorming_show_path(socket, :new_idea, socket.assigns.brainstorming)
-     )}
-  end
-
   @impl true
   def handle_info({:idea_added, idea}, socket) do
-    new_ideas = socket.assigns.ideas ++ [idea]
+    # uses the database to sort and update all ideas, instead of appending the idea to the end of list (which would be more performant)
+    new_ideas = Brainstormings.list_ideas_for_brainstorming(idea.brainstorming_id)
     {:noreply, assign(socket, :ideas, new_ideas)}
   end
 
@@ -88,5 +82,12 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   def handle_event("sort_by_label", %{"id" => id}, socket) do
     {:noreply, assign(socket, :ideas, Brainstormings.sort_ideas_by_labels(id))}
+  end
+
+  def handle_event("handle_hotkey_i", _, socket) do
+    {:noreply,
+     push_patch(socket,
+       to: Routes.brainstorming_show_path(socket, :new_idea, socket.assigns.brainstorming)
+     )}
   end
 end

@@ -13,9 +13,9 @@
   <body class="bg-light">
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white border-bottom mb-2" style="height:50px;">
       <div class="container">
-        <a class="navbar-brand mb-0 h1" href="#">
+        <%= link to: "/", class: "navbar-brand mb-0 h1" do %>
           <img src="<%= Routes.static_path(@conn, "/images/mindwendel_logo_black.svg") %>" height="20px" />
-        </a>
+        <% end %>
 
         <button
           class="navbar-toggler"

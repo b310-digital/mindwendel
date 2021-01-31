@@ -43,8 +43,8 @@ defmodule Mindwendel.Accounts do
   end
 
   def merge_brainstorming_user(%Brainstorming{} = brainstorming, %User{} = user) do
-    unless user.id in (brainstorming.users |> Enum.map(& &1.id)) do
-      brainstorming_users = brainstorming.users ++ [user]
+    unless user.id in Enum.map(brainstorming.users, fn e -> e.id end) do
+      brainstorming_users = [user | brainstorming.users]
 
       updated_brainstorming =
         brainstorming

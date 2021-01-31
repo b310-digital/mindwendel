@@ -1,7 +1,6 @@
 defmodule MindwendelServices.CSVFormatter do
   use Mindwendel.DataCase
   alias Mindwendel.Factory
-  alias Mindwendel.Brainstormings
   alias Mindwendel.CSVFormatter
 
   setup do

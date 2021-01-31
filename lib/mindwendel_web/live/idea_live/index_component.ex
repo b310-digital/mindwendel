@@ -2,7 +2,6 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
   use MindwendelWeb, :live_component
 
   alias Mindwendel.Brainstormings
-  alias Mindwendel.Brainstormings.Idea
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
