@@ -29,6 +29,6 @@ defmodule Mindwendel.Release do
   end
 
   def run_seeds do
-    Code.eval_file("./priv/repo/seeds.exs")
+    Code.eval_file("#{:code.priv_dir(@app)}/repo/seeds.exs")
   end
 end
