@@ -15,20 +15,22 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
-      - name: Push to GitHub Packages
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GH_CONTAINER_REGISTRY_PERSONAL_ACCESS_TOKEN }}
-          push: true
-          tags: |
-            user/app:latest
-            user/app:1.0.0
-            ghcr.io/user/app:latest
-            ghcr.io/user/app:1.0.0
-          registry: ghcr.io
-          tags: |
-            mindwendel/mindwendel_github_workflow:latest
+      - run: echo "Hello Hello"
 
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+      # - name: Push to GitHub Packages
+      #   uses: docker/build-push-action@v1
+      #   with:
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GH_CONTAINER_REGISTRY_PERSONAL_ACCESS_TOKEN }}
+      #     push: true
+      #     tags: |
+      #       user/app:latest
+      #       user/app:1.0.0
+      #       ghcr.io/user/app:latest
+      #       ghcr.io/user/app:1.0.0
+      #     registry: ghcr.io
+      #     tags: |
+      #       mindwendel/mindwendel_github_workflow:latest
+
+      # - name: Image digest
+      #   run: echo ${{ steps.docker_build.outputs.digest }}
