@@ -18,5 +18,5 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GH_CONTAINER_REGISTRY_PERSONAL_ACCESS_TOKEN }}
           registry: ghcr.io
-          repository: mindwendel/mindwendel/mindwendel
+          repository: mindwendel/mindwendel/mindwendel_github_workflow
           tag_with_ref: true
