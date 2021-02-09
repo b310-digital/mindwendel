@@ -2,10 +2,18 @@ name: Publish Docker image
 
 on:
   workflow_dispatch:
+    docker_tag:
+      description: "Define the docker tag name. You can define the docker tag version separately"
+      default: mindwendel_github_workflow
+    docker_tag_version:
+      description: "Define the docker tag version"
+      required: true
   push:
-    branches: [44-refine-release-process-docker]
-  # release:
-  #   types: [published]
+    # TODO:: Remove this after testing
+    branches:
+      - 44-refine-release-process-docker
+    tags:
+      - "*.*.*"
 
 jobs:
   push_to_registry:
@@ -14,6 +22,9 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+
+      - run: echo ${GITHUB_REF}
+      - run: echo ${GITHUB_REF#refs/*/}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -34,7 +45,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/mindwendel/mindwendel_github_workflow:latest
+          tags: ghcr.io/mindwendel/mindwendel_github_workflow:${GITHUB_REF#refs/*/}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

@@ -1,0 +1,26 @@
+READMETEMPLATE.md
+README.md
+
+# git
+.git
+.gitattributes
+.gitignore
+
+# Node
+## Logs
+logs
+*.log
+assets/npm-debug.log*
+assets/yarn-debug.log*
+assets/yarn-error.log*
+
+## Dependency directories
+assets/node_modules/
+
+## Misc files
+.tool_versions
+.prettierrc
+elixir_buildpack.config
+phoenix_static_buildpack.config
+README.md
+LICENSE
