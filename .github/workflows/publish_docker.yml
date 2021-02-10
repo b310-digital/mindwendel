@@ -26,6 +26,10 @@ jobs:
       - run: echo ${GITHUB_REF}
       - run: echo ${GITHUB_REF#refs/*/}
 
+      - name: Set output
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -46,7 +50,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags:
-            - "ghcr.io/mindwendel/mindwendel_github_workflow:${{GITHUB_REF#refs/*/}}"
+            - ghcr.io/mindwendel/mindwendel_github_workflow:${{ steps.vars.outputs.tag }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
