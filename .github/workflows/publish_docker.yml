@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: On push tag publish docker image
 
 on:
   workflow_dispatch:
@@ -20,15 +20,12 @@ jobs:
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
     steps:
+      - name: Setting vars for later access
+        id: set_vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
       - name: Check out the repo
         uses: actions/checkout@v2
-
-      - run: echo ${GITHUB_REF}
-      - run: echo ${GITHUB_REF#refs/*/}
-
-      - name: Set output
-        id: vars
-        run: echo ::set-output name=tag::ghcr.io/mindwendel/mindwendel_github_workflow:${GITHUB_REF#refs/*/}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -49,7 +46,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.vars.outputs.tag }}
+          tags: ${{ format('ghcr.io/mindwendel/mindwendel_github_workflow:{0}', steps.set_vars.outputs.tag) }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
