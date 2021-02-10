@@ -45,7 +45,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: "ghcr.io/mindwendel/mindwendel_github_workflow:${GITHUB_REF#refs/*/}"
+          tags:
+            - "ghcr.io/mindwendel/mindwendel_github_workflow:${{GITHUB_REF#refs/*/}}"
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
