@@ -1,15 +1,15 @@
-name: On push tag publish docker image
+name: On push build publish release
 
 on:
   workflow_dispatch:
     docker_tag:
       description: "Define the docker tag name. You can define the docker tag version separately"
-      default: mindwendel_github_workflow
+      default: mindwendel
     docker_tag_version:
       description: "Define the docker tag version"
       required: true
   push:
-    # TODO:: Remove this after testing
+    # TODO:: Remove after branch merged
     branches:
       - 44-refine-release-process-docker
     tags:
@@ -41,6 +41,7 @@ jobs:
           password: ${{ secrets.GH_CONTAINER_REGISTRY_PERSONAL_ACCESS_TOKEN }}
 
       - name: Push to GitHub Packages
+        id: docker_build
         uses: docker/build-push-action@v2
         with:
           context: .
