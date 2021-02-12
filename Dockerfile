@@ -1,15 +1,20 @@
-FROM elixir:1.11-alpine as development
 
-RUN apk add --update-cache \
-    postgresql-client \
-    nodejs npm
+ARG ALPINE_VERSION=3.13
+
+
+FROM elixir:1.11-alpine as elixir_alpine
+
+RUN apk add --update-cache postgresql-client nodejs npm
+
+RUN mix local.hex --force
+RUN mix local.rebar --force
 
 WORKDIR /app
 
 COPY . .
 
-RUN mix local.hex --force
-RUN mix local.rebar --force
+FROM elixir_alpine as development
+
 RUN mix deps.get
 RUN npm --prefix assets install
 RUN mix compile
@@ -17,8 +22,10 @@ RUN mix compile
 RUN ["chmod", "+x", "./entrypoint.sh"]
 ENTRYPOINT ["sh", "./entrypoint.sh"]
 
+
+# Building a release version
 # https://hexdocs.pm/phoenix/releases.html
-FROM development AS build
+FROM elixir_alpine AS build
 
 # Set build ENV
 ENV MIX_ENV=prod
@@ -35,7 +42,7 @@ RUN mix phx.digest
 RUN mix do compile, release
 
 # prepare release image
-FROM alpine:3.13 AS app
+FROM alpine:${ALPINE_VERSION} AS app
 RUN apk add --no-cache openssl ncurses-libs postgresql-client
 
 WORKDIR /app

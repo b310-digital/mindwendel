@@ -19,7 +19,6 @@ assets/node_modules/
 
 ## Misc files
 .tool_versions
-.prettierrc
 elixir_buildpack.config
 phoenix_static_buildpack.config
 README.md
