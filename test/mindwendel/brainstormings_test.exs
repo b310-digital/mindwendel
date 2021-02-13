@@ -4,9 +4,12 @@ defmodule Mindwendel.BrainstormingsTest do
   alias Mindwendel.Brainstormings
 
   setup do
+    brainstorming = Factory.insert!(:brainstorming)
+
     %{
-      brainstorming: Factory.insert!(:brainstorming),
-      idea: Factory.insert!(:idea),
+      brainstorming: brainstorming,
+      idea:
+        Factory.insert!(:idea, brainstorming: brainstorming, inserted_at: ~N[2021-01-01 15:04:30]),
       user: Factory.insert!(:user),
       like: Factory.insert!(:like, :with_idea_and_user)
     }
@@ -28,7 +31,7 @@ defmodule Mindwendel.BrainstormingsTest do
   end
 
   describe "list_ideas_for_brainstorming" do
-    test "orders by like count", %{brainstorming: brainstorming, user: user} do
+    test "orders by like count", %{brainstorming: brainstorming, user: user, idea: idea} do
       first_idea = Factory.insert!(:idea, brainstorming_id: brainstorming.id)
       third_idea = Factory.insert!(:idea, brainstorming_id: brainstorming.id)
       second_idea = Factory.insert!(:idea, brainstorming_id: brainstorming.id)
@@ -42,10 +45,14 @@ defmodule Mindwendel.BrainstormingsTest do
       ids =
         Enum.map(Brainstormings.list_ideas_for_brainstorming(brainstorming.id), fn x -> x.id end)
 
-      assert ids == [first_idea.id, second_idea.id, third_idea.id]
+      assert ids == [first_idea.id, second_idea.id, third_idea.id, idea.id]
     end
 
-    test "orders by date if like count is equal", %{brainstorming: brainstorming, user: user} do
+    test "orders by date if like count is equal", %{
+      brainstorming: brainstorming,
+      user: user,
+      idea: idea
+    } do
       older_idea =
         Factory.insert!(:idea,
           brainstorming_id: brainstorming.id,
@@ -64,7 +71,7 @@ defmodule Mindwendel.BrainstormingsTest do
       ids =
         Enum.map(Brainstormings.list_ideas_for_brainstorming(brainstorming.id), fn x -> x.id end)
 
-      assert ids == [younger_idea.id, older_idea.id]
+      assert ids == [younger_idea.id, older_idea.id, idea.id]
     end
   end
 
