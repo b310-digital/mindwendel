@@ -29,15 +29,13 @@
       <div class="row mt-5">
         <div class="col-md-12 col-lg-12 mt-2">
           <h3>Your latest brainstormings</h3>
-          <%
-            sorted_brainstorming =
-              Enum.sort_by(@current_user.brainstormings, &(&1.inserted_at), {:desc, Time})
-                |> Enum.slice(0, 3)
-          %>
-          <%= for brainstorming <- sorted_brainstorming do %>
-            <a href="<%= Routes.brainstorming_show_path(@conn, :show, brainstorming) %>">
-              <h5><%= brainstorming.name %> <span class="badge rounded-pill bg-light text-dark"><%= Timex.format!(brainstorming.inserted_at, "{relative}", :relative) %></span></h5>
-            </a>
+          <%= for brainstorming <- sorted_brainstormings_for(@current_user) do %>
+          <h5>
+            <%= link brainstorming.name, to: Routes.brainstorming_show_path(@conn, :show, brainstorming) %>
+            <span class="badge rounded-pill bg-light text-dark">
+              <%= Timex.format!(brainstorming.inserted_at, "{relative}", :relative) %>
+            </span>
+          </h5>
           <% end %>
         </div>
       </div>
