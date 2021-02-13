@@ -344,12 +344,12 @@ defmodule Mindwendel.Brainstormings do
 
   ## Examples
 
-      iex> subscribe
+      iex> subscribe(3)
       :ok
 
   """
-  def subscribe do
-    Phoenix.PubSub.subscribe(Mindwendel.PubSub, "ideas")
+  def subscribe(brainstorming_id) do
+    Phoenix.PubSub.subscribe(Mindwendel.PubSub, "brainstormings:" <> brainstorming_id)
   end
 
   @doc """
@@ -364,7 +364,7 @@ defmodule Mindwendel.Brainstormings do
   def broadcast({:ok, idea}, event) do
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
-      "ideas",
+      "brainstormings:" <> idea.brainstorming_id,
       {event, idea |> Repo.preload([:link, :likes])}
     )
 
