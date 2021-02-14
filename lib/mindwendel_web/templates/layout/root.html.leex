@@ -11,7 +11,7 @@
   </head>
 
   <body class="bg-light">
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white border-bottom mb-2" style="height:50px;">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white border-bottom mb-2">
       <div class="container">
         <%= link to: "/", class: "navbar-brand mb-0 h1" do %>
           <img src="<%= Routes.static_path(@conn, "/images/mindwendel_logo_black.svg") %>" height="20px" />
@@ -23,23 +23,23 @@
           data-bs-target="#navbarDropdownToggler"
           aria-controls="navbarDropdownToggler"
           aria-expanded="false"
-          aria-label="Toggle navigation" >
+          aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarDropdownToggler">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 bg-white">
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/">New brainstorming</a>
             </li>
 
             <%= if assigns[:current_user] do %>
-              <li class="nav-item dropdown d-none d-lg-block">
+              <li class="nav-item dropdown d-none d-lg-block bg-white">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                   Your brainstormings
                 </a>
                 <ul class="dropdown-menu">
-                  <%= for brainstorming <- @current_user.brainstormings do %>
+                  <%= for brainstorming <- list_brainstormings_for(@current_user, 10) do %>
                     <a class="dropdown-item <%= if assigns[:brainstorming].id == brainstorming.id, do: "active", else: "" %>" href="<%= Routes.brainstorming_show_path(@conn, :show, brainstorming) %>">
                       <%= brainstorming.name %>
                     </a>
@@ -49,8 +49,8 @@
 
               <%# The following tags are invisible on larger screens due to .d-lg-none %>
               <%# We do this to avoid a second level dropdown menu when the navbar is collapsed %>
-              <div class="dropdown-divider d-lg-none"></div>
-              <%= for brainstorming <- @current_user.brainstormings |> Enum.sort_by(&(&1.inserted_at), {:desc, Time}) do %>
+              <li class="nav-item"><hr class="dropdown-divider"></li>
+              <%= for brainstorming <- list_brainstormings_for(@current_user, 10) do %>
                 <li class="nav-item d-lg-none">
                   <a class="nav-link <%= if assigns[:brainstorming].id == brainstorming.id, do: "active", else: "" %>" href="<%= Routes.brainstorming_show_path(@conn, :show, brainstorming) %>">
                     <%= brainstorming.name %>
