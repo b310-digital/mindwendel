@@ -7,6 +7,7 @@ do
 done
 
 if [[ -z `psql -Atq -h $DATABASE_HOST -p $DATABASE_PORT -U $DATABASE_USER -W $DATABASE_USER_PASSWORD -c "\\list $DATABASE_NAME"` ]]; then
+  echo "Database $DATABASE_NAME does not exists."
   mix ecto.create
   mix ecto.migrate
   mix run priv/repo/seeds.exs

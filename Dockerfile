@@ -1,7 +1,6 @@
 
 ARG ALPINE_VERSION=3.13
 
-
 FROM elixir:1.11-alpine as elixir_alpine
 
 RUN apk add --update-cache postgresql-client nodejs npm
