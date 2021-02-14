@@ -29,7 +29,7 @@
       <div class="row mt-5">
         <div class="col-md-12 col-lg-12 mt-2">
           <h3>Your latest brainstormings</h3>
-          <%= for brainstorming <- sorted_brainstormings_for(@current_user) do %>
+          <%= for brainstorming <- list_brainstormings_for(@current_user) do %>
           <h5>
             <%= link brainstorming.name, to: Routes.brainstorming_show_path(@conn, :show, brainstorming) %>
             <span class="badge rounded-pill bg-light text-dark">
