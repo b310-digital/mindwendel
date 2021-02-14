@@ -3,7 +3,6 @@ defmodule MindwendelWeb.BrainstormingChannelTest do
 
   alias Mindwendel.Factory
   alias Mindwendel.Brainstormings
-  alias Mindwendel.Brainstormings.Idea
 
   setup do
     %{
@@ -17,7 +16,7 @@ defmodule MindwendelWeb.BrainstormingChannelTest do
 
       Brainstormings.subscribe(brainstorming.id)
       Brainstormings.update_idea(idea, %{body: "lalala"})
-      assert_received {:idea_updated, idea}
+      assert_received {:idea_updated, _}
     end
 
     test "does not receive messages from other brainstormings", %{brainstorming: brainstorming} do
@@ -26,7 +25,7 @@ defmodule MindwendelWeb.BrainstormingChannelTest do
 
       Brainstormings.subscribe(other_brainstorming.id)
       Brainstormings.update_idea(idea, %{body: "lalala"})
-      refute_received {:idea_updated, idea}
+      refute_received {:idea_updated, _}
     end
   end
 end

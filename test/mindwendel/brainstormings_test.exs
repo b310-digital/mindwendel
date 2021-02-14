@@ -4,15 +4,32 @@ defmodule Mindwendel.BrainstormingsTest do
   alias Mindwendel.Brainstormings
 
   setup do
-    brainstorming = Factory.insert!(:brainstorming)
+    user = Factory.insert!(:user)
+    brainstorming = Factory.insert!(:brainstorming, users: [user])
 
     %{
       brainstorming: brainstorming,
       idea:
         Factory.insert!(:idea, brainstorming: brainstorming, inserted_at: ~N[2021-01-01 15:04:30]),
-      user: Factory.insert!(:user),
+      user: user,
       like: Factory.insert!(:like, :with_idea_and_user)
     }
+  end
+
+  describe "list_brainstormings_for" do
+    test "returns the 3 most recent brainstormings", %{brainstorming: brainstorming, user: user} do
+      older_brainstorming =
+        Factory.insert!(:brainstorming, inserted_at: ~N[2021-01-10 15:04:30], users: [user])
+
+      oldest_brainstorming =
+        Factory.insert!(:brainstorming, inserted_at: ~N[2021-01-05 15:04:30], users: [user])
+
+      assert Brainstormings.list_brainstormings_for(user.id) |> Enum.map(fn b -> b.id end) == [
+               brainstorming.id,
+               older_brainstorming.id,
+               oldest_brainstorming.id
+             ]
+    end
   end
 
   describe "change brainstorming" do

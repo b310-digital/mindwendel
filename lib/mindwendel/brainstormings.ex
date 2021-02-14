@@ -11,6 +11,25 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Brainstormings.Like
 
   @doc """
+  Returns the 3 most recent brainstormings for a a user.
+
+  ## Examples
+
+      iex> list_brainstormings_for(3)
+      [%Brainstorming{}, ...]
+
+  """
+  def list_brainstormings_for(user_id) do
+    Repo.all(
+      from brainstorming in Brainstorming,
+        join: users in assoc(brainstorming, :users),
+        where: users.id == ^user_id,
+        order_by: [desc: brainstorming.inserted_at],
+        limit: 3
+    )
+  end
+
+  @doc """
   Returns the list of ideas.
 
   ## Examples
