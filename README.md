@@ -27,40 +27,26 @@ Brainstorm ...
 
 ## Getting Started
 
-mindwendel can be run just about anywhere
-
- <!-- TODO: Add an installation guide with detailed instructions for various deployments. -->
- <!-- So checkout our Installation Guides for detailed instructions for various deployments. -->
+mindwendel can be run just about anywhere. So checkout our [Installation Guides](./docs/installing_mindwendel.md) for detailed instructions for various deployments.
 
 Here's the TLDR:
 
-### Docker-Compose
+- Run mindwendel via Docker and reference your postgres database
 
-To run mindwendel via Docker-Compose, just type
+  ```sh
+  docker run -d --name mindwendel \
+    -p 127.0.0.1:80:4000 \
+    -e DATABASE_HOST="..." \
+    -e DATABASE_PORT="5432" \
+    -e DATABASE_NAME="mindwendel_prod" \
+    -e DATABASE_USER="mindwendel_db_user" \
+    -e DATABASE_USER_PASSWORD="mindwendel_db_user_password" \
+    -e SECRET_KEY_BASE="generate_your_own_secret_key_base_and_save_it" \
+    -e URL_HOST="your_domain_to_mindwendel" \
+    ghcr.io/mindwendel/mindwendel
+  ```
 
-```sh
-docker-compose up
-```
-
-Note: Adjust the env vars in teh `docker-copmose.yml`.
-
-### Docker
-
-To just run mindwendel via Docker (without postgres database), just type
-
-```sh
-docker run -d --name mindwendel \
-  -p 127.0.0.1:80:4000 \
-  -e DATABASE_HOST="..." \
-  -e DATABASE_USER="..." \
-  -e DATABASE_USER_PASSWORD="..." \
-  -e DATABASE_NAME="..." \
-  -e SECRET_KEY_BASE \
-  -e URL_HOST="localhost" \
-  ghcr.io/mindwendel/mindwendel
-```
-
-NOTE: mindwendel requires a postgres database. You can use our docker-compose file to also install the postgres.
+NOTE: mindwendel requires a postgres database. You can use [our docker-compose file](./docs/installing_mindwendel.md#running_on_docker_compose) to also install the postgres.
 
 ## Usage example
 
