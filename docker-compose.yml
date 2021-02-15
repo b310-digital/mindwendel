@@ -2,23 +2,29 @@ version: "3"
 
 services:
   mindwendel:
-    image: ghcr.io/mindwendel/mindwendel:latest
+    container_name: mindwendel
+    build:
+      context: .
+      target: development
     environment:
-      # You can also define the environment variables in the .env.prod file. Use the `.env.prod.default` as template
-      # When executing `docker up`, then `.env` file will be considered automatically
-      # env_file:
-      #  - .env.prod
       DATABASE_USER: postgres
       DATABASE_USER_PASSWORD: postgres
       DATABASE_NAME: mindwendel
       DATABASE_PORT: 5432
       DATABASE_HOST: db
-      URL_HOST: "localhost"
-      SECRET_KEY_BASE: "zva4uKXd0O/gN/LybopmApQkT7iZnnyCK8JUh95U3Go65k9umxwxXwH/7gPSOdHi"
     ports:
-      - "80:4000"
+      - "4000:4000"
     depends_on:
       - db
+    # Mount the app folder to increase development speed. Ignore compiled and build folders.
+    volumes:
+      - .:/app
+      - /app/deps/
+      - /app/assets/node_modules
+      - /app/priv/static
+    # In case you want to use the included .env file to provide the credentials.
+    # env_file:
+    #  - .env
   db:
     image: postgres:latest
     environment:
