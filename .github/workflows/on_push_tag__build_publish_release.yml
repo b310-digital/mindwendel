@@ -1,4 +1,4 @@
-name: On push tag build publish release
+name: on_push_tag_build_publish_release
 
 on:
   workflow_dispatch:
