@@ -5,8 +5,7 @@ FROM elixir:1.11-alpine as elixir_alpine
 
 RUN apk add --update-cache postgresql-client nodejs npm
 
-RUN mix local.hex --force
-RUN mix local.rebar --force
+RUN mix do local.hex --force, local.rebar --force
 
 WORKDIR /app
 
@@ -14,9 +13,8 @@ COPY . .
 
 FROM elixir_alpine as development
 
-RUN mix deps.get
+RUN mix do deps.get, compile
 RUN npm --prefix assets install
-RUN mix compile
 
 RUN ["chmod", "+x", "./entrypoint.sh"]
 ENTRYPOINT ["sh", "./entrypoint.sh"]
@@ -30,7 +28,7 @@ FROM elixir_alpine AS build
 ENV MIX_ENV=prod
 
 # Install mix dependencies
-RUN mix deps.compile
+RUN mix do deps.get, deps.compile
 
 # Build assets
 RUN npm --prefix ./assets ci --progress=false --no-audit --loglevel=error
