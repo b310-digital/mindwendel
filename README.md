@@ -5,7 +5,9 @@
 Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm and upvote ideas and thoughts within your team. Built from scratch with [Phoenix](https://www.phoenixframework.org).
 
 ## Features
-- Anonymously invite people to your brainstorming - no registration needed. Usernames are optional.
+
+- 5 minute setup (It is not a joke)
+- Anonymously invite people to your brainstormings - no registration needed. Usernames are optional.
 - Easily create and upvote ideas, with live updates from your companions.
 - Preview of links to ease URL sharing
 - Cluster your ideas with labels
@@ -15,22 +17,69 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 ![](docs/screenshot2.png)
 
 ## Use-cases
+
 Brainstorm ...
+
 - ... new business ideas
 - ... solutions for a problem
 - ... what to eat tonight
-- ... 
+- ...
 
 ## Getting Started
 
-### Prerequisites
+mindwendel can be run just about anywhere. So checkout our [Installation Guides](./docs/installing_mindwendel.md) for detailed instructions for various deployments.
+
+Here's the TLDR:
+
+- Run mindwendel via Docker and reference your postgres database
+
+  ```sh
+  docker run -d --name mindwendel \
+    -p 127.0.0.1:80:4000 \
+    -e DATABASE_HOST="..." \
+    -e DATABASE_PORT="5432" \
+    -e DATABASE_NAME="mindwendel_prod" \
+    -e DATABASE_USER="mindwendel_db_user" \
+    -e DATABASE_USER_PASSWORD="mindwendel_db_user_password" \
+    -e SECRET_KEY_BASE="generate_your_own_secret_key_base_and_save_it" \
+    -e URL_HOST="your_domain_to_mindwendel" \
+    ghcr.io/mindwendel/mindwendel
+  ```
+
+NOTE: mindwendel requires a postgres database. You can use [our docker-compose file](./docs/installing_mindwendel.md#running-on-docker-compose) to also install the postgres.
+
+## Usage example
+
+## Contributing
+
+To get started with a development installation of mindwendel, follow the instructions below.
+
+mindwendel is built on top of:
 
 - [Elixir](https://elixir-lang.org/install.html)
 - [Phoenix Framework](https://hexdocs.pm/phoenix/installation.html#phoenix)
 - [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_view)
 - [PostgreSQL](https://www.postgresql.org)
 
-### For local setup and development
+### Dev setup based on Docker
+
+- Startup docker container
+  ```sh
+  docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+  ```
+- Go to http://localhost:4000/
+
+- Open you favorite editor and start developing
+
+- Open a shell in the docker container to execute tests, etc.
+
+  ```sh
+  docker exec -it mindwendel sh
+  ```
+
+- In the shell, you can now execute all commands as on you local machine, see [testing commands](#testing)
+
+### Dev setup an your local machine (without docker)
 
 - Clone the repo
   ```sh
@@ -66,28 +115,6 @@ Brainstorm ...
   ```
 - Go to http://localhost:4000/
 
-### For docker development
-
-```sh
-docker-compose build
-```
-
-```sh
-docker-compose up
-```
-
-To browse the container, use e.g.:
-
-```sh
-docker exec -it mindwendel sh
-```
-
-## Usage example
-
-## Development setup
-
-For local development, please follow [the guide for local development setup](#for-local-setup-and-development).
-
 ### Testing
 
 - Load the env variables for testing
@@ -101,6 +128,13 @@ For local development, please follow [the guide for local development setup](#fo
 - Run the test
   ```sh
   mix test
+  ```
+
+### Build release and production docker image
+
+- Build the docker image based on our Dockerfile
+  ```sh
+  docker build -t mindwendel_prod .
   ```
 
 ### Formatting
