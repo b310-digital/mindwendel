@@ -46,7 +46,7 @@ Here's the TLDR:
     ghcr.io/mindwendel/mindwendel
   ```
 
-NOTE: mindwendel requires a postgres database. You can use [our docker-compose file](./docs/installing_mindwendel.md#running_on_docker_compose) to also install the postgres.
+NOTE: mindwendel requires a postgres database. You can use [our docker-compose file](./docs/installing_mindwendel.md#running-on-docker-compose) to also install the postgres.
 
 ## Usage example
 
@@ -128,6 +128,13 @@ mindwendel is built on top of:
 - Run the test
   ```sh
   mix test
+  ```
+
+### Build release and production docker image
+
+- Build the docker image based on our Dockerfile
+  ```sh
+  docker build -t mindwendel_prod .
   ```
 
 ### Formatting

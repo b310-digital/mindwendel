@@ -9,9 +9,6 @@ on:
       description: "Define the docker tag version"
       required: true
   push:
-    # TODO:: Remove after branch merged
-    branches:
-      - 44-refine-release-process-docker
     tags:
       - "*.*.*"
 
@@ -47,7 +44,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ format('ghcr.io/mindwendel/mindwendel_github_workflow:{0}', steps.set_vars.outputs.tag) }}
+          tags: ${{ format('ghcr.io/mindwendel/mindwendel:{0}', steps.set_vars.outputs.tag) }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

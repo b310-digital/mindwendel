@@ -25,9 +25,11 @@ services:
     # In case you want to use the included .env file to provide the credentials.
     # env_file:
     #  - .env
+
   db:
     image: postgres:latest
     environment:
+      # IMPORTANT: Do not use these credentials in produciton. Please use other credentials when deploying this in production
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       PGDATA: /var/lib/postgresql/data/pgdata

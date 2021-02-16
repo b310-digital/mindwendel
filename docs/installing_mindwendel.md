@@ -4,8 +4,8 @@ We have prepared different installation configurations for you. A postgres datab
 
 Below, we provide detailed instructions on how to install and run mindwendel in a variety of common configurations:
 
-- [Running on Docker-Compose](#running_on_docker-compose) (RECOMMENDED)
-- [Running on Docker](#running_on_docker)
+- [Running on Docker-Compose](#running-on-docker-compose) (RECOMMENDED)
+- [Running on Docker](#running-on-docker)
 
 ## Running on Docker-Compose
 
@@ -59,6 +59,7 @@ When you use [docker-compose](https://docs.docker.com/compose/), you will be usi
       restart: always
       ports:
         - "5432:5432"
+      # This is important for a production setup in order ot presist the mindwendel database even the docker container is stopped and removed
       volumes:
         - pgdata:/var/lib/postgresql/data
   volumes:
@@ -70,7 +71,7 @@ When you use [docker-compose](https://docs.docker.com/compose/), you will be usi
   docker-compose up
   ```
 
-Note: Adjust the env vars in teh `docker-copmose.yml`.
+Note: Adjust the env vars in `docker-copmose.yml`.
 
 ## Running on Docker
 
@@ -90,4 +91,4 @@ If you are using Docker containers and prefer to manage your mindwendel installa
     ghcr.io/mindwendel/mindwendel
   ```
 
-NOTE: mindwendel requires a postgres database. You can use our docker-compose file to also install the postgres.
+NOTE: mindwendel requires a postgres database. You can use our docker-compose file to also install the postgres, see [above](#running-on-docker-compose).
