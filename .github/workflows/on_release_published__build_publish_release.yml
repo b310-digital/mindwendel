@@ -1,16 +1,11 @@
-name: on_push_tag_build_publish_release
+name: on_release_published__build_publish_release
 
 on:
-  workflow_dispatch:
-    docker_tag:
-      description: "Define the docker tag name. You can define the docker tag version separately"
-      default: mindwendel
-    docker_tag_version:
-      description: "Define the docker tag version"
-      required: true
   push:
-    tags:
-      - "*.*.*"
+    branches:
+      - "57-adjust-github-workflow-release"
+  release:
+    types: [published]
 
 jobs:
   push_to_registry:
@@ -44,7 +39,9 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ format('ghcr.io/mindwendel/mindwendel:{0}', steps.set_vars.outputs.tag) }}
+          tags:
+            - ${{ format('ghcr.io/mindwendel/mindwendel_test_with_label:{0}', steps.set_vars.outputs.tag) }}
+            - ghcr.io/mindwendel/mindwendel_test_with_label:label
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
