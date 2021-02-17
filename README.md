@@ -65,7 +65,7 @@ mindwendel is built on top of:
 
 - Startup docker container
   ```sh
-  docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+  docker-compose up
   ```
 - Go to http://localhost:4000/
 
