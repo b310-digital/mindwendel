@@ -40,7 +40,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ format('ghcr.io/mindwendel/mindwendel_test_with_label:{0}', steps.set_vars.outputs.tag) }}
+            ${{ format('ghcr.io/mindwendel/mindwendel_test_with_label:v{0}', steps.set_vars.outputs.tag) }}
             ghcr.io/mindwendel/mindwendel_test_with_label:label
 
       - name: Image digest
