@@ -1,9 +1,6 @@
 name: on_release_published__build_publish_release
 
 on:
-  push:
-    branches:
-      - "57-adjust-github-workflow-release"
   release:
     types: [published]
 
@@ -40,8 +37,8 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ format('ghcr.io/mindwendel/mindwendel_test_with_label:v{0}', steps.set_vars.outputs.tag) }}
-            ghcr.io/mindwendel/mindwendel_test_with_label:label
+            ${{ format('ghcr.io/mindwendel/mindwendel:{0}', steps.set_vars.outputs.tag) }}
+            ghcr.io/mindwendel/mindwendel:label
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
