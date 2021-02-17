@@ -11,6 +11,25 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Brainstormings.Like
 
   @doc """
+  Returns the 3 most recent brainstormings for a a user.
+
+  ## Examples
+
+      iex> list_brainstormings_for(3)
+      [%Brainstorming{}, ...]
+
+  """
+  def list_brainstormings_for(user_id, limit \\ 3) do
+    Repo.all(
+      from brainstorming in Brainstorming,
+        join: users in assoc(brainstorming, :users),
+        where: users.id == ^user_id,
+        order_by: [desc: brainstorming.inserted_at],
+        limit: ^limit
+    )
+  end
+
+  @doc """
   Returns the list of ideas.
 
   ## Examples
@@ -344,12 +363,12 @@ defmodule Mindwendel.Brainstormings do
 
   ## Examples
 
-      iex> subscribe
+      iex> subscribe(3)
       :ok
 
   """
-  def subscribe do
-    Phoenix.PubSub.subscribe(Mindwendel.PubSub, "ideas")
+  def subscribe(brainstorming_id) do
+    Phoenix.PubSub.subscribe(Mindwendel.PubSub, "brainstormings:" <> brainstorming_id)
   end
 
   @doc """
@@ -364,7 +383,7 @@ defmodule Mindwendel.Brainstormings do
   def broadcast({:ok, idea}, event) do
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
-      "ideas",
+      "brainstormings:" <> idea.brainstorming_id,
       {event, idea |> Repo.preload([:link, :likes])}
     )
 

@@ -1,10 +1,11 @@
-version: '3'
+version: "3"
 
 services:
   mindwendel:
     container_name: mindwendel
     build:
       context: .
+      target: development
     environment:
       DATABASE_USER: postgres
       DATABASE_USER_PASSWORD: postgres
@@ -24,13 +25,17 @@ services:
     # In case you want to use the included .env file to provide the credentials.
     # env_file:
     #  - .env
+
   db:
     image: postgres:latest
     environment:
+      # IMPORTANT: Do not use these credentials in produciton. Please use other credentials when deploying this in production
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       PGDATA: /var/lib/postgresql/data/pgdata
     restart: always
+    ports:
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 volumes:

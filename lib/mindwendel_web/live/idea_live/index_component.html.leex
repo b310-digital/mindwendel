@@ -8,9 +8,14 @@
               <i class="bi bi-x text-secondary"></i>
             <% end %>
 
-            <%= text_to_html(idea.body) %>
+            <%= unless idea.link do %>
+              <%= text_to_html(idea.body) %>
+            <% end %>
 
             <%= if idea.link do %>
+              <%= link to: idea.link.url do %>
+                <%= text_to_html(idea.body) %>
+              <% end %>
               <hr />
               <div class="row">
                 <div class="col-md-3">

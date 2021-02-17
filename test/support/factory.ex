@@ -40,7 +40,7 @@ defmodule Mindwendel.Factory do
   def build(:like, :with_idea_and_user) do
     %Like{
       user: build(:user),
-      idea: build(:idea)
+      idea: build(:idea, brainstorming: build(:brainstorming))
     }
   end
 
