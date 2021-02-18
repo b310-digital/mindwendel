@@ -21,7 +21,8 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
-        ref: ${{ github.event.inputs.github_ref }}
+        with:
+          ref: ${{ github.event.inputs.github_ref }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
