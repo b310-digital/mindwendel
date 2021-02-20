@@ -7,7 +7,6 @@ defmodule MindwendelWeb.StaticPageControllerTest do
     test "contains text", %{conn: conn} do
       conn = get(conn, Routes.static_page_path(conn, :home))
       assert html_response(conn, 200) =~ "mindwendel"
-      assert html_response(conn, 200) =~ "Brainstorm"
     end
 
     test "sets current_user_id in session", %{conn: conn} do
@@ -40,7 +39,7 @@ defmodule MindwendelWeb.StaticPageControllerTest do
 
       conn = get(conn, Routes.static_page_path(conn, :home))
 
-      assert html_response(conn, 200) =~ "Your latest brainstormings"
+      assert html_response(conn, 200) =~ "Deine letzten Brainstormings"
       assert html_response(conn, 200) =~ brainstorming.name
     end
 
@@ -55,7 +54,7 @@ defmodule MindwendelWeb.StaticPageControllerTest do
 
       conn = get(conn, Routes.static_page_path(conn, :home))
 
-      refute html_response(conn, 200) =~ "Your latest brainstormings"
+      refute html_response(conn, 200) =~ "Deine letzten Brainstormings"
       refute html_response(conn, 200) =~ brainstorming.name
     end
   end
