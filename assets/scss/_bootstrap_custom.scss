@@ -1,13 +1,22 @@
 // Required
 @import "../node_modules/bootstrap/scss/bootstrap";
 
-.card-body-mindwendel-idea {
-  @extend .card-body;
-  padding: 0.5rem 0.5rem;
+//#00456F secondary
+$primary: #00a3d3;
+
+.btn-primary {
+  color: #ffffff !important;
 }
 
+.card-body-mindwendel-idea {
+    @extend .card-body;
+    padding: 0.5rem 0.5rem;
+  }
+  
 .card-footer-mindwendel-idea {
   @extend .card-footer;
   padding: 0.5rem 0.5rem;
   background-color: inherit;
 }
+
+@import "../node_modules/bootstrap";
