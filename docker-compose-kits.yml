@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  mindwendel:
+    container_name: mindwendel
+    image: kits/mindwendel
+    build:
+      context: .
+      target: app
+    environment:
+      DATABASE_USER: postgres
+      DATABASE_USER_PASSWORD: postgres
+      DATABASE_NAME: mindwendel
+      DATABASE_PORT: 5432
+      DATABASE_HOST: db
+      DATABASE_SSL: "true"
+      URL_HOST: localhost
+      # IMPORTANT: Change the secret key base - see readme
+      SECRET_KEY_BASE:
+      MW_DEFAULT_LOCALE: de
+      MW_FEATURE_BRAINSTORMING_TEASER: "false"
+      # Use the URL_PORT to change url generation behavior
+      # URL_PORT: 
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+  db:
+    image: postgres:latest
+    environment:
+      # IMPORTANT: Do not use these credentials in production. Please use other credentials when deploying this in production
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
