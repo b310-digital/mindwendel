@@ -6,12 +6,12 @@
     <br /><br/>
 
     Mit unserem schlanken Tool »mindwendel« sammelst du auf überraschend einfache
-    Weise Ideen mit anderen gemeinsam. Diese kannst du liken, sortieren und farbig
+    Weise mit anderen gemeinsam Ideen. Diese kannst du liken, sortieren und farbig
     markieren.
     <br /><br />
     <%= f = form_for @changeset, Routes.brainstorming_path(@conn, :create) %>
       <div class="input-group">
-        <%= text_input f, :name, class: "form-control", placeholder: "Wie können wir ...", autofocus: true %>
+        <%= text_input f, :name, class: "form-control", placeholder: "Gib Deine Frage ein!", autofocus: true %>
         <%= if message = f.errors[:name] do %>
           <span><%= translate_error(message) %></span>
         <% end %>
