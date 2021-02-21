@@ -31,6 +31,9 @@ config :mindwendel, MindwendelWeb.Endpoint,
     ]
   ]
 
+config :mindwendel, :options,
+  brainstorming_teasers: System.get_env("BRAINSTORMING_TEASERS") || "true"
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
