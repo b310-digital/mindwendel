@@ -21,4 +21,5 @@ config :mindwendel, MindwendelWeb.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
-config :mindwendel, :options, brainstorming_teasers: "true"
+config :mindwendel, :options, feature_brainstorming_teasers:
+  Enum.member?(["", "true"], String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || ""))
