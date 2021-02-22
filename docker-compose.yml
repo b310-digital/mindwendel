@@ -12,7 +12,7 @@ services:
       DATABASE_NAME: mindwendel
       DATABASE_PORT: 5432
       DATABASE_HOST: db
-      BRAINSTORMING_TEASERS: "true"
+      MW_FEATURE_BRAINSTORMING_TEASER: "true"
     ports:
       - "4000:4000"
     depends_on:
