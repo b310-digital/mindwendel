@@ -12,14 +12,16 @@ services:
       DATABASE_NAME: mindwendel
       DATABASE_PORT: 5432
       DATABASE_HOST: db
-      MW_FEATURE_BRAINSTORMING_TEASER: "true"
+      # prod related env vars
+      # MW_FEATURE_BRAINSTORMING_TEASER: "true"
+      # SECRET_KEY_BASE:
+      # URL_HOST: localhost
     ports:
       - "4000:4000"
     depends_on:
       - db
     # Mount the app folder to increase development speed. Ignore compiled and build folders.
     volumes:
-      - .:/app
       - /app/deps/
       - /app/assets/node_modules
       - /app/priv/static

@@ -12,15 +12,15 @@ use Mix.Config
 config :mindwendel, MindwendelWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+# Do not print debug messages in production
+config :logger, level: :info
+
 config :mindwendel, :options,
   feature_brainstorming_teasers:
     Enum.member?(
       ["", "true"],
       String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
     )
-
-# Do not print debug messages in production
-config :logger, level: :info
 
 # ## SSL Support
 #
