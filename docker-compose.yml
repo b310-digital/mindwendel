@@ -12,12 +12,16 @@ services:
       DATABASE_NAME: mindwendel
       DATABASE_PORT: 5432
       DATABASE_HOST: db
+      # prod related env vars
+      # SECRET_KEY_BASE:
+      # URL_HOST: localhost
     ports:
       - "4000:4000"
     depends_on:
       - db
     # Mount the app folder to increase development speed. Ignore compiled and build folders.
     volumes:
+      # attention: uncomment the app folder mount if you want to build the app stage
       - .:/app
       - /app/deps/
       - /app/assets/node_modules
@@ -29,7 +33,7 @@ services:
   db:
     image: postgres:latest
     environment:
-      # IMPORTANT: Do not use these credentials in produciton. Please use other credentials when deploying this in production
+      # IMPORTANT: Do not use these credentials in production. Please use other credentials when deploying this in production
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       PGDATA: /var/lib/postgresql/data/pgdata

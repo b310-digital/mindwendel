@@ -31,6 +31,13 @@ config :mindwendel, MindwendelWeb.Endpoint,
     ]
   ]
 
+config :mindwendel, :options,
+  feature_brainstorming_teasers:
+    Enum.member?(
+      ["", "true"],
+      String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
+    )
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
