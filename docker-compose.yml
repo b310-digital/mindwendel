@@ -13,7 +13,6 @@ services:
       DATABASE_PORT: 5432
       DATABASE_HOST: db
       # prod related env vars
-      # MW_FEATURE_BRAINSTORMING_TEASER: "true"
       # SECRET_KEY_BASE:
       # URL_HOST: localhost
     ports:
