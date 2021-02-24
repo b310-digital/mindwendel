@@ -62,6 +62,13 @@ config :mindwendel, MindwendelWeb.Endpoint,
   ],
   secret_key_base: secret_key_base
 
+config :mindwendel, :options,
+  feature_brainstorming_teasers:
+    Enum.member?(
+      ["", "true"],
+      String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
+    )
+
 # ## Using releases (Elixir v1.9+)
 #
 # If you are doing OTP releases, you need to instruct Phoenix
