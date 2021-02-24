@@ -42,7 +42,7 @@ Repo.insert(
 
 Repo.insert(
   %Inspiration{
-    title: "What would your most challening customer want you to do?",
+    title: "What would your most challenging customer want you to do?",
     type: "What if",
     language: "en"
   },
