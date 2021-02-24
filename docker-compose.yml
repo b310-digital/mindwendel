@@ -2,6 +2,7 @@ version: "3"
 
 services:
   mindwendel:
+    container_name: mindwendel
     build:
       context: .
       target: development
