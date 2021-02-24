@@ -21,6 +21,8 @@ services:
       - db
     # Mount the app folder to increase development speed. Ignore compiled and build folders.
     volumes:
+      # attention: uncomment the app folder mount if you want to build the app stage
+      - .:/app
       - /app/deps/
       - /app/assets/node_modules
       - /app/priv/static
