@@ -2,10 +2,9 @@ version: "3"
 
 services:
   mindwendel:
-    container_name: mindwendel
     build:
       context: .
-      target: development
+      target: app
     environment:
       DATABASE_USER: postgres
       DATABASE_USER_PASSWORD: postgres
@@ -18,7 +17,7 @@ services:
       - db
     # Mount the app folder to increase development speed. Ignore compiled and build folders.
     volumes:
-      - .:/app
+      # - .:/app
       - /app/deps/
       - /app/assets/node_modules
       - /app/priv/static
