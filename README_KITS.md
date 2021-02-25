@@ -9,13 +9,27 @@ This project includes a few CI changes to the mindwendel software. To limit the 
 - `favicon` => `kits_favicon` as new favicon
 - New svg images / other icons prefixed with `kits_`
 
+If development occurs more frequently, these files should be integrated normally - resulting in modified files. Changes from the mindwendel main repo then have to be merged or rebased.
+
 ## Development
 
-Exchange the files mentioned at the top with their counterparts, or copy e.g. the html files in the same folders like their counterparts and change the static_controller.ex to use these files (layout and home).
+To simulated local development, exchange the following files:
 
-Move the raw css files to /priv/static/css.
+Change the static_page_controller inside mindwendel_web/controllers as follows:
 
-If you need more information on where to move the files, please have a look at the docker build file Dockerfile_Kits.
+```elixir
+plug :put_root_layout, {MindwendelWeb.LayoutView, :kits_static_page}
+```
+
+```elixir
+    render(conn, "kits_home.html",
+      current_user: current_user,
+      brainstorming: %Brainstorming{},
+      changeset: Brainstormings.change_brainstorming(%Brainstorming{}, %{})
+    )
+```
+
+Move the raw css files (kits_home.css / kits.css) to /priv/static/css.
 
 Thats it.
 
