@@ -9,6 +9,15 @@ This project includes a few CI changes to the mindwendel software. To limit the 
 - `favicon` => `kits_favicon` as new favicon
 - New svg images / other icons prefixed with `kits_`
 
+## Development
+
+Exchange the files mentioned at the top with their counterparts, or copy e.g. the html files in the same folders like their counterparts and change the static_controller.ex to use these files (layout and home).
+
+Move the raw css files to /priv/static/css.
+
+If you need more information on where to move the files, please have a look at the docker build file Dockerfile_Kits.
+
+Thats it.
 
 ## Installation
 
@@ -20,7 +29,7 @@ docker-compose -f docker-compose-kits.yml up
 or to make sure updates will be included:
 
 ```sh
-docker-compose -f .\docker-compose-kits.yml --force-recreate up
+docker-compose -f docker-compose-kits.yml --force-recreate up
 ```
 
 Important: Make sure to exchange passwords with proper ones!
