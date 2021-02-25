@@ -15,7 +15,7 @@ services:
       DATABASE_PORT: 5432
       DATABASE_HOST: db
       URL_HOST: localhost
-      SECRET_KEY_BASE: 1cCMiiunj/SDScaPa6aF3vQ4sqrJ63TyoQ+mnULUj8Ov2l6MyZXXS73AjUnvlxHL
+      SECRET_KEY_BASE:
       MW_FEATURE_BRAINSTORMING_TEASER: "false"
     ports:
       - "80:4000"
