@@ -26,4 +26,4 @@ docker-compose -f .\docker-compose-kits.yml --force-recreate up
 Important: Make sure to exchange passwords with proper ones!
 
 
-See main README for project specifica.
+See main README for project specifics.
