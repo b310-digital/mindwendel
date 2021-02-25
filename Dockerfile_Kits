@@ -1,0 +1,67 @@
+
+ARG ALPINE_VERSION=3.13
+
+FROM elixir:1.11-alpine as elixir_alpine
+
+RUN apk add --update-cache postgresql-client nodejs npm
+
+RUN mix do local.hex --force, local.rebar --force
+
+WORKDIR /app
+
+COPY . .
+
+FROM elixir_alpine as development
+
+RUN mix do deps.get, compile
+RUN npm --prefix assets install
+
+RUN ["chmod", "+x", "./entrypoint.sh"]
+ENTRYPOINT ["sh", "./entrypoint.sh"]
+
+
+# Building a release version
+# https://hexdocs.pm/phoenix/releases.html
+FROM elixir_alpine AS build
+
+# Set build ENV
+ENV MIX_ENV=prod
+
+# Install mix dependencies
+RUN mix do deps.get, deps.compile
+
+# Attention! Overwrite section for kits
+# Overwrite mindwendel original with specific kits files. This enables a "No Merge" Process for updates.
+COPY ./lib/mindwendel_web/templates/layout/kits_static_page.html.leex ./lib/mindwendel_web/templates/layout/static_page.html.leex
+COPY ./lib/mindwendel_web/templates/static_page/kits_home.html.leex ./lib/mindwendel_web/templates/static_page/home.html.leex
+COPY ./assets/css/kits_home.css ./priv/static/css/kits_home.css
+COPY ./assets/static/kits_favicon.ico ./assets/static/favicon.ico
+COPY ./assets/static/images/noun_bulb.svg ./assets/static/images/mindwendel_logo_black.svg
+COPY ./assets/css/kits.css ./priv/static/css/kits.css
+COPY ./assets/css/kits_bootstrap_custom.scss ./assets/css/_bootstrap_custom.scss
+# End of Overwrite Section
+
+# Build assets
+RUN npm --prefix ./assets ci --progress=false --no-audit --loglevel=error
+RUN npm run --prefix ./assets deploy
+RUN mix phx.digest
+
+# compile and build release
+RUN mix do compile, release
+
+# prepare release image
+FROM alpine:${ALPINE_VERSION} AS app
+RUN apk add --no-cache openssl ncurses-libs postgresql-client
+
+WORKDIR /app
+
+RUN chown nobody:nobody /app
+
+USER nobody:nobody
+
+COPY entrypoint.release.sh /app/entrypoint.release.sh
+COPY --from=build --chown=nobody:nobody /app/_build/prod/rel/mindwendel ./
+
+ENV HOME=/app
+
+ENTRYPOINT ["sh", "./entrypoint.release.sh"]
