@@ -30,13 +30,6 @@ ENV MIX_ENV=prod
 # Install mix dependencies
 RUN mix do deps.get, deps.compile
 
-# Attention! Overwrite section for kits
-# Overwrite mindwendel original with specific kits files. This enables a "No Merge" Process for updates.
-COPY ./assets/css/kits_home.css ./priv/static/css/kits_home.css
-COPY ./assets/css/kits.css ./priv/static/css/kits.css
-COPY ./assets/static/kits_favicon.ico ./assets/static/favicon.ico
-# End of Overwrite Section
-
 # Build assets
 RUN npm --prefix ./assets ci --progress=false --no-audit --loglevel=error
 RUN npm run --prefix ./assets deploy
