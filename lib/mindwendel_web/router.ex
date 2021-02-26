@@ -8,6 +8,7 @@ defmodule MindwendelWeb.Router do
     plug :put_root_layout, {MindwendelWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug Mindwendel.Plugs.XFrameOptions
     plug Mindwendel.Plugs.SetSessionUserId
   end
 

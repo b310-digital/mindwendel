@@ -32,13 +32,9 @@ RUN mix do deps.get, deps.compile
 
 # Attention! Overwrite section for kits
 # Overwrite mindwendel original with specific kits files. This enables a "No Merge" Process for updates.
-COPY ./lib/mindwendel_web/templates/layout/kits_static_page.html.leex ./lib/mindwendel_web/templates/layout/static_page.html.leex
-COPY ./lib/mindwendel_web/templates/static_page/kits_home.html.leex ./lib/mindwendel_web/templates/static_page/home.html.leex
 COPY ./assets/css/kits_home.css ./priv/static/css/kits_home.css
-COPY ./assets/static/kits_favicon.ico ./assets/static/favicon.ico
-COPY ./assets/static/images/noun_bulb.svg ./assets/static/images/mindwendel_logo_black.svg
 COPY ./assets/css/kits.css ./priv/static/css/kits.css
-COPY ./assets/css/kits_bootstrap_custom.scss ./assets/css/_bootstrap_custom.scss
+COPY ./assets/static/kits_favicon.ico ./assets/static/favicon.ico
 # End of Overwrite Section
 
 # Build assets
