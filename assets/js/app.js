@@ -44,7 +44,7 @@ Hooks.ShareBrainstormingLinkButton = {
             url: document.getElementById("brainstorming-link").value
           })
         } else {
-          document.getElementById("brainstorming-sharing-link-block").style.display = ""
+          document.getElementById("brainstorming-sharing-link-block").classList.toggle('invisible');
         }
     })
   }
