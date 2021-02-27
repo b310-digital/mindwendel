@@ -1,39 +1,39 @@
 <div class="card">
 <div class="card-header">
-  <h4>Administration for brainstorming <%= @brainstorming.name %></h4>
+  <h4><%= gettext("Administration for brainstorming %{name}", name: @brainstorming.name) %></h4>
 </div>
   <div class="card-body">
-  <p>Save this link to update / delete your brainstorming later on:</p>
+  <p><%= gettext("Save this link to update / delete your brainstorming later on:") %></p>
     <%= tag :input, id: "brainstorming-link", type: "text", class: "form-control", value: @uri, aria_describedby: "basic-addon1", readonly: true %>
 
     <br />
     <i class="far fa-arrow-alt-circle-right"></i>
-    <%= link "Proceed to your brainstorming", to: Routes.brainstorming_show_path(@conn, :show, @brainstorming), class: "fw-bold" %>
+    <%= link gettext("Proceed to your brainstorming"), to: Routes.brainstorming_show_path(@conn, :show, @brainstorming), class: "fw-bold" %>
     <br /><br />
 
-    <h5>Edit Brainstorming</h5>
+    <h5><%= gettext("Edit Brainstorming") %></h5>
     <hr />
     <%= render "_form.html",
       conn: @conn,
       changeset: @changeset,
       path: Routes.admin_brainstorming_path(@conn, :update, @brainstorming.admin_url_id),
-      button_title: "Update"
+      button_title: gettext("Update")
     %>
 
     <br />
-    <h5>Export</h5>
+    <h5><%= gettext("Export") %></h5>
     <hr />
-    <%= link "Export to CSV", to: Routes.admin_brainstorming_path(@conn, :export, @brainstorming.admin_url_id, _format: "csv"), class: "fw-bold" %><br />
-    <%= link "Export to HTML", to: Routes.admin_brainstorming_path(@conn, :export, @brainstorming.admin_url_id), class: "fw-bold" %>
+    <%= link gettext("Export to CSV"), to: Routes.admin_brainstorming_path(@conn, :export, @brainstorming.admin_url_id, _format: "csv"), class: "fw-bold" %><br />
+    <%= link gettext("Export to HTML"), to: Routes.admin_brainstorming_path(@conn, :export, @brainstorming.admin_url_id), class: "fw-bold" %>
     <br /><br />
 
 
-    <h5>Delete Brainstorming</h5>
+    <h5><%= gettext("Delete Brainstorming") %></h5>
     <hr />
-    <p>Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone</p>
+    <p><%= gettext("Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone") %></p>
     <div class="row">
       <div class="col-lg-12 col-xl-2 d-grid gap-2">
-        <%= button("Delete", to: Routes.admin_brainstorming_path(@conn, :delete, @brainstorming.admin_url_id), method: :delete, class: "btn btn-danger") %>
+        <%= button(gettext("Delete"), to: Routes.admin_brainstorming_path(@conn, :delete, @brainstorming.admin_url_id), method: :delete, class: "btn btn-danger") %>
       </div>
     </div>
   </div>

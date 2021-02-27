@@ -29,6 +29,6 @@
   <%= hidden_input f, :brainstorming_id %>
 
   <br /><br />
-  <%= live_patch raw("Close"), to: @return_to, class: "btn btn-secondary form-cancel" %>
-  <%= submit "Save", phx_disable_with: "Saving...", class: "btn btn-primary" %>
+  <%= live_patch raw(gettext("Close")), to: @return_to, class: "btn btn-secondary form-cancel" %>
+  <%= submit gettext("Save"), phx_disable_with: gettext("Saving..."), class: "btn btn-primary" %>
 </form>
