@@ -189,12 +189,12 @@ msgid "mindwendel could not be found."
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/controllers/brainstorming_controller.ex:19
+#: lib/mindwendel_web/controllers/brainstorming_controller.ex:21
 msgid "Something went wrong when creating a brainstorming. Please try again."
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:75
+#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:77
 msgid "Successfully deleted brainstorming."
 msgstr ""
 
@@ -221,4 +221,19 @@ msgstr ""
 #, elixir-format
 #: lib/mindwendel_web/templates/static_page/home.html.leex:31
 msgid "Your latest brainstormings"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/live/idea_live/form_component.html.leex:22
+msgid "Your idea"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/live/idea_live/form_component.html.leex:9
+msgid "Required fields are either missing or incorrect:"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/live/idea_live/form_component.html.leex:14
+msgid "Username"
 msgstr ""

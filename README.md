@@ -150,6 +150,17 @@ We are using Elixir's built-in formatter.
   mix format
   ```
 
+## Environment Variables
+
+### Localisation
+ 
+ Currently, there are two language files available, german ("de") and english ("en"). To set the default_locale, you can set `MW_DEFAULT_LOCALE`. The default is english.
+
+ You can extract new strings to translate by running:
+ ```
+  mix gettext.extract --merge
+ ```
+
 ## Contributing
 
 1. Fork it (<https://github.com/mindwendel/mindwendel/fork>)
