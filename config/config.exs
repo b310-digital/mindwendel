@@ -26,7 +26,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-
 # set possible translations:
 config :mindwendel, MindwendelWeb.Gettext, default_locale: "de", locales: ~w(en de)
 

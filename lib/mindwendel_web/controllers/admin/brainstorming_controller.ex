@@ -22,7 +22,9 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
         conn
         |> put_flash(
           :info,
-          gettext("Your brainstorming was created successfully! Please favorite or copy this link, to return later to this administrative view.")
+          gettext(
+            "Your brainstorming was created successfully! Please favorite or copy this link, to return later to this administrative view."
+          )
         )
         |> redirect(to: Routes.admin_brainstorming_path(conn, :edit, brainstorming.admin_url_id))
 

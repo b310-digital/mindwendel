@@ -8,7 +8,9 @@ defmodule MindwendelWeb.BrainstormingController do
         conn
         |> put_flash(
           :info,
-          gettext("Your brainstorming was created successfully! Share the link with other people and start brainstorming.")
+          gettext(
+            "Your brainstorming was created successfully! Share the link with other people and start brainstorming."
+          )
         )
         |> redirect(to: Routes.brainstorming_show_path(conn, :show, brainstorming))
 
