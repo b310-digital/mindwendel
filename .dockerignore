@@ -48,3 +48,10 @@ erl_crash.dump
 
 # Also ignore elixir language runtime needed by visual studio code
 .elixir_ls
+
+# Ignoring the env files
+.env*
+
+# Ignoring files relevant for gigalixir and heroku
+elixir_buildpack.config
+phoenix_static_buildpack.config
