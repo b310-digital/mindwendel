@@ -21,9 +21,6 @@ config :mindwendel, MindwendelWeb.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
-# Always use en for tests:
-config :mindwendel, MindwendelWeb.Gettext, default_locale: "en"
-
 config :mindwendel, :options,
   feature_brainstorming_teasers:
     Enum.member?(
