@@ -26,12 +26,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# set possible translations:
-default_locale = String.trim(System.get_env("MW_DEFAULT_LOCALE") || "en")
-
-config :gettext, :default_locale, default_locale
-config :timex, :default_locale, default_locale
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

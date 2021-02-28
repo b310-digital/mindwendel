@@ -5,7 +5,7 @@ services:
     container_name: mindwendel
     build:
       context: .
-      target: development
+      target: app
     environment:
       DATABASE_USER: postgres
       DATABASE_USER_PASSWORD: postgres
@@ -15,6 +15,9 @@ services:
       # prod related env vars
       # SECRET_KEY_BASE:
       # URL_HOST: localhost
+      SECRET_KEY_BASE: Q+E79shOfupMYDYB/uhhw7y2Fu55QgwBq+S8KZKlHM9pg0YBKkmTNFHTxmVSswj3
+      URL_HOST: localhost
+      MW_DEFAULT_LOCALE: de
     ports:
       - "4000:4000"
     depends_on:
@@ -22,7 +25,7 @@ services:
     # Mount the app folder to increase development speed. Ignore compiled and build folders.
     volumes:
       # attention: uncomment the app folder mount if you want to build the app stage
-      - .:/app
+      # - .:/app
       - /app/deps/
       - /app/assets/node_modules
       - /app/priv/static

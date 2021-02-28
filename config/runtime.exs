@@ -78,3 +78,9 @@ config :mindwendel, MindwendelWeb.Endpoint, server: true
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
+
+# set possible translations:
+default_locale = String.trim(System.get_env("MW_DEFAULT_LOCALE") || "en")
+
+config :gettext, :default_locale, default_locale
+config :timex, :default_locale, default_locale
