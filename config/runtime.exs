@@ -60,8 +60,7 @@ if config_env() != :test do
   config :mindwendel, MindwendelWeb.Endpoint,
     url: [host: url_host, port: String.to_integer(System.get_env("PORT") || "4000")],
     http: [
-      port: String.to_integer(System.get_env("PORT") || "4000"),
-      transport_options: [socket_opts: [:inet6]]
+      port: String.to_integer(System.get_env("PORT") || "4000")
     ],
     secret_key_base: secret_key_base
 
