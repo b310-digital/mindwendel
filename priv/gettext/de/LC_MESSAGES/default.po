@@ -241,10 +241,10 @@ msgstr "Nutzername"
 
 #, elixir-format
 #: lib/mindwendel_web/live/idea_live/index_component.html.leex:33
+#: lib/mindwendel_web/templates/admin/brainstorming/export.html.leex:3
 msgid "By"
 msgstr "Von"
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/index_component.html.leex:33
 msgid "Anonymous"
 msgstr "Anonym"

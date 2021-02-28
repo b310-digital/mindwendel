@@ -12,6 +12,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 - Preview of links to ease URL sharing
 - Cluster your ideas with labels
 - Export your generated ideas to html or csv (currently comma separated)
+- German & English Translation files
 
 ![](docs/screenshot.png)
 ![](docs/screenshot2.png)
