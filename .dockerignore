@@ -1,5 +1,4 @@
 READMETEMPLATE.md
-README.md
 
 # git
 .git
@@ -22,5 +21,37 @@ assets/node_modules/
 .tool_versions
 elixir_buildpack.config
 phoenix_static_buildpack.config
-README.md
-LICENSE
+
+# In order to avoid running into weird conflicts when working with docker and on the host machine 
+# https://elixirforum.com/t/trivial-elixir-app-release-build-runs-but-docker-runtime-error-from-erlexec/30859/3
+
+# The directory Mix will write compiled artifacts to.
+_build/
+
+# If you run "mix test --cover", coverage assets end up here.
+cover/
+
+# The directory Mix downloads your dependencies sources to.
+deps/
+
+# Where 3rd-party dependencies like ExDoc output generated docs.
+doc/
+
+# Ignore .fetch files in case you like to edit your project deps locally.
+.fetch
+
+# If the VM crashes, it generates a dump, let's ignore it too.
+erl_crash.dump
+
+# Also ignore archive artifacts (built via "mix archive.build").
+*.ez
+
+# Also ignore elixir language runtime needed by visual studio code
+.elixir_ls
+
+# Ignoring the env files
+.env*
+
+# Ignoring files relevant for gigalixir and heroku
+elixir_buildpack.config
+phoenix_static_buildpack.config
