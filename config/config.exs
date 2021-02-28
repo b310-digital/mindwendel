@@ -12,11 +12,10 @@ config :mindwendel,
 
 # Configures the endpoint
 config :mindwendel, MindwendelWeb.Endpoint,
-  url: [host: "localhost"],
-  secret_key_base: "zva4uKXd0O/gN/LybopmApQkT7iZnnyCK8JUh95U3Go65k9umxwxXwH/7gPSOdHi",
   render_errors: [view: MindwendelWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Mindwendel.PubSub,
-  live_view: [signing_salt: "MBwQ4WtK"]
+  live_view: [signing_salt: "MBwQ4WtK"],
+  code_reloader: false
 
 # Configures Elixir's Logger
 config :logger, :console,

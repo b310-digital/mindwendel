@@ -7,15 +7,16 @@ services:
       context: .
       target: development
     environment:
+      # adjust these vars in production!
       DATABASE_USER: postgres
       DATABASE_USER_PASSWORD: postgres
       DATABASE_NAME: mindwendel
       DATABASE_PORT: 5432
       DATABASE_HOST: db
-      MW_DEFAULT_LOCALE: en
-      # prod related env vars
-      # SECRET_KEY_BASE:
-      # URL_HOST: localhost
+      DATABASE_SSL: "false"
+      MW_DEFAULT_LOCALE: de
+      SECRET_KEY_BASE: 24Ip+GncLkNy+EAyC5wG9K5zIHNBmeLa6d87bhabAueuvHUy34Qfjs41+zWKDrJm
+      URL_HOST: localhost
     ports:
       - "4000:4000"
     depends_on:
@@ -23,7 +24,7 @@ services:
     # Mount the app folder to increase development speed. Ignore compiled and build folders.
     volumes:
       # attention: uncomment the app folder mount if you want to build the app stage
-      - .:/app
+      # - .:/app
       - /app/deps/
       - /app/assets/node_modules
       - /app/priv/static
