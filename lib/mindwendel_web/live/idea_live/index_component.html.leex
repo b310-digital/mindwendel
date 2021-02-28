@@ -30,7 +30,7 @@
           </div>
           <div class="card-footer-mindwendel-idea">
             <small class="text-muted">
-              By <%= idea.username %> <%= Timex.format!(idea.inserted_at, "{relative}", :relative) %>
+              <%= gettext("By") %> <%= Gettext.gettext(MindwendelWeb.Gettext, idea.username) %> <%= Timex.format!(idea.inserted_at, "{relative}", :relative) %>
             </small>
             <div class="float-end">
               <span class="me-1"><%= length(idea.likes) %></span>

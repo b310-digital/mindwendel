@@ -29,10 +29,7 @@ config :phoenix, :json_library, Jason
 # set possible translations:
 default_locale = String.trim(System.get_env("MW_DEFAULT_LOCALE") || "en")
 
-config :mindwendel, MindwendelWeb.Gettext,
-  default_locale: default_locale,
-  locales: ~w(en de)
-
+config :gettext, :default_locale, default_locale
 config :timex, :default_locale, default_locale
 
 # Import environment specific config. This must remain at the bottom

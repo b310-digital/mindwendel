@@ -238,3 +238,8 @@ msgstr ""
 #: lib/mindwendel_web/live/idea_live/form_component.html.leex:14
 msgid "Username"
 msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/live/idea_live/index_component.html.leex:33
+msgid "By"
+msgstr ""
