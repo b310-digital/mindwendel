@@ -36,7 +36,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
       {:ok, _idea} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Idea created successfully")
+         |> put_flash(:info, gettext("Idea created successfully"))
          |> push_redirect(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->

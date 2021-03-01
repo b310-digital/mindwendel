@@ -58,7 +58,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   defp apply_action(socket, :new_idea, brainstorming_id) do
     socket
-    |> assign(:page_title, "#{socket.assigns.brainstorming.name} - New Idea")
+    |> assign(:page_title, gettext("%{name} - New Idea", name: socket.assigns.brainstorming.name))
     |> assign(:idea, %Idea{
       brainstorming_id: brainstorming_id,
       username: socket.assigns.current_user.username
@@ -72,7 +72,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   defp apply_action(socket, :edit, _params) do
     socket
-    |> assign(:page_title, "#{socket.assigns.brainstorming.name} - Edit")
+    |> assign(:page_title, gettext("%{name} - Edit", name: socket.assigns.brainstorming.name))
   end
 
   @impl true

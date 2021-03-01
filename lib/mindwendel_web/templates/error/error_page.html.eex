@@ -29,8 +29,8 @@
             <% end %>
           <% end %>
         </h1>
-        <h2 class="my-5">mindwendel could not be found.</h2>
-        <a href="/">Try again from home</a>
+        <h2 class="my-5"><%= gettext("mindwendel could not be found.") %></h2>
+        <a href="/"><%= gettext("Try again from home") %></a>
       </div>
     </main>
   </body>

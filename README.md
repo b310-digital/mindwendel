@@ -12,6 +12,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 - Preview of links to ease URL sharing
 - Cluster your ideas with labels
 - Export your generated ideas to html or csv (currently comma separated)
+- German & English Translation files
 
 ![](docs/screenshot.png)
 ![](docs/screenshot2.png)
@@ -149,6 +150,17 @@ We are using Elixir's built-in formatter.
   ```sh
   mix format
   ```
+
+## Environment Variables
+
+### Localisation
+ 
+ Currently, there are two language files available, german ("de") and english ("en"). To set the default_locale, you can set `MW_DEFAULT_LOCALE`. The default is english.
+
+ You can extract new strings to translate by running:
+ ```
+  mix gettext.extract --merge
+ ```
 
 ## Contributing
 

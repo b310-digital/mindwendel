@@ -6,12 +6,12 @@
 
   <%= if Enum.count(f.errors) > 0 do %>
     <div class="alert alert-danger">
-      Required fields are either missing or incorrect:
+      <%= gettext("Required fields are either missing or incorrect:") %>
     </div>
   <% end %>
 
   <div class="form-group">
-    <%= label f, :username %>
+    <%= label f, gettext("Username") %>
     <%= text_input f, :username, class: "form-control" %>
     <%= if message = f.errors[:username] do %>
       <span><%= translate_error(message) %></span>
@@ -19,7 +19,7 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :body, "Your idea" %>
+    <%= label f, :body, gettext("Your idea") %>
     <%= textarea f, :body, class: "form-control" %>
     <%= if message = f.errors[:body] do %>
       <span><%= translate_error(message) %></span>
@@ -29,6 +29,6 @@
   <%= hidden_input f, :brainstorming_id %>
 
   <br /><br />
-  <%= live_patch raw("Close"), to: @return_to, class: "btn btn-secondary form-cancel" %>
-  <%= submit "Save", phx_disable_with: "Saving...", class: "btn btn-primary" %>
+  <%= live_patch gettext("Close"), to: @return_to, class: "btn btn-secondary form-cancel" %>
+  <%= submit gettext("Save"), phx_disable_with: gettext("Saving..."), class: "btn btn-primary" %>
 </form>

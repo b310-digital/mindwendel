@@ -2,10 +2,6 @@ use Mix.Config
 
 # Configure your database
 config :mindwendel, Mindwendel.Repo,
-  username: System.get_env("DATABASE_USER"),
-  password: System.get_env("DATABASE_USER_PASSWORD"),
-  database: System.get_env("DATABASE_NAME"),
-  hostname: System.get_env("DATABASE_HOST"),
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -30,13 +26,6 @@ config :mindwendel, MindwendelWeb.Endpoint,
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
-
-config :mindwendel, :options,
-  feature_brainstorming_teasers:
-    Enum.member?(
-      ["", "true"],
-      String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
-    )
 
 # ## SSL Support
 #

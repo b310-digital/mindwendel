@@ -7,14 +7,17 @@ services:
       context: .
       target: development
     environment:
+      # adjust these vars in production!
       DATABASE_USER: postgres
       DATABASE_USER_PASSWORD: postgres
       DATABASE_NAME: mindwendel
       DATABASE_PORT: 5432
       DATABASE_HOST: db
-      # prod related env vars
-      # SECRET_KEY_BASE:
-      # URL_HOST: localhost
+      DATABASE_SSL: "true"
+      MW_DEFAULT_LOCALE: de
+      # run mix phx.gen.secret
+      SECRET_KEY_BASE: 
+      URL_HOST: localhost
     ports:
       - "4000:4000"
     depends_on:
