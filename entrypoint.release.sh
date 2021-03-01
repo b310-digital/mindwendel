@@ -6,4 +6,4 @@ do
 done
 
 ./bin/mindwendel eval "Mindwendel.Release.migrate"
-exec bin/mindwendel start
+exec ./bin/mindwendel start

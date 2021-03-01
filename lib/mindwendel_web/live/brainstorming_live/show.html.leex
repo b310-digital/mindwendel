@@ -37,7 +37,7 @@
     </div>
   </div>
 
-  <div class="input-group mb-3" id="brainstorming-sharing-link-block" style="display:none;">
+  <div class="input-group mb-3 invisible" id="brainstorming-sharing-link-block">
     <%= tag :input, id: "brainstorming-link", type: "text", class: "form-control", value: @uri, aria_describedby: "basic-addon1", readonly: true %>
     <div class="input-group-append">
       <button id="button-brainstorming-copy-link" class="btn btn-outline-secondary" type="button" phx-hook="CopyBrainstormingLinkButton">
