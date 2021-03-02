@@ -15,23 +15,23 @@
   <div class="d-flex bd-highlight flex-wrap">
     <h2 id="brainstorming-title" class="flex-grow-1"><%= @brainstorming.name %></h2>
     <div>
-      <%= live_patch gettext("New Idea"), to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming), class: "btn btn-primary m-1 d-none d-lg-inline-block", title: gettext("New idea page (Hotkey: i)"), style: "width: 100px;" %>
+      <%= live_patch gettext("New Idea"), to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming), class: "btn btn-primary d-none d-lg-inline-block", title: gettext("New idea page (Hotkey: i)"), style: "width: 100px;" %>
     </div>
     <div>
-      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
+      <%= link to: "#", class: "btn btn-primary ms-1", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
         <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Sort by likes") %>
       <% end %>
-      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_label", phx_value_id: @brainstorming.id, title: gettext("Sort by label") do %>
+      <%= link to: "#", class: "btn btn-primary", phx_click: "sort_by_label", phx_value_id: @brainstorming.id, title: gettext("Sort by label") do %>
         <i class="bi-sort-alpha-up-alt"></i> <%= gettext("Sort by label") %>
       <% end %>
     </div>
     <div>
-      <button class="btn btn-secondary m-1" id="btn-share" phx-hook="ShareBrainstormingLinkButton">
+      <button class="btn btn-secondary ms-1" id="btn-share" phx-hook="ShareBrainstormingLinkButton">
         <i class="bi-share-fill"></i>
       </button>
     </div>
     <div>
-      <%= link to: Routes.admin_brainstorming_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary m-1" do %>
+      <%= link to: Routes.admin_brainstorming_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary ms-1" do %>
         <i class="bi-gear-fill"></i>
       <% end %>
     </div>
