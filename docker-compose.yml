@@ -22,8 +22,10 @@ services:
       - "4000:4000"
     depends_on:
       - db
-    # Mount the app folder to increase development speed. Ignore compiled and build folders.
+    # Mount the lib and test folder to increase development speed (not needed in prod).
     volumes:
+      - ./lib:/app/lib
+      - ./test:/app/test
       - /app/deps/
       - /app/assets/node_modules
       - /app/priv/static
