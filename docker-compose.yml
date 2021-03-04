@@ -13,10 +13,10 @@ services:
       DATABASE_NAME: mindwendel
       DATABASE_PORT: 5432
       DATABASE_HOST: db
-      DATABASE_SSL: "true"
+      DATABASE_SSL: "false"
       MW_DEFAULT_LOCALE: en
       # run mix phx.gen.secret
-      SECRET_KEY_BASE: 
+      SECRET_KEY_BASE:
       URL_HOST: localhost
     ports:
       - "4000:4000"
@@ -24,8 +24,6 @@ services:
       - db
     # Mount the app folder to increase development speed. Ignore compiled and build folders.
     volumes:
-      # attention: uncomment the app folder mount if you want to build the app stage
-      - .:/app
       - /app/deps/
       - /app/assets/node_modules
       - /app/priv/static
