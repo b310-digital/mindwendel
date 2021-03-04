@@ -12,32 +12,33 @@
 <% end %>
 
 <div id="brainstorming-details">
-  <div class="d-flex bd-highlight flex-wrap">
-    <h2 id="brainstorming-title" class="flex-grow-1"><%= @brainstorming.name %></h2>
-    <div>
-      <%= live_patch gettext("New Idea"), to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming), class: "btn btn-primary m-1 d-none d-lg-inline-block", title: gettext("New idea page (Hotkey: i)"), style: "width: 100px;" %>
+  <div class="content">
+    <div class="row">
+      <div class="col-sm-12 col-md-5 col-xl-7">
+        <h2 id="brainstorming-title"><%= @brainstorming.name %></h2>
+      </div>
+      <div class="col-sm-12 col-md-7 col-xl-5">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <%= live_patch gettext("New Idea"), to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming), class: "btn btn-primary d-none d-lg-inline-block", title: gettext("New idea page (Hotkey: i)"), style: "width: 100px;" %>
+          <%= link to: "#", class: "btn btn-primary", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
+            <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Sort by likes") %>
+          <% end %>
+          <%= link to: "#", class: "btn btn-primary", phx_click: "sort_by_label", phx_value_id: @brainstorming.id, title: gettext("Sort by label") do %>
+            <i class="bi-sort-alpha-up-alt"></i> <%= gettext("Sort by label") %>
+          <% end %>
+        </div>
+        <div class="gap-1 d-flex justify-content-end">
+          <button class="btn btn-secondary mt-1" id="btn-share" phx-hook="ShareBrainstormingLinkButton">
+            <i class="bi-share-fill"></i>
+          </button>
+          <%= link to: Routes.admin_brainstorming_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary mt-1" do %>
+            <i class="bi-gear-fill"></i>
+          <% end %>
+        </div>
+      </div>
     </div>
-    <div>
-      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
-        <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Sort by likes") %>
-      <% end %>
-      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_label", phx_value_id: @brainstorming.id, title: gettext("Sort by label") do %>
-        <i class="bi-sort-alpha-up-alt"></i> <%= gettext("Sort by label") %>
-      <% end %>
-    </div>
-    <div>
-      <button class="btn btn-secondary m-1" id="btn-share" phx-hook="ShareBrainstormingLinkButton">
-        <i class="bi-share-fill"></i>
-      </button>
-    </div>
-    <div>
-      <%= link to: Routes.admin_brainstorming_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary m-1" do %>
-        <i class="bi-gear-fill"></i>
-      <% end %>
-    </div>
-  </div>
 
-  <div class="input-group mb-3 invisible" id="brainstorming-sharing-link-block">
+  <div class="input-group mb-3 mt-1 d-none" id="brainstorming-sharing-link-block">
     <%= tag :input, id: "brainstorming-link", type: "text", class: "form-control", value: @uri, aria_describedby: "basic-addon1", readonly: true %>
     <div class="input-group-append">
       <button id="button-brainstorming-copy-link" class="btn btn-outline-secondary" type="button" phx-hook="CopyBrainstormingLinkButton">
@@ -55,7 +56,7 @@
       return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming) %>
   <% end %>
 
-    <%= if @live_action in [:new_idea] do %>
+  <%= if @live_action in [:new_idea] do %>
     <%= live_modal @socket, MindwendelWeb.IdeaLive.FormComponent,
       id: :new,
       title: gettext("New idea"),
@@ -72,5 +73,5 @@
     <div class="d-grid gap-2">
       <%= live_patch gettext("New Idea"), to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming), class: "btn btn-primary", title: gettext("Open new idea page (Hotkey: i)") %>
     </div>
-</footer>
+  </footer>
 </div>
