@@ -14,7 +14,7 @@ services:
       DATABASE_PORT: 5432
       DATABASE_HOST: db
       DATABASE_SSL: "true"
-      MW_DEFAULT_LOCALE: de
+      MW_DEFAULT_LOCALE: en
       # run mix phx.gen.secret
       SECRET_KEY_BASE: 
       URL_HOST: localhost
