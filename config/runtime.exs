@@ -5,10 +5,10 @@
 import Config
 
 if config_env() == :test do
-    # always force locale to en for tests:
-    default_locale = "en"
-    config :gettext, :default_locale, default_locale
-    config :timex, :default_locale, default_locale
+  # always force locale to en for tests:
+  default_locale = "en"
+  config :gettext, :default_locale, default_locale
+  config :timex, :default_locale, default_locale
 else
   database_host =
     System.get_env("DATABASE_HOST") ||
