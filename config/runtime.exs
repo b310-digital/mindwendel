@@ -4,12 +4,7 @@
 # remember to add this file to your .gitignore.
 import Config
 
-if config_env() == :test do
-  # always force locale to en for tests:
-  default_locale = "en"
-  config :gettext, :default_locale, default_locale
-  config :timex, :default_locale, default_locale
-else
+if config_env() != :test do
   database_host =
     System.get_env("DATABASE_HOST") ||
       raise """
@@ -78,12 +73,17 @@ else
   #
   # Then you can assemble a release by calling `mix release`.
   # See `mix help release` for more information.
-
-  # set possible translations:
-  default_locale = String.trim(System.get_env("MW_DEFAULT_LOCALE") || "en")
-  config :gettext, :default_locale, default_locale
-  config :timex, :default_locale, default_locale
 end
+
+# force en in test:
+default_locale =
+  case config_env() do
+    :test -> "en"
+    _ -> String.trim(System.get_env("MW_DEFAULT_LOCALE") || "en")
+  end
+
+config :gettext, :default_locale, default_locale
+config :timex, :default_locale, default_locale
 
 # enable brainstorming teasers:
 config :mindwendel, :options,
