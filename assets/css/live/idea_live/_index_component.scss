@@ -71,6 +71,12 @@
   @mixin labelled($label, $label_color) {
     &--labelled-#{$label} {
       border-color: $label_color;
+
+      .IndexComponent__IdeaLabelBadge__#{$label} {
+        @extend .badge;
+        @extend .rounded-pill;
+        background-color: $label_color;
+      }
     }
   }
 
