@@ -14,10 +14,10 @@
 <div id="brainstorming-details">
   <div class="content">
     <div class="row">
-      <div class="col-sm-12 col-md-5 col-xl-7">
+      <div class="col-sm-12 col-md-12 col-xl-6">
         <h2 id="brainstorming-title"><%= @brainstorming.name %></h2>
       </div>
-      <div class="col-sm-12 col-md-7 col-xl-5">
+      <div class="col-sm-12 col-md-12 col-xl-6">
         <div class="d-grid d-md-flex justify-content-md-end">
           <%= live_patch gettext("New Idea"), to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming), class: "btn btn-primary m-1", title: gettext("New idea page (Hotkey: i)") %>
           <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
