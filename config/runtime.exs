@@ -69,7 +69,9 @@ if config_env() != :test do
   # If you are doing OTP releases, you need to instruct Phoenix
   # to start each relevant endpoint:
   #
-  config :mindwendel, MindwendelWeb.Endpoint, server: true
+  if config_env() == :prod do
+    config :mindwendel, MindwendelWeb.Endpoint, server: true
+  end
   #
   # Then you can assemble a release by calling `mix release`.
   # See `mix help release` for more information.
