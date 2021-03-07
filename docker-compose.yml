@@ -15,11 +15,12 @@ services:
       DATABASE_HOST: db
       DATABASE_SSL: "false"
       MW_DEFAULT_LOCALE: en
+      PORT: 80
       # run mix phx.gen.secret
       SECRET_KEY_BASE:
       URL_HOST: localhost
     ports:
-      - "4000:4000"
+      - "80:80"
     depends_on:
       - db
     # Mount the lib and test folder to increase development speed (not needed for prod deployment!).
