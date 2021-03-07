@@ -14,24 +14,24 @@
 <div id="brainstorming-details">
   <div class="content">
     <div class="row">
-      <div class="col-sm-12 col-md-5 col-xl-7">
+      <div class="col-sm-12 col-md-12 col-xl-6">
         <h2 id="brainstorming-title"><%= @brainstorming.name %></h2>
       </div>
-      <div class="col-sm-12 col-md-7 col-xl-5">
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <%= live_patch gettext("New Idea"), to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming), class: "btn btn-primary d-none d-lg-inline-block", title: gettext("New idea page (Hotkey: i)"), style: "width: 100px;" %>
-          <%= link to: "#", class: "btn btn-primary", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
+      <div class="col-sm-12 col-md-12 col-xl-6">
+        <div class="d-grid d-md-flex justify-content-md-end">
+          <%= live_patch gettext("New Idea"), to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming), class: "btn btn-primary m-1", title: gettext("New idea page (Hotkey: i)") %>
+          <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
             <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Sort by likes") %>
           <% end %>
-          <%= link to: "#", class: "btn btn-primary", phx_click: "sort_by_label", phx_value_id: @brainstorming.id, title: gettext("Sort by label") do %>
+          <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_label", phx_value_id: @brainstorming.id, title: gettext("Sort by label") do %>
             <i class="bi-sort-alpha-up-alt"></i> <%= gettext("Sort by label") %>
           <% end %>
         </div>
-        <div class="gap-1 d-flex justify-content-end">
-          <button class="btn btn-secondary mt-1" id="btn-share" phx-hook="ShareBrainstormingLinkButton">
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-secondary m-1" id="btn-share" phx-hook="ShareBrainstormingLinkButton">
             <i class="bi-share-fill"></i>
           </button>
-          <%= link to: Routes.admin_brainstorming_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary mt-1" do %>
+          <%= link to: Routes.admin_brainstorming_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary m-1" do %>
             <i class="bi-gear-fill"></i>
           <% end %>
         </div>
