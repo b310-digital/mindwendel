@@ -23,7 +23,7 @@ services:
       - "80:80"
     depends_on:
       - db
-    # Mount the lib and test folder to increase development speed (not needed for prod deployment!).
+    # Mount the lib and test folder to increase development speed (do not use for prod setups!)
     volumes:
       - ./lib:/app/lib
       - ./test:/app/test
