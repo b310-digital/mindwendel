@@ -52,11 +52,11 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       |> element("#idea-#{idea.id} a#idea-label-label_1")
       |> render_click()
 
-      assert Repo.reload(idea).label == :label_1
+      assert Repo.reload(idea).label_old == :label_1
     end
 
     test "removes labels from idea", %{conn: conn, brainstorming: brainstorming} do
-      idea = Factory.insert!(:idea, %{brainstorming: brainstorming, label: :label_1})
+      idea = Factory.insert!(:idea, %{brainstorming: brainstorming, label_old: :label_1})
       brainstorming = Repo.preload(brainstorming, :ideas)
 
       {:ok, show_live_view, _html} =
@@ -72,7 +72,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       |> element("#idea-#{idea.id} a#idea-label-label_1")
       |> render_click()
 
-      assert Repo.reload(idea).label == nil
+      assert Repo.reload(idea).label_old == nil
     end
   end
 end

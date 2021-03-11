@@ -2,6 +2,7 @@ defmodule Mindwendel.Factory do
   alias Mindwendel.Repo
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Attachments.Link
   alias Mindwendel.Accounts.User
@@ -49,12 +50,20 @@ defmodule Mindwendel.Factory do
     }
   end
 
+  def build(:idea_label) do
+    %IdeaLabel{}
+  end
+
   def build(factory_name, attributes) do
     factory_name |> build() |> struct!(attributes)
   end
 
   def insert!(:brainstorming, :with_users) do
     build(:brainstorming, :with_users) |> Repo.insert!()
+  end
+
+  def insert!(:brainstorming, :with_labels) do
+    build(:brainstorming, :with_labels) |> Repo.insert!()
   end
 
   def insert!(:like, :with_idea_and_user) do

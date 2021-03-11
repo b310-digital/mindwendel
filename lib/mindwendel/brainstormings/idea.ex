@@ -3,6 +3,7 @@ defmodule Mindwendel.Brainstormings.Idea do
 
   import Ecto.Changeset
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Attachments.Link
   alias Mindwendel.UrlPreview
@@ -12,10 +13,11 @@ defmodule Mindwendel.Brainstormings.Idea do
   schema "ideas" do
     field :body, :string
     field :username, :string, default: "Anonymous"
-    field :label, Ecto.Enum, values: @label_values
+    field :label_old, Ecto.Enum, source: :label, values: @label_values
     has_one :link, Link
     has_many :likes, Like
     belongs_to :brainstorming, Brainstorming, foreign_key: :brainstorming_id, type: :binary_id
+    belongs_to :label, IdeaLabel, foreign_key: :label_id, type: :binary_id, on_replace: :nilify
 
     timestamps()
   end
@@ -23,10 +25,11 @@ defmodule Mindwendel.Brainstormings.Idea do
   @doc false
   def changeset(idea, attrs) do
     idea
-    |> cast(attrs, [:username, :body, :brainstorming_id, :label])
+    |> cast(attrs, [:username, :body, :brainstorming_id, :label_old])
+    # |> cast_assoc(:label)
     |> validate_required([:username, :body, :brainstorming_id])
     |> validate_length(:body, min: 2, max: 1023)
-    |> validate_inclusion(:label, @label_values)
+    |> validate_inclusion(:label_old, @label_values)
   end
 
   def build_link(idea) do

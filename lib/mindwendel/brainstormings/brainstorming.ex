@@ -3,6 +3,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
 
   import Ecto.Changeset
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Accounts.User
   alias Mindwendel.Accounts.BrainstormingUser
 
@@ -11,6 +12,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     field :option_show_link_to_settings, :boolean
     field :admin_url_id, :binary_id
     has_many :ideas, Idea
+    has_many :labels, IdeaLabel
     many_to_many :users, User, join_through: BrainstormingUser
 
     timestamps()
@@ -21,8 +23,14 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     brainstorming
     |> cast(attrs, [:name, :option_show_link_to_settings])
     |> validate_required([:name])
+    # |> cast_assoc(:labels, required: true)
     |> shorten_name
     |> gen_admin_url_id(brainstorming)
+  end
+
+  def changeset_edit(brainstorming, attrs) do
+    changeset(brainstorming, attrs)
+    |> cast_assoc(:labels, required: true)
   end
 
   defp gen_admin_url_id(changeset, brainstorming) do
@@ -43,5 +51,15 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     brainstorming
     |> change(%{})
     |> put_assoc(:users, users)
+  end
+
+  def idea_label_factory do
+    [
+      %IdeaLabel{name: "cyan", color: "#0dcaf0"},
+      %IdeaLabel{name: "gray-dark", color: "#343a40"},
+      %IdeaLabel{name: "green", color: "#198754"},
+      %IdeaLabel{name: "red", color: "#dc3545"},
+      %IdeaLabel{name: "yellow", color: "#ffc107"}
+    ]
   end
 end

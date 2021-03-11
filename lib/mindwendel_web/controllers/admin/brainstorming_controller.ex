@@ -3,11 +3,13 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.CSVFormatter
+  alias Mindwendel.Repo
 
   plug :fetch_user
 
   def edit(conn, %{"id" => id}) do
-    brainstorming = Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
+    brainstorming =
+      Brainstormings.get_brainstorming_by!(%{admin_url_id: id}) |> Repo.preload([:labels])
 
     render(conn, "edit.html",
       brainstorming: brainstorming,
@@ -34,7 +36,8 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   end
 
   def update(conn, %{"id" => id, "brainstorming" => brainstorming_params}) do
-    brainstorming = Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
+    brainstorming =
+      Brainstormings.get_brainstorming_by!(%{admin_url_id: id}) |> Repo.preload(:labels)
 
     case Brainstormings.update_brainstorming(brainstorming, brainstorming_params) do
       {:ok, brainstorming} ->
