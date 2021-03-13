@@ -298,7 +298,7 @@ defmodule Mindwendel.Brainstormings do
 
   ## Examples
 
-      iex> delete_old_brainstormings(idea)
+      iex> delete_old_brainstormings(30)
       :ok
 
   """
