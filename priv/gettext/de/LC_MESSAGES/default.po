@@ -42,7 +42,7 @@ msgid "Are you sure you want to delete this idea?"
 msgstr "Möchtest du die Idee löschen?"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:33
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:34
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr "Achtung: Hiermit löschst du das Brainstorming und alle dazugehörigen Ideen. Diese Aktion kann nicht rückgängig gemacht werden."
 
@@ -67,22 +67,22 @@ msgid "Create!"
 msgstr "Erstellen!"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:36
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:37
 msgid "Delete"
 msgstr "Löschen"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:31
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:32
 msgid "Delete Brainstorming"
 msgstr "Lösche Brainstorming"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:26
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:27
 msgid "Export to CSV"
 msgstr "Export als CSV"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:27
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:28
 msgid "Export to HTML"
 msgstr "Export als HTML"
 
@@ -128,7 +128,7 @@ msgid "Open new idea page (Hotkey: i)"
 msgstr "Öffne neue Ideen Dialog (Hotkey: i)"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:11
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:12
 msgid "Proceed to your brainstorming"
 msgstr "Weiter zu deinem Brainstorming"
 
@@ -138,7 +138,7 @@ msgid "Save"
 msgstr "Speichern"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:6
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:7
 msgid "Save this link to update / delete your brainstorming later on:"
 msgstr "Speichere diesen Link, um das Brainstorming zukünftig zu bearbeiten oder zu löschen"
 
@@ -165,7 +165,7 @@ msgid "Try again from home"
 msgstr "Versuch es auf der Starseite"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:20
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:21
 msgid "Update"
 msgstr "Ändern"
 
@@ -200,12 +200,12 @@ msgid "Your brainstorming was created successfully! Share the link with other pe
 msgstr "Dein Brainstorming wurde erstellt! Teile den Link mit anderen Personen und legt los."
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:14
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:15
 msgid "Edit Brainstorming"
 msgstr "Editiere Brainstorming"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:24
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:25
 msgid "Export"
 msgstr "Export"
 
