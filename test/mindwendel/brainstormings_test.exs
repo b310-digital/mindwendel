@@ -6,6 +6,7 @@ defmodule Mindwendel.BrainstormingsTest do
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Attachments.Link
+  alias Mindwendel.Accounts.User
 
   setup do
     user = Factory.insert!(:user)
@@ -204,6 +205,15 @@ defmodule Mindwendel.BrainstormingsTest do
 
       assert Enum.member?(Brainstormings.list_brainstormings_for(user.id), old_brainstorming.id) ==
                false
+    end
+
+    test "does not remove the user", %{user: user} do
+      old_brainstorming =
+        Factory.insert!(:brainstorming, users: [user], inserted_at: ~N[2021-01-01 10:00:00])
+
+      Brainstormings.delete_old_brainstormings()
+
+      assert Repo.exists?(from u in User, where: u.id == ^user.id)
     end
 
     test "keeps the new brainstorming", %{brainstorming: brainstorming} do
