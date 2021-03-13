@@ -5,7 +5,7 @@ services:
     container_name: mindwendel
     build:
       context: .
-      target: app
+      target: development
     environment:
       # adjust these vars in production!
       DATABASE_USER: postgres
@@ -17,7 +17,7 @@ services:
       MW_DEFAULT_LOCALE: en
       PORT: 80
       # run mix phx.gen.secret
-      SECRET_KEY_BASE: LGgQaW198S4JxIHaKF9q6Rwgd1QCT+pkPLJZSJbEB5vHvAAw8AqXvmQyDZBSY68r
+      SECRET_KEY_BASE:
       URL_HOST: localhost
     ports:
       - "80:80"
@@ -25,8 +25,8 @@ services:
       - db
     # Mount the lib and test folder to increase development speed (do not use for prod setups!)
     volumes:
-      #- ./lib:/app/lib
-      #- ./test:/app/test
+      - ./lib:/app/lib
+      - ./test:/app/test
       - /app/deps/
       - /app/assets/node_modules
       - /app/priv/static
