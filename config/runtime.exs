@@ -91,7 +91,6 @@ default_locale =
 config :gettext, :default_locale, default_locale
 config :timex, :default_locale, default_locale
 
-
 delete_brainstormings_after_days =
   if System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS") &&
        System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS") != "",
@@ -113,7 +112,7 @@ if config_env() == :prod || config_env() == :dev do
     plugins: [
       {Oban.Plugins.Cron,
        crontab: [
-         {"*/2 * * * *", Mindwendel.Worker.RemoveBrainstormingsAfterPeriodWorker}
+         {"@midnight", Mindwendel.Worker.RemoveBrainstormingsAfterPeriodWorker}
        ]}
     ],
     queues: [default: 5]
