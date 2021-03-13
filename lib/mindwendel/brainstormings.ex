@@ -298,11 +298,11 @@ defmodule Mindwendel.Brainstormings do
 
   ## Examples
 
-      iex> delete_old_brainstormings(idea)
+      iex> delete_old_brainstormings(30)
       :ok
 
   """
-  def delete_old_brainstormings(after_days) do
+  def delete_old_brainstormings(after_days \\ 30) do
     date_time = Timex.now() |> Timex.shift(days: -1 * after_days)
 
     Repo.delete_all(from b in Brainstorming, where: b.inserted_at < ^date_time)
