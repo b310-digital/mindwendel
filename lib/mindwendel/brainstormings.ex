@@ -294,6 +294,21 @@ defmodule Mindwendel.Brainstormings do
   end
 
   @doc """
+  Deletes all brainstormings, older than 30 days since creation
+
+  ## Examples
+
+      iex> delete_old_brainstormings(idea)
+      :ok
+
+  """
+  def delete_old_brainstormings(after_days) do
+    date_time = Timex.now() |> Timex.shift(days: -1 * after_days)
+
+    Repo.delete_all(from b in Brainstorming, where: b.inserted_at < ^date_time)
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking brainstorming changes.
 
   ## Examples
