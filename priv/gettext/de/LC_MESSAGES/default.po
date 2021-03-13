@@ -12,11 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/mindwendel_web/live/page_live.html.leex:2
-msgid "Welcome to %{name}!"
-msgstr ""
-
-#, elixir-format
 #: lib/mindwendel_web/templates/static_page/home.html.leex:11
 msgid "Brainstorm"
 msgstr "Los geht's!"
@@ -57,7 +52,7 @@ msgid "Close"
 msgstr "Schließen"
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:45
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:47
 msgid "Copy"
 msgstr "Kopieren"
 
@@ -103,7 +98,7 @@ msgstr "Idee erstellt"
 
 #, elixir-format
 #: lib/mindwendel_web/live/brainstorming_live/show.html.leex:22
-#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:74
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:76
 msgid "New Idea"
 msgstr "Neue Idee"
 
@@ -113,7 +108,7 @@ msgid "New brainstorming"
 msgstr "Neues Brainstorming"
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:62
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:64
 msgid "New idea"
 msgstr "Neue Idee"
 
@@ -128,7 +123,7 @@ msgid "No ideas brainstormed"
 msgstr "Bisher keine Ideen"
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:74
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:76
 msgid "Open new idea page (Hotkey: i)"
 msgstr "Öffne neue Ideen Dialog (Hotkey: i)"
 
@@ -244,3 +239,13 @@ msgstr "Von"
 #: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:3
 msgid "Administration for brainstorming: %{name}"
 msgstr "Administration für: %{name}"
+
+#, elixir-format
+#: lib/mindwendel_web/templates/admin/brainstorming/_form.html.leex:5
+msgid "Show brainstorming settings link for all users"
+msgstr "Zeige Link zur Admnistration für alle Nutzer"
+
+#, elixir-format
+#: lib/mindwendel_web/templates/admin/brainstorming/_form.html.leex:10
+msgid "Warning: Please make sure you save the admin link at the top, before hiding the settings link!"
+msgstr "Achtung: Bitte speichere den Admin-Link oben ab, bevor du den Link zur Administration versteckst."
