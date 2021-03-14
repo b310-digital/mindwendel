@@ -2,16 +2,21 @@
   <div class="form-group mb-2 mt-2">
     <%= label f, :name %>
     <%= text_input f, :name, class: "form-control" %>
-    <br />
-    <%= checkbox f, :option_show_link_to_settings %>
-    <%= label f,:option_show_link_to_settings, gettext("Show brainstorming settings link for all users") %>
+    <%= if message = f.errors[:name] do %>
+      <span><%= translate_error(message) %></span>
+    <% end %>
+  </div>
+  <div class="form-check mb-2 mt-2">
+    <%= checkbox f, :option_show_link_to_settings, id: "checkbox-option-show-link-to-settings", class: "form-check-input" %>
+    <%= label f, :option_show_link_to_settings,
+        gettext("Show brainstorming settings link for all users"),
+        for: "checkbox-option-show-link-to-settings",
+        class: "form-check-label"
+    %>
     <br />
     <small class="form-text text-muted">
       <%= gettext("Warning: Please make sure you save the admin link at the top, before hiding the settings link!") %>
     </small>
-    <%= if message = f.errors[:name] do %>
-      <span><%= translate_error(message) %></span>
-    <% end %>
   </div>
   <div class="row">
     <div class="col-md-12 col-lg-2 d-grid gap-2">
