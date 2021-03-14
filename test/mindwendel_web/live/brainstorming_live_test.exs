@@ -28,7 +28,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       assert html =~ brainstorming.name
     end
 
-    test "shows all ideas that belong to brainstorming", %{conn: conn} do
+    test "shows ideas belonging to brainstorming", %{conn: conn} do
       brainstorming = Factory.insert!(:brainstorming)
 
       brainstorming_ideas =
@@ -56,7 +56,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       end)
     end
 
-    test "active idea label ", %{conn: conn} do
+    test "show active idea label ", %{conn: conn} do
       brainstorming = Factory.insert!(:brainstorming)
       selected_ideal_label = Enum.at(brainstorming.labels, 0)
 
@@ -70,12 +70,10 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
 
       assert show_live_view
-             |> has_element?(".IndexComponent__IdeaCard--active[data-testid=\"#{idea.id}\"]")
+             |> has_element?(html_selector_idea_card_labelled(idea))
 
       assert show_live_view
-             |> has_element?(
-               ".IndexComponent__IdeaLabel--active[data-testid=\"#{selected_ideal_label.id}\"]"
-             )
+             |> has_element?(html_selector_idea_label_active(selected_ideal_label))
     end
 
     test "applys labels to idea", %{conn: conn} do
@@ -87,9 +85,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
 
       element_selector =
-        ".IndexComponent__IdeaCard[data-testid=\"#{idea.id}\"] .IndexComponent__IdeaLabelSection a[phx-value-label-id=\"#{
-          selected_ideal_label.id
-        }\"]"
+        "#{html_selector_idea_card(idea)} #{html_selector_idea_label_link(selected_ideal_label)}"
 
       assert show_live_view |> has_element?(element_selector)
 
@@ -115,9 +111,9 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
 
       element_selector =
-        ".IndexComponent__IdeaCard--active[data-testid=\"#{idea.id}\"] .IndexComponent__IdeaLabelSection a[data-testid=\"#{
-          selected_ideal_label.id
-        }\"]"
+        "#{html_selector_idea_card_labelled(idea)} #{
+          html_selector_idea_label_link(selected_ideal_label)
+        }"
 
       assert show_live_view |> has_element?(element_selector)
 
@@ -145,7 +141,19 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
     ".IndexComponent__IdeaCard[data-testid=\"#{idea.id}\"]"
   end
 
+  defp html_selector_idea_card_labelled(idea) do
+    ".IndexComponent__IdeaCard--labelled[data-testid=\"#{idea.id}\"]"
+  end
+
+  defp html_selector_idea_label_link(idea_label) do
+    "a[data-testid=\"#{idea_label.id}\"]"
+  end
+
   defp html_selector_idea_label(idea_label) do
     ".IndexComponent__IdeaLabel[data-testid=\"#{idea_label.id}\"]"
+  end
+
+  defp html_selector_idea_label_active(idea_label) do
+    ".IndexComponent__IdeaLabel--active[data-testid=\"#{idea_label.id}\"]"
   end
 end
