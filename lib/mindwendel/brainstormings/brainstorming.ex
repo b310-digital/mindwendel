@@ -11,6 +11,10 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     field :name, :string
     field :option_show_link_to_settings, :boolean
     field :admin_url_id, :binary_id
+    # ToDo: Please change the previous line to this one
+    # It will avoids this function gen_admin_url_id/2
+    # Maybe consider to write a migration for older brainstormings
+    # field :admin_url_id, Ecto.UUID, autogenerate: true
     has_many :ideas, Idea
     has_many :labels, IdeaLabel
     many_to_many :users, User, join_through: BrainstormingUser
@@ -23,7 +27,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     brainstorming
     |> cast(attrs, [:name, :option_show_link_to_settings])
     |> validate_required([:name])
-    # |> cast_assoc(:labels, required: true)
+    |> cast_assoc(:labels, required: true)
     |> shorten_name
     |> gen_admin_url_id(brainstorming)
   end
@@ -55,11 +59,11 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
 
   def idea_label_factory do
     [
-      %IdeaLabel{name: "cyan", color: "#0dcaf0"},
-      %IdeaLabel{name: "gray-dark", color: "#343a40"},
-      %IdeaLabel{name: "green", color: "#198754"},
-      %IdeaLabel{name: "red", color: "#dc3545"},
-      %IdeaLabel{name: "yellow", color: "#ffc107"}
+      %IdeaLabel{name: "cyan", color: "#0dcaf0", position_order: 0},
+      %IdeaLabel{name: "gray-dark", color: "#343a40", position_order: 1},
+      %IdeaLabel{name: "green", color: "#198754", position_order: 2},
+      %IdeaLabel{name: "red", color: "#dc3545", position_order: 3},
+      %IdeaLabel{name: "yellow", color: "#ffc107", position_order: 4}
     ]
   end
 end
