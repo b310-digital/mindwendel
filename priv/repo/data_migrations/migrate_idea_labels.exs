@@ -69,7 +69,6 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabels do
           idea_label.name == idea_label_name
         end)
 
-      # change(idea, %{label_id: idea_label.id})
       change(idea)
       |> put_assoc(:label, idea_label)
       |> Repo.update()

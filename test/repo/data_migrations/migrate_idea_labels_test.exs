@@ -1,13 +1,12 @@
 defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabelsTest do
-  # use Mindwendel.DataCase
+  Code.require_file("./priv/repo/data_migrations/migrate_idea_labels.exs")
+
   use Mindwendel.DataCase
   alias Mindwendel.Factory
   alias Mindwendel.Repo
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Repo.DataMigrations.MigrateIdealLabels
-
-  Code.require_file("./priv/repo/data_migrations/migrate_idea_labels.exs")
 
   setup do
     %{brainstorming: Factory.insert!(:brainstorming, %{labels: []})}
@@ -28,14 +27,11 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabelsTest do
     end
 
     test "considers existing idea_labels and adds up to five idea labels for each brainstorming" do
+      idea_label_1 = %IdeaLabel{name: "idea_label_1", position_order: 7}
+      idea_label_2 = %IdeaLabel{name: "idea_label_2", position_order: 8}
+
       brainstroming_with_two_labels =
-        %Brainstorming{
-          name: "How to brainstorm ideas?",
-          labels: [
-            %IdeaLabel{name: "1st_label_name"},
-            %IdeaLabel{name: "2nd_label_name"}
-          ]
-        }
+        %Brainstorming{name: "How to brainstorm ideas?", labels: [idea_label_1, idea_label_2]}
         |> Repo.insert!()
 
       assert Enum.count(brainstroming_with_two_labels.labels) == 2
@@ -44,6 +40,14 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabelsTest do
 
       updated_brainstorming = Repo.reload(brainstroming_with_two_labels) |> Repo.preload(:labels)
       assert Enum.count(updated_brainstorming.labels) == 5
+
+      assert Enum.map(updated_brainstorming.labels, &Map.take(&1, [:name, :position_order])) == [
+               %{name: idea_label_1.name, position_order: 7},
+               %{name: idea_label_2.name, position_order: 8},
+               %{name: "cyan", position_order: 0},
+               %{name: "gray-dark", position_order: 1},
+               %{name: "green", position_order: 2}
+             ]
     end
 
     test "does not add additional idea labels when running multiple times", %{
