@@ -31,8 +31,10 @@
           <button class="btn btn-secondary m-1" id="btn-share" phx-hook="ShareBrainstormingLinkButton">
             <i class="bi-share-fill"></i>
           </button>
-          <%= link to: Routes.admin_brainstorming_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary m-1" do %>
-            <i class="bi-gear-fill"></i>
+          <%= if @brainstorming.option_show_link_to_settings do %>
+            <%= link to: Routes.admin_brainstorming_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary m-1" do %>
+              <i class="bi-gear-fill"></i>
+            <% end %>
           <% end %>
         </div>
       </div>

@@ -11,11 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/page_live.html.leex:2
-msgid "Welcome to %{name}!"
-msgstr ""
-
-#, elixir-format
 #: lib/mindwendel_web/templates/static_page/home.html.leex:11
 msgid "Brainstorm"
 msgstr ""
@@ -56,7 +51,7 @@ msgid "Close"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:45
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:47
 msgid "Copy"
 msgstr ""
 
@@ -102,7 +97,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/mindwendel_web/live/brainstorming_live/show.html.leex:22
-#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:74
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:76
 msgid "New Idea"
 msgstr ""
 
@@ -112,7 +107,7 @@ msgid "New brainstorming"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:62
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:64
 msgid "New idea"
 msgstr ""
 
@@ -127,7 +122,7 @@ msgid "No ideas brainstormed"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:74
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:76
 msgid "Open new idea page (Hotkey: i)"
 msgstr ""
 
@@ -242,4 +237,14 @@ msgstr ""
 #, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:3
 msgid "Administration for brainstorming: %{name}"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/templates/admin/brainstorming/_form.html.leex:7
+msgid "Show brainstorming settings link for all users"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/templates/admin/brainstorming/_form.html.leex:10
+msgid "Warning: Please make sure you save the admin link at the top, before hiding the settings link!"
 msgstr ""

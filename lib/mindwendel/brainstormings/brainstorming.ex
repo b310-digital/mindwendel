@@ -8,6 +8,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
 
   schema "brainstormings" do
     field :name, :string
+    field :option_show_link_to_settings, :boolean
     field :admin_url_id, :binary_id
     has_many :ideas, Idea
     many_to_many :users, User, join_through: BrainstormingUser
@@ -18,7 +19,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   @doc false
   def changeset(brainstorming, attrs) do
     brainstorming
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :option_show_link_to_settings])
     |> validate_required([:name])
     |> shorten_name
     |> gen_admin_url_id(brainstorming)
