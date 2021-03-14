@@ -37,12 +37,12 @@ msgid "%{name} - New Idea"
 msgstr "%{name} - Neue Idee"
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/index_component.html.leex:7
+#: lib/mindwendel_web/live/idea_live/index_component.html.leex:15
 msgid "Are you sure you want to delete this idea?"
 msgstr "Möchtest du die Idee löschen?"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:33
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:43
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr "Achtung: Hiermit löschst du das Brainstorming und alle dazugehörigen Ideen. Diese Aktion kann nicht rückgängig gemacht werden."
 
@@ -67,22 +67,22 @@ msgid "Create!"
 msgstr "Erstellen!"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:36
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:46
 msgid "Delete"
 msgstr "Löschen"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:31
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:41
 msgid "Delete Brainstorming"
 msgstr "Lösche Brainstorming"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:26
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:36
 msgid "Export to CSV"
 msgstr "Export als CSV"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:27
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:37
 msgid "Export to HTML"
 msgstr "Export als HTML"
 
@@ -118,7 +118,7 @@ msgid "New idea page (Hotkey: i)"
 msgstr "Neue Idee (Hotkey: i)"
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/index_component.html.leex:63
+#: lib/mindwendel_web/live/idea_live/index_component.html.leex:77
 msgid "No ideas brainstormed"
 msgstr "Bisher keine Ideen"
 
@@ -185,12 +185,12 @@ msgid "Something went wrong when creating a brainstorming. Please try again."
 msgstr "Leider gab es einen Fehler beim Erstellen des Brainstormings. Bitte probiere es erneut."
 
 #, elixir-format
-#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:77
+#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:83
 msgid "Successfully deleted brainstorming."
 msgstr "Brainstorming erfolgreich gelöscht"
 
 #, elixir-format
-#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:25
+#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:30
 msgid "Your brainstorming was created successfully! Please favorite or copy this link, to return later to this administrative view."
 msgstr "Dein Brainstorming wurde erstellt! Bitte speichere den Link für die Administrationsansicht"
 
@@ -205,7 +205,7 @@ msgid "Edit Brainstorming"
 msgstr "Editiere Brainstorming"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:24
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:34
 msgid "Export"
 msgstr "Export"
 
@@ -230,7 +230,7 @@ msgid "Username"
 msgstr "Nutzername"
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/index_component.html.leex:33
+#: lib/mindwendel_web/live/idea_live/index_component.html.leex:41
 #: lib/mindwendel_web/templates/admin/brainstorming/export.html.leex:3
 msgid "By"
 msgstr "Von"
@@ -259,3 +259,48 @@ msgstr "Brainstorming wird gelöscht in "
 #: lib/mindwendel_web/templates/static_page/home.html.leex:26
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr "Brainstormings werden nach %{days} Tagen gelöscht."
+
+#, elixir-format
+#: lib/mindwendel_web/templates/admin/brainstorming/_form_labels.html.leex:6
+msgid "Choose the label color"
+msgstr "Wähle die Farbe für das Label aus"
+
+#, elixir-format, fuzzy
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:24
+msgid "Edit Brainstorming Labels"
+msgstr "Editiere Labels in diesem Brainstorming"
+
+#, elixir-format
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:30
+msgid "Edit labels"
+msgstr "Bearbeite die Labels"
+
+#, elixir-format
+#: lib/mindwendel_web/templates/admin/brainstorming/_form_labels.html.leex:7
+msgid "Type the label name"
+msgstr "Gebe dem Label einen Namen"
+
+#, elixir-format
+#: lib/mindwendel/brainstormings/brainstorming.ex:62
+msgid "cyan"
+msgstr "Cyan"
+
+#, elixir-format
+#: lib/mindwendel/brainstormings/brainstorming.ex:63
+msgid "gray dark"
+msgstr "Dunkelgrau"
+
+#, elixir-format
+#: lib/mindwendel/brainstormings/brainstorming.ex:64
+msgid "green"
+msgstr "Grün"
+
+#, elixir-format
+#: lib/mindwendel/brainstormings/brainstorming.ex:65
+msgid "red"
+msgstr "Rot"
+
+#, elixir-format
+#: lib/mindwendel/brainstormings/brainstorming.ex:66
+msgid "yellow"
+msgstr "Gelb"

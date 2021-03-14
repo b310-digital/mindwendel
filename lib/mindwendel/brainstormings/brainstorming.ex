@@ -2,6 +2,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   use Mindwendel.Schema
 
   import Ecto.Changeset
+  import MindwendelWeb.Gettext
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Accounts.User
@@ -59,11 +60,11 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
 
   def idea_label_factory do
     [
-      %IdeaLabel{name: "cyan", color: "#0dcaf0", position_order: 0},
-      %IdeaLabel{name: "gray-dark", color: "#343a40", position_order: 1},
-      %IdeaLabel{name: "green", color: "#198754", position_order: 2},
-      %IdeaLabel{name: "red", color: "#dc3545", position_order: 3},
-      %IdeaLabel{name: "yellow", color: "#ffc107", position_order: 4}
+      %IdeaLabel{name: gettext("cyan"), color: "#0dcaf0", position_order: 0},
+      %IdeaLabel{name: gettext("gray dark"), color: "#343a40", position_order: 1},
+      %IdeaLabel{name: gettext("green"), color: "#198754", position_order: 2},
+      %IdeaLabel{name: gettext("red"), color: "#dc3545", position_order: 3},
+      %IdeaLabel{name: gettext("yellow"), color: "#ffc107", position_order: 4}
     ]
   end
 end
