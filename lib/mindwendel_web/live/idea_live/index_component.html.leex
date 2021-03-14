@@ -2,10 +2,10 @@
   <div id="ideas" class="row mb-5">
     <%= for idea <- @ideas do %>
       <div class="col-md-6">
-        <%= if idea.label do %>
-          <div class="card mt-3 shadow-sm p-2 rounded IndexComponent__IdeaCard IndexComponent__IdeaCard--active" data-testid="<%= idea.id %>" style="border-color: <%= idea.label.color %>">
-        <% else %>
+        <%= unless idea.label do %>
           <div class="card mt-3 shadow-sm p-2 rounded IndexComponent__IdeaCard" data-testid="<%= idea.id %>">
+        <% else %>
+          <div class="card mt-3 shadow-sm p-2 rounded IndexComponent__IdeaCard--labelled" data-testid="<%= idea.id %>" style="border-color: <%= idea.label.color %>">
         <% end %>
           <div class="card-body-mindwendel-idea">
             <%= if idea.label do %>
@@ -54,17 +54,16 @@
             </div>
             <div class="IndexComponent__IdeaLabelSection">
               <%= for label <- @brainstorming.labels do %>
-                <%= if idea.label && idea.label.id == label.id do %>
-                  <%= link to: "", class: "text-decoration-none me-1", data_testid: label.id, title: "label #{label.name}", phx_click: "update_label", phx_target: @myself, phx_value_id: idea.id, phx_value_label_id: nil do %>
-                    <i class="IndexComponent__IdeaLabel IndexComponent__IdeaLabel--active" data-testid="<%= label.id %>" style="color: <%= label.color %>;" ></i>
-                  <% end %>
-                <% else %>
+                <%= unless idea.label && idea.label.id == label.id do %>
                   <%= link to: "", class: "text-decoration-none me-1", data_testid: label.id, title: "label #{label.name}", phx_click: "update_label", phx_target: @myself, phx_value_id: idea.id, phx_value_label_id: label.id do %>
                     <i class="IndexComponent__IdeaLabel" data-testid="<%= label.id %>" style="color: <%= label.color %>;" ></i>
                   <% end %>
+                <% else %>
+                  <%= link to: "", class: "text-decoration-none me-1", data_testid: label.id, title: "label #{label.name}", phx_click: "update_label", phx_target: @myself, phx_value_id: idea.id, phx_value_label_id: nil do %>
+                    <i class="IndexComponent__IdeaLabel--active" data-testid="<%= label.id %>" style="color: <%= label.color %>;" ></i>
+                  <% end %>
                 <% end %>
               <% end %>
-
             </div>
           </div>
         </div>

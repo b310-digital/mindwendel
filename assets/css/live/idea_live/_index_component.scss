@@ -37,6 +37,13 @@
   }
 }
 
+.IndexComponent__IdeaCard--labelled {
+  .IndexComponent__IdeaLabelBadge {
+    @extend .badge;
+    @extend .rounded-pill;
+  }
+}
+
 .IndexComponent__IdeaLabel {
   @extend %bi-icon-before;
   @extend %bi-circle-fill-before;
@@ -50,62 +57,5 @@
   @extend %bi-check-circle-fill-before;
   &:hover {
     @extend %bi-x-circle-fill-before;
-  }
-}
-
-.IndexComponent__IdeaLabel {
-  @mixin ideaLabel($label, $label_color) {
-    &--#{$label} {
-      @extend %bi-icon-before;
-      @extend %bi-circle-fill-before;
-
-      color: $label_color;
-
-      &:hover {
-        @extend %bi-plus-circle-fill-before;
-      }
-
-      &--active {
-        @extend %bi-icon-before;
-        @extend %bi-check-circle-fill-before;
-        color: $label_color;
-        &:hover {
-          @extend %bi-x-circle-fill-before;
-        }
-      }
-    }
-  }
-
-  @include ideaLabel(label_1, var(--bs-cyan));
-  @include ideaLabel(label_2, var(--bs-gray-dark));
-  @include ideaLabel(label_3, var(--bs-green));
-  @include ideaLabel(label_4, var(--bs-red));
-  @include ideaLabel(label_5, var(--bs-yellow));
-}
-
-.IndexComponent__IdeaCard {
-  @mixin labelled($label, $label_color) {
-    &--labelled-#{$label} {
-      border-color: $label_color;
-
-      .IndexComponent__IdeaLabelBadge__#{$label} {
-        @extend .badge;
-        @extend .rounded-pill;
-        background-color: $label_color;
-      }
-    }
-  }
-
-  @include labelled(label_1, var(--bs-cyan));
-  @include labelled(label_2, var(--bs-gray-dark));
-  @include labelled(label_3, var(--bs-green));
-  @include labelled(label_4, var(--bs-red));
-  @include labelled(label_5, var(--bs-yellow));
-}
-
-.IndexComponent__IdeaCard--active {
-  .IndexComponent__IdeaLabelBadge {
-    @extend .badge;
-    @extend .rounded-pill;
   }
 }
