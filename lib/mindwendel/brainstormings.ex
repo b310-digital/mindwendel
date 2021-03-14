@@ -72,8 +72,9 @@ defmodule Mindwendel.Brainstormings do
   def sort_ideas_by_labels(brainstorming_id) do
     Repo.all(
       from idea in Idea,
+        left_join: l in assoc(idea, :label),
         where: idea.brainstorming_id == ^brainstorming_id,
-        order_by: [asc_nulls_last: idea.label, desc: idea.inserted_at]
+        order_by: [asc_nulls_last: l.position_order, desc: idea.inserted_at]
     )
     |> Repo.preload([:link, :likes, :label])
   end

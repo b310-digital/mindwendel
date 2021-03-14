@@ -1,6 +1,7 @@
 defmodule Mindwendel.BrainstormingsTest do
   use Mindwendel.DataCase
   alias Mindwendel.Factory
+
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
@@ -142,6 +143,64 @@ defmodule Mindwendel.BrainstormingsTest do
       assert Ecto.assoc(like, :idea)
              |> Repo.one()
              |> Brainstormings.count_likes_for_idea() == 1
+    end
+  end
+
+  describe "sort_ideas_by_labels" do
+    test "sorts without ideas" do
+      brainstorming_without_ideas = Factory.insert!(:brainstorming)
+
+      ideas_sorted_by_labels = Brainstormings.sort_ideas_by_labels(brainstorming_without_ideas.id)
+
+      assert ideas_sorted_by_labels |> Enum.empty?()
+      assert ideas_sorted_by_labels == []
+    end
+
+    test "sorts unlabelled ideas based on inserted_at", %{
+      brainstorming: brainstorming,
+      idea: idea_old
+    } do
+      idea_young = Factory.insert!(:idea, %{brainstorming: brainstorming})
+
+      ideas_sorted_by_labels = Brainstormings.sort_ideas_by_labels(brainstorming.id)
+
+      assert ideas_sorted_by_labels |> Enum.map(& &1.id) == [idea_young.id, idea_old.id]
+    end
+
+    test "sorts labelled ideas based on label position order and inserted_at", %{
+      brainstorming: brainstorming,
+      idea: idea_without_label
+    } do
+      brainstorming = brainstorming |> Repo.preload([:labels])
+
+      idea_with_1st_label_old =
+        Factory.insert!(:idea, %{
+          brainstorming: brainstorming,
+          label: Enum.at(brainstorming.labels, 0)
+        })
+
+      idea_with_second_label =
+        Factory.insert!(:idea, %{
+          brainstorming: brainstorming,
+          label: Enum.at(brainstorming.labels, 1)
+        })
+
+      # Created 10 seconds later than idea_with_1st_label_old
+      idea_with_1st_label_young =
+        Factory.insert!(:idea, %{
+          brainstorming: brainstorming,
+          inserted_at: NaiveDateTime.add(idea_with_1st_label_old.inserted_at, 10),
+          label: Enum.at(brainstorming.labels, 0)
+        })
+
+      ideas_sorted_by_labels = Brainstormings.sort_ideas_by_labels(brainstorming.id)
+
+      assert Enum.map(ideas_sorted_by_labels, & &1.id) == [
+               idea_with_1st_label_young.id,
+               idea_with_1st_label_old.id,
+               idea_with_second_label.id,
+               idea_without_label.id
+             ]
     end
   end
 
