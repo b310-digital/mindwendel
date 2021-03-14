@@ -1,16 +1,18 @@
 defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabels do
   import Ecto.Query
   import Ecto.Changeset
+  import MindwendelWeb.Gettext
+
   alias Mindwendel.Repo
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
 
   @label_old_to_idea_label_name_mapping %{
-    label_1: "cyan",
-    label_2: "gray-dark",
-    label_3: "green",
-    label_4: "red",
-    label_5: "yellow"
+    label_1: gettext("cyan"),
+    label_2: gettext("gray dark"),
+    label_3: gettext("green"),
+    label_4: gettext("red"),
+    label_5: gettext("yellow")
   }
 
   def run do

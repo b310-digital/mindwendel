@@ -45,7 +45,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabelsTest do
                %{name: idea_label_1.name, position_order: 7},
                %{name: idea_label_2.name, position_order: 8},
                %{name: "cyan", position_order: 0},
-               %{name: "gray-dark", position_order: 1},
+               %{name: "gray dark", position_order: 1},
                %{name: "green", position_order: 2}
              ]
     end
