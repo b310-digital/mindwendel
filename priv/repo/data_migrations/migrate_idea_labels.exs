@@ -4,7 +4,6 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabels do
   alias Mindwendel.Repo
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
-  alias Mindwendel.Brainstormings.IdeaLabel
 
   @label_old_to_idea_label_name_mapping %{
     label_1: "cyan",

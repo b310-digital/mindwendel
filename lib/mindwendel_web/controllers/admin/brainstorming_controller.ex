@@ -2,14 +2,17 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   use MindwendelWeb, :controller
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.CSVFormatter
   alias Mindwendel.Repo
+  import Ecto.Query
 
   plug :fetch_user
 
   def edit(conn, %{"id" => id}) do
     brainstorming =
-      Brainstormings.get_brainstorming_by!(%{admin_url_id: id}) |> Repo.preload([:labels])
+      Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
+      |> Repo.preload(labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order))
 
     render(conn, "edit.html",
       brainstorming: brainstorming,

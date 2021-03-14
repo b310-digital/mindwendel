@@ -69,7 +69,7 @@
       return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming) %>
   <% end %>
 
-  <%= live_component @socket, MindwendelWeb.IdeaLive.IndexComponent, ideas: @ideas, id: @brainstorming.id, current_user: @current_user %>
+  <%= live_component @socket, MindwendelWeb.IdeaLive.IndexComponent, ideas: @ideas, brainstorming: @brainstorming, id: @brainstorming.id, current_user: @current_user %>
 
   <footer class="footer fixed-bottom d-lg-none bg-light">
     <div class="d-grid gap-2">

@@ -4,14 +4,13 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabelsTest do
   alias Mindwendel.Factory
   alias Mindwendel.Repo
   alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Repo.DataMigrations.MigrateIdealLabels
 
   Code.require_file("./priv/repo/data_migrations/migrate_idea_labels.exs")
 
   setup do
-    %{brainstorming: Factory.insert!(:brainstorming)}
+    %{brainstorming: Factory.insert!(:brainstorming, %{labels: []})}
   end
 
   describe "#prepare_labels_for_brainstormings/0" do

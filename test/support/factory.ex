@@ -14,7 +14,8 @@ defmodule Mindwendel.Factory do
 
   def build(:brainstorming) do
     %Brainstorming{
-      name: "How to brainstorm ideas?"
+      name: "How to brainstorm ideas?",
+      labels: Brainstorming.idea_label_factory()
     }
   end
 

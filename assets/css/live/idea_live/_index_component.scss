@@ -38,6 +38,22 @@
 }
 
 .IndexComponent__IdeaLabel {
+  @extend %bi-icon-before;
+  @extend %bi-circle-fill-before;
+  &:hover {
+    @extend %bi-plus-circle-fill-before;
+  }
+}
+
+.IndexComponent__IdeaLabel--active {
+  @extend %bi-icon-before;
+  @extend %bi-check-circle-fill-before;
+  &:hover {
+    @extend %bi-x-circle-fill-before;
+  }
+}
+
+.IndexComponent__IdeaLabel {
   @mixin ideaLabel($label, $label_color) {
     &--#{$label} {
       @extend %bi-icon-before;
@@ -85,4 +101,11 @@
   @include labelled(label_3, var(--bs-green));
   @include labelled(label_4, var(--bs-red));
   @include labelled(label_5, var(--bs-yellow));
+}
+
+.IndexComponent__IdeaCard--active {
+  .IndexComponent__IdeaLabelBadge {
+    @extend .badge;
+    @extend .rounded-pill;
+  }
 }

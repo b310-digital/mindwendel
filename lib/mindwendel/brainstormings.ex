@@ -7,6 +7,7 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Repo
 
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Like
 
@@ -65,7 +66,7 @@ defmodule Mindwendel.Brainstormings do
         order_by: [desc_nulls_last: idea_count.like_count, desc: idea.inserted_at]
 
     Repo.all(idea_query)
-    |> Repo.preload([:link, :likes])
+    |> Repo.preload([:link, :likes, :label])
   end
 
   def sort_ideas_by_labels(brainstorming_id) do
@@ -74,7 +75,7 @@ defmodule Mindwendel.Brainstormings do
         where: idea.brainstorming_id == ^brainstorming_id,
         order_by: [asc_nulls_last: idea.label, desc: idea.inserted_at]
     )
-    |> Repo.preload([:link, :likes])
+    |> Repo.preload([:link, :likes, :label])
   end
 
   @doc """
@@ -91,7 +92,7 @@ defmodule Mindwendel.Brainstormings do
       ** (Ecto.NoResultsError)
 
   """
-  def get_idea!(id), do: Repo.get!(Idea, id)
+  def get_idea!(id), do: Repo.get!(Idea, id) |> Repo.preload([:label])
 
   @doc """
   Count likes for an idea.
@@ -166,6 +167,13 @@ defmodule Mindwendel.Brainstormings do
     |> broadcast(:idea_updated)
   end
 
+  def update_idea_label(%Idea{} = idea, label) do
+    idea
+    |> Idea.changeset_update_label(label)
+    |> Repo.update()
+    |> broadcast(:idea_updated)
+  end
+
   @doc """
   Deletes a idea.
 
@@ -228,7 +236,12 @@ defmodule Mindwendel.Brainstormings do
   """
   # See https://stackoverflow.com/questions/53802091/elixir-uuid-how-to-handle-500-error-when-uuid-doesnt-match
   def get_brainstorming!(id) do
-    Repo.get!(Brainstorming, id) |> Repo.preload([:users, ideas: [:link, :likes]])
+    Repo.get!(Brainstorming, id)
+    |> Repo.preload([
+      :users,
+      labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
+      ideas: [:link, :likes, :label]
+    ])
   end
 
   @doc """
@@ -236,6 +249,20 @@ defmodule Mindwendel.Brainstormings do
   """
   def get_brainstorming_by!(%{admin_url_id: admin_url_id}) do
     Repo.get_by!(Brainstorming, admin_url_id: admin_url_id)
+  end
+
+  def get_idea_label!(id) do
+    Repo.get!(IdeaLabel, id)
+  end
+
+  def get_idea_label(id) when not is_nil(id) do
+    Repo.get(IdeaLabel, id)
+  rescue
+    Ecto.Query.CastError -> nil
+  end
+
+  def get_idea_label(id) when is_nil(id) do
+    nil
   end
 
   @doc """
@@ -251,7 +278,7 @@ defmodule Mindwendel.Brainstormings do
 
   """
   def create_brainstorming(attrs \\ %{}) do
-    %Brainstorming{}
+    %Brainstorming{labels: Brainstorming.idea_label_factory()}
     |> Brainstorming.changeset(attrs)
     |> Repo.insert()
   end
@@ -399,7 +426,7 @@ defmodule Mindwendel.Brainstormings do
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
       "brainstormings:" <> idea.brainstorming_id,
-      {event, idea |> Repo.preload([:link, :likes])}
+      {event, idea |> Repo.preload([:link, :likes, :label])}
     )
 
     {:ok, idea}

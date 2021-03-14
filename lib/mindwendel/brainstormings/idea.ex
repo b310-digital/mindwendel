@@ -25,11 +25,15 @@ defmodule Mindwendel.Brainstormings.Idea do
   @doc false
   def changeset(idea, attrs) do
     idea
-    |> cast(attrs, [:username, :body, :brainstorming_id, :label_old])
+    |> cast(attrs, [:username, :body, :brainstorming_id, :label_old, :label_id])
     # |> cast_assoc(:label)
     |> validate_required([:username, :body, :brainstorming_id])
     |> validate_length(:body, min: 2, max: 1023)
     |> validate_inclusion(:label_old, @label_values)
+  end
+
+  def changeset_update_label(idea, label) do
+    change(idea) |> put_assoc(:label, label)
   end
 
   def build_link(idea) do
