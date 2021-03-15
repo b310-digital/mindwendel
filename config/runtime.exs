@@ -91,11 +91,13 @@ default_locale =
 config :gettext, :default_locale, default_locale
 config :timex, :default_locale, default_locale
 
+parsed_feature_brainstorming_removal_after_days =
+  String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS") || "")
+
 delete_brainstormings_after_days =
-  if System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS") &&
-       System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS") != "",
-     do: String.to_integer(System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS")),
-     else: 30
+  if parsed_feature_brainstorming_removal_after_days != "",
+    do: String.to_integer(parsed_feature_brainstorming_removal_after_days),
+    else: 30
 
 # enable/disable brainstorming teasers and configure delete brainstormings option:
 config :mindwendel, :options,
@@ -104,7 +106,7 @@ config :mindwendel, :options,
       ["", "true"],
       String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
     ),
-  feature_delete_brainstormings_after_days: delete_brainstormings_after_days
+  feature_brainstorming_removal_after_days: delete_brainstormings_after_days
 
 if config_env() == :prod || config_env() == :dev do
   config :mindwendel, Oban,

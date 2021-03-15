@@ -150,7 +150,7 @@ defmodule Mindwendel.BrainstormingsTest do
       old_brainstorming = Factory.insert!(:brainstorming, inserted_at: ~N[2021-01-01 10:00:00])
       Brainstormings.delete_old_brainstormings()
 
-      assert Repo.exists?(from b in Brainstorming, where: b.id == ^old_brainstorming.id) == false
+      refute Repo.exists?(from b in Brainstorming, where: b.id == ^old_brainstorming.id)
     end
 
     test "removes the old brainstormings ideas" do
@@ -164,7 +164,7 @@ defmodule Mindwendel.BrainstormingsTest do
 
       Brainstormings.delete_old_brainstormings()
 
-      assert Repo.exists?(from i in Idea, where: i.id == ^old_idea.id) == false
+      refute Repo.exists?(from i in Idea, where: i.id == ^old_idea.id)
     end
 
     test "removes the old brainstormings likes" do
@@ -179,7 +179,7 @@ defmodule Mindwendel.BrainstormingsTest do
       old_like = Factory.insert!(:like, idea: old_idea)
       Brainstormings.delete_old_brainstormings()
 
-      assert Repo.exists?(from l in Like, where: l.id == ^old_like.id) == false
+      refute Repo.exists?(from l in Like, where: l.id == ^old_like.id)
     end
 
     test "removes the old brainstormings links" do
@@ -194,7 +194,7 @@ defmodule Mindwendel.BrainstormingsTest do
       old_link = Factory.insert!(:link, idea: old_idea)
       Brainstormings.delete_old_brainstormings()
 
-      assert Repo.exists?(from l in Link, where: l.id == ^old_link.id) == false
+      refute Repo.exists?(from l in Link, where: l.id == ^old_link.id)
     end
 
     test "removes the old brainstormings users connection", %{user: user} do
@@ -203,14 +203,11 @@ defmodule Mindwendel.BrainstormingsTest do
 
       Brainstormings.delete_old_brainstormings()
 
-      assert Enum.member?(Brainstormings.list_brainstormings_for(user.id), old_brainstorming.id) ==
-               false
+      refute Enum.member?(Brainstormings.list_brainstormings_for(user.id), old_brainstorming.id)
     end
 
     test "does not remove the user", %{user: user} do
-      old_brainstorming =
-        Factory.insert!(:brainstorming, users: [user], inserted_at: ~N[2021-01-01 10:00:00])
-
+      Factory.insert!(:brainstorming, users: [user], inserted_at: ~N[2021-01-01 10:00:00])
       Brainstormings.delete_old_brainstormings()
 
       assert Repo.exists?(from u in User, where: u.id == ^user.id)

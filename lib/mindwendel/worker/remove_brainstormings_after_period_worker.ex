@@ -5,7 +5,7 @@ defmodule Mindwendel.Worker.RemoveBrainstormingsAfterPeriodWorker do
   @impl Oban.Worker
   def perform(_job) do
     days =
-      Application.fetch_env!(:mindwendel, :options)[:feature_delete_brainstormings_after_days]
+      Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]
 
     Brainstormings.delete_old_brainstormings(days)
 
