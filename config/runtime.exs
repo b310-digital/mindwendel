@@ -95,9 +95,11 @@ parsed_feature_brainstorming_removal_after_days =
   String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS") || "")
 
 delete_brainstormings_after_days =
-  if parsed_feature_brainstorming_removal_after_days != "",
-    do: String.to_integer(parsed_feature_brainstorming_removal_after_days),
-    else: 30
+  if parsed_feature_brainstorming_removal_after_days != "" do
+    String.to_integer(parsed_feature_brainstorming_removal_after_days)
+  else
+    30
+  end
 
 # enable/disable brainstorming teasers and configure delete brainstormings option:
 config :mindwendel, :options,
