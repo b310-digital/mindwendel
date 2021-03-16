@@ -63,14 +63,11 @@ Hooks.Modal = {
     const hideModal = () => modal && modal.hide()
     this.el.addEventListener('submit', hideModal)
     this.el.querySelector(".phx-modal-close").addEventListener('click', hideModal)
-    this.el.querySelector(".form-cancel").addEventListener('click', hideModal)
     this.el.addEventListener('keyup', (keyEvent) => {
       if (keyEvent.key === 'Escape') {
         // This will tell the "#modal" div to send a "close" event to the server
         this.pushEventTo("#modal", "close")
         hideModal()
-
-        // You could also just press the button ;-), i.e. this.el.querySelector(".phx-modal-close").click()
       }
     })
     
@@ -79,7 +76,7 @@ Hooks.Modal = {
       // To avoid multiple registers
       window.removeEventListener('popstate', hideModal)
     })
-  },
+  }
 }
 
 let liveSocket = new LiveSocket("/live", Socket, { hooks: Hooks, params: {_csrf_token: csrfToken}})
