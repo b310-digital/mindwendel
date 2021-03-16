@@ -26,10 +26,6 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
     {:noreply, socket}
   end
 
-  def handle_event("update_label_old", %{"id" => id}, socket) do
-    handle_event("update_label_old", %{"id" => id, "label" => nil}, socket)
-  end
-
   def handle_event("update_label", %{"id" => id, "label-id" => label_id}, socket) do
     idea_label = Brainstormings.get_idea_label(label_id)
 
