@@ -62,6 +62,7 @@ Hooks.Modal = {
     
     const hideModal = () => modal && modal.hide()
     this.el.addEventListener('submit', hideModal)
+    this.el.querySelector(".form-cancel").addEventListener('click', hideModal)
     this.el.querySelector(".phx-modal-close").addEventListener('click', hideModal)
     this.el.addEventListener('keyup', (keyEvent) => {
       if (keyEvent.key === 'Escape') {

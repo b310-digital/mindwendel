@@ -28,7 +28,8 @@
   </div>
 
   <%= hidden_input f, :brainstorming_id %>
-
-  <br />
-  <%= submit gettext("Save"), phx_disable_with: gettext("Saving..."), class: "btn btn-primary", disabled: !@changeset.valid? %>
 </form>
+<br />
+
+<%= live_patch gettext("Close"), to: @return_to, class: "btn btn-secondary form-cancel me-2"  %>
+<%= submit gettext("Save"), phx_disable_with: gettext("Saving..."), class: "btn btn-primary", disabled: !@changeset.valid? %>
