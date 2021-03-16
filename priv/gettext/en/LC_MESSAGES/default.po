@@ -240,13 +240,13 @@ msgstr ""
 msgid "Administration for brainstorming: %{name}"
 msgstr ""
 
+#, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/_form.html.leex:12
-#: lib/mindwendel_web/templates/admin/brainstorming/_form.html.leex:7
 msgid "Show brainstorming settings link for all users"
 msgstr ""
 
+#, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/_form.html.leex:18
-#: lib/mindwendel_web/templates/admin/brainstorming/_form.html.leex:10
 msgid "Warning: Please make sure you save the admin link at the top, before hiding the settings link!"
 
 #, elixir-format
@@ -264,7 +264,7 @@ msgstr ""
 msgid "Choose the label color"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:24
 msgid "Edit Brainstorming Labels"
 msgstr ""
@@ -280,27 +280,26 @@ msgid "Type the label name"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:62
+#: lib/mindwendel/brainstormings/brainstorming.ex:63
 msgid "cyan"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:63
+#: lib/mindwendel/brainstormings/brainstorming.ex:64
 msgid "gray dark"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:64
+#: lib/mindwendel/brainstormings/brainstorming.ex:65
 msgid "green"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:65
+#: lib/mindwendel/brainstormings/brainstorming.ex:66
 msgid "red"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:66
+#: lib/mindwendel/brainstormings/brainstorming.ex:67
 msgid "yellow"
-msgstr ""
 msgstr ""

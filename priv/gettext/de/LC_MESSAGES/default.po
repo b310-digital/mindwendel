@@ -265,7 +265,7 @@ msgstr "Brainstormings werden nach %{days} Tagen gelöscht."
 msgid "Choose the label color"
 msgstr "Wähle die Farbe für das Label aus"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:24
 msgid "Edit Brainstorming Labels"
 msgstr "Editiere Labels in diesem Brainstorming"
@@ -281,26 +281,26 @@ msgid "Type the label name"
 msgstr "Gebe dem Label einen Namen"
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:62
+#: lib/mindwendel/brainstormings/brainstorming.ex:63
 msgid "cyan"
 msgstr "Cyan"
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:63
+#: lib/mindwendel/brainstormings/brainstorming.ex:64
 msgid "gray dark"
 msgstr "Dunkelgrau"
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:64
+#: lib/mindwendel/brainstormings/brainstorming.ex:65
 msgid "green"
 msgstr "Grün"
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:65
+#: lib/mindwendel/brainstormings/brainstorming.ex:66
 msgid "red"
 msgstr "Rot"
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:66
+#: lib/mindwendel/brainstormings/brainstorming.ex:67
 msgid "yellow"
 msgstr "Gelb"
