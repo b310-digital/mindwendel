@@ -2,11 +2,12 @@
 <%= f = form_for @changeset, @path %>
   <div class="row">
   <%= inputs_for f, :labels, fn p -> %>
-      <div class="input-group mb-3">
-        <%= color_input p, :color, class: "form-control form-control-color", title: gettext("Choose the label color") %>
-        <%= text_input p, :name, class: "form-control", placeholder: gettext("Type the label name") %>
+      <div class="input-group has-validation mb-3">
+        <%= color_input p, :color, class: "form-control form-control-color #{if p.errors[:color], do: "is-invalid", else: ""}", title: gettext("Choose the label color") %>
+        <%= text_input p, :name, class: "form-control #{if p.errors[:name], do: "is-invalid", else: ""}", placeholder: gettext("Type the label name") %>
+        <%= error_tag p, :color %>
+        <%= error_tag p, :name %>
       </div>
-      <%= error_tag p, :name %>
   <% end %>
     </div>
 

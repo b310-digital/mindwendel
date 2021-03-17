@@ -18,5 +18,6 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
     idea_label
     |> cast(params, [:name, :color])
     |> validate_required([:name])
+    |> validate_format(:color, ~r/^#[0-9a-f]{6}$/)
   end
 end
