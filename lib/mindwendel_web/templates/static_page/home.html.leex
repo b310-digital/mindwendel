@@ -22,6 +22,9 @@
             <%= submit gettext("Create!"), class: "btn btn-primary fw-bold" %>
           </div>
         </form>
+        <small class="text-muted">
+          <%= gettext("Brainstormings will be deleted after %{days} days.", days: Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]) %>
+        </small>
       </div>
     </div>
 

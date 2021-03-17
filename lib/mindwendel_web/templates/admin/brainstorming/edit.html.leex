@@ -5,11 +5,11 @@
   <div class="card-body">
   <p><%= gettext("Save this link to update / delete your brainstorming later on:") %></p>
     <%= tag :input, id: "brainstorming-link", type: "text", class: "form-control", value: @uri, aria_describedby: "basic-addon1", readonly: true %>
-
     <br />
     <i class="far fa-arrow-alt-circle-right"></i>
     <%= link gettext("Proceed to your brainstorming"), to: Routes.brainstorming_show_path(@conn, :show, @brainstorming), class: "fw-bold" %>
-    <br /><br />
+    <br />
+    <p>(<%= gettext("Brainstorming will be deleted ") %><%= Timex.format!(brainstorming_available_until(@brainstorming), "{relative}", :relative) %>)</p>
 
     <h5><%= gettext("Edit Brainstorming") %></h5>
     <hr />
