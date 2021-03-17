@@ -26,10 +26,9 @@
       <span><%= translate_error(message) %></span>
     <% end %>
   </div>
-
+  <br />
   <%= hidden_input f, :brainstorming_id %>
-</form>
-<br />
 
-<%= live_patch gettext("Close"), to: @return_to, class: "btn btn-secondary form-cancel me-2"  %>
-<%= submit gettext("Save"), phx_disable_with: gettext("Saving..."), class: "btn btn-primary", disabled: !@changeset.valid? %>
+  <%= live_patch gettext("Close"), to: @return_to, id: "idea-modal-cancel", class: "btn btn-secondary form-cancel me-2", phx_update: "ignore" %>
+  <%= submit gettext("Save"), to: @return_to, phx_disable_with: gettext("Saving..."), class: "btn btn-primary", disabled: !@changeset.valid? %>
+</form>
