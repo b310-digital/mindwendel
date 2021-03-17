@@ -14,9 +14,10 @@ defmodule Mindwendel.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Mindwendel.PubSub},
       # Start the Endpoint (http/https)
-      MindwendelWeb.Endpoint
+      MindwendelWeb.Endpoint,
       # Start a worker by calling: Mindwendel.Worker.start_link(arg)
       # {Mindwendel.Worker, arg}
+      {Oban, oban_config()}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -30,5 +31,9 @@ defmodule Mindwendel.Application do
   def config_change(changed, _new, removed) do
     MindwendelWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp oban_config do
+    Application.get_env(:mindwendel, Oban)
   end
 end

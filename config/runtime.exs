@@ -91,10 +91,33 @@ default_locale =
 config :gettext, :default_locale, default_locale
 config :timex, :default_locale, default_locale
 
-# enable brainstorming teasers:
+parsed_feature_brainstorming_removal_after_days =
+  String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS") || "")
+
+delete_brainstormings_after_days =
+  if parsed_feature_brainstorming_removal_after_days != "" do
+    String.to_integer(parsed_feature_brainstorming_removal_after_days)
+  else
+    30
+  end
+
+# enable/disable brainstorming teasers and configure delete brainstormings option:
 config :mindwendel, :options,
   feature_brainstorming_teasers:
     Enum.member?(
       ["", "true"],
       String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
-    )
+    ),
+  feature_brainstorming_removal_after_days: delete_brainstormings_after_days
+
+if config_env() == :prod || config_env() == :dev do
+  config :mindwendel, Oban,
+    repo: Mindwendel.Repo,
+    plugins: [
+      {Oban.Plugins.Cron,
+       crontab: [
+         {"@midnight", Mindwendel.Worker.RemoveBrainstormingsAfterPeriodWorker}
+       ]}
+    ],
+    queues: [default: 5]
+end

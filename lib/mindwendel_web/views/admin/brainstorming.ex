@@ -5,4 +5,11 @@ defmodule MindwendelWeb.Admin.BrainstormingView do
   def count_likes_for_idea(idea) do
     Brainstormings.count_likes_for_idea(idea)
   end
+
+  def brainstorming_available_until(brainstorming) do
+    Timex.shift(brainstorming.inserted_at,
+      days:
+        Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]
+    )
+  end
 end

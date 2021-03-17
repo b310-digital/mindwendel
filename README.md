@@ -13,6 +13,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 - Cluster your ideas with labels
 - Export your generated ideas to html or csv (currently comma separated)
 - German & English Translation files
+- By default, brainstormings are deleted after 30 days to ensure GDPR compliancy.
 
 ![](docs/screenshot.png)
 ![](docs/screenshot2.png)
