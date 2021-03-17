@@ -40,7 +40,8 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
 
   def update(conn, %{"id" => id, "brainstorming" => brainstorming_params}) do
     brainstorming =
-      Brainstormings.get_brainstorming_by!(%{admin_url_id: id}) |> Repo.preload(:labels)
+      Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
+      |> Repo.preload(labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order))
 
     case Brainstormings.update_brainstorming(brainstorming, brainstorming_params) do
       {:ok, brainstorming} ->

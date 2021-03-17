@@ -11,11 +11,9 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   schema "brainstormings" do
     field :name, :string
     field :option_show_link_to_settings, :boolean
+    # Todo: The following line can be changed `field :admin_url_id, Ecto.UUID, autogenerate: true`
+    # This will automatically generate a UUID for the admin_url_id which would make the method `gen_admin_url_id/2` obsolete.
     field :admin_url_id, :binary_id
-    # ToDo: Please change the previous line to this one
-    # It will avoids this function gen_admin_url_id/2
-    # Maybe consider to write a migration for older brainstormings
-    # field :admin_url_id, Ecto.UUID, autogenerate: true
     has_many :ideas, Idea
     has_many :labels, IdeaLabel
     many_to_many :users, User, join_through: BrainstormingUser
