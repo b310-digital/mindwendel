@@ -127,7 +127,6 @@ msgstr "Bisher keine Ideen"
 msgid "Open new idea page (Hotkey: i)"
 msgstr "Öffne neue Ideen Dialog (Hotkey: i)"
 
-#, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:10
 msgid "Proceed to your brainstorming"
 msgstr "Weiter zu deinem Brainstorming"
@@ -209,7 +208,6 @@ msgstr "Editiere Brainstorming"
 msgid "Export"
 msgstr "Export"
 
-#, elixir-format
 #: lib/mindwendel_web/templates/static_page/home.html.leex:34
 msgid "Your latest brainstormings"
 msgstr "Deine letzten Brainstormings"
@@ -255,7 +253,7 @@ msgstr "Achtung: Bitte speichere den Admin-Link oben ab, bevor du den Link zur A
 msgid "Brainstorming will be deleted "
 msgstr "Brainstorming wird gelöscht in "
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/mindwendel_web/templates/static_page/home.html.leex:26
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr "Brainstormings werden nach %{days} Tagen gelöscht."

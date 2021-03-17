@@ -126,8 +126,8 @@ msgstr ""
 msgid "Open new idea page (Hotkey: i)"
 msgstr ""
 
+#, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:10
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:11
 msgid "Proceed to your brainstorming"
 msgstr ""
 
@@ -209,7 +209,6 @@ msgid "Export"
 msgstr ""
 
 #: lib/mindwendel_web/templates/static_page/home.html.leex:34
-#: lib/mindwendel_web/templates/static_page/home.html.leex:31
 msgid "Your latest brainstormings"
 msgstr ""
 
@@ -247,6 +246,7 @@ msgstr ""
 #, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/_form.html.leex:18
 msgid "Warning: Please make sure you save the admin link at the top, before hiding the settings link!"
+msgstr ""
 
 #, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:12
@@ -302,4 +302,3 @@ msgstr ""
 #: lib/mindwendel/brainstormings/brainstorming.ex:67
 msgid "yellow"
 msgstr ""
-
