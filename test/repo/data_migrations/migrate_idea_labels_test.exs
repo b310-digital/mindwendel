@@ -67,7 +67,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabelsTest do
       brainstorming: existing_brainstorming
     } do
       idea =
-        Factory.build(:idea, label_old: :label_1, brainstorming: existing_brainstorming)
+        Factory.build(:idea, deprecated_label: :label_1, brainstorming: existing_brainstorming)
         |> Repo.insert!()
 
       MigrateIdealLabels.run()
@@ -81,12 +81,16 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabelsTest do
     end
   end
 
-  test "does not override existing label wiht label_old" do
+  test "does not override existing label with deprecated_label" do
     idea_label = Factory.insert!(:idea_label, name: "Topic A")
     brainstorming = Factory.insert!(:brainstorming, labels: [idea_label])
 
     idea =
-      Factory.insert!(:idea, label_old: :label_1, label: idea_label, brainstorming: brainstorming)
+      Factory.insert!(:idea,
+        deprecated_label: :label_1,
+        label: idea_label,
+        brainstorming: brainstorming
+      )
 
     MigrateIdealLabels.run()
 
@@ -98,11 +102,11 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabelsTest do
     assert Enum.map(updated_brainstorming.labels, & &1.id) |> Enum.member?(idea_label.id)
   end
 
-  test "asdasdas", %{
+  test "migrate predefined values of field deprecated_label", %{
     brainstorming: existing_brainstorming
   } do
-    for {k, v} <- MigrateIdealLabels.label_old_to_idea_label_name_mapping() do
-      idea = Factory.insert!(:idea, label_old: k, brainstorming: existing_brainstorming)
+    for {k, v} <- MigrateIdealLabels.deprecated_label_to_idea_label_name_mapping() do
+      idea = Factory.insert!(:idea, deprecated_label: k, brainstorming: existing_brainstorming)
 
       MigrateIdealLabels.run()
 

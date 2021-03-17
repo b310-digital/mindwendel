@@ -7,7 +7,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabels do
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
 
-  @label_old_to_idea_label_name_mapping %{
+  @deprecated_label_to_idea_label_name_mapping %{
     label_1: gettext("cyan"),
     label_2: gettext("gray dark"),
     label_3: gettext("green"),
@@ -48,11 +48,12 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabels do
     end)
   end
 
-  def label_old_to_idea_label_name_for(label_old) do
-    @label_old_to_idea_label_name_mapping[label_old]
+  def deprecated_label_to_idea_label_name_for(deprecated_label) do
+    @deprecated_label_to_idea_label_name_mapping[deprecated_label]
   end
 
-  def label_old_to_idea_label_name_mapping, do: @label_old_to_idea_label_name_mapping
+  def deprecated_label_to_idea_label_name_mapping,
+    do: @deprecated_label_to_idea_label_name_mapping
 
   defp migrate_labels_to_idea_labels(%Brainstorming{} = brainstorming) do
     new_labels = (brainstorming.labels ++ Brainstorming.idea_label_factory()) |> Enum.slice(0..4)
@@ -64,7 +65,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabels do
 
   defp migrate_label_to_idea_label(%Idea{} = idea) do
     unless idea.label do
-      idea_label_name = label_old_to_idea_label_name_for(idea.label_old)
+      idea_label_name = deprecated_label_to_idea_label_name_for(idea.deprecated_label)
 
       idea_label =
         Enum.find(idea.brainstorming.labels, fn idea_label ->

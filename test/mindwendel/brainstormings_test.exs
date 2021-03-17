@@ -173,7 +173,7 @@ defmodule Mindwendel.BrainstormingsTest do
     } do
       brainstorming = brainstorming |> Repo.preload([:labels])
 
-      idea_with_1st_label_old =
+      idea_with_1st_label_older =
         Factory.insert!(:idea, %{
           brainstorming: brainstorming,
           label: Enum.at(brainstorming.labels, 0)
@@ -185,19 +185,19 @@ defmodule Mindwendel.BrainstormingsTest do
           label: Enum.at(brainstorming.labels, 1)
         })
 
-      # Created 10 seconds later than idea_with_1st_label_old
-      idea_with_1st_label_young =
+      # Created 10 seconds later than idea_with_1st_label_older
+      idea_with_1st_label_younger =
         Factory.insert!(:idea, %{
           brainstorming: brainstorming,
-          inserted_at: NaiveDateTime.add(idea_with_1st_label_old.inserted_at, 10),
+          inserted_at: NaiveDateTime.add(idea_with_1st_label_older.inserted_at, 10),
           label: Enum.at(brainstorming.labels, 0)
         })
 
       ideas_sorted_by_labels = Brainstormings.sort_ideas_by_labels(brainstorming.id)
 
       assert Enum.map(ideas_sorted_by_labels, & &1.id) == [
-               idea_with_1st_label_young.id,
-               idea_with_1st_label_old.id,
+               idea_with_1st_label_younger.id,
+               idea_with_1st_label_older.id,
                idea_with_second_label.id,
                idea_without_label.id
              ]
