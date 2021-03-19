@@ -21,15 +21,6 @@
     %>
     <br /><br />
 
-    <h5><%= gettext("Edit Brainstorming Labels") %></h5>
-    <hr />
-    <%= render "_form_labels.html",
-      conn: @conn,
-      changeset: @changeset,
-      path: Routes.admin_brainstorming_path(@conn, :update, @brainstorming.admin_url_id),
-      button_title: gettext("Edit labels")
-    %>
-
     <br />
     <h5><%= gettext("Export") %></h5>
     <hr />

@@ -165,6 +165,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:20
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:30
 msgid "Update"
 msgstr ""
 
@@ -184,7 +185,7 @@ msgid "Something went wrong when creating a brainstorming. Please try again."
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:83
+#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:84
 msgid "Successfully deleted brainstorming."
 msgstr ""
 
@@ -213,17 +214,17 @@ msgid "Your latest brainstormings"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/form_component.html.leex:22
+#: lib/mindwendel_web/live/idea_live/form_component.html.leex:23
 msgid "Your idea"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/form_component.html.leex:9
+#: lib/mindwendel_web/live/idea_live/form_component.html.leex:10
 msgid "Required fields are either missing or incorrect:"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/form_component.html.leex:14
+#: lib/mindwendel_web/live/idea_live/form_component.html.leex:15
 msgid "Username"
 msgstr ""
 
@@ -269,36 +270,31 @@ msgid "Edit Brainstorming Labels"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:30
-msgid "Edit labels"
-msgstr ""
-
-#, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/_form_labels.html.leex:7
 msgid "Type the label name"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:63
+#: lib/mindwendel/brainstormings/brainstorming.ex:61
 msgid "cyan"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:64
+#: lib/mindwendel/brainstormings/brainstorming.ex:62
 msgid "gray dark"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:65
+#: lib/mindwendel/brainstormings/brainstorming.ex:63
 msgid "green"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:66
+#: lib/mindwendel/brainstormings/brainstorming.ex:64
 msgid "red"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:67
+#: lib/mindwendel/brainstormings/brainstorming.ex:65
 msgid "yellow"
 msgstr ""

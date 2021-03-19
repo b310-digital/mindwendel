@@ -127,6 +127,7 @@ msgstr "Bisher keine Ideen"
 msgid "Open new idea page (Hotkey: i)"
 msgstr "Öffne neue Ideen Dialog (Hotkey: i)"
 
+#, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:10
 msgid "Proceed to your brainstorming"
 msgstr "Weiter zu deinem Brainstorming"
@@ -165,6 +166,7 @@ msgstr "Versuch es auf der Starseite"
 
 #, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:20
+#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:30
 msgid "Update"
 msgstr "Ändern"
 
@@ -184,7 +186,7 @@ msgid "Something went wrong when creating a brainstorming. Please try again."
 msgstr "Leider gab es einen Fehler beim Erstellen des Brainstormings. Bitte probiere es erneut."
 
 #, elixir-format
-#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:83
+#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:84
 msgid "Successfully deleted brainstorming."
 msgstr "Brainstorming erfolgreich gelöscht"
 
@@ -213,17 +215,17 @@ msgid "Your latest brainstormings"
 msgstr "Deine letzten Brainstormings"
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/form_component.html.leex:22
+#: lib/mindwendel_web/live/idea_live/form_component.html.leex:23
 msgid "Your idea"
 msgstr "Deine Idee"
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/form_component.html.leex:9
+#: lib/mindwendel_web/live/idea_live/form_component.html.leex:10
 msgid "Required fields are either missing or incorrect:"
 msgstr "Einige Pflichtfelder fehlen oder sind inkorrekt:"
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/form_component.html.leex:14
+#: lib/mindwendel_web/live/idea_live/form_component.html.leex:15
 msgid "Username"
 msgstr "Nutzername"
 
@@ -266,12 +268,7 @@ msgstr "Wähle die Farbe für das Label aus"
 #, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:24
 msgid "Edit Brainstorming Labels"
-msgstr "Editiere Labels in diesem Brainstorming"
-
-#, elixir-format
-#: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:30
-msgid "Edit labels"
-msgstr "Bearbeite die Labels"
+msgstr "Editiere Brainstorming Labels"
 
 #, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/_form_labels.html.leex:7
@@ -279,26 +276,26 @@ msgid "Type the label name"
 msgstr "Gebe dem Label einen Namen"
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:63
+#: lib/mindwendel/brainstormings/brainstorming.ex:61
 msgid "cyan"
 msgstr "Cyan"
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:64
+#: lib/mindwendel/brainstormings/brainstorming.ex:62
 msgid "gray dark"
 msgstr "Dunkelgrau"
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:65
+#: lib/mindwendel/brainstormings/brainstorming.ex:63
 msgid "green"
 msgstr "Grün"
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:66
+#: lib/mindwendel/brainstormings/brainstorming.ex:64
 msgid "red"
 msgstr "Rot"
 
 #, elixir-format
-#: lib/mindwendel/brainstormings/brainstorming.ex:67
+#: lib/mindwendel/brainstormings/brainstorming.ex:65
 msgid "yellow"
 msgstr "Gelb"
