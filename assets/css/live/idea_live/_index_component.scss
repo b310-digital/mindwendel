@@ -1,5 +1,19 @@
 // We would like to use the BEM css naming convention to avoid css collisions, see http://getbem.com/naming/
 
+.IndexComponent__IdeaCard--labelled {
+  .IndexComponent__IdeaLabelBadge {
+    @extend .badge;
+    @extend .rounded-pill;
+  }
+}
+
+// The following placeholder selectors are taken from `../node_modules/bootstrap-icons/font/bootstrap-icons.css`.
+// We are not able to @extend the bootstrap-icon css classes directly from the imported bootstrap-icons.css, because
+// SASS is not able to extend the pseudo selectors used by bootstrap-icons, e.g. `bi-check-circle-fill::before { ... }`.
+// See https://stackoverflow.com/questions/17181837/sass-extend-with-pseudo-selectors
+//
+// Therefore, we need to copy these bootstrap-icon styles in the placeholder selectors in order to reuse them
+// in the dedicated css styles for the idea labels, e.g. `.IndexComponent__IdeaLabel`.
 %bi-icon-before {
   display: inline-block;
   font-family: bootstrap-icons !important;
@@ -15,13 +29,14 @@
 
 %bi-check-circle-fill-before {
   &::before {
+    // This content needs to match the content definition used in the `../node_modules/bootstrap-icons/font/bootstrap-icons.css`
     content: "\f26a";
   }
 }
 
 %bi-plus-circle-fill-before {
   &::before {
-    content: "\f4d2";
+    content: "\f4f9";
   }
 }
 
@@ -33,14 +48,7 @@
 
 %bi-x-circle-fill-before {
   &::before {
-    content: "\f5e6";
-  }
-}
-
-.IndexComponent__IdeaCard--labelled {
-  .IndexComponent__IdeaLabelBadge {
-    @extend .badge;
-    @extend .rounded-pill;
+    content: "\f622";
   }
 }
 

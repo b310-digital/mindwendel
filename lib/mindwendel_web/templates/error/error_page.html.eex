@@ -23,7 +23,7 @@
         <h1 style="font-size: 8rem;">
           <%= for i <- @status |> Integer.to_string |> String.graphemes do %>
             <%= if i == "0" do %>
-              <i class="bi bi-lightbulb-off text-black"></i>
+              <i class="bi-lightbulb-off text-black"></i>
             <% else %>
               <%= i %>
             <% end %>
