@@ -126,8 +126,7 @@ config :mindwendel, :options,
     ),
   feature_brainstorming_removal_after_days: delete_brainstormings_after_days
 
-IO.puts config_env()
-if config_env() == :prod do
+if config_env() == :prod || config_env() == :dev do
   config :mindwendel, Oban,
     repo: Mindwendel.Repo,
     plugins: [
