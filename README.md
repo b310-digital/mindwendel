@@ -185,6 +185,8 @@ prior knowledge, and collect and structure ideas. In addition, mindwendel can
 be found on kits.blog/tools and can be used by schools for free. More info on
 how to use it can be found in this post https://kits.blog/digitale-lesestrategien-brainstorming/
 
+Logos and text provided with courtesy of kits.
+
 
 ## Acknowledgements
 
