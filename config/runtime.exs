@@ -112,13 +112,14 @@ config :mindwendel, :options,
   feature_brainstorming_removal_after_days: delete_brainstormings_after_days
 
 if config_env() == :prod || config_env() == :dev do
-  config :mindwendel, Oban,
-    repo: Mindwendel.Repo,
-    plugins: [
-      {Oban.Plugins.Cron,
-       crontab: [
-         {"@midnight", Mindwendel.Worker.RemoveBrainstormingsAfterPeriodWorker}
-       ]}
-    ],
-    queues: [default: 5]
+  config :mindwendel, Oban, queues: false, plugins: false, repo: Mindwendel.Repo
+  #config :mindwendel, Oban,
+  #  repo: Mindwendel.Repo,
+  #  plugins: [
+  #    {Oban.Plugins.Cron,
+  #     crontab: [
+  #       {"@midnight", Mindwendel.Worker.RemoveBrainstormingsAfterPeriodWorker}
+  #     ]}
+  #  ],
+  #  queues: [default: 5]
 end
