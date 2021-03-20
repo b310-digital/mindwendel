@@ -171,9 +171,8 @@ We are using Elixir's built-in formatter.
 4. Push to the branch (`git push origin fooBar`)
 5. Create a new Pull Request
 
-## Testemonials
+## Testimonials
 
-### kits
 
 <img src="docs/kits_logo.svg" width=100px align="left">
 <img src="docs/nlq-medienberatung-niedersachsen.svg" width=100px align="left">
