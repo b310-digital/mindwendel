@@ -128,12 +128,12 @@ config :mindwendel, :options,
 
 if config_env() == :prod || config_env() == :dev do
   config :mindwendel, Oban,
-   repo: Mindwendel.Repo,
-   plugins: [
-     {Oban.Plugins.Cron,
-      crontab: [
-        {"@midnight", Mindwendel.Worker.RemoveBrainstormingsAfterPeriodWorker}
-      ]}
-   ],
-   queues: [default: 5]
+    repo: Mindwendel.Repo,
+    plugins: [
+      {Oban.Plugins.Cron,
+       crontab: [
+         {"@midnight", Mindwendel.Worker.RemoveBrainstormingsAfterPeriodWorker}
+       ]}
+    ],
+    queues: [default: 5]
 end
