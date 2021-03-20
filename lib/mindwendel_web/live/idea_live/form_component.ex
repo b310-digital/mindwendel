@@ -32,7 +32,9 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
       username: idea_params["username"]
     })
 
-    case Brainstormings.create_idea(idea_params) do
+    case Brainstormings.create_idea(
+           Map.put(idea_params, "user_id", socket.assigns.current_user.id)
+         ) do
       {:ok, _idea} ->
         {:noreply,
          socket

@@ -7,6 +7,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Attachments.Link
   alias Mindwendel.UrlPreview
+  alias Mindwendel.Accounts.User
 
   @label_values [:label_1, :label_2, :label_3, :label_4, :label_5]
 
@@ -15,6 +16,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     field :username, :string, default: "Anonymous"
     field :deprecated_label, Ecto.Enum, source: :label, values: @label_values
     has_one :link, Link
+    belongs_to :user, User
     has_many :likes, Like
     belongs_to :brainstorming, Brainstorming, foreign_key: :brainstorming_id, type: :binary_id
     belongs_to :label, IdeaLabel, foreign_key: :label_id, type: :binary_id, on_replace: :nilify
@@ -25,7 +27,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   @doc false
   def changeset(idea, attrs) do
     idea
-    |> cast(attrs, [:username, :body, :brainstorming_id, :deprecated_label, :label_id])
+    |> cast(attrs, [:username, :body, :brainstorming_id, :deprecated_label, :label_id, :user_id])
     |> validate_required([:username, :body, :brainstorming_id])
     |> validate_length(:body, min: 2, max: 1023)
     |> validate_inclusion(:deprecated_label, @label_values)
