@@ -1,5 +1,6 @@
 use Mix.Config
-
+IO.puts "prod prod"
+IO.puts config_env()
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
 # when generating URLs.
