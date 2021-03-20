@@ -3,7 +3,7 @@ defmodule Mindwendel.Repo.Migrations.AddUserIdToIdeas do
 
   def change do
     alter table("ideas") do
-      add :user_id, references(:users, type: :uuid)
+      add :user_id, references(:users, type: :uuid, on_delete: :nilify_all)
     end
   end
 end
