@@ -116,7 +116,7 @@ if config_env() == :prod || config_env() == :dev do
     plugins: [
       {Oban.Plugins.Cron,
        crontab: [
-         {"@midnight", Mindwendel.Worker.RemoveBrainstormingsAfterPeriodWorker}
+         {"@midnight", Mindwendel.Worker.RemoveBrainstormingsAndUsersAfterPeriodWorker}
        ]}
     ],
     queues: [default: 5]

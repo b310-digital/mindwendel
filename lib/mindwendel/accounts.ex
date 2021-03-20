@@ -1,4 +1,5 @@
 defmodule Mindwendel.Accounts do
+  import Ecto.Query, warn: false
   alias Mindwendel.Repo
   alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.Brainstorming
@@ -110,5 +111,10 @@ defmodule Mindwendel.Accounts do
       :error -> brainstorming
       {:ok, _} -> merge_brainstorming_user(brainstorming, get_or_create_user(user_id))
     end
+  end
+
+  def delete_inactive_users(after_days \\ 30) do
+    date_time = Timex.now() |> Timex.shift(days: -1 * after_days)
+    Repo.delete_all(from u in User, where: u.updated_at < ^date_time)
   end
 end
