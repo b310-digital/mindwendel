@@ -171,6 +171,23 @@ We are using Elixir's built-in formatter.
 4. Push to the branch (`git push origin fooBar`)
 5. Create a new Pull Request
 
+## Testimonials
+
+
+<img src="https://www.nibis.de/img/nlq-medienbildung.png" align="left" style="margin-right:20px">
+<img src="https://kits.blog/wp-content/uploads/2021/03/kits_logo.svg" width=100px align="left" style="margin-right:20px">
+
+
+kits is a project platform hosted by a public institution for quality
+development in schools (Lower Saxony, Germany) and focusses on digital tools
+and media in language teaching. mindwendel is used in workshops to activate
+prior knowledge, and collect and structure ideas. In addition, mindwendel can
+be found on https://kits.blog/tools and can be used by schools for free. More info on
+how to use it can be found in this post https://kits.blog/digitale-lesestrategien-brainstorming/
+
+Logos and text provided with courtesy of kits.
+
+
 ## Acknowledgements
 
 - https://github.com/JannikStreek
