@@ -26,14 +26,16 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
     {:noreply, socket}
   end
 
-  def handle_event("update_label", %{"id" => id, "label" => label}, socket) do
+  def handle_event("update_label", %{"id" => id, "label-id" => label_id}, socket) do
+    idea_label = Brainstormings.get_idea_label(label_id)
+
     Brainstormings.get_idea!(id)
-    |> Brainstormings.update_idea(%{label: label})
+    |> Brainstormings.update_idea_label(idea_label)
 
     {:noreply, socket}
   end
 
   def handle_event("update_label", %{"id" => id}, socket) do
-    handle_event("update_label", %{"id" => id, "label" => nil}, socket)
+    handle_event("update_label", %{"id" => id, "label-id" => nil}, socket)
   end
 end

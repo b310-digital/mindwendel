@@ -2,18 +2,18 @@ defmodule Mindwendel.Factory do
   alias Mindwendel.Repo
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Attachments.Link
   alias Mindwendel.Accounts.User
   alias Mindwendel.Help.Inspiration
 
-  def build(:user) do
-    %User{}
-  end
-
   def build(:brainstorming) do
     %Brainstorming{
-      name: "How to brainstorm ideas?"
+      name: "How to brainstorm ideas?",
+      # This can be removed as soon the todo is solved in lib/mindwendel/brainstormings/brainstorming.ex:12
+      admin_url_id: Ecto.UUID.generate(),
+      labels: Brainstorming.idea_label_factory()
     }
   end
 
@@ -23,8 +23,8 @@ defmodule Mindwendel.Factory do
     }
   end
 
-  def build(:like) do
-    %Like{}
+  def build(:idea_label) do
+    %IdeaLabel{}
   end
 
   def build(:link) do
@@ -33,6 +33,14 @@ defmodule Mindwendel.Factory do
 
   def build(:inspiration) do
     %Inspiration{title: "Hi", type: "test"}
+  end
+
+  def build(:like) do
+    %Like{}
+  end
+
+  def build(:user) do
+    %User{}
   end
 
   def build(:brainstorming, :with_users) do
@@ -55,6 +63,10 @@ defmodule Mindwendel.Factory do
 
   def insert!(:brainstorming, :with_users) do
     build(:brainstorming, :with_users) |> Repo.insert!()
+  end
+
+  def insert!(:brainstorming, :with_labels) do
+    build(:brainstorming, :with_labels) |> Repo.insert!()
   end
 
   def insert!(:like, :with_idea_and_user) do

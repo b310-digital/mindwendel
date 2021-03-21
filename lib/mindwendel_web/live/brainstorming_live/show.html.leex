@@ -2,7 +2,7 @@
 
 <%= if @inspiration do %>
   <a data-bs-toggle="collapse" href="#inspiration" role="button" aria-expanded="false">
-    <i class="bi bi-question-circle"></i> <%= gettext("Got stuck? Try inspirational teasers!") %>
+    <i class="bi-question-circle"></i> <%= gettext("Got stuck? Try inspirational teasers!") %>
   </a><br /><br />
   <div class="alert alert-info collapse" id="inspiration">
     <p>
@@ -69,7 +69,7 @@
       return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming) %>
   <% end %>
 
-  <%= live_component @socket, MindwendelWeb.IdeaLive.IndexComponent, ideas: @ideas, id: @brainstorming.id, current_user: @current_user %>
+  <%= live_component @socket, MindwendelWeb.IdeaLive.IndexComponent, ideas: @ideas, brainstorming: @brainstorming, id: @brainstorming.id, current_user: @current_user %>
 
   <footer class="footer fixed-bottom d-lg-none bg-light">
     <div class="d-grid gap-2">
