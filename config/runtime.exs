@@ -39,6 +39,7 @@ if config_env() != :test do
     ssl: database_ssl,
     hostname: database_host,
     username: database_user,
+    port: String.to_integer(System.get_env("DATABASE_PORT") || "5432"),
     password: database_user_password,
     database: database_name,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
