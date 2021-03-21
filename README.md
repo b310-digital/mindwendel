@@ -175,7 +175,7 @@ We are using Elixir's built-in formatter.
 
 
 <img src="https://www.nibis.de/img/nlq-medienbildung.png" align="left" style="margin-right:20px">
-<img src="docs/kits_logo.svg" width=100px align="left" style="margin-right:20px">
+<img src="https://idea.kits.blog/images/kits_footer-7a003362ffb83a228d153d34e5cb4893.svg?vsn=d" width=100px align="left" style="margin-right:20px">
 
 
 kits is a project platform hosted by a public institution for quality
