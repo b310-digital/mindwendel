@@ -45,9 +45,9 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
 
     case Brainstormings.update_brainstorming(brainstorming, brainstorming_params) do
       {:ok, brainstorming} ->
-        redirect(conn,
-          to: Routes.admin_brainstorming_path(conn, :edit, brainstorming.admin_url_id)
-        )
+        conn
+        |> put_flash(:info, gettext("Your brainstorming was successfully updated."))
+        |> redirect(to: Routes.admin_brainstorming_path(conn, :edit, brainstorming.admin_url_id))
 
       {:error, changeset} ->
         render(conn, "edit.html",
