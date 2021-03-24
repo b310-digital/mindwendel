@@ -365,4 +365,12 @@ msgstr ""
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:69
 #, elixir-autogen, elixir-format
 msgid "Update idea"
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Legal Disclosure"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Privacy"
 msgstr ""

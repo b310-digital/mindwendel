@@ -1,15 +1,27 @@
-<div class="d-flex flex-column text-white p-3">
-  <header class="mb-4">
-    <div>
-      <h3 class="float-md-start mb-0"><%= link("Glühbirne", to: "/") %></h3>
-    </div>
+<div class="d-flex w-100 h-100 p-3 pb-0 mx-auto flex-column text-white">
+  <header class="mb-auto bg-none container">
+    <%= link to: "/", class: "text-reset text-decoration-none" do %>
+      <img src="<%= Routes.static_path(@conn, "/images/mindwendel_logo_white.svg") %>" height="40px" class="float-md-start me-3" />
+      <h3 class="mb-0"> mindwendel</h3>
+    <% end %>
   </header>
-  <div>
+  <main class="container">
+    <br /><br />
     <h2>Legal Disclosure</h2>
     Information in accordance with Section 5 TMG
-    <br><br>Jannik Streek<br>Durlacher Straße 4a<br>10715 Berlin<br>
+    <br /><br /> <%= link to: "https://b310.de", class: "text-reset" do %>B310 Digital GmbH <% end %><br />Food Tech Campus<br />Birkenstraße 22<br />10559 Berlin<br /><br />
+    Represented by: <br />
+    Jannik Streek<br />
+    Gerardo Navarro Suarez <br />
+    Nicholas Wittstruck<br />
+    <br />
+    Register and registration number: <br />
+    Amtsgericht Berlin (Charlottenburg) HRB 210643<br />
+    <br />
+    Umsatzsteuer-ID according to § 27a Umsatzsteuergesetz:<br />
+    DE326377073<br />
     <h2>Contact Information</h2>
-  E-Mail: mindwendel (at) jannik-streek.de<br><br>
+    E-Mail: kontakt (at) b310.de<br><br>
     <h2>Disclaimer</h2>
     Accountability for content<br>
     The contents of our pages have been created with the utmost care. However, we cannot guarantee the contents'
@@ -31,5 +43,5 @@
 
     <br><br>
     <i>Quelle: </i><a href="http://www.translate-24h.de" target="_blank">translate-24h.de</a> <br><br>
-  </div>
+  </main>
 </div>
