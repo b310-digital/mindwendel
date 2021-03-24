@@ -383,3 +383,17 @@ msgstr "Bist du sicher, dass das Brainstorming geleert werden soll?"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Empty brainstorming"
 msgstr "Leere das Brainstorming"
+#, elixir-format
+#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:49
+msgid "Your brainstorming was successfully updated."
+msgstr "Dein Brainstorming wurde aktualisiert."
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Legal Disclosure"
+msgstr "Impressum"
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Privacy"
+msgstr "Datenschutz"
