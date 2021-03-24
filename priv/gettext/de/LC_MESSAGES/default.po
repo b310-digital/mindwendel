@@ -390,3 +390,17 @@ msgstr "Likes"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Brainstorming will be deleted %{days}"
 msgstr "Brainstorming wird gelöscht %{days}"
+#, elixir-format
+#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:49
+msgid "Your brainstorming was successfully updated."
+msgstr "Dein Brainstorming wurde aktualisiert."
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Legal Disclosure"
+msgstr "Impressum"
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Privacy"
+msgstr "Datenschutz"
