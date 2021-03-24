@@ -340,3 +340,13 @@ msgstr ""
 #: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:56
 msgid "Download as svg"
 msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Legal Disclosure"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Privacy"
+msgstr ""

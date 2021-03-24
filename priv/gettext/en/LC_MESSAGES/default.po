@@ -290,8 +290,8 @@ msgid "yellow"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:78
-msgid "Add idea label"
+#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:49
+msgid "Your brainstorming was successfully updated."
 msgstr ""
 
 #, elixir-format
@@ -341,3 +341,13 @@ msgstr "Download as png"
 #: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:56
 msgid "Download as svg"
 msgstr "Download as svg"
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Legal Disclosure"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Privacy"
+msgstr ""

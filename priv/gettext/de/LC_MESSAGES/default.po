@@ -341,3 +341,18 @@ msgstr "Download als PNG"
 #: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:56
 msgid "Download as svg"
 msgstr "Download als SVG"
+
+#, elixir-format
+#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:49
+msgid "Your brainstorming was successfully updated."
+msgstr "Dein Brainstorming wurde aktualisiert."
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Legal Disclosure"
+msgstr "Impressum"
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Privacy"
+msgstr "Datenschutz"
