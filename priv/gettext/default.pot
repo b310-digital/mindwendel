@@ -302,3 +302,13 @@ msgstr ""
 #: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:49
 msgid "Your brainstorming was successfully updated."
 msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Legal Disclosure"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+msgid "Privacy"
+msgstr ""
