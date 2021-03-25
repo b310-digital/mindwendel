@@ -1,5 +1,8 @@
 <div class="d-flex w-100 h-100 p-3 pb-0 mx-auto flex-column bg-mindwendel text-white">
-  <header class="mb-auto bg-none container" >
+  <header class="mb-auto bg-none container">
+      <%= link to: "https://github.com/mindwendel/mindwendel", class: "text-reset text-decoration-none" do %>
+        <img src="<%= Routes.static_path(@conn, "/images/GitHub-Mark-Light-64px.png") %>" height="40px" class="float-end" />
+      <% end %>
       <img src="<%= Routes.static_path(@conn, "/images/mindwendel_logo_white.svg") %>" height="40px" class="float-md-start me-3" />
       <h3 class="mb-0"> mindwendel</h3>
   </header>
@@ -46,6 +49,8 @@
   </main>
 
   <footer class="mt-auto">
-    <p> Made with ❤️ in the 🇪🇺 | <%= link(gettext("Legal Disclosure"), to: "/legal") %> | <%= link(gettext("Privacy"), to: "/privacy") %></p>
+
+    <span class="me-2">Made with ❤️ in the 🇪🇺</span> <br class="d-md-none" />
+    <%= link(gettext("Legal Disclosure"), to: "/legal") %> | <%= link(gettext("Privacy"), to: "/privacy") %>
   </footer>
 </div>
