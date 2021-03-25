@@ -40,6 +40,7 @@ Here's the TLDR:
     -p 127.0.0.1:80:4000 \
     -e DATABASE_HOST="..." \
     -e DATABASE_PORT="5432" \
+    -e DATABASE_SSL="false" \
     -e DATABASE_NAME="mindwendel_prod" \
     -e DATABASE_USER="mindwendel_db_user" \
     -e DATABASE_USER_PASSWORD="mindwendel_db_user_password" \
