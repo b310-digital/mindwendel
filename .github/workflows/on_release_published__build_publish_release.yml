@@ -38,7 +38,7 @@ jobs:
           push: true
           tags: |
             ${{ format('ghcr.io/mindwendel/mindwendel:{0}', steps.set_vars.outputs.tag) }}
-            ghcr.io/mindwendel/mindwendel:label
+            ghcr.io/mindwendel/mindwendel:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
