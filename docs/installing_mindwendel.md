@@ -76,22 +76,34 @@ When you use [docker-compose](https://docs.docker.com/compose/), you will be usi
   docker-compose up
   ```
 
-  Important: The production database is currently not created automatically. You have to create it by yourself, e.g. after having created the containers with the run command:
+- To create the production database (after having created the containers via up):
+
+  First, start the container:
   ```sh
-    docker start mindwendel_db_1
-    docker exec -it mindwendel_db_1 sh
-    su -- postgres
-    psql
-    postgres=# CREATE USER mindwendel_db_user WITH PASSWORD 'mindwendel_db_user_password';
-    postgres=# CREATE DATABASE mindwendel_prod;
-    postgres=# GRANT ALL PRIVILEGES ON DATABASE mindwendel_prod TO mindwendel_db_user;
-    \q
-    exit
+  docker start mindwendel_db_1
   ```
 
-Then adjust the db password in the docker compose file accordingly.
+  Then eiher:
+  ```sh
+  docker exec -it mindwendel_db_1 createuser -rPed mindwendel_db_user --username=postgres
+  docker exec -it mindwendel_db_1 createdb mindwendel_prod --username=mindwendel_db_user
+  ```
 
-Note: Adjust the env vars in `docker-copmose.yml` according to your preferences.
+  Or login to the container and do it from there:
+  ```sh
+  docker exec -it mindwendel_db_1 sh
+  su -- postgres
+  psql
+  postgres=# CREATE USER mindwendel_db_user WITH PASSWORD 'mindwendel_db_user_password';
+  postgres=# CREATE DATABASE mindwendel_prod;
+  postgres=# GRANT ALL PRIVILEGES ON DATABASE mindwendel_prod TO mindwendel_db_user;
+  \q
+  exit
+  ```
+
+  After that, adjust the db password in the docker compose file accordingly.
+
+  Note: Adjust the env vars in `docker-compose.yml` according to your preferences.
 
 
 ## Running on Docker
