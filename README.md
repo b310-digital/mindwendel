@@ -213,4 +213,4 @@ Logos and text provided with courtesy of kits.
 
 ## Additonal licence
 
-The mindwendel [logo](https://thenounproject.com/icon/735650/) in this repo – created by [mikicon]https://thenounproject.com/mikicon) – is licenced under [CC BY 3.0 Unported](https://creativecommons.org/licenses/by/3.0/).
+The mindwendel [logo](https://thenounproject.com/icon/735650/) in this repo – created by [mikicon](https://thenounproject.com/mikicon) – is licenced under [CC BY 3.0 Unported](https://creativecommons.org/licenses/by/3.0/).
