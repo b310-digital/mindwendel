@@ -162,7 +162,7 @@ msgstr "Sortiere nach Likes"
 #, elixir-format
 #: lib/mindwendel_web/templates/error/error_page.html.eex:33
 msgid "Try again from home"
-msgstr "Versuch es auf der Starseite"
+msgstr "Versuch es auf der Startseite"
 
 #, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/edit.html.leex:20
@@ -242,7 +242,7 @@ msgstr "Administration für: %{name}"
 #, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/_form.html.leex:13
 msgid "Show brainstorming settings link for all users"
-msgstr "Zeige Link zur Admnistration für alle Nutzer"
+msgstr "Zeige Link zur Administration für alle Nutzer"
 
 #, elixir-format
 #: lib/mindwendel_web/templates/admin/brainstorming/_form.html.leex:19
