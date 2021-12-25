@@ -34,8 +34,10 @@ npm-debug.log
 /priv/static/
 
 # Extending gitignore to include also all .env files, e.g. .env.development.local, .env.test, etc.
-.env
+.env*
 
 .docker
 .vscode
 .DS_Store
+
+docker-compose.override.yml
