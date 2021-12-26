@@ -88,6 +88,7 @@ jobs:
       - run: mix test
 
   check_mix_format:
+    runs-on: ubuntu-latest
     container: bitwalker/alpine-elixir-phoenix:1.11
 
     needs: build_deps
