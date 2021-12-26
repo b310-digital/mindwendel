@@ -10,6 +10,7 @@ config :mindwendel, Mindwendel.Repo,
   password: System.get_env("TEST_DATABASE_USER_PASSWORD"),
   database: "#{System.get_env("TEST_DATABASE_NAME")}#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: System.get_env("TEST_DATABASE_HOST"),
+  show_sensitive_data_on_connection_error: true,
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,
