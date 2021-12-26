@@ -12,7 +12,7 @@ on:
 jobs:
   build_deps:
     runs-on: ubuntu-latest
-    container: bitwalker/alpine-elixir-phoenix:latest
+    container: bitwalker/alpine-elixir-phoenix:1.11
 
     steps:
       # See https://github.com/actions/checkout
@@ -37,7 +37,7 @@ jobs:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
     # Docker Hub image that `container-job` executes in
-    container: bitwalker/alpine-elixir-phoenix:latest
+    container: bitwalker/alpine-elixir-phoenix:1.11
 
     needs: build_deps
 
@@ -90,7 +90,7 @@ jobs:
 
   check_mix_format:
     runs-on: ubuntu-latest
-    container: bitwalker/alpine-elixir-phoenix:latest
+    container: bitwalker/alpine-elixir-phoenix:1.11
 
     needs: build_deps
 
