@@ -6,29 +6,29 @@ import Config
 require Logger
 
 if config_env() != :test do
-  if System.get_env("DATABASE_URL") do
+  unless System.get_env("DATABASE_URL") do
     Logger.warn(
       "Environment variable DATABASE_URL is missing, e.g. Database_URL=ecto://USER:PASS@HOST/DATABASE"
     )
   end
 
-  if System.get_env("DATABASE_HOST") do
+  unless System.get_env("DATABASE_HOST") do
     Logger.warn(
       "Environment variable DATABASE_HOST is missing, e.g. DATABASE_HOST=localhost or DATABASE_HOST=postgres"
     )
   end
 
-  if System.get_env("DATABASE_NAME") do
+  unless System.get_env("DATABASE_NAME") do
     Logger.warn("Environment variable DATABASE_NAME is missing, e.g. DATABASE_NAME=mindwendel")
   end
 
-  if System.get_env("DATABASE_USER") do
+  unless System.get_env("DATABASE_USER") do
     Logger.warn(
       "Environment variable DATABASE_USER is missing, e.g. DATABASE_USER=mindwendel_user"
     )
   end
 
-  if System.get_env("DATABASE_USER_PASSWORD") do
+  unless System.get_env("DATABASE_USER_PASSWORD") do
     Logger.warn(
       "Environment variable DATABASE_USER_PASSWORD is missing, e.g. DATABASE_USER_PASSWORD=mindwendel_user_password"
     )
