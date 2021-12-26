@@ -34,8 +34,6 @@ if config_env() != :test do
     )
   end
 
-  database_ssl = (System.get_env("DATABASE_SSL") || "true") == "true"
-
   config :mindwendel, Mindwendel.Repo,
     database: System.get_env("DATABASE_NAME"),
     hostname: System.get_env("DATABASE_HOST"),
