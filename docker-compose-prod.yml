@@ -1,10 +1,6 @@
 version: "3.8"
 
 services:
-  # You might already have other docker services listed in your docker-compose file
-  # ...
-
-  # Add the following mindwendel service
   app_prod:
     build:
       context: .
