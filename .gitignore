@@ -35,6 +35,8 @@ npm-debug.log
 
 # Extending gitignore to include also all .env files, e.g. .env.development.local, .env.test, etc.
 .env*
+!.env.default
+!.env.prod.default
 
 .docker
 .vscode
