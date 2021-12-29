@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Only continue if database is ready
 while ! pg_isready -q -h $DATABASE_HOST -p $DATABASE_PORT -U $DATABASE_USER
 do

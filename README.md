@@ -35,7 +35,7 @@ Here's the TLDR:
 
 - Run mindwendel via Docker and reference your postgres database
 
-  ```sh
+  ```bash
   docker run -d --name mindwendel \
     -p 127.0.0.1:80:4000 \
     -e DATABASE_HOST="..." \
@@ -51,8 +51,6 @@ Here's the TLDR:
 
 NOTE: mindwendel requires a postgres database. You can use [our docker-compose file](./docs/installing_mindwendel.md#running-on-docker-compose) to also install the postgres.
 
-## Usage example
-
 ## Contributing
 
 To get started with a development installation of mindwendel, follow the instructions below.
@@ -64,79 +62,68 @@ mindwendel is built on top of:
 - [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_view)
 - [PostgreSQL](https://www.postgresql.org)
 
-### Dev setup based on Docker
+### Development
 
-- Startup docker container
-  ```sh
-  docker-compose up
+- Startup docker-compose setup
+
+  ```bash
+  docker-compose up -d
   ```
+
 - Go to http://localhost:4000/
 
 - Open you favorite editor and start developing
 
 - Open a shell in the docker container to execute tests, etc.
 
-  ```sh
-  docker exec -it mindwendel sh
+  ```bash
+  docker-compose exec app sh
   ```
 
-- In the shell, you can now execute all commands as on you local machine, see [testing commands](#testing)
-
-### Dev setup an your local machine (without docker)
-
-- Clone the repo
-  ```sh
-  git clone https://github.com/mindwendel/mindwendel.git
-  ```
-- Install dependencies with
-  ```sh
-  mix deps.get
-  ```
-- Copy and adjust local env variables, e.g. DATABASE_USER, DATABASE_NAME, etc.
-  ```sh
-  cp .env.default .env
-  ```
-- Load your env variables; NOTE: Always do this when your env settings change or your open a new terminal session
-  ```sh
-  source .env
-  ```
-- Create and migrate your database with
-  ```sh
-  mix ecto.setup
-  ```
-- Add seeds with
-  ```sh
-  mix run priv/repo/seeds.exs
-  ```
-- Install NPM packages
-  ```sh
-  npm --prefix assets install
-  ```
-- Start the phoenix server
-  ```sh
-  mix phx.server
-  ```
 - Go to http://localhost:4000/
 
 ### Testing
 
-- Load the env variables for testing
-  ```sh
-  source .env
+- Startup docker-compose setup
+
+  ```bash
+  docker-compose up -d
   ```
+
 - Ensure your database is running and reset your database
-  ```sh
-  MIX_ENV=test mix ecto.reset
+
+  ```bash
+  docker-compose exec app MIX_ENV=test mix ecto.reset
   ```
+
 - Run the test
-  ```sh
-  mix test
+
+  ```bash
+  docker-compose exec app mix test
   ```
+
+### Production
+
+- Duplicate and rename `.env.default`
+
+  ```bash
+  cp .env.prod.default .env.prod
+  ```
+
+- Adjust all configs in `.env.prod`, e.g. database settings, ports, disable ssl env vars if necessary
+
+- Start everything at once (including a forced build):
+
+  ```bash
+  docker-compose --file docker-compose-prod.yml --env-file .env.prod up -d --build --force-recreate
+  ```
+
+- Go to `http://localhost` to open up mindmapper
 
 ### Build release and production docker image
 
 - Build the docker image based on our Dockerfile
-  ```sh
+  ```bash
   docker build -t mindwendel_prod .
   ```
 
@@ -145,11 +132,11 @@ mindwendel is built on top of:
 We are using Elixir's built-in formatter.
 
 - Check if the code is properly formatted
-  ```sh
+  ```bash
   mix format --check-formatted
   ```
 - Automatically format the code
-  ```sh
+  ```bash
   mix format
   ```
 
@@ -175,10 +162,8 @@ You can extract new strings to translate by running:
 
 ## Testimonials
 
-
 <img src="https://www.nibis.de/img/nlq-medienbildung.png" align="left" style="margin-right:20px">
 <img src="https://kits.blog/wp-content/uploads/2021/03/kits_logo.svg" width=100px align="left" style="margin-right:20px">
-
 
 kits is a project platform hosted by a public institution for quality
 development in schools (Lower Saxony, Germany) and focusses on digital tools
@@ -188,7 +173,6 @@ be found on https://kits.blog/tools and can be used by schools for free. More in
 how to use it can be found in this post https://kits.blog/digitale-lesestrategien-brainstorming/
 
 Logos and text provided with courtesy of kits.
-
 
 ## Acknowledgements
 
