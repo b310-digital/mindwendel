@@ -155,7 +155,7 @@ We are using Elixir's built-in formatter.
 
 ## Environment Variables
 
-### Localisation
+### Localization
 
 Currently, there are two language files available, german ("de") and english ("en"). To set the default_locale, you can set `MW_DEFAULT_LOCALE`. The default is english.
 

@@ -3,46 +3,46 @@
 # although such is generally not recommended and you have to
 # remember to add this file to your .gitignore.
 import Config
+require Logger
 
 if config_env() != :test do
-  database_host =
-    System.get_env("DATABASE_HOST") ||
-      raise """
-      Environment variable DATABASE_HOST is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
-      """
+  unless System.get_env("DATABASE_URL") do
+    Logger.warn(
+      "Environment variable DATABASE_URL is missing, e.g. Database_URL=ecto://USER:PASS@HOST/DATABASE"
+    )
+  end
 
-  database_name =
-    System.get_env("DATABASE_NAME") ||
-      raise """
-      Environment variable DATABASE_NAME is missing.
-      For example: mindwendel
-      """
+  unless System.get_env("DATABASE_HOST") do
+    Logger.warn(
+      "Environment variable DATABASE_HOST is missing, e.g. DATABASE_HOST=localhost or DATABASE_HOST=postgres"
+    )
+  end
 
-  database_user =
-    System.get_env("DATABASE_USER") ||
-      raise """
-      Environment variable DATABASE_USER is missing.
-      For example: mindwendel_user
-      """
+  unless System.get_env("DATABASE_NAME") do
+    Logger.warn("Environment variable DATABASE_NAME is missing, e.g. DATABASE_NAME=mindwendel")
+  end
 
-  database_user_password =
-    System.get_env("DATABASE_USER_PASSWORD") ||
-      raise """
-      Environment variable DATABASE_USER_PASSWORD is missing.
-      For example: password
-      """
+  unless System.get_env("DATABASE_USER") do
+    Logger.warn(
+      "Environment variable DATABASE_USER is missing, e.g. DATABASE_USER=mindwendel_user"
+    )
+  end
 
-  database_ssl = (System.get_env("DATABASE_SSL") || "true") == "true"
+  unless System.get_env("DATABASE_USER_PASSWORD") do
+    Logger.warn(
+      "Environment variable DATABASE_USER_PASSWORD is missing, e.g. DATABASE_USER_PASSWORD=mindwendel_user_password"
+    )
+  end
 
   config :mindwendel, Mindwendel.Repo,
-    ssl: database_ssl,
-    hostname: database_host,
-    username: database_user,
-    port: String.to_integer(System.get_env("DATABASE_PORT") || "5432"),
-    password: database_user_password,
-    database: database_name,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+    database: System.get_env("DATABASE_NAME"),
+    hostname: System.get_env("DATABASE_HOST"),
+    password: System.get_env("DATABASE_USER_PASSWORD"),
+    pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
+    port: String.to_integer(System.get_env("DATABASE_PORT", "5432")),
+    ssl: System.get_env("DATABASE_SSL", "true") == "true",
+    url: System.get_env("DATABASE_URL"),
+    username: System.get_env("DATABASE_USER")
 
   secret_key_base =
     System.get_env("SECRET_KEY_BASE") ||

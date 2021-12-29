@@ -126,3 +126,11 @@ If you are using Docker containers and prefer to manage your mindwendel installa
   ```
 
 NOTE: mindwendel requires a postgres database. You can use our docker-compose file to also install the postgres, see [above](#running-on-docker-compose).
+
+## Running on Gigalixir.com
+
+Gigalixir.com is a plattform as a service that fully supports Elixir and Phoenix.
+
+Follow the steps as described in [this guide](https://hexdocs.pm/phoenix/gigalixir.html#content).
+
+Note: Because of the releases.exs, Gigalixir automatically deploys the app as an elixir release. This is why `gigalixir run mix ecto.migrate` will not work. However, the Gigalixir team provides another utility command that helps with the migration `gigalixir ps:migrate`, see https://gigalixir.readthedocs.io/en/latest/database.html#how-to-run-migrations .
