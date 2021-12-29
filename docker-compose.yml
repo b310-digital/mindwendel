@@ -5,6 +5,7 @@ services:
     build:
       context: .
       target: development
+    stdin_open: true
     environment:
       DATABASE_HOST: ${DOCKER_COMPOSE_APP_DATABASE_HOST:-postgres}
       DATABASE_NAME: ${DOCKER_COMPOSE_APP_DATABASE_NAME:-${DOCKER_COMPOSE_POSTGRES_DB:-mindwendel-dev}}
@@ -20,9 +21,9 @@ services:
       TEST_DATABASE_NAME: ${DOCKER_COMPOSE_APP_TEST_DATABASE_NAME:-${DOCKER_COMPOSE_POSTGRES_DB:-mindwendel-test}}
       TEST_DATABASE_USER_PASSWORD: ${DOCKER_COMPOSE_APP_TEST_DATABASE_USER_PASSWORD:-${DOCKER_COMPOSE_POSTGRES_PASSWORD:-mindwendel-user-password}}
       TEST_DATABASE_USER: ${DOCKER_COMPOSE_APP_TEST_DATABASE_USER:-${DOCKER_COMPOSE_POSTGRES_USER:-mindwendel-user}}
-      URL_HOST: localhost
+      URL_HOST: 0.0.0.0
     ports:
-      - "80:80"
+      - "4000:4000"
     depends_on:
       - postgres
     # Mount the lib and test folder to increase development speed (do not use for prod setups!)

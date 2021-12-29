@@ -4,7 +4,7 @@ services:
   app_prod:
     build:
       context: .
-      target: app
+      target: production
     environment:
       # Add the address of the database host, so that mindwendel can find the database, e.g. an ip address or a reference to another service in the docker-compose file
       DATABASE_HOST: ${DOCKER_COMPOSE_APP_PROD_DATABASE_HOST:-postgres_prod}

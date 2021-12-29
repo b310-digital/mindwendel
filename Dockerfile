@@ -3,43 +3,70 @@ ARG ALPINE_VERSION=3.13
 
 FROM elixir:1.11-alpine as elixir_alpine
 
-RUN apk add --update-cache postgresql-client nodejs npm
+ENV APP_PATH=/app
+
+RUN apk add \
+    --update-cache \
+    nodejs \
+    npm
 
 RUN mix do local.hex --force, local.rebar --force
 
-WORKDIR /app
-
-COPY . .
+WORKDIR $APP_PATH
 
 FROM elixir_alpine as development
 
-RUN mix do deps.get, compile
-RUN npm --prefix assets install
+RUN apk add \
+    # The package `inotify-tools` is needed for instant live-reload of the the phoenix server
+    inotify-tools \
+    postgresql-client
 
-RUN ["chmod", "+x", "./entrypoint.sh"]
-ENTRYPOINT ["sh", "./entrypoint.sh"]
+# Install mix dependencies
+COPY mix.exs mix.lock $APP_PATH/
+RUN mix do deps.get
 
+COPY assets/package.json assets/package-lock.json $APP_PATH/assets/
+RUN npm install --prefix assets
+
+COPY . .
+
+# RUN mix do deps.get, compile
+# RUN npm --prefix assets install
+
+# RUN ["chmod", "+x", "./entrypoint.sh"]
+# ENTRYPOINT ["sh", "./entrypoint.sh"]
 
 # Building a release version
 # https://hexdocs.pm/phoenix/releases.html
-FROM elixir_alpine AS build
+FROM elixir_alpine AS production_build
 
 # Set build ENV
 ENV MIX_ENV=prod
 
 # Install mix dependencies
+COPY mix.exs mix.lock $APP_PATH/
 RUN mix do deps.get, deps.compile
 
 # Build assets
-RUN npm --prefix ./assets ci --progress=false --no-audit --loglevel=error
-RUN npm run --prefix ./assets deploy
-RUN mix phx.digest
+COPY assets $APP_PATH/assets/
+RUN set -eux; \
+    npm \
+      --loglevel=error \
+      --no-audit \
+      --prefix assets \
+      --progress=false \
+      ci ; \
+    npm \
+      --prefix assets \
+      run \
+      deploy
 
-# compile and build release
-RUN mix do compile, release
+# Compile and build release
+COPY . .
+RUN mix do phx.digest, compile, release
 
 # prepare release image
-FROM alpine:${ALPINE_VERSION} AS app
+FROM alpine:${ALPINE_VERSION} AS production
 
 # Labels Standard
 LABEL org.label-schema.schema-version="1.0"
