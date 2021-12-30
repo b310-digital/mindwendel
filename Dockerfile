@@ -30,12 +30,6 @@ RUN npm install --prefix assets
 
 COPY . .
 
-# RUN mix do deps.get, compile
-# RUN npm --prefix assets install
-
-# RUN ["chmod", "+x", "./entrypoint.sh"]
-# ENTRYPOINT ["sh", "./entrypoint.sh"]
-
 # Building a release version
 # https://hexdocs.pm/phoenix/releases.html
 FROM elixir_alpine AS production_build
@@ -65,7 +59,7 @@ RUN set -eux; \
 COPY . .
 RUN mix do phx.digest, compile, release
 
-# prepare release image
+# Prepare release image
 FROM alpine:${ALPINE_VERSION} AS production
 
 # Labels Standard
@@ -81,17 +75,26 @@ LABEL org.label-schema.docker.cmd="docker run -d --name mindwendel -p 127.0.0.1:
 LABEL org.opencontainers.image.source="https://github.com/mindwendel/mindwendel"
 LABEL maintainer="gerardo.navarro.suarez@gmail.com"
 
-RUN apk add --no-cache openssl ncurses-libs postgresql-client
+ENV APP_PATH=/app
 
-WORKDIR /app
+RUN apk add --no-cache \
+      libgcc \
+      libstdc++ \
+      ncurses-libs \
+      openssl \
+      postgresql-client
 
-RUN chown nobody:nobody /app
+WORKDIR $APP_PATH
+
+RUN chown nobody:nobody $APP_PATH/
 
 USER nobody:nobody
 
-COPY entrypoint.release.sh /app/entrypoint.release.sh
-COPY --from=build --chown=nobody:nobody /app/_build/prod/rel/mindwendel ./
+COPY entrypoint.release.sh $APP_PATH/entrypoint.release.sh
+COPY --from=production_build --chown=nobody:nobody $APP_PATH/_build/prod/rel/mindwendel ./
 
-ENV HOME=/app
+ENV HOME=$APP_PATH
 
-ENTRYPOINT ["sh", "./entrypoint.release.sh"]
+ENTRYPOINT ["sh", "entrypoint.release.sh"]
+
+EXPOSE 8000

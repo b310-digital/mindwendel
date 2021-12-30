@@ -116,6 +116,17 @@ mindwendel is built on top of:
 
 ### Production
 
+- Generate self-signed ssl sertificate for the postgres server on the host machine; the generated files are mounted into the docker container
+
+  ```bash
+  mkdir -p ./ca
+  openssl req -new -text -passout pass:abcd -subj /CN=localhost -out ./ca/server.req -keyout ./ca/privkey.pem
+  openssl rsa -in ./ca/privkey.pem -passin pass:abcd -out ./ca/server.key
+  openssl req -x509 -in ./ca/server.req -text -key ./ca/server.key -out ./ca/server.crt
+  chmod 600 ./ca/server.key
+  test $(uname -s) = Linux && chown 70 ./ca/server.key
+  ```
+
 - Duplicate and rename `.env.default`
 
   ```bash
