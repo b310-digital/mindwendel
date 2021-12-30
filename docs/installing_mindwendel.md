@@ -45,7 +45,8 @@ When you use [docker-compose](https://docs.docker.com/compose/), you will be usi
         MW_DEFAULT_LOCALE: en
 
         # Add a secret key base for mindwendel for encrypting the use session
-        # NOTE: There are multiple commands you can use to generate a secret key base. Pick one command you like, e.g. `date +%s | sha256sum | base64 | head -c 64 ; echo`
+        # NOTE: There are multiple commands you can use to generate a secret key base. Pick one command you like, e.g.:
+        # `date +%s | sha256sum | base64 | head -c 64 ; echo`
         # See https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
         SECRET_KEY_BASE: "generate_your_own_secret_key_base_and_save_it"
       ports:
@@ -72,6 +73,7 @@ When you use [docker-compose](https://docs.docker.com/compose/), you will be usi
   ```
 
 - To run mindwendel via Docker-Compose, just type
+
   ```sh
   docker-compose up
   ```
@@ -79,17 +81,20 @@ When you use [docker-compose](https://docs.docker.com/compose/), you will be usi
 - To create the production database (after having created the containers via up):
 
   First, start the container:
+
   ```sh
   docker start mindwendel_db_1
   ```
 
   Then eiher:
+
   ```sh
   docker exec -it mindwendel_db_1 createuser -rPed mindwendel_db_user --username=postgres
   docker exec -it mindwendel_db_1 createdb mindwendel_prod --username=mindwendel_db_user
   ```
 
   Or login to the container and do it from there:
+
   ```sh
   docker exec -it mindwendel_db_1 sh
   su -- postgres
@@ -104,7 +109,6 @@ When you use [docker-compose](https://docs.docker.com/compose/), you will be usi
   After that, adjust the db password in the docker compose file accordingly.
 
   Note: Adjust the env vars in `docker-compose.yml` according to your preferences.
-
 
 ## Running on Docker
 

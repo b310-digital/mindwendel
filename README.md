@@ -70,6 +70,18 @@ mindwendel is built on top of:
   docker-compose up -d
   ```
 
+- Setup the database
+
+  ```bash
+  docker-compose exec app mix ecto.setup
+  ```
+
+- Start the server
+
+```bash
+  docker-compose exec app mix phx.server
+```
+
 - Go to http://localhost:4000/
 
 - Open you favorite editor and start developing
