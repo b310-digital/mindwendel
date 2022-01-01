@@ -141,7 +141,11 @@ mindwendel is built on top of:
   docker-compose --file docker-compose-prod.yml --env-file .env.prod up -d --build --force-recreate
   ```
 
-- Go to `http://localhost` to open up mindmapper
+- Open the browser and go to `http://${URL_HOST}`
+
+#### Note
+
+- The url has to match the URL_HOST env variable; so http://localhost will not work when your URL_HOST=0.0.0.0
 
 ### Build release and production docker image
 

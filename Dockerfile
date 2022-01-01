@@ -90,11 +90,11 @@ RUN chown nobody:nobody $APP_PATH/
 
 USER nobody:nobody
 
-COPY entrypoint.release.sh $APP_PATH/entrypoint.release.sh
 COPY --from=production_build --chown=nobody:nobody $APP_PATH/_build/prod/rel/mindwendel ./
 
 ENV HOME=$APP_PATH
 
+COPY --chown=nobody:nobody entrypoint.release.sh $APP_PATH/entrypoint.release.sh
 ENTRYPOINT ["sh", "entrypoint.release.sh"]
 
-EXPOSE 8000
+EXPOSE 80
