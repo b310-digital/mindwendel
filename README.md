@@ -145,7 +145,7 @@ mindwendel is built on top of:
 
 #### Note
 
-- The url has to match the URL_HOST env variable; so http://localhost will not work when your URL_HOST=0.0.0.0
+- The url has to match the env var `URL_HOST`; so http://localhost will not work when your `URL_HOST=0.0.0.0`
 
 ### Build release and production docker image
 
