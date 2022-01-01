@@ -13,7 +13,7 @@ services:
       # Add the port of the database host (default is 5432)
       DATABASE_PORT: ${DOCKER_COMPOSE_APP_PROD_DATABASE_PORT:-${DOCKER_COMPOSE_POSTGRES_PROD_PORT:-5432}}
       # for non local setups, ssl should be set to true!
-      DATABASE_SSL: ${DOCKER_COMPOSE_APP_PROD_DATABASE_SSL:-false}
+      DATABASE_SSL: ${DOCKER_COMPOSE_APP_PROD_DATABASE_SSL:-true}
       # Add the credentials for the database user that mindwendel should use to access the database
       # NOTE: The database user should have read and write permissions
       DATABASE_USER_PASSWORD: ${DOCKER_COMPOSE_APP_PROD_DATABASE_USER_PASSWORD:-${DOCKER_COMPOSE_POSTGRES_PROD_PASSWORD}}
