@@ -20,7 +20,10 @@ defmodule Mindwendel.MixProject do
   def application do
     [
       mod: {Mindwendel.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [
+        :logger,
+        :runtime_tools
+      ]
     ]
   end
 
