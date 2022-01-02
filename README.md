@@ -99,13 +99,13 @@ mindwendel is built on top of:
 - Startup docker-compose setup
 
   ```bash
-  docker-compose up -d
+  docker-compose up --build -d
   ```
 
 - Ensure your database is running and reset your database
 
   ```bash
-  docker-compose exec app MIX_ENV=test mix ecto.reset
+  docker-compose exec app mix ecto.test.prepare
   ```
 
 - Run the test
