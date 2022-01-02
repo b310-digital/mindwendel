@@ -98,9 +98,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabels do
 
   def migrate_labels_from_ideas do
     Repo.transaction(fn ->
-      from(Idea,
-        preload: [:label, brainstorming: [:labels]]
-      )
+      from(Idea, preload: [:label, brainstorming: [:labels]])
       |> Repo.all()
       |> Enum.each(&migrate_label_to_idea_label/1)
     end)
