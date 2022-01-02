@@ -10,7 +10,11 @@ defmodule Mindwendel.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      # This was necessary when executing `mix test` and was thrown by priv/repo/data_migrations/migrate_idea_labels.exs .
+      # The follwoing line avoids a warning in the test, see https://elixirforum.com/t/the-inspect-protocol-has-already-been-consolidated-for-ecto-schema-with-redacted-field/34992/14
+      # Apparently, it should have been resolved in the latest version of phoenix. But, we will see.
+      consolidate_protocols: Mix.env() != :test
     ]
   end
 
