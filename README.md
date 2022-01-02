@@ -67,7 +67,7 @@ mindwendel is built on top of:
 - Startup docker-compose setup
 
   ```bash
-  docker-compose up -d
+  docker-compose up --build -d
   ```
 
 - Setup the database
