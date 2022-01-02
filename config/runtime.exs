@@ -64,7 +64,7 @@ if config_env() != :test do
       port: String.to_integer(System.get_env("URL_PORT") || System.get_env("PORT") || "4000")
     ],
     http: [
-      port: String.to_integer(System.get_env("PORT") || "4000")
+      port: String.to_integer(System.get_env("URL_PORT") || System.get_env("PORT") || "4000")
     ],
     secret_key_base: secret_key_base
 

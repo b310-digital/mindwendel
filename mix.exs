@@ -20,7 +20,10 @@ defmodule Mindwendel.MixProject do
   def application do
     [
       mod: {Mindwendel.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [
+        :logger,
+        :runtime_tools
+      ]
     ]
   end
 
@@ -63,9 +66,10 @@ defmodule Mindwendel.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.test.prepare": ["cmd MIX_ENV=test mix ecto.reset"],
+      setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end
