@@ -4,11 +4,13 @@ defmodule Mindwendel.Accounts.User do
   import Ecto.Changeset
 
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Accounts.BrainstormingUser
 
   schema "users" do
     field :username, :string, default: "Anonymous"
     many_to_many :brainstormings, Brainstorming, join_through: BrainstormingUser
+    has_many :ideas, Idea
 
     timestamps()
   end
