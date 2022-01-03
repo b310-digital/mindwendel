@@ -10,6 +10,10 @@ defmodule Mindwendel.Release do
     end
   end
 
+  def run_seeds do
+    Code.eval_file("#{:code.priv_dir(@app)}/repo/seeds.exs")
+  end
+
   def rollback(repo, version) do
     load_app()
     {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :down, to: version))
