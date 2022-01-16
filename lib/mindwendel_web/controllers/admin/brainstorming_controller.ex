@@ -1,32 +1,9 @@
 defmodule MindwendelWeb.Admin.BrainstormingController do
   use MindwendelWeb, :controller
   alias Mindwendel.Brainstormings
-  alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.CSVFormatter
-  alias Mindwendel.Repo
-  import Ecto.Query
 
   plug :fetch_user
-
-  def create(conn, %{"brainstorming" => brainstorming_params}) do
-    case Brainstormings.create_brainstorming(brainstorming_params) do
-      {:ok, brainstorming} ->
-        conn
-        |> put_flash(
-          :info,
-          gettext(
-            "Your brainstorming was created successfully! Please favorite or copy this link, to return later to this administrative view."
-          )
-        )
-        |> redirect(
-          to: Routes.admin_brainstorming_edit_path(conn, :edit, brainstorming.admin_url_id)
-        )
-
-      {:error, changeset} ->
-        render(conn, "new.html", brainstorming: %Brainstorming{}, changeset: changeset)
-    end
-  end
 
   def export(conn, %{"id" => id}) do
     brainstorming = Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
