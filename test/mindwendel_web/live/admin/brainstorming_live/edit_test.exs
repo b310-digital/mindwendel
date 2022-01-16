@@ -76,8 +76,6 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     {:ok, edit_live_view, _html} =
       live(conn, Routes.admin_brainstorming_edit_path(conn, :edit, brainstorming.admin_url_id))
 
-    IO.inspect(Enum.at(brainstorming.labels, 0).id)
-
     edit_live_view
     |> element("button[value=#{Enum.at(brainstorming.labels, 0).id}]", "Remove")
     |> render_click()
