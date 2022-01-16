@@ -45,7 +45,6 @@
       <hr />
 
       <div class="mb-3">
-        <% IO.inspect(@changeset) %>
         <%= inputs_for f, :labels, fn p -> %>
           <div class="input-group has-validation mb-3">
             <%= color_input p, :color, class: "form-control form-control-color #{if p.errors[:color], do: "is-invalid", else: ""}", title: gettext("Choose the label color") %>

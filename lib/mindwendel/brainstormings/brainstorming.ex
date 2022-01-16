@@ -51,12 +51,6 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     |> put_assoc(:users, users)
   end
 
-  def changeset_add_label(brainstorming, %IdeaLabel{} = label) do
-    brainstorming
-    |> change(%{})
-    |> put_assoc(:labels, brainstorming.labels ++ [label])
-  end
-
   def idea_label_factory do
     [
       %IdeaLabel{name: gettext("cyan"), color: "#0dcaf0", position_order: 0},

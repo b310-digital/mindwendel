@@ -21,9 +21,9 @@ defmodule MindwendelWeb.Router do
     get "/", StaticPageController, :home
 
     scope "/admin", Admin, as: :admin do
-      live "/brainstormings/:id/edit", BrainstormingLive.Edit, :edit
       delete "/brainstormings/:id", BrainstormingController, :delete
       get "/brainstormings/:id/export", BrainstormingController, :export
+      live "/brainstormings/:id/edit", BrainstormingLive.Edit, :edit
     end
 
     post "/brainstormings", BrainstormingController, :create

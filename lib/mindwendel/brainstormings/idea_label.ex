@@ -9,6 +9,7 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
     field :name, :string
     field :color, :string
     field :position_order, :integer
+    # See https://hexdocs.pm/ecto/Ecto.Changeset.html#module-the-on_replace-option
     field :delete, :boolean, virtual: true
 
     belongs_to :brainstorming, Brainstorming, foreign_key: :brainstorming_id, type: :binary_id

@@ -44,9 +44,6 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
         }
 
       {:error, changeset} ->
-        IO.inspect(changeset)
-        IO.inspect(changeset.data)
-
         {
           :noreply,
           socket
@@ -91,25 +88,20 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
   def handle_event("remove_idea_label", %{"value" => idea_label_id}, socket) do
     brainstorming = socket.assigns.brainstorming
 
-    IO.inspect(brainstorming.labels)
-
     brainstorming_labels =
       Enum.map(
         brainstorming.labels,
         fn label ->
           if label.id == idea_label_id do
             %{label | delete: true}
-            |> Map.from_struct()
           else
-            Map.from_struct(label)
+            label
           end
         end
-        # |> Enum.map(&Map.from_struct/1)
       )
+      |> Enum.map(&Map.from_struct/1)
 
-    case Brainstormings.update_brainstorming(brainstorming, %{
-           labels: brainstorming_labels
-         }) do
+    case Brainstormings.update_brainstorming(brainstorming, %{labels: brainstorming_labels}) do
       {:ok, brainstorming} ->
         {
           :noreply,
