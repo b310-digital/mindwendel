@@ -175,8 +175,8 @@ Currently, there are two language files available, german ("de") and english ("e
 
 You can extract new strings to translate by running:
 
-```
- mix gettext.extract --merge
+```bash
+mix gettext.extract --merge
 ```
 
 ## Contributing

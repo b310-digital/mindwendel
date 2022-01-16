@@ -21,7 +21,8 @@ defmodule MindwendelWeb.Router do
     get "/", StaticPageController, :home
 
     scope "/admin", Admin, as: :admin do
-      resources "/brainstormings", BrainstormingController, except: [:index, :show, :new, :create]
+      live "/brainstormings/:id/edit", BrainstormingLive.Edit, :edit
+      delete "/brainstormings/:id", BrainstormingController, :delete
       get "/brainstormings/:id/export", BrainstormingController, :export
     end
 

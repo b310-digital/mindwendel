@@ -32,7 +32,7 @@
             <i class="bi-share-fill"></i>
           </button>
           <%= if @brainstorming.option_show_link_to_settings do %>
-            <%= link to: Routes.admin_brainstorming_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary m-1" do %>
+            <%= link to: Routes.admin_brainstorming_edit_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary m-1" do %>
               <i class="bi-gear-fill"></i>
             <% end %>
           <% end %>

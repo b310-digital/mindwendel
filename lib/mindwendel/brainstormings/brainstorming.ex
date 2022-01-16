@@ -26,14 +26,9 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     brainstorming
     |> cast(attrs, [:name, :option_show_link_to_settings])
     |> validate_required([:name])
-    |> cast_assoc(:labels, required: true)
+    |> cast_assoc(:labels)
     |> shorten_name
     |> gen_admin_url_id(brainstorming)
-  end
-
-  def changeset_edit(brainstorming, attrs) do
-    changeset(brainstorming, attrs)
-    |> cast_assoc(:labels, required: true)
   end
 
   defp gen_admin_url_id(changeset, brainstorming) do
@@ -54,6 +49,12 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     brainstorming
     |> change(%{})
     |> put_assoc(:users, users)
+  end
+
+  def changeset_add_label(brainstorming, %IdeaLabel{} = label) do
+    brainstorming
+    |> change(%{})
+    |> put_assoc(:labels, brainstorming.labels ++ [label])
   end
 
   def idea_label_factory do
