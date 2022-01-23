@@ -6,7 +6,7 @@ services:
     image: kits/mindwendel
     build:
       context: .
-      target: app
+      target: production
     environment:
       DATABASE_USER: postgres
       DATABASE_USER_PASSWORD: postgres
@@ -20,7 +20,7 @@ services:
       MW_DEFAULT_LOCALE: de
       MW_FEATURE_BRAINSTORMING_TEASER: "false"
       # Use the URL_PORT to change url generation behavior
-      # URL_PORT: 
+      # URL_PORT:
     ports:
       - "4000:4000"
     depends_on:
