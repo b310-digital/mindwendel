@@ -10,7 +10,11 @@ defmodule Mindwendel.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      # This was necessary when executing `mix test` and was thrown by priv/repo/data_migrations/migrate_idea_labels.exs .
+      # The follwoing line avoids a warning in the test, see https://elixirforum.com/t/the-inspect-protocol-has-already-been-consolidated-for-ecto-schema-with-redacted-field/34992/14
+      # Apparently, it should have been resolved in the latest version of phoenix. But, we will see.
+      consolidate_protocols: Mix.env() != :test
     ]
   end
 
@@ -20,7 +24,10 @@ defmodule Mindwendel.MixProject do
   def application do
     [
       mod: {Mindwendel.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [
+        :logger,
+        :runtime_tools
+      ]
     ]
   end
 
@@ -63,9 +70,10 @@ defmodule Mindwendel.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.test.prepare": ["cmd MIX_ENV=test mix ecto.reset"],
+      setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end

@@ -1,50 +1,54 @@
 version: "3.8"
 
 services:
-  mindwendel:
-    container_name: mindwendel
+  app:
     build:
       context: .
       target: development
+    stdin_open: true
     environment:
-      # adjust these vars in production!
-      DATABASE_USER: postgres
-      DATABASE_USER_PASSWORD: postgres
-      DATABASE_NAME: mindwendel
-      DATABASE_PORT: 5432
-      DATABASE_HOST: db
-      DATABASE_SSL: "false"
-      MW_DEFAULT_LOCALE: en
-      PORT: 80
-      # run mix phx.gen.secret
-      SECRET_KEY_BASE:
-      URL_HOST: localhost
+      DATABASE_HOST: ${DOCKER_COMPOSE_APP_DATABASE_HOST:-postgres}
+      DATABASE_NAME: ${DOCKER_COMPOSE_APP_DATABASE_NAME:-mindwendel-dev}
+      DATABASE_PORT: ${DOCKER_COMPOSE_APP_DATABASE_PORT:-5432}
+      DATABASE_SSL: ${DOCKER_COMPOSE_APP_DATABASE_SSL:-false}
+      DATABASE_USER_PASSWORD: ${DOCKER_COMPOSE_APP_DATABASE_USER_PASSWORD:-mindwendel-user-password}
+      DATABASE_USER: ${DOCKER_COMPOSE_APP_DATABASE_USER:-mindwendel-user}
+      MW_DEFAULT_LOCALE: ${DOCKER_COMPOSE_APP_MW_DEFAULT_LOCALE:-en}
+      MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS: ${DOCKER_COMPOSE_APP_MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS:-30}
+      MW_FEATURE_BRAINSTORMING_TEASER: ${DOCKER_COMPOSE_APP_MW_FEATURE_BRAINSTORMING_TEASER:-true}
+      # This is an example secret key base that can be use in development
+      # NOTE: There are multiple commands you can use to generate a secret key base. Pick one command you like, e.g. `date +%s | sha256sum | base64 | head -c 64 ; echo`
+      # !!ATTENTION: DO NOT USE THIS FOR PRODUCTION!!
+      SECRET_KEY_BASE: ${DOCKER_COMPOSE_APP_SECRET_KEY_BASE:-NDliN2UzNjAzMTlmMWIxODZhNzRjMDIzMDY2OTQ5N2Q4NGU3MjUxZjM0YmI0ZGY1}
+      TEST_DATABASE_HOST: ${DOCKER_COMPOSE_APP_TEST_DATABASE_HOST:-postgres}
+      TEST_DATABASE_NAME: ${DOCKER_COMPOSE_APP_TEST_DATABASE_NAME:-mindwendel-test}
+      TEST_DATABASE_USER_PASSWORD: ${DOCKER_COMPOSE_APP_TEST_DATABASE_USER_PASSWORD:-mindwendel-user-password}
+      TEST_DATABASE_USER: ${DOCKER_COMPOSE_APP_TEST_DATABASE_USER:-mindwendel-user}
+      URL_HOST: ${DOCKER_COMPOSE_APP_URL_HOST:-0.0.0.0}
+      URL_PORT: ${DOCKER_COMPOSE_APP_URL_PORT:-4000}
     ports:
-      - "80:80"
+      - "${DOCKER_COMPOSE_APP_URL_PORT:-4000}:${DOCKER_COMPOSE_APP_PORT:-4000}"
     depends_on:
-      - db
+      - postgres
     # Mount the lib and test folder to increase development speed (do not use for prod setups!)
     volumes:
-      - ./lib:/app/lib
-      - ./test:/app/test
+      - ./:/app
+      - /app/_build/
       - /app/deps/
       - /app/assets/node_modules
       - /app/priv/static
-    # In case you want to use the included .env file to provide the credentials.
-    # env_file:
-    #  - .env
 
-  db:
-    image: postgres:latest
+  postgres:
+    image: postgres:12-alpine
     environment:
-      # IMPORTANT: Do not use these credentials in production. Please use other credentials when deploying this in production
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
       PGDATA: /var/lib/postgresql/data/pgdata
-    restart: always
-    ports:
-      - "5432:5432"
+      # IMPORTANT: Do not use these credentials in production. Please use other credentials when deploying this in production
+      POSTGRES_DB: ${DOCKER_COMPOSE_POSTGRES_DB:-mindwendel-dev}
+      POSTGRES_USER: ${DOCKER_COMPOSE_POSTGRES_USER:-mindwendel-user}
+      POSTGRES_PASSWORD: ${DOCKER_COMPOSE_POSTGRES_PASSWORD:-mindwendel-user-password}
+      POSTGRES_PORT: ${DOCKER_COMPOSE_POSTGRES_PORT:-5432}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+
 volumes:
-  pgdata:
+  postgres_data:

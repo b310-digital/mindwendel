@@ -38,9 +38,15 @@ When you use [docker-compose](https://docs.docker.com/compose/), you will be usi
 
         # Add the url host that points to this mindwendel installation. This is used by mindwendel to generate urls with the right host throughout the app.
         URL_HOST: "your_domain_to_mindwendel"
+        URL_PORT: 80
+
+        # for non local setups, ssl should be set to true!
+        DATABASE_SSL: "false"
+        MW_DEFAULT_LOCALE: en
 
         # Add a secret key base for mindwendel for encrypting the use session
-        # NOTE: There are multiple commands you can use to generate a secret key base. Pick one command you like, e.g. `date +%s | sha256sum | base64 | head -c 64 ; echo`
+        # NOTE: There are multiple commands you can use to generate a secret key base. Pick one command you like, e.g.:
+        # `date +%s | sha256sum | base64 | head -c 64 ; echo`
         # See https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
         SECRET_KEY_BASE: "generate_your_own_secret_key_base_and_save_it"
       ports:
@@ -67,11 +73,42 @@ When you use [docker-compose](https://docs.docker.com/compose/), you will be usi
   ```
 
 - To run mindwendel via Docker-Compose, just type
+
   ```sh
   docker-compose up
   ```
 
-Note: Adjust the env vars in `docker-copmose.yml`.
+- To create the production database (after having created the containers via up):
+
+  First, start the container:
+
+  ```sh
+  docker start mindwendel_db_1
+  ```
+
+  Then eiher:
+
+  ```sh
+  docker exec -it mindwendel_db_1 createuser -rPed mindwendel_db_user --username=postgres
+  docker exec -it mindwendel_db_1 createdb mindwendel_prod --username=mindwendel_db_user
+  ```
+
+  Or login to the container and do it from there:
+
+  ```sh
+  docker exec -it mindwendel_db_1 sh
+  su -- postgres
+  psql
+  postgres=# CREATE USER mindwendel_db_user WITH PASSWORD 'mindwendel_db_user_password';
+  postgres=# CREATE DATABASE mindwendel_prod;
+  postgres=# GRANT ALL PRIVILEGES ON DATABASE mindwendel_prod TO mindwendel_db_user;
+  \q
+  exit
+  ```
+
+  After that, adjust the db password in the docker compose file accordingly.
+
+  Note: Adjust the env vars in `docker-compose.yml` according to your preferences.
 
 ## Running on Docker
 
@@ -83,6 +120,7 @@ If you are using Docker containers and prefer to manage your mindwendel installa
     -p 127.0.0.1:80:4000 \
     -e DATABASE_HOST="..." \
     -e DATABASE_PORT="5432" \
+    -e DATABASE_SSL="false" \
     -e DATABASE_NAME="mindwendel_prod" \
     -e DATABASE_USER="mindwendel_db_user" \
     -e DATABASE_USER_PASSWORD="mindwendel_db_user_password" \
@@ -92,3 +130,11 @@ If you are using Docker containers and prefer to manage your mindwendel installa
   ```
 
 NOTE: mindwendel requires a postgres database. You can use our docker-compose file to also install the postgres, see [above](#running-on-docker-compose).
+
+## Running on Gigalixir.com
+
+Gigalixir.com is a plattform as a service that fully supports Elixir and Phoenix.
+
+Follow the steps as described in [this guide](https://hexdocs.pm/phoenix/gigalixir.html#content).
+
+Note: Because of the releases.exs, Gigalixir automatically deploys the app as an elixir release. This is why `gigalixir run mix ecto.migrate` will not work. However, the Gigalixir team provides another utility command that helps with the migration `gigalixir ps:migrate`, see https://gigalixir.readthedocs.io/en/latest/database.html#how-to-run-migrations .

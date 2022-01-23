@@ -1,4 +1,5 @@
 use Mix.Config
+require Logger
 
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
@@ -12,8 +13,42 @@ use Mix.Config
 config :mindwendel, MindwendelWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+secret_key_base = System.get_env("SECRET_KEY_BASE")
+
+unless secret_key_base do
+  Logger.warn(
+    "Environment variable SECRET_KEY_BASE is missing. You can generate one by calling: mix phx.gen.secret"
+  )
+end
+
+url_host = System.get_env("URL_HOST")
+
+unless url_host do
+  Logger.warn(
+    "Environment variable URL_HOST is missing.The URL_HOST should be the domain name (wihtout protocol and port) for accessing your app."
+  )
+end
+
+config :mindwendel, MindwendelWeb.Endpoint,
+  url: [
+    host: url_host,
+    port: String.to_integer(System.get_env("URL_PORT") || System.get_env("PORT") || "4000")
+  ],
+  http: [
+    port: String.to_integer(System.get_env("URL_PORT") || System.get_env("PORT") || "4000"),
+    transport_options: [socket_opts: [:inet6]]
+  ],
+  secret_key_base: secret_key_base
+
 # Do not print debug messages in production
 config :logger, level: :info
+
+config :mindwendel, :options,
+  feature_brainstorming_teasers:
+    Enum.member?(
+      ["", "true"],
+      String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
+    )
 
 # ## SSL Support
 #
@@ -48,7 +83,3 @@ config :logger, level: :info
 #       force_ssl: [hsts: true]
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
-
-# Finally import the config/prod.secret.exs which loads secrets
-# and configuration from environment variables.
-# import_config "prod.secret.exs"

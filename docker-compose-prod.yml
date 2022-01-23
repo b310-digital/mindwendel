@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+  app_prod:
+    build:
+      context: .
+      target: production
+    environment:
+      # Add the address of the database host, so that mindwendel can find the database, e.g. an ip address or a reference to another service in the docker-compose file
+      DATABASE_HOST: ${DOCKER_COMPOSE_APP_PROD_DATABASE_HOST:-postgres_prod}
+      # Add the database name that mindwendel should use, e.g. in this case we created and named the database `mindwendel_prod`
+      DATABASE_NAME: ${DOCKER_COMPOSE_APP_PROD_DATABASE_NAME:?}
+      # Add the port of the database host (default is 5432)
+      DATABASE_PORT: ${DOCKER_COMPOSE_APP_PROD_DATABASE_PORT:-5432}
+      # for non local setups, ssl should be set to true!
+      DATABASE_SSL: ${DOCKER_COMPOSE_APP_PROD_DATABASE_SSL:-true}
+      # Add the credentials for the database user that mindwendel should use to access the database
+      # NOTE: The database user should have read and write permissions
+      DATABASE_USER_PASSWORD: ${DOCKER_COMPOSE_APP_PROD_DATABASE_USER_PASSWORD:?}
+      DATABASE_USER: ${DOCKER_COMPOSE_APP_PROD_DATABASE_USER:?}
+
+      MW_DEFAULT_LOCALE: ${DOCKER_COMPOSE_APP_PROD_MW_DEFAULT_LOCALE:-en}
+      MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS: ${DOCKER_COMPOSE_APP_PROD_MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS:-30}
+      MW_FEATURE_BRAINSTORMING_TEASER: ${DOCKER_COMPOSE_APP_PROD_MW_FEATURE_BRAINSTORMING_TEASER:-true}
+
+      # Add a secret key base for mindwendel for encrypting the use session
+      # NOTE: There are multiple commands you can use to generate a secret key base. Pick one command you like, e.g. `date +%s | sha256sum | base64 | head -c 64 ; echo`
+      # See https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
+      SECRET_KEY_BASE: ${DOCKER_COMPOSE_APP_PROD_SECRET_KEY_BASE:?}
+
+      # Add the url host that points to this mindwendel installation. This is used by mindwendel to generate urls with the right host throughout the app.
+      URL_HOST: ${DOCKER_COMPOSE_APP_PROD_URL_HOST:?}
+      URL_PORT: ${DOCKER_COMPOSE_APP_PROD_URL_PORT:-80}
+    ports:
+      - "${DOCKER_COMPOSE_APP_PROD_URL_PORT:-80}:${DOCKER_COMPOSE_APP_PROD_URL_PORT:-80}"
+    depends_on:
+      - postgres_prod
+
+  # If you do not have another postgres database service in this docker-compose, you can add this postgres service.
+  # Note: Please use other credentials when using this in production.
+  postgres_prod:
+    image: postgres:12-alpine
+    # Pass config parameters to the postgres server.
+    # Find more information below when you need to generate the ssl-relevant file your self
+    command: -c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: ${DOCKER_COMPOSE_POSTGRES_PROD_DB}
+      POSTGRES_PASSWORD: ${DOCKER_COMPOSE_POSTGRES_PROD_PASSWORD}
+      POSTGRES_PORT: ${DOCKER_COMPOSE_POSTGRES_PROD_PORT:-5432}
+      POSTGRES_USER: ${DOCKER_COMPOSE_POSTGRES_PROD_USER}
+    volumes:
+      # To setup an ssl-enabled postgres server locally, you need to generate a self-signed ssl certificate.
+      # See README.md for more information.
+      # Mount the ssl_cert_file and ssl_key_file into the docker container.
+      - ./ca/server.crt:/var/lib/postgresql/server.crt
+      - ./ca/server.key:/var/lib/postgresql/server.key
+      - postgres_prod_data:/var/lib/postgresql/data/pgdata
+
+volumes:
+  postgres_prod_data:

@@ -12,7 +12,11 @@ config :mindwendel,
 
 # Configures the endpoint
 config :mindwendel, MindwendelWeb.Endpoint,
-  render_errors: [view: MindwendelWeb.ErrorView, accepts: ~w(html json), layout: false],
+  render_errors: [
+    view: MindwendelWeb.ErrorView,
+    accepts: ~w(html json),
+    layout: false
+  ],
   pubsub_server: Mindwendel.PubSub,
   live_view: [signing_salt: "MBwQ4WtK"],
   code_reloader: false
@@ -20,7 +24,9 @@ config :mindwendel, MindwendelWeb.Endpoint,
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
+  metadata: [
+    :request_id
+  ]
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
