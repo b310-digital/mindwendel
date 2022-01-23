@@ -1,3 +1,5 @@
+use Mix.Config
+require Logger
 import Config
 require Logger
 
