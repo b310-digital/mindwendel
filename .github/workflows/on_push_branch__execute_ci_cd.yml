@@ -28,7 +28,7 @@ jobs:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
+
       # install hex:
       - run: mix local.hex --force && mix local.rebar --force
       - run: mix deps.get
@@ -79,7 +79,7 @@ jobs:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
+
       # install hex:
       - run: mix local.hex --force && mix local.rebar --force
       - run: mix compile
@@ -102,7 +102,7 @@ jobs:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
+
       # install hex:
       - run: mix local.hex --force && mix local.rebar --force
       - run: mix format --check-formatted
@@ -136,13 +136,13 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-        
+
       - uses: actions/cache@v2
         with:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
+
       # install hex:
       - run: mix local.hex --force && mix local.rebar --force
       - run: mix sobelow --config
