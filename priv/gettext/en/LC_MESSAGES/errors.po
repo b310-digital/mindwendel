@@ -97,4 +97,4 @@ msgid "must be equal to %{number}"
 msgstr ""
 
 msgid "idea label associated with idea"
-msgstr "This label is associated with at least one idea"
+msgstr "This label is associated with an idea"
