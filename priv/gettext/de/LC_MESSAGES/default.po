@@ -327,7 +327,7 @@ msgstr "Dein Brainstorming wurde aktualisiert."
 #, elixir-format
 #: lib/mindwendel_web/live/admin/brainstorming_live/show.html.leex:76
 msgid "Add idea label"
-msgstr "Neues Label hinzufügen"
+msgstr "Neues Label"
 
 #, elixir-format
 #: lib/mindwendel_web/live/admin/brainstorming_live/show.html.leex:60
