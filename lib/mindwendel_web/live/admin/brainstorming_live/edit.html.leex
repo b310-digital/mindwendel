@@ -36,7 +36,7 @@
 
       <div class="row mb-3">
         <div class="col-md-12 col-lg-2 d-grid gap-2">
-          <%= submit gettext("Update"), class: "btn btn-primary btn-block" %>
+          <%= submit gettext("Update"), class: "btn btn-primary" %>
         </div>
       </div>
 
@@ -44,7 +44,7 @@
 
       <hr />
 
-      <div class="mb-3">
+      <div class="row mb-3">
         <%= inputs_for f, :labels, fn p -> %>
           <div class="input-group has-validation mb-3">
             <%= color_input p, :color, class: "form-control form-control-color #{if p.errors[:color], do: "is-invalid", else: ""}", title: gettext("Choose the label color") %>
@@ -64,14 +64,14 @@
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-12 col-lg-2 d-grid gap-2">
-          <button type="button" class="btn btn-primary btn-block" phx-click="add_idea_label"><%= gettext("Add idea label") %></button>
+        <div class="col-12 d-grid">
+          <button type="button" class="btn btn-primary" phx-click="add_idea_label"><%= gettext("Add idea label") %></button>
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-12 col-lg-2 d-grid gap-2">
-          <%= submit gettext("Update"), class: "btn btn-primary btn-block" %>
+          <%= submit gettext("Update"), class: "btn btn-primary" %>
         </div>
       </div>
     </form>
