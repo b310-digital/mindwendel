@@ -1,6 +1,7 @@
 defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.IdeaLabelFactory
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Repo
 
@@ -55,13 +56,14 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
   def handle_event("add_idea_label", _params, socket) do
     brainstorming = socket.assigns.brainstorming
 
+    idea_label_new = IdeaLabelFactory.build_idea_label(brainstorming)
+
     brainstorming_labels =
       (brainstorming.labels ++
          [
-           %IdeaLabel{
-             name: gettext("cyan"),
-             color: "#0dcaf0",
-             position_order: length(brainstorming.labels) + 1
+           %{
+             idea_label_new
+             | position_order: length(brainstorming.labels) + 1
            }
          ])
       |> Enum.map(&Map.from_struct/1)
