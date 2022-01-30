@@ -16,11 +16,13 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
       Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
       |> Repo.preload(labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order))
 
+    changeset = Brainstormings.change_brainstorming(brainstorming, %{})
+
     {
       :ok,
       socket
       |> assign(:brainstorming, brainstorming)
-      |> assign(:changeset, Brainstormings.change_brainstorming(brainstorming, %{}))
+      |> assign(:changeset, changeset)
     }
   end
 
@@ -34,14 +36,16 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
       })
       |> Repo.preload(labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order))
 
+    changeset = Brainstorming.changeset(brainstorming, brainstorming_params)
+
     case Brainstormings.update_brainstorming(brainstorming, brainstorming_params) do
-      {:ok, brainstorming} ->
+      {:ok, brainstorming_updated} ->
         {
           :noreply,
           socket
           |> put_flash(:info, gettext("Your brainstorming was successfully updated."))
-          |> assign(:brainstorming, brainstorming)
-          |> assign(:changeset, Brainstorming.changeset(brainstorming, %{}))
+          |> assign(:brainstorming, brainstorming_updated)
+          |> assign(:changeset, changeset)
         }
 
       {:error, changeset} ->
