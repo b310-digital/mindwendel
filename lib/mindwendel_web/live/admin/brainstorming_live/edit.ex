@@ -26,6 +26,17 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
     }
   end
 
+  def handle_info(:reset_changeset, socket) do
+    brainstorming = socket.assigns.brainstorming
+    changeset = Brainstormings.change_brainstorming(brainstorming, %{})
+
+    {
+      :noreply,
+      socket
+      |> assign(:changeset, changeset)
+    }
+  end
+
   def handle_params(_unsigned_params, uri, socket),
     do: {:noreply, assign(socket, uri: URI.parse(uri))}
 
@@ -40,10 +51,16 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
 
     case Brainstormings.update_brainstorming(brainstorming, brainstorming_params) do
       {:ok, brainstorming_updated} ->
+        if socket.assigns[:changeset_changed_timer_ref],
+          do: Process.cancel_timer(socket.assigns.changeset_changed_timer_ref)
+
+        # Reset changeset after five seconds in order to remove the save tooltip
+        changeset_changed_timer_ref = Process.send_after(self(), :reset_changeset, 5 * 1000)
+
         {
           :noreply,
           socket
-          |> put_flash(:info, gettext("Your brainstorming was successfully updated."))
+          |> assign(:changeset_changed_timer_ref, changeset_changed_timer_ref)
           |> assign(:brainstorming, brainstorming_updated)
           |> assign(:changeset, changeset)
         }
