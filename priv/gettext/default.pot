@@ -41,7 +41,7 @@ msgid "Are you sure you want to delete this idea?"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:92
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:97
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr ""
 
@@ -66,22 +66,22 @@ msgid "Create!"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:95
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:100
 msgid "Delete"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:90
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:95
 msgid "Delete Brainstorming"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:86
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:91
 msgid "Export to CSV"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:87
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:92
 msgid "Export to HTML"
 msgstr ""
 
@@ -164,12 +164,6 @@ msgid "Try again from home"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:39
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:76
-msgid "Update"
-msgstr ""
-
-#, elixir-format
 #: lib/mindwendel_web/templates/layout/root.html.leex:39
 msgid "Your brainstormings"
 msgstr ""
@@ -200,7 +194,7 @@ msgid "Edit Brainstorming"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:84
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:89
 msgid "Export"
 msgstr ""
 
@@ -235,12 +229,12 @@ msgid "Administration for brainstorming: %{name}"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:27
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:33
 msgid "Show brainstorming settings link for all users"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:33
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:39
 msgid "Warning: Please make sure you save the admin link at the top, before hiding the settings link!"
 msgstr ""
 
@@ -255,23 +249,22 @@ msgid "Brainstormings will be deleted after %{days} days."
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:50
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:56
 msgid "Choose the label color"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:43
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:49
 msgid "Edit Brainstorming Labels"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:51
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:57
 msgid "Type the label name"
 msgstr ""
 
 #, elixir-format
 #: lib/mindwendel/brainstormings/brainstorming.ex:56
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:62
 msgid "cyan"
 msgstr ""
 
@@ -296,17 +289,23 @@ msgid "yellow"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:41
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:74 lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:109
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:94
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:129
 msgid "Your brainstorming was successfully updated."
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:70
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:80
 msgid "Add idea label"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:52
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:58
 msgid "Remove idea label"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:26
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:45
+msgid "Saved"
 msgstr ""
