@@ -57,6 +57,12 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
         # Reset changeset after five seconds in order to remove the save tooltip
         changeset_changed_timer_ref = Process.send_after(self(), :reset_changeset, 5 * 1000)
 
+        Phoenix.PubSub.broadcast(
+          Mindwendel.PubSub,
+          "brainstormings:" <> brainstorming_updated.id,
+          {:brainstorming_updated, brainstorming_updated}
+        )
+
         {
           :noreply,
           socket
@@ -91,6 +97,12 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
 
     case Brainstormings.update_brainstorming(brainstorming, %{labels: brainstorming_labels}) do
       {:ok, brainstorming} ->
+        Phoenix.PubSub.broadcast(
+          Mindwendel.PubSub,
+          "brainstormings:" <> brainstorming.id,
+          {:brainstorming_updated, brainstorming}
+        )
+
         {
           :noreply,
           socket
@@ -126,6 +138,12 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
 
     case Brainstormings.update_brainstorming(brainstorming, %{labels: brainstorming_labels}) do
       {:ok, brainstorming} ->
+        Phoenix.PubSub.broadcast(
+          Mindwendel.PubSub,
+          "brainstormings:" <> brainstorming.id,
+          {:brainstorming_updated, brainstorming}
+        )
+
         {
           :noreply,
           socket
