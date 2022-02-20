@@ -14,7 +14,7 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
 
     belongs_to :brainstorming, Brainstorming, foreign_key: :brainstorming_id, type: :binary_id
 
-    has_many :ideas, Idea, foreign_key: :label_id
+    many_to_many :ideas, Idea, join_through: "idea_idea_labels", on_replace: :delete
     timestamps()
   end
 

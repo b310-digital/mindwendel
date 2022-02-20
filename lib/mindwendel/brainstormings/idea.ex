@@ -20,6 +20,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     has_many :likes, Like
     belongs_to :brainstorming, Brainstorming, foreign_key: :brainstorming_id, type: :binary_id
     belongs_to :label, IdeaLabel, foreign_key: :label_id, type: :binary_id, on_replace: :nilify
+    many_to_many :idea_labels, IdeaLabel, join_through: "idea_idea_labels", on_replace: :delete
 
     timestamps()
   end
@@ -35,6 +36,10 @@ defmodule Mindwendel.Brainstormings.Idea do
 
   def changeset_update_label(idea, label) do
     change(idea) |> put_assoc(:label, label)
+  end
+
+  def changeset_update_labels(idea, idea_labels) do
+    change(idea) |> put_assoc(:idea_labels, idea_labels)
   end
 
   def build_link(idea) do
