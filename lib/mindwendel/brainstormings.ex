@@ -300,6 +300,7 @@ defmodule Mindwendel.Brainstormings do
     brainstorming
     |> Brainstorming.changeset(attrs)
     |> Repo.update()
+    |> broadcast(:brainstorming_updated)
   end
 
   @doc """
@@ -414,6 +415,16 @@ defmodule Mindwendel.Brainstormings do
     Phoenix.PubSub.subscribe(Mindwendel.PubSub, "brainstormings:" <> brainstorming_id)
   end
 
+  def broadcast({:ok, %Brainstorming{} = brainstorming}, event) do
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> brainstorming.id,
+      {event, brainstorming}
+    )
+
+    {:ok, brainstorming}
+  end
+
   @doc """
   Returns a broadcast status tuple
 
@@ -423,7 +434,7 @@ defmodule Mindwendel.Brainstormings do
       {:ok, %Idea{}}
 
   """
-  def broadcast({:ok, idea}, event) do
+  def broadcast({:ok, %Idea{} = idea}, event) do
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
       "brainstormings:" <> idea.brainstorming_id,

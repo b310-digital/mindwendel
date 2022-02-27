@@ -29,12 +29,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
   def handle_info(:reset_changeset, socket) do
     brainstorming = socket.assigns.brainstorming
     changeset = Brainstormings.change_brainstorming(brainstorming, %{})
-
-    {
-      :noreply,
-      socket
-      |> assign(:changeset, changeset)
-    }
+    {:noreply, assign(socket, :changeset, changeset)}
   end
 
   def handle_params(_unsigned_params, uri, socket),
@@ -51,25 +46,25 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
 
     case Brainstormings.update_brainstorming(brainstorming, brainstorming_params) do
       {:ok, brainstorming_updated} ->
-        if socket.assigns[:changeset_changed_timer_ref],
-          do: Process.cancel_timer(socket.assigns.changeset_changed_timer_ref)
-
-        # Reset changeset after five seconds in order to remove the save tooltip
-        changeset_changed_timer_ref = Process.send_after(self(), :reset_changeset, 5 * 1000)
+        reset_changeset_timer_ref = reset_changeset_timer(socket)
 
         {
           :noreply,
           socket
-          |> assign(:changeset_changed_timer_ref, changeset_changed_timer_ref)
           |> assign(:brainstorming, brainstorming_updated)
           |> assign(:changeset, changeset)
+          |> assign(:reset_changeset_timer_ref, reset_changeset_timer_ref)
+          |> clear_flash()
         }
 
       {:error, changeset} ->
+        cancel_changeset_timer(socket)
+
         {
           :noreply,
           socket
           |> assign(changeset: changeset)
+          |> put_flash(:error, gettext("Your brainstorming was not saved."))
         }
     end
   end
@@ -91,19 +86,25 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
 
     case Brainstormings.update_brainstorming(brainstorming, %{labels: brainstorming_labels}) do
       {:ok, brainstorming} ->
+        reset_changeset_timer_ref = reset_changeset_timer(socket)
+
         {
           :noreply,
           socket
-          |> put_flash(:info, gettext("Your brainstorming was successfully updated."))
           |> assign(:brainstorming, brainstorming)
           |> assign(:changeset, Brainstorming.changeset(brainstorming, %{}))
+          |> assign(:reset_changeset_timer_ref, reset_changeset_timer_ref)
+          |> clear_flash()
         }
 
       {:error, changeset} ->
+        cancel_changeset_timer(socket)
+
         {
           :noreply,
           socket
           |> assign(changeset: changeset)
+          |> put_flash(:error, gettext("Your brainstorming was not saved."))
         }
     end
   end
@@ -126,19 +127,25 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
 
     case Brainstormings.update_brainstorming(brainstorming, %{labels: brainstorming_labels}) do
       {:ok, brainstorming} ->
+        reset_changeset_timer_ref = reset_changeset_timer(socket)
+
         {
           :noreply,
           socket
-          |> put_flash(:info, gettext("Your brainstorming was successfully updated."))
           |> assign(:brainstorming, brainstorming)
           |> assign(:changeset, Brainstorming.changeset(brainstorming, %{}))
+          |> assign(:reset_changeset_timer_ref, reset_changeset_timer_ref)
+          |> clear_flash()
         }
 
       {:error, changeset} ->
+        cancel_changeset_timer(socket)
+
         {
           :noreply,
           socket
           |> assign(changeset: changeset)
+          |> put_flash(:error, gettext("Your brainstorming was not saved."))
         }
     end
   end
@@ -148,5 +155,19 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
       days:
         Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]
     )
+  end
+
+  defp cancel_changeset_timer(socket) do
+    if socket.assigns[:reset_changeset_timer_ref],
+      do: Process.cancel_timer(socket.assigns.reset_changeset_timer_ref)
+
+    socket.assigns[:reset_changeset_timer_ref]
+  end
+
+  defp reset_changeset_timer(socket) do
+    cancel_changeset_timer(socket)
+
+    # Reset changeset after five seconds in order to remove the save tooltip
+    Process.send_after(self(), :reset_changeset, 5 * 1000)
   end
 end
