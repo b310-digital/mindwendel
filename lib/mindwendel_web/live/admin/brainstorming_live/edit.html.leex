@@ -64,11 +64,8 @@
             <%= if message = f.errors[:labels] do %>
               <span class="invalid-feedback" phx_feedback_for="<%= input_id(f, :labels)%>"><%= translate_error(message) %></span>
             <% end %>
-            <%= content_tag(:div,
-              class: "valid-tooltip",
-              phx_feedback_for: input_id(f, :option_show_link_to_settings)
-            ) do %>
-            Saved.
+            <%= content_tag(:div, class: "valid-tooltip", phx_feedback_for: input_id(f, :labels)) do %>
+              <%= gettext("Saved") %>
             <% end %>
           </div>
         <% end %>
@@ -77,7 +74,7 @@
 
       <div class="row mb-3">
         <div class="col-12 d-grid">
-          <button type="button" class="btn btn-primary" phx-click="add_idea_label"><%= gettext("Add idea label") %></button>
+          <button type="button" class="btn btn-secondary" phx-click="add_idea_label"><%= gettext("Add idea label") %></button>
         </div>
       </div>
 
