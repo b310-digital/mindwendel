@@ -85,3 +85,6 @@ msgstr "muss größer oder gleich sein zu %{number}"
 
 msgid "must be equal to %{number}"
 msgstr "muss gleich sein zu %{number}"
+
+msgid "idea label associated with idea"
+msgstr "Dieses Label ist mit einer Idee assoziiert"

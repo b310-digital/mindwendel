@@ -1,6 +1,7 @@
 defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.IdeaLabelFactory
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Repo
 
@@ -15,11 +16,24 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
       Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
       |> Repo.preload(labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order))
 
+    changeset = Brainstormings.change_brainstorming(brainstorming, %{})
+
     {
       :ok,
       socket
       |> assign(:brainstorming, brainstorming)
-      |> assign(:changeset, Brainstormings.change_brainstorming(brainstorming, %{}))
+      |> assign(:changeset, changeset)
+    }
+  end
+
+  def handle_info(:reset_changeset, socket) do
+    brainstorming = socket.assigns.brainstorming
+    changeset = Brainstormings.change_brainstorming(brainstorming, %{})
+
+    {
+      :noreply,
+      socket
+      |> assign(:changeset, changeset)
     }
   end
 
@@ -33,14 +47,22 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
       })
       |> Repo.preload(labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order))
 
+    changeset = Brainstorming.changeset(brainstorming, brainstorming_params)
+
     case Brainstormings.update_brainstorming(brainstorming, brainstorming_params) do
-      {:ok, brainstorming} ->
+      {:ok, brainstorming_updated} ->
+        if socket.assigns[:changeset_changed_timer_ref],
+          do: Process.cancel_timer(socket.assigns.changeset_changed_timer_ref)
+
+        # Reset changeset after five seconds in order to remove the save tooltip
+        changeset_changed_timer_ref = Process.send_after(self(), :reset_changeset, 5 * 1000)
+
         {
           :noreply,
           socket
-          |> put_flash(:info, gettext("Your brainstorming was successfully updated."))
-          |> assign(:brainstorming, brainstorming)
-          |> assign(:changeset, Brainstorming.changeset(brainstorming, %{}))
+          |> assign(:changeset_changed_timer_ref, changeset_changed_timer_ref)
+          |> assign(:brainstorming, brainstorming_updated)
+          |> assign(:changeset, changeset)
         }
 
       {:error, changeset} ->
@@ -55,13 +77,14 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
   def handle_event("add_idea_label", _params, socket) do
     brainstorming = socket.assigns.brainstorming
 
+    idea_label_new = IdeaLabelFactory.build_idea_label(brainstorming)
+
     brainstorming_labels =
       (brainstorming.labels ++
          [
-           %IdeaLabel{
-             name: gettext("cyan"),
-             color: "#0dcaf0",
-             position_order: length(brainstorming.labels) + 1
+           %{
+             idea_label_new
+             | position_order: length(brainstorming.labels) + 1
            }
          ])
       |> Enum.map(&Map.from_struct/1)

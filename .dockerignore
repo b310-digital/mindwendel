@@ -55,3 +55,5 @@ erl_crash.dump
 # Ignoring files relevant for gigalixir and heroku
 elixir_buildpack.config
 phoenix_static_buildpack.config
+
+docker-compose*.yml

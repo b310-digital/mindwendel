@@ -22,7 +22,7 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
 
   def changeset(idea_label, %{delete: true}) do
     %{Ecto.Changeset.change(idea_label, delete: true) | action: :delete}
-    |> no_assoc_constraint(:ideas)
+    |> no_assoc_constraint(:ideas, message: "idea label associated with idea")
   end
 
   def changeset(idea_label, params) do
