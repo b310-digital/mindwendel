@@ -66,7 +66,7 @@ defmodule Mindwendel.Brainstormings do
         order_by: [desc_nulls_last: idea_count.like_count, desc: idea.inserted_at]
 
     Repo.all(idea_query)
-    |> Repo.preload([:link, :likes, :label])
+    |> Repo.preload([:link, :likes, :label, :idea_labels])
   end
 
   def sort_ideas_by_labels(brainstorming_id) do
@@ -93,7 +93,7 @@ defmodule Mindwendel.Brainstormings do
       ** (Ecto.NoResultsError)
 
   """
-  def get_idea!(id), do: Repo.get!(Idea, id) |> Repo.preload([:label])
+  def get_idea!(id), do: Repo.get!(Idea, id) |> Repo.preload([:label, :idea_labels])
 
   @doc """
   Count likes for an idea.
@@ -241,7 +241,7 @@ defmodule Mindwendel.Brainstormings do
     |> Repo.preload([
       :users,
       labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
-      ideas: [:link, :likes, :label]
+      ideas: [:link, :likes, :label, :idea_labels]
     ])
   end
 

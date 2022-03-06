@@ -38,13 +38,22 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
     {:noreply, socket}
   end
 
-  def handle_event("add_idea_label", %{"id" => id, "label-id" => label_id}, socket) do
-    idea_label = Brainstormings.get_idea_label(label_id)
-    idea = Brainstormings.get_idea!(id)
-    # TODO: Convert to set
-    idea_labels_new = [idea.idea_labels | idea_label]
+  def handle_event(
+        "add_idea_label",
+        %{"idea-id" => idea_id, "idea-label-id" => idea_label_id},
+        socket
+      ) do
+    idea = Brainstormings.get_idea!(idea_id)
+    idea_label = Brainstormings.get_idea_label(idea_label_id)
 
-    case(Brainstormings.update_idea(idea, idea_labels: idea_labels_new)) do
+    # TODO: Convert to set
+    idea_labels_new =
+      [idea_label | idea.idea_labels]
+      |> IO.inspect()
+      |> Enum.map(&Map.from_struct/1)
+      |> IO.inspect()
+
+    case(Brainstormings.update_idea(idea, %{idea_labels: idea_labels_new})) do
       {:ok, idea} ->
         IO.inspect("ok")
         {:noreply, socket}

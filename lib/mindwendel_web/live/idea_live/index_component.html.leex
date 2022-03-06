@@ -56,12 +56,12 @@
             </div>
             <div class="IndexComponent__IdeaLabelSection">
               <%= for label <- @brainstorming.labels do %>
-                <%= unless idea.label && idea.label.id == label.id do %>
-                  <%= link to: "#", class: "text-decoration-none me-1", data_testid: label.id, title: "label #{label.name}", phx_click: "update_label", phx_target: @myself, phx_value_id: idea.id, phx_value_label_id: label.id do %>
+                <%= unless Enum.find(idea.idea_labels, fn idea_label -> idea_label.name == label.name end) do %>
+                  <%= link to: "#", class: "text-decoration-none me-1", data_testid: label.id, title: "label #{label.name}", phx_click: "add_idea_label", phx_target: @myself, phx_value_idea_id: idea.id, phx_value_idea_label_id: label.id do %>
                     <i class="IndexComponent__IdeaLabel" data-testid="<%= label.id %>" style="color: <%= label.color %>;" ></i>
                   <% end %>
                 <% else %>
-                  <%= link to: "#", class: "text-decoration-none me-1", data_testid: label.id, title: "label #{label.name}", phx_click: "update_label", phx_target: @myself, phx_value_id: idea.id, phx_value_label_id: nil do %>
+                  <%= link to: "#", class: "text-decoration-none me-1", data_testid: label.id, title: "label #{label.name}", phx_click: "remove_idea_label", phx_target: @myself, phx_value_idea_id: idea.id, phx_value_idea_label_id: nil do %>
                     <i class="IndexComponent__IdeaLabel--active" data-testid="<%= label.id %>" style="color: <%= label.color %>;" ></i>
                   <% end %>
                 <% end %>
