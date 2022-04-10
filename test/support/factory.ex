@@ -3,6 +3,7 @@ defmodule Mindwendel.Factory do
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Attachments.Link
   alias Mindwendel.Accounts.User
@@ -26,6 +27,10 @@ defmodule Mindwendel.Factory do
 
   def build(:idea_label) do
     %IdeaLabel{}
+  end
+
+  def build(:idea_idea_label) do
+    %IdeaIdeaLabel{}
   end
 
   def build(:link) do
