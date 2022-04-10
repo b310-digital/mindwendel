@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.5 (Ubuntu 12.5-0ubuntu0.20.04.1)
--- Dumped by pg_dump version 12.5 (Ubuntu 12.5-0ubuntu0.20.04.1)
+-- Dumped from database version 12.10
+-- Dumped by pg_dump version 13.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -80,7 +80,35 @@ CREATE TABLE public.brainstormings (
     name character varying(255),
     inserted_at timestamp(0) without time zone NOT NULL,
     updated_at timestamp(0) without time zone NOT NULL,
-    admin_url_id uuid
+    admin_url_id uuid,
+    option_show_link_to_settings boolean DEFAULT true
+);
+
+
+--
+-- Name: idea_idea_labels; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.idea_idea_labels (
+    idea_id uuid NOT NULL,
+    idea_label_id uuid NOT NULL,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
+);
+
+
+--
+-- Name: idea_labels; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.idea_labels (
+    id uuid NOT NULL,
+    name character varying(255),
+    color character varying(255),
+    position_order integer,
+    brainstorming_id uuid,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
 );
 
 
@@ -95,7 +123,9 @@ CREATE TABLE public.ideas (
     body character varying(1024),
     inserted_at timestamp(0) without time zone NOT NULL,
     updated_at timestamp(0) without time zone NOT NULL,
-    label text
+    label text,
+    label_id uuid,
+    user_id uuid
 );
 
 
@@ -261,6 +291,22 @@ ALTER TABLE ONLY public.brainstormings
 
 
 --
+-- Name: idea_idea_labels idea_idea_labels_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.idea_idea_labels
+    ADD CONSTRAINT idea_idea_labels_pkey PRIMARY KEY (idea_id, idea_label_id);
+
+
+--
+-- Name: idea_labels idea_labels_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.idea_labels
+    ADD CONSTRAINT idea_labels_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: ideas ideas_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -328,6 +374,34 @@ CREATE INDEX brainstorming_users_brainstorming_id_index ON public.brainstorming_
 --
 
 CREATE INDEX brainstorming_users_user_id_index ON public.brainstorming_users USING btree (user_id);
+
+
+--
+-- Name: idea_idea_labels_idea_id_idea_label_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idea_idea_labels_idea_id_idea_label_id_index ON public.idea_idea_labels USING btree (idea_id, idea_label_id);
+
+
+--
+-- Name: idea_idea_labels_idea_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idea_idea_labels_idea_id_index ON public.idea_idea_labels USING btree (idea_id);
+
+
+--
+-- Name: idea_idea_labels_idea_label_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idea_idea_labels_idea_label_id_index ON public.idea_idea_labels USING btree (idea_label_id);
+
+
+--
+-- Name: idea_labels_brainstorming_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idea_labels_brainstorming_id_index ON public.idea_labels USING btree (brainstorming_id);
 
 
 --
@@ -403,11 +477,51 @@ ALTER TABLE ONLY public.brainstorming_users
 
 
 --
+-- Name: idea_idea_labels idea_idea_labels_idea_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.idea_idea_labels
+    ADD CONSTRAINT idea_idea_labels_idea_id_fkey FOREIGN KEY (idea_id) REFERENCES public.ideas(id) ON DELETE CASCADE;
+
+
+--
+-- Name: idea_idea_labels idea_idea_labels_idea_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.idea_idea_labels
+    ADD CONSTRAINT idea_idea_labels_idea_label_id_fkey FOREIGN KEY (idea_label_id) REFERENCES public.idea_labels(id) ON DELETE CASCADE;
+
+
+--
+-- Name: idea_labels idea_labels_brainstorming_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.idea_labels
+    ADD CONSTRAINT idea_labels_brainstorming_id_fkey FOREIGN KEY (brainstorming_id) REFERENCES public.brainstormings(id) ON DELETE CASCADE;
+
+
+--
 -- Name: ideas ideas_brainstorming_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.ideas
     ADD CONSTRAINT ideas_brainstorming_id_fkey FOREIGN KEY (brainstorming_id) REFERENCES public.brainstormings(id) ON DELETE CASCADE;
+
+
+--
+-- Name: ideas ideas_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ideas
+    ADD CONSTRAINT ideas_label_id_fkey FOREIGN KEY (label_id) REFERENCES public.idea_labels(id);
+
+
+--
+-- Name: ideas ideas_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ideas
+    ADD CONSTRAINT ideas_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE SET NULL;
 
 
 --
@@ -453,4 +567,10 @@ INSERT INTO public."schema_migrations" (version) VALUES (20210114133116);
 INSERT INTO public."schema_migrations" (version) VALUES (20210115114944);
 INSERT INTO public."schema_migrations" (version) VALUES (20210124094443);
 INSERT INTO public."schema_migrations" (version) VALUES (20210127203125);
+INSERT INTO public."schema_migrations" (version) VALUES (20210306141634);
+INSERT INTO public."schema_migrations" (version) VALUES (20210307073759);
 INSERT INTO public."schema_migrations" (version) VALUES (20210313121036);
+INSERT INTO public."schema_migrations" (version) VALUES (20210313172908);
+INSERT INTO public."schema_migrations" (version) VALUES (20210314114416);
+INSERT INTO public."schema_migrations" (version) VALUES (20210320072725);
+INSERT INTO public."schema_migrations" (version) VALUES (20220220151400);
