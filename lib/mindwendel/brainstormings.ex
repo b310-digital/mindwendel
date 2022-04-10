@@ -8,6 +8,7 @@ defmodule Mindwendel.Brainstormings do
 
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Like
 
@@ -175,6 +176,31 @@ defmodule Mindwendel.Brainstormings do
     |> broadcast(:idea_updated)
   end
 
+  def add_idea_label_to_idea(%Idea{} = idea, %IdeaLabel{} = idea_label) do
+    idea = Repo.preload(idea, :idea_labels)
+
+    idea_labels =
+      (idea.idea_labels ++ [idea_label])
+      |> Enum.map(&Ecto.Changeset.change/1)
+
+    idea
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:idea_labels, idea_labels)
+    |> Repo.update()
+    |> broadcast(:idea_updated)
+  end
+
+  def remove_idea_label_from_idea(%Idea{} = idea, %IdeaLabel{} = idea_label) do
+    from(idea_idea_label in IdeaIdeaLabel,
+      where:
+        idea_idea_label.idea_id == ^idea.id and
+          idea_idea_label.idea_label_id == ^idea_label.id
+    )
+    |> Repo.delete_all()
+
+    {:ok, get_idea!(idea.id)} |> broadcast(:idea_updated)
+  end
+
   @doc """
   Deletes a idea.
 
@@ -202,7 +228,7 @@ defmodule Mindwendel.Brainstormings do
 
   """
   def change_idea(%Idea{} = idea, attrs \\ %{}) do
-    Repo.preload(idea, :link) |> Idea.changeset(attrs)
+    Repo.preload(idea, [:link, :idea_labels]) |> Idea.changeset(attrs)
   end
 
   @doc """

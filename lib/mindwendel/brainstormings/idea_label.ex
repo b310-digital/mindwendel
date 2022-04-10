@@ -15,6 +15,7 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
     belongs_to :brainstorming, Brainstorming, foreign_key: :brainstorming_id, type: :binary_id
 
     many_to_many :ideas, Idea, join_through: "idea_idea_labels", on_replace: :delete
+
     timestamps()
   end
 
@@ -23,7 +24,6 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
   def changeset(idea_label, %{delete: true}) do
     %{Ecto.Changeset.change(idea_label, delete: true) | action: :delete}
     |> no_assoc_constraint(:ideas, message: "idea label associated with idea")
-    # |> foreign_key_constraint(:ideas, name: :idea_labels_ideas_label_id_fkey)
   end
 
   def changeset(idea_label, params) do

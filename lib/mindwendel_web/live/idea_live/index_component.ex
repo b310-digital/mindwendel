@@ -29,46 +29,43 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
     {:noreply, socket}
   end
 
-  def handle_event("update_label", %{"id" => id, "label-id" => label_id}, socket) do
-    idea_label = Brainstormings.get_idea_label(label_id)
-
-    Brainstormings.get_idea!(id)
-    |> Brainstormings.update_idea_label(idea_label)
-
-    {:noreply, socket}
-  end
-
   def handle_event(
-        "add_idea_label",
-        %{"idea-id" => idea_id, "idea-label-id" => idea_label_id},
+        "add_idea_label_to_idea",
+        %{
+          "idea-id" => idea_id,
+          "idea-label-id" => idea_label_id
+        },
         socket
       ) do
     idea = Brainstormings.get_idea!(idea_id)
     idea_label = Brainstormings.get_idea_label(idea_label_id)
 
-    # TODO: Convert to set
-    idea_labels_new =
-      [idea_label | idea.idea_labels]
-      |> IO.inspect()
-      |> Enum.map(&Map.from_struct/1)
-      |> IO.inspect()
-
-    case(Brainstormings.update_idea(idea, %{idea_labels: idea_labels_new})) do
+    case(Brainstormings.add_idea_label_to_idea(idea, idea_label)) do
       {:ok, idea} ->
-        IO.inspect("ok")
         {:noreply, socket}
 
       {:error, changeset} ->
-        IO.inspect("error")
         {:noreply, socket}
     end
   end
 
-  def handle_event("remove_idea_label", %{"id" => id, "label-id" => label_id}, socket) do
-    {:noreply, socket}
-  end
+  def handle_event(
+        "remove_idea_label_from_idea",
+        %{
+          "idea-id" => idea_id,
+          "idea-label-id" => idea_label_id
+        },
+        socket
+      ) do
+    idea = Brainstormings.get_idea!(idea_id)
+    idea_label = Brainstormings.get_idea_label(idea_label_id)
 
-  def handle_event("update_label", %{"id" => id}, socket) do
-    handle_event("update_label", %{"id" => id, "label-id" => nil}, socket)
+    case(Brainstormings.remove_idea_label_from_idea(idea, idea_label)) do
+      {:ok, idea} ->
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        {:noreply, socket}
+    end
   end
 end

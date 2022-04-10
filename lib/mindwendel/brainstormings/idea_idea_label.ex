@@ -14,10 +14,11 @@ defmodule Mindwendel.Brainstormings.IdeaIdeaLabel do
   end
 
   @doc false
-  def changeset(idea_idea_label, attrs) do
+  def changeset(idea_idea_label, attrs \\ %{}) do
     idea_idea_label
     |> cast(attrs, [:idea_id, :idea_label_id])
-    |> validate_required([])
+    |> cast_assoc(:idea, required: true)
+    |> cast_assoc(:idea_label, required: true)
     |> unique_constraint([:idea_id, :idea_label_id],
       name: :idea_idea_labels_idea_id_idea_label_id_index
     )
