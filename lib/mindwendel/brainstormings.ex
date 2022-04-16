@@ -71,13 +71,22 @@ defmodule Mindwendel.Brainstormings do
   end
 
   def sort_ideas_by_labels(brainstorming_id) do
-    Repo.all(
-      from idea in Idea,
-        left_join: l in assoc(idea, :label),
-        where: idea.brainstorming_id == ^brainstorming_id,
-        order_by: [asc_nulls_last: l.position_order, desc: idea.inserted_at]
+    from(
+      idea in Idea,
+      left_join: l in assoc(idea, :idea_labels),
+      where: idea.brainstorming_id == ^brainstorming_id,
+      preload: [
+        :link,
+        :likes,
+        :idea_labels
+      ],
+      order_by: [
+        asc_nulls_last: l.position_order,
+        desc: idea.inserted_at
+      ]
     )
-    |> Repo.preload([:link, :likes, :label])
+    |> Repo.all()
+    |> Enum.uniq()
   end
 
   @doc """
