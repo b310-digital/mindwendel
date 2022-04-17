@@ -19,9 +19,11 @@ defmodule Mindwendel.Factory do
   end
 
   def build(:idea) do
+    brainstorming = build(:brainstorming)
+
     %Idea{
       body: "Mindwendel!",
-      brainstorming: build(:brainstorming)
+      brainstorming: brainstorming
     }
   end
 

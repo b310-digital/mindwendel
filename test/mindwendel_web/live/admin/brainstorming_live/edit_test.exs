@@ -79,7 +79,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     brainstorming_label_first = Enum.at(brainstorming.labels, 0)
 
     edit_live_view
-    |> element("button[value=#{brainstorming_label_first.id}]", "Remove")
+    |> element("button[value=\"#{brainstorming_label_first.id}\"]", "Remove")
     |> render_click()
 
     assert edit_live_view |> element("input#brainstorming_labels_0_name") |> has_element?

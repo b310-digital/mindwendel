@@ -11,7 +11,7 @@
             <% end %>
 
             <%= for idea_label <- idea.idea_labels do %>
-              <span class="IndexComponent__IdeaLabelBadge mb-3" style="background-color: <%= idea_label.color %>;"><%= idea_label.name %></span>
+              <span class="IndexComponent__IdeaLabelBadge mb-3" data-testid="<%= idea_label.id %>" style="background-color: <%= idea_label.color %>;"><%= idea_label.name %></span>
             <% end %>
 
             <%= unless idea.link do %>
