@@ -489,7 +489,7 @@ ALTER TABLE ONLY public.idea_idea_labels
 --
 
 ALTER TABLE ONLY public.idea_idea_labels
-    ADD CONSTRAINT idea_idea_labels_idea_label_id_fkey FOREIGN KEY (idea_label_id) REFERENCES public.idea_labels(id) ON DELETE CASCADE;
+    ADD CONSTRAINT idea_idea_labels_idea_label_id_fkey FOREIGN KEY (idea_label_id) REFERENCES public.idea_labels(id);
 
 
 --
@@ -574,3 +574,4 @@ INSERT INTO public."schema_migrations" (version) VALUES (20210313172908);
 INSERT INTO public."schema_migrations" (version) VALUES (20210314114416);
 INSERT INTO public."schema_migrations" (version) VALUES (20210320072725);
 INSERT INTO public."schema_migrations" (version) VALUES (20220220151400);
+INSERT INTO public."schema_migrations" (version) VALUES (20220220162733);

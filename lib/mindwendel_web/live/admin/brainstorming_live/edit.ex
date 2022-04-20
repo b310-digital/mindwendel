@@ -14,7 +14,13 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
 
     brainstorming =
       Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
-      |> Repo.preload(labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order))
+      |> Repo.preload(
+        labels:
+          from(idea_label in IdeaLabel,
+            order_by: idea_label.position_order,
+            preload: [:idea_idea_labels]
+          )
+      )
 
     changeset = Brainstormings.change_brainstorming(brainstorming, %{})
 
@@ -113,16 +119,14 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
     brainstorming = socket.assigns.brainstorming
 
     brainstorming_labels =
-      Enum.map(
-        brainstorming.labels,
-        fn label ->
-          if label.id == idea_label_id do
-            %{label | delete: true}
-          else
-            label
-          end
+      brainstorming.labels
+      |> Enum.map(fn label ->
+        if label.id == idea_label_id do
+          %{label | delete: true}
+        else
+          label
         end
-      )
+      end)
       |> Enum.map(&Map.from_struct/1)
 
     case Brainstormings.update_brainstorming(brainstorming, %{labels: brainstorming_labels}) do
