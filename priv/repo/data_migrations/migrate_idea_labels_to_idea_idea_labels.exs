@@ -3,7 +3,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdeaLabelsToIdeaIdeaLabels do
 
   def run do
     try do
-      Ecto.Adapters.SQL.query!(Mindwendel.Repo, migration_sql)
+      Ecto.Adapters.SQL.query!(Mindwendel.Repo, migration_sql())
     rescue
       e in Postgrex.Error ->
         Logger.error("""

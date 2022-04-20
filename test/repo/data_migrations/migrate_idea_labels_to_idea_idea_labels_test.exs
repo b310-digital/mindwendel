@@ -5,9 +5,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdeaLabelsToIdeaIdeaLabelsTest d
 
   alias Mindwendel.Factory
   alias Mindwendel.Repo
-  alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
-  alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Repo.DataMigrations.MigrateIdeaLabelsToIdeaIdeaLabels
 
@@ -28,7 +26,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdeaLabelsToIdeaIdeaLabelsTest d
   end
 
   test "migrates successfully", %{
-    brainstorming: brainstorming,
+    brainstorming: _brainstorming,
     brainstorming_label_1: brainstorming_label_1,
     idea_1: idea_1,
     brainstorming_label_2: brainstorming_label_2,
@@ -59,11 +57,11 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdeaLabelsToIdeaIdeaLabelsTest d
   end
 
   test "fails gracefully", %{
-    brainstorming: brainstorming,
+    brainstorming: _brainstorming,
     brainstorming_label_1: brainstorming_label_1,
     idea_1: idea_1,
-    brainstorming_label_2: brainstorming_label_2,
-    idea_2: idea_2
+    brainstorming_label_2: _brainstorming_label_2,
+    idea_2: _idea_2
   } do
     Factory.insert!(:idea_idea_label, idea: idea_1, idea_label: brainstorming_label_1)
 

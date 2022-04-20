@@ -75,7 +75,6 @@ defmodule Mindwendel.IdeaTest do
     end
 
     test "update idea_labels", %{idea: idea} do
-      IO.inspect(idea)
       Brainstormings.update_idea(idea, %{idea_labels: []})
 
       assert Enum.empty?(idea.idea_labels)

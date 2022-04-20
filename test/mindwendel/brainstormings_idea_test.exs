@@ -3,13 +3,8 @@ defmodule Mindwendel.BrainstormingsIdeaTest do
   alias Mindwendel.Factory
 
   alias Mindwendel.Brainstormings
-  alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
-  alias Mindwendel.Brainstormings.Like
-  alias Mindwendel.Attachments.Link
-  alias Mindwendel.Accounts.User
 
   setup do
     brainstorming = Factory.insert!(:brainstorming, %{labels: [Factory.build(:idea_label)]})
@@ -28,7 +23,7 @@ defmodule Mindwendel.BrainstormingsIdeaTest do
     end
 
     test "creates one IdeaIdeaLabel", %{idea_label: idea_label, idea: idea} do
-      {:ok, idea_changed} = Brainstormings.add_idea_label_to_idea(idea, idea_label)
+      {:ok, _idea_changed} = Brainstormings.add_idea_label_to_idea(idea, idea_label)
 
       assert Repo.all(IdeaIdeaLabel) |> Enum.count() == 1
 
@@ -40,7 +35,7 @@ defmodule Mindwendel.BrainstormingsIdeaTest do
     test "does not create additional IdeaLabel", %{idea_label: idea_label, idea: idea} do
       assert Repo.all(IdeaLabel) |> Enum.count() == 1
 
-      {:ok, idea_changed} = Brainstormings.add_idea_label_to_idea(idea, idea_label)
+      {:ok, _idea_changed} = Brainstormings.add_idea_label_to_idea(idea, idea_label)
 
       assert Repo.all(IdeaLabel) |> Enum.count() == 1
       assert Repo.one(IdeaLabel) == idea_label
@@ -70,14 +65,14 @@ defmodule Mindwendel.BrainstormingsIdeaTest do
           brainstorming: another_brainstorming
         })
 
-      {:error, changeset} =
+      {:error, _changeset} =
         Brainstormings.add_idea_label_to_idea(idea, idea_label_from_another_brainstorming)
     end
 
     @tag :skip
     test "update idea_labels", %{idea: idea} do
       idea = Repo.preload(idea, :idea_labels)
-      idea_label = idea.brainstorming.labels |> Enum.at(0)
+      _idea_label = idea.brainstorming.labels |> Enum.at(0)
       Brainstormings.update_idea(idea, %{idea_labels: []})
 
       assert Enum.empty?(idea.idea_labels)
@@ -93,7 +88,7 @@ defmodule Mindwendel.BrainstormingsIdeaTest do
     test "does not create idea_labels without brainstorming", %{idea: idea} do
       assert Repo.all(IdeaIdeaLabel) |> Enum.count() == 0
       idea = Repo.preload(idea, [:idea_labels, :idea_idea_labels])
-      idea_label = idea.brainstorming.labels |> Enum.at(0) |> IO.inspect()
+      idea_label = idea.brainstorming.labels |> Enum.at(0)
 
       Brainstormings.add_idea_label_to_idea(idea, idea_label)
 

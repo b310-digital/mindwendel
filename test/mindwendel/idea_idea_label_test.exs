@@ -56,12 +56,12 @@ defmodule Mindwendel.IdeaIdeaLabelTest do
       idea: idea,
       idea_label: idea_label
     } do
-      Repo.aggregate(IdeaIdeaLabel, :count, :idea_id) |> IO.inspect()
+      Repo.aggregate(IdeaIdeaLabel, :count, :idea_id)
 
       idea_idea_label = %IdeaIdeaLabel{idea: idea, idea_label: idea_label}
       IdeaIdeaLabel.changeset(idea_idea_label) |> Repo.insert!()
 
-      Repo.aggregate(IdeaIdeaLabel, :count, :idea_id) |> IO.inspect()
+      Repo.aggregate(IdeaIdeaLabel, :count, :idea_id)
     end
   end
 end

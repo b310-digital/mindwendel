@@ -60,7 +60,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       brainstorming = Factory.insert!(:brainstorming)
       selected_ideal_label = Enum.at(brainstorming.labels, 0)
 
-      idea =
+      _idea =
         Factory.insert!(:idea, %{
           idea_labels: [selected_ideal_label],
           brainstorming: brainstorming
@@ -141,10 +141,6 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
   defp html_selector_idea_card(idea) do
     ".IndexComponent__IdeaCard[data-testid=\"#{idea.id}\"]"
-  end
-
-  defp html_selector_idea_card_labelled(idea) do
-    ".IndexComponent__IdeaCard--labelled[data-testid=\"#{idea.id}\"]"
   end
 
   defp html_selector_idea_label_badge(idea_label) do
