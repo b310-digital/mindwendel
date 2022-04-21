@@ -10,7 +10,7 @@
               <% end %>
             <% end %>
 
-            <%= for idea_label <- idea.idea_labels do %>
+            <%= for idea_label <- Enum.sort_by(idea.idea_labels, &(&1.position_order)) do %>
               <span class="IndexComponent__IdeaLabelBadge mb-3" data-testid="<%= idea_label.id %>" style="background-color: <%= idea_label.color %>;"><%= idea_label.name %></span>
             <% end %>
 
@@ -52,7 +52,7 @@
             </div>
             <div class="IndexComponent__IdeaLabelSection">
               <%= for brainstorming_idea_label <- @brainstorming.labels do %>
-                <%= unless Enum.find(idea.idea_labels, fn idea_label -> idea_label.name == brainstorming_idea_label.name end) do %>
+                <%= unless Enum.find(idea.idea_labels, fn idea_label -> idea_label.id == brainstorming_idea_label.id end) do %>
                   <%= link to: "#", class: "text-decoration-none me-1", data_testid: brainstorming_idea_label.id, title: "label #{brainstorming_idea_label.name}", phx_click: "add_idea_label_to_idea", phx_target: @myself, phx_value_idea_id: idea.id, phx_value_idea_label_id: brainstorming_idea_label.id do %>
                     <i class="IndexComponent__IdeaLabel" data-testid="<%= brainstorming_idea_label.id %>" style="color: <%= brainstorming_idea_label.color %>;" ></i>
                   <% end %>
