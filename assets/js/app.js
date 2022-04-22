@@ -33,20 +33,22 @@ Hooks.CopyBrainstormingLinkButton = {
   }
 }
 
-Hooks.ShareBrainstormingLinkButton = {
+Hooks.NativeSharingButton = {
   mounted() {
-    this.el.addEventListener('click', (event) => {
-        if(navigator.share) {
-          navigator.share({
-            title: 'Mindwendel Brainstorming',
-            text: 'Join my brainstorming',
-            url: this.el.getAttribute("data-url") || document.getElementById("brainstorming-link").value
-          })
-        } else {
-          document.getElementById("brainstorming-sharing-link-block").classList.toggle('d-none');
-        }
-    })
-  }
+    const shareData = {
+      title: this.el.getAttribute(`data-native-sharing-button-share-data-title`) || 'Mindwendel Brainstorming',
+      text: this.el.getAttribute(`data-native-sharing-button-share-data-text`) || 'Join my brainstorming',
+      url: this.el.getAttribute(`data-native-sharing-button-share-data-url`) || document.getElementById("brainstorming-link").value
+    }
+     
+    if (navigator.share) {
+      this.el.addEventListener('click', (event) => {
+          navigator.share(shareData)
+          .then() // Do nothing
+          .catch(err => { console.log(`Error: ${err}`) }) 
+        })
+      }
+    }
 }
 
 Hooks.Modal = {
@@ -93,10 +95,9 @@ const buildQrCodeOptions = (qrCodeUrl) => ({
     })
 
 Hooks.QrCodeCanvas = {
-  
   mounted() {
     const qrCodeCanvasElement = this.el
-    const qrCodeUrl = qrCodeCanvasElement.getAttribute("data-url");
+    const qrCodeUrl = qrCodeCanvasElement.getAttribute("data-qr-code-url")
     
     const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
     const qrCode = new QRCodeStyling(qrCodeOptions)
@@ -107,7 +108,7 @@ Hooks.QrCodeCanvas = {
 
 Hooks.QrCodeDownloadButton = {
   mounted() {
-    const qrCodeUrl = this.el.getAttribute("data-url");
+    const qrCodeUrl = this.el.getAttribute("data-qr-code-url");
     const qrCodeFilename = this.el.getAttribute("data-qr-code-filename") || qrCodeUrl;
     
     const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)

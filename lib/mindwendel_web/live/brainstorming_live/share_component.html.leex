@@ -1,11 +1,30 @@
 
 <div class="row mb-3">
   <div class="input-group">
-    <input id="brainstorming-link-input-readonly" type="text" class="form-control" value="<%= @uri %>" aria-label="Url to brainstorming" aria-describedby="brainstorming-link-copy-to-clipboard-button" />
-    <button class="btn btn-outline-secondary" type="button" id="brainstorming-link-copy-to-clipboard-button" phx-hook="CopyBrainstormingLinkButton" data-clipboard-target="#brainstorming-link-input-readonly">
+    <input
+      aria-describedby="brainstorming-link-copy-to-clipboard-button"
+      class="form-control"
+      id="brainstorming-link-input-readonly"
+      type="text"
+      value="<%= @uri %>" aria-label="Url to brainstorming"
+    />
+    <button
+      class="btn btn-outline-secondary"
+      data-clipboard-target="#brainstorming-link-input-readonly"
+      id="brainstorming-link-copy-to-clipboard-button"
+      phx-hook="CopyBrainstormingLinkButton"
+      type="button"
+    >
       <%= gettext("Copy") %>
     </button>
-    <button class="btn btn-outline-secondary" id="brainstorming-link-share-button" phx-hook="ShareBrainstormingLinkButton" data-url="<%= @uri %>">
+    <button
+      class="btn btn-outline-secondary"
+      data-native-sharing-button-share-data-text="<%= gettext("Join my brainstorming") %>"
+      data-native-sharing-button-share-data-title="<%= gettext("Mindwendel Brainstorming") %>"
+      data-native-sharing-button-share-data-url="<%= @uri %>"
+      id="brainstorming-link-share-button"
+      phx-hook="NativeSharingButton"
+    >
       <i class="bi-share-fill"></i>
     </button>
   </div>
@@ -15,13 +34,24 @@
 
 <div class="row mb-3">
   <div class="d-flex justify-content-center">
-    <div height="300px" width="300px" id="brainstorming-link-qr-code-canvas" phx-hook="QrCodeCanvas" data-url="<%= @uri %>"></div>
+    <div
+      data-qr-code-url="<%= @uri %>"
+      id="brainstorming-link-qr-code-canvas"
+      phx-hook="QrCodeCanvas"
+    >
+    </div>
   </div>
 </div>
 
 <div class="row mb-3">
   <div class="d-flex justify-content-center">
-    <a class="btn btn-primary" data-url="<%= @uri %>" id="brainstorming-link-qr-code-download-button" phx-hook="QrCodeDownloadButton">
+    <a
+      class="btn btn-primary"
+      data-qr-code-filename="<%= @uri %>"
+      data-qr-code-url="<%= @uri %>"
+      id="brainstorming-link-qr-code-download-button"
+      phx-hook="QrCodeDownloadButton"
+    >
       <i class="bi-download"></i> <%= gettext("Download") %>
     </a>
 
