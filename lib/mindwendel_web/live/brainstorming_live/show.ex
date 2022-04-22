@@ -85,6 +85,11 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     |> assign(:page_title, gettext("%{name} - Edit", name: socket.assigns.brainstorming.name))
   end
 
+  defp apply_action(socket, :share, _params) do
+    socket
+    |> assign(:page_title, socket.assigns.brainstorming.name)
+  end
+
   @impl true
   def handle_event("sort_by_likes", %{"id" => id}, socket) do
     {:noreply, assign(socket, :ideas, Brainstormings.list_ideas_for_brainstorming(id))}

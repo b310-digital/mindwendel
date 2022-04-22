@@ -1,0 +1,31 @@
+
+<div class="row mb-3">
+  <div class="input-group">
+    <input id="brainstorming-link-input-readonly" type="text" class="form-control" value="<%= @uri %>" aria-label="Url to brainstorming" aria-describedby="brainstorming-link-copy-to-clipboard-button" />
+    <button class="btn btn-outline-secondary" type="button" id="brainstorming-link-copy-to-clipboard-button" phx-hook="CopyBrainstormingLinkButton" data-clipboard-target="#brainstorming-link-input-readonly">
+      <%= gettext("Copy") %>
+    </button>
+    <button class="btn btn-outline-secondary" id="brainstorming-link-share-button" phx-hook="ShareBrainstormingLinkButton" data-url="<%= @uri %>">
+      <i class="bi-share-fill"></i>
+    </button>
+  </div>
+</div>
+
+<hr/>
+
+<div class="row mb-3">
+  <div class="d-flex justify-content-center">
+    <div height="300px" width="300px" id="brainstorming-link-qr-code-canvas" phx-hook="QrCodeCanvas" data-url="<%= @uri %>"></div>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="d-flex justify-content-center">
+    <a class="btn btn-primary" data-url="<%= @uri %>" id="brainstorming-link-qr-code-download-button" phx-hook="QrCodeDownloadButton">
+      <i class="bi-download"></i> <%= gettext("Download") %>
+    </a>
+
+    &nbsp;
+
+  </div>
+</div>

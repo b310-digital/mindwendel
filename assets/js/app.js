@@ -20,17 +20,16 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
+import QRCodeStyling from "qr-code-styling";
+import ClipboardJS from "clipboard"
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
 let Hooks = {}
 
 Hooks.CopyBrainstormingLinkButton = {
   mounted() {
-    this.el.addEventListener('click', (event) => {
-      document.querySelector("#brainstorming-link").select()
-      // does not work in safari - apparently there is no single function that works everywhere. Of course.
-      document.execCommand('copy')
-    })
+    new ClipboardJS(this.el);
   }
 }
 
@@ -41,7 +40,7 @@ Hooks.ShareBrainstormingLinkButton = {
           navigator.share({
             title: 'Mindwendel Brainstorming',
             text: 'Join my brainstorming',
-            url: document.getElementById("brainstorming-link").value
+            url: this.el.getAttribute("data-url") || document.getElementById("brainstorming-link").value
           })
         } else {
           document.getElementById("brainstorming-sharing-link-block").classList.toggle('d-none');
@@ -61,9 +60,15 @@ Hooks.Modal = {
     modal.show()
     
     const hideModal = () => modal && modal.hide()
+    
     this.el.addEventListener('submit', hideModal)
-    this.el.querySelector(".form-cancel").addEventListener('click', hideModal)
-    this.el.querySelector(".phx-modal-close").addEventListener('click', hideModal)
+
+    const formCancelElement = this.el.querySelector(".form-cancel")
+    formCancelElement && formCancelElement.addEventListener('click', hideModal)
+    
+    const phxModalCloseElement = this.el.querySelector(".phx-modal-close")
+    phxModalCloseElement && phxModalCloseElement.addEventListener('click', hideModal)
+    
     this.el.addEventListener('keyup', (keyEvent) => {
       if (keyEvent.key === 'Escape') {
         // This will tell the "#modal" div to send a "close" event to the server
@@ -76,6 +81,39 @@ Hooks.Modal = {
       hideModal()
       // To avoid multiple registers
       window.removeEventListener('popstate', hideModal)
+    })
+  }
+}
+
+const buildQrCodeOptions = (qrCodeUrl) => ({
+      width: 300,
+      height: 300,
+      type: "svg",
+      data: qrCodeUrl || "",
+    })
+
+Hooks.QrCodeCanvas = {
+  
+  mounted() {
+    const qrCodeCanvasElement = this.el
+    const qrCodeUrl = qrCodeCanvasElement.getAttribute("data-url");
+    
+    const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
+    const qrCode = new QRCodeStyling(qrCodeOptions)
+            
+    qrCode.append(qrCodeCanvasElement);
+  }
+}
+
+Hooks.ShareQrCodeDownloadButton = {
+  mounted() {
+    const qrCodeUrl = this.el.getAttribute("data-url");
+    
+    const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
+    const qrCode = new QRCodeStyling(qrCodeOptions)
+    
+    this.el && this.el.addEventListener('click', () => {
+      qrCode.download({ name: "qr", extension: "svg" });
     })
   }
 }
@@ -94,3 +132,4 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
+
