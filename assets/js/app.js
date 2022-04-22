@@ -127,13 +127,16 @@ Hooks.QrCodeCanvas = {
 Hooks.QrCodeDownloadButton = {
   mounted() {
     const qrCodeUrl = this.el.getAttribute("data-qr-code-url");
-    const qrCodeFilename = this.el.getAttribute("data-qr-code-filename") || qrCodeUrl;
+    const qrCodeFilename = this.el.getAttribute("data-qr-code-filename") || qrCodeUrl || "qrcode";
+    const qrCodeFileExtension = this.el.getAttribute("data-qr-code-file-extension") || "png";
     
     const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
     const qrCode = new QRCodeStyling(qrCodeOptions)
     
     this.el && this.el.addEventListener('click', () => {
-      qrCode.download({ name: qrCodeFilename, extension: "svg" });
+      qrCode.download({ name: qrCodeFilename, extension: qrCodeFileExtension })
+        .then() // Do nothing
+        .catch(err => { console.log(`Error: ${err}`) }) 
     })
   }
 }

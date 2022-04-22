@@ -47,15 +47,26 @@
   <div class="d-flex justify-content-center">
     <a
       class="btn btn-primary"
+      data-qr-code-file-extension="ssasdasdasdasdsvg"
       data-qr-code-filename="<%= @uri %>"
       data-qr-code-url="<%= @uri %>"
-      id="brainstorming-link-qr-code-download-button"
+      id="brainstorming-link-qr-code-download-as-svg-button"
       phx-hook="QrCodeDownloadButton"
     >
-      <i class="bi-download"></i> <%= gettext("Download") %>
+      <i class="bi-download"></i> <%= gettext("Download as svg") %>
     </a>
-
     &nbsp;
+
+    <a
+      class="btn btn-primary"
+      data-qr-code-file-extension="png"
+      data-qr-code-filename="<%= @uri %>"
+      data-qr-code-url="<%= @uri %>"
+      id="brainstorming-link-qr-code-download-as-png-button"
+      phx-hook="QrCodeDownloadButton"
+    >
+      <i class="bi-download"></i> <%= gettext("Download as png") %>
+    </a>
 
   </div>
 </div>

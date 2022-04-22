@@ -312,11 +312,6 @@ msgid "Your brainstorming was not saved."
 msgstr "Dein Brainstorming wurde nicht gespeichert."
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:55
-msgid "Download"
-msgstr "Download"
-
-#, elixir-format
 #: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:22
 msgid "Join my brainstorming"
 msgstr "Trete meinem Brainstorming bei."
@@ -332,7 +327,17 @@ msgstr "Mindwendel Brainstorming"
 msgid "Share"
 msgstr "Teilen"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/mindwendel_web/live/brainstorming_live/show.html.leex:67
 msgid "Share brainstorming"
 msgstr "Teile Dein Brainstorming"
+
+#, elixir-format, fuzzy
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:67
+msgid "Download as png"
+msgstr "Download als PNG"
+
+#, elixir-format, fuzzy
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:56
+msgid "Download as svg"
+msgstr "Download als SVG"
