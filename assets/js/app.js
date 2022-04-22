@@ -105,15 +105,16 @@ Hooks.QrCodeCanvas = {
   }
 }
 
-Hooks.ShareQrCodeDownloadButton = {
+Hooks.QrCodeDownloadButton = {
   mounted() {
     const qrCodeUrl = this.el.getAttribute("data-url");
+    const qrCodeFilename = this.el.getAttribute("data-qr-code-filename") || qrCodeUrl;
     
     const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
     const qrCode = new QRCodeStyling(qrCodeOptions)
     
     this.el && this.el.addEventListener('click', () => {
-      qrCode.download({ name: "qr", extension: "svg" });
+      qrCode.download({ name: qrCodeFilename, extension: "svg" });
     })
   }
 }
