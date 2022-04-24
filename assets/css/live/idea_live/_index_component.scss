@@ -1,13 +1,5 @@
 // We would like to use the BEM css naming convention to avoid css collisions, see http://getbem.com/naming/
 
-// TODO: Remove styling and referecnes in code
-.IndexComponent__IdeaCard--labelled {
-  .IndexComponent__IdeaLabelBadge {
-    @extend .badge;
-    @extend .rounded-pill;
-  }
-}
-
 .IndexComponent__IdeaLabelBadge {
   @extend .badge;
   @extend .rounded-pill;
