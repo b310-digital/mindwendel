@@ -55,9 +55,9 @@ defmodule Mindwendel.BrainstormingsTest do
 
   describe "list_ideas_for_brainstorming" do
     test "orders by like count", %{brainstorming: brainstorming, user: user, idea: idea} do
-      first_idea = Factory.insert!(:idea, brainstorming_id: brainstorming.id)
-      third_idea = Factory.insert!(:idea, brainstorming_id: brainstorming.id)
-      second_idea = Factory.insert!(:idea, brainstorming_id: brainstorming.id)
+      first_idea = Factory.insert!(:idea, brainstorming: brainstorming)
+      third_idea = Factory.insert!(:idea, brainstorming: brainstorming)
+      second_idea = Factory.insert!(:idea, brainstorming: brainstorming)
 
       another_user = Factory.insert!(:user)
 
@@ -78,13 +78,13 @@ defmodule Mindwendel.BrainstormingsTest do
     } do
       older_idea =
         Factory.insert!(:idea,
-          brainstorming_id: brainstorming.id,
+          brainstorming: brainstorming,
           inserted_at: ~N[2021-01-15 15:04:30]
         )
 
       younger_idea =
         Factory.insert!(:idea,
-          brainstorming_id: brainstorming.id,
+          brainstorming: brainstorming,
           inserted_at: ~N[2021-01-15 15:05:30]
         )
 

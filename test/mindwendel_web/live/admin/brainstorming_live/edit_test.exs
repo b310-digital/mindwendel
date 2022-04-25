@@ -79,7 +79,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     brainstorming_label_first = Enum.at(brainstorming.labels, 0)
 
     edit_live_view
-    |> element("button[value=#{brainstorming_label_first.id}]", "Remove")
+    |> element("button[value=\"#{brainstorming_label_first.id}\"]", "Remove")
     |> render_click()
 
     assert edit_live_view |> element("input#brainstorming_labels_0_name") |> has_element?
@@ -89,5 +89,48 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
            |> has_element?
 
     refute edit_live_view |> element("input#brainstorming_labels_4_name") |> has_element?
+  end
+
+  test "does not remove idea label when idea is attached to this label", %{
+    conn: conn,
+    brainstorming: brainstorming
+  } do
+    brainstorming_label_first = Enum.at(brainstorming.labels, 0)
+
+    _idea =
+      Factory.insert!(:idea,
+        brainstorming: brainstorming,
+        idea_labels: [
+          brainstorming_label_first
+        ]
+      )
+
+    {:ok, edit_live_view, _html} =
+      live(conn, Routes.admin_brainstorming_edit_path(conn, :edit, brainstorming.admin_url_id))
+
+    edit_live_view
+    |> element(html_selector_remove_idea_label_button(brainstorming_label_first), "Remove")
+    |> render_click()
+
+    # It should still be there because the idea label is still connected iwth an idea and therefore cannot be deleted.
+    assert edit_live_view
+           |> element(".invalid-feedback", "This label is associated with an idea")
+           |> has_element?()
+
+    assert edit_live_view
+           |> element("input[type=hidden][value=#{brainstorming_label_first.id}]")
+           |> has_element?
+
+    assert edit_live_view
+           |> element(html_selector_remove_idea_label_button(brainstorming_label_first), "Remove")
+           |> has_element?
+
+    assert edit_live_view |> element("input#brainstorming_labels_0_name") |> has_element?
+
+    assert edit_live_view |> element("input#brainstorming_labels_4_name") |> has_element?
+  end
+
+  defp html_selector_remove_idea_label_button(idea_label) do
+    "button[value=\"#{idea_label.id}\"]"
   end
 end

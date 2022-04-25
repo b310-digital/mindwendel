@@ -1,10 +1,8 @@
 // We would like to use the BEM css naming convention to avoid css collisions, see http://getbem.com/naming/
 
-.IndexComponent__IdeaCard--labelled {
-  .IndexComponent__IdeaLabelBadge {
-    @extend .badge;
-    @extend .rounded-pill;
-  }
+.IndexComponent__IdeaLabelBadge {
+  @extend .badge;
+  @extend .rounded-pill;
 }
 
 // The following placeholder selectors are taken from `../node_modules/bootstrap-icons/font/bootstrap-icons.css`.

@@ -4,6 +4,7 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
   import Ecto.Changeset
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Brainstormings.IdeaIdeaLabel
 
   schema "idea_labels" do
     field :name, :string
@@ -14,7 +15,9 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
 
     belongs_to :brainstorming, Brainstorming, foreign_key: :brainstorming_id, type: :binary_id
 
-    has_many :ideas, Idea, foreign_key: :label_id
+    many_to_many :ideas, Idea, join_through: "idea_idea_labels", on_replace: :delete
+    has_many :idea_idea_labels, IdeaIdeaLabel, on_replace: :delete
+
     timestamps()
   end
 
@@ -22,7 +25,7 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
 
   def changeset(idea_label, %{delete: true}) do
     %{Ecto.Changeset.change(idea_label, delete: true) | action: :delete}
-    |> no_assoc_constraint(:ideas, message: "idea label associated with idea")
+    |> no_assoc_constraint(:idea_idea_labels, message: "idea label associated with idea")
   end
 
   def changeset(idea_label, params) do
