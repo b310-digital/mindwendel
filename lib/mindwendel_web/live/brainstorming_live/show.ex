@@ -49,6 +49,16 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   end
 
   @impl true
+  def handle_info({:brainstorming_updated, brainstorming}, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(:brainstorming, Brainstormings.get_brainstorming!(brainstorming.id))
+      |> assign(:ideas, Brainstormings.list_ideas_for_brainstorming(brainstorming.id))
+    }
+  end
+
+  @impl true
   def handle_info({:idea_updated, idea}, socket) do
     # another option is to reload the ideas from the db - but this would trigger a new sorting which might confuse the user
     new_ideas = Enum.map(socket.assigns.ideas, fn e -> if e.id == idea.id, do: idea, else: e end)

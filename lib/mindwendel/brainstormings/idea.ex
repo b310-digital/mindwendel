@@ -4,6 +4,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   import Ecto.Changeset
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Attachments.Link
   alias Mindwendel.UrlPreview
@@ -20,12 +21,13 @@ defmodule Mindwendel.Brainstormings.Idea do
     has_many :likes, Like
     belongs_to :brainstorming, Brainstorming, foreign_key: :brainstorming_id, type: :binary_id
     belongs_to :label, IdeaLabel, foreign_key: :label_id, type: :binary_id, on_replace: :nilify
+    many_to_many :idea_labels, IdeaLabel, join_through: IdeaIdeaLabel, on_replace: :delete
 
     timestamps()
   end
 
   @doc false
-  def changeset(idea, attrs) do
+  def changeset(idea, attrs \\ %{}) do
     idea
     |> cast(attrs, [:username, :body, :brainstorming_id, :deprecated_label, :label_id, :user_id])
     |> validate_required([:username, :body, :brainstorming_id])
@@ -35,6 +37,10 @@ defmodule Mindwendel.Brainstormings.Idea do
 
   def changeset_update_label(idea, label) do
     change(idea) |> put_assoc(:label, label)
+  end
+
+  def changeset_update_labels(idea, idea_labels) do
+    change(idea) |> put_assoc(:idea_labels, idea_labels)
   end
 
   def build_link(idea) do

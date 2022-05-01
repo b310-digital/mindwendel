@@ -14,15 +14,21 @@
     <h5><%= gettext("Edit Brainstorming") %></h5>
     <hr />
 
-    <%= f = form_for @changeset, "#", [phx_submit: :save] %>
-      <div class="form-group mb-3">
+    <%= f = form_for @changeset, "#", [phx_submit: :save, phx_change: :save] %>
+      <div class="mb-3 position-relative">
         <%= label f, :name, class: "form-label" %>
-        <%= text_input f, :name, class: "form-control #{if f.errors[:name], do: "is-invalid", else: ""}" %>
+        <%= text_input f, :name, class: "form-control #{if f.errors[:name], do: "is-invalid"} #{if f.source.changes[:name], do: "is-valid"}", phx_debounce: 500, phx_feedback_for: input_id(f, :name) %>
         <%= error_tag f, :name %>
+        <%= content_tag(:div,
+          class: "valid-tooltip",
+          phx_feedback_for: input_id(f, :name)
+        ) do %>
+        <%= gettext("Saved") %>
+        <% end %>
       </div>
 
       <div class="form-check mb-3">
-        <%= checkbox f, :option_show_link_to_settings, id: "checkbox-option-show-link-to-settings", class: "form-check-input" %>
+        <%= checkbox f, :option_show_link_to_settings, id: "checkbox-option-show-link-to-settings", class: "form-check-input #{if f.source.changes[:option_show_link_to_settings] != nil, do: "is-valid"}" %>
         <%= label f, :option_show_link_to_settings,
             gettext("Show brainstorming settings link for all users"),
             for: "checkbox-option-show-link-to-settings",
@@ -32,31 +38,35 @@
         <small class="form-text text-muted">
           <%= gettext("Warning: Please make sure you save the admin link at the top, before hiding the settings link!") %>
         </small>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-12 col-lg-2 d-grid gap-2">
-          <%= submit gettext("Update"), class: "btn btn-primary btn-block" %>
-        </div>
+        <%= content_tag(:div,
+          class: "valid-tooltip",
+          phx_feedback_for: input_id(f, :option_show_link_to_settings)
+        ) do %>
+          <%= gettext("Saved") %>
+        <% end %>
       </div>
 
       <h5><%= gettext("Edit Brainstorming Labels") %></h5>
 
       <hr />
 
-      <div class="mb-3">
+      <div class="row">
         <%= inputs_for f, :labels, fn p -> %>
           <div class="input-group has-validation mb-3">
-            <%= color_input p, :color, class: "form-control form-control-color #{if p.errors[:color], do: "is-invalid", else: ""}", title: gettext("Choose the label color") %>
-            <%= text_input p, :name, class: "form-control #{if p.errors[:name] || p.errors[:ideas] || f.errors[:labels] , do: "is-invalid", else: ""}", placeholder: gettext("Type the label name") %>
+            <%= color_input p, :color, class: "form-control form-control-color #{if p.errors[:color], do: "is-invalid"}  #{if p.source.changes[:name] || p.source.changes[:color], do: "border-success"}", title: gettext("Choose the label color") %>
+            <%= text_input p, :name, class: "form-control #{if p.errors[:name] || p.errors[:idea_idea_labels] || f.errors[:labels], do: "is-invalid"} #{if p.source.changes[:name] || p.source.changes[:color], do: "is-valid"}", placeholder: gettext("Type the label name"), phx_debounce: 500 %>
             <button class="btn btn-outline-secondary" type="button" phx-click="remove_idea_label" value="<%= input_value(p, :id) %>"><%= gettext("Remove idea label") %></button>
             <%= error_tag p, :color %>
             <%= error_tag p, :name %>
-            <%= if message = p.errors[:ideas] do %>
-              <span class="invalid-feedback" phx_feedback_for="<%= input_id(p, :name)%>"><%= translate_error(message) %></span>
+            <%= if message = p.errors[:idea_idea_labels] do %>
+                <span class="is-invalid"></span>
+                <span class="invalid-feedback" phx_feedback_for="<%= input_id(p, :name)%>"><%= translate_error(message) %></span>
             <% end %>
             <%= if message = f.errors[:labels] do %>
               <span class="invalid-feedback" phx_feedback_for="<%= input_id(f, :labels)%>"><%= translate_error(message) %></span>
+            <% end %>
+            <%= content_tag(:div, class: "valid-tooltip", phx_feedback_for: input_id(f, :labels)) do %>
+              <%= gettext("Saved") %>
             <% end %>
           </div>
         <% end %>
@@ -64,16 +74,11 @@
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-12 col-lg-2 d-grid gap-2">
-          <button type="button" class="btn btn-primary btn-block" phx-click="add_idea_label"><%= gettext("Add idea label") %></button>
+        <div class="col-12 d-grid">
+          <button type="button" class="btn btn-secondary" phx-click="add_idea_label"><%= gettext("Add idea label") %></button>
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-12 col-lg-2 d-grid gap-2">
-          <%= submit gettext("Update"), class: "btn btn-primary btn-block" %>
-        </div>
-      </div>
     </form>
 
     <br /><br />

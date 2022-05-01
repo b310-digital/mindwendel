@@ -60,9 +60,9 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       brainstorming = Factory.insert!(:brainstorming)
       selected_ideal_label = Enum.at(brainstorming.labels, 0)
 
-      idea =
+      _idea =
         Factory.insert!(:idea, %{
-          label: selected_ideal_label,
+          idea_labels: [selected_ideal_label],
           brainstorming: brainstorming
         })
 
@@ -70,7 +70,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
 
       assert show_live_view
-             |> has_element?(html_selector_idea_card_labelled(idea))
+             |> has_element?(html_selector_idea_label_badge(selected_ideal_label))
 
       assert show_live_view
              |> has_element?(html_selector_idea_label_active(selected_ideal_label))
@@ -85,34 +85,8 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
 
       element_selector =
-        "#{html_selector_idea_card(idea)} #{html_selector_idea_label_link(selected_ideal_label)}"
-
-      assert show_live_view |> has_element?(element_selector)
-
-      show_live_view
-      |> element(element_selector)
-      |> render_click()
-
-      updated_idea = Repo.reload(idea) |> Repo.preload([:label])
-      assert updated_idea.label == selected_ideal_label
-    end
-
-    test "removes labels from idea", %{conn: conn} do
-      brainstorming = Factory.insert!(:brainstorming)
-      selected_ideal_label = Enum.at(brainstorming.labels, 0)
-
-      idea =
-        Factory.insert!(:idea, %{
-          label: selected_ideal_label,
-          brainstorming: brainstorming
-        })
-
-      {:ok, show_live_view, _html} =
-        live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
-
-      element_selector =
-        "#{html_selector_idea_card_labelled(idea)} #{
-          html_selector_idea_label_link(selected_ideal_label)
+        "#{html_selector_idea_card(idea)} #{
+          html_selector_add_idea_label_to_idea_link(selected_ideal_label)
         }"
 
       assert show_live_view |> has_element?(element_selector)
@@ -121,8 +95,36 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       |> element(element_selector)
       |> render_click()
 
-      updated_idea = Repo.reload(idea) |> Repo.preload([:label])
-      assert updated_idea.label == nil
+      updated_idea = Repo.reload(idea) |> Repo.preload([:idea_labels])
+      assert updated_idea.idea_labels |> Enum.at(0) == selected_ideal_label
+    end
+
+    test "removes labels from idea", %{conn: conn} do
+      brainstorming = Factory.insert!(:brainstorming)
+      selected_ideal_label = Enum.at(brainstorming.labels, 0)
+
+      idea =
+        Factory.insert!(:idea, %{
+          idea_labels: [selected_ideal_label],
+          brainstorming: brainstorming
+        })
+
+      {:ok, show_live_view, _html} =
+        live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+      element_selector =
+        "#{html_selector_idea_card(idea)} #{
+          html_selector_remove_idea_label_from_idea_link(selected_ideal_label)
+        }"
+
+      assert show_live_view |> has_element?(element_selector)
+
+      show_live_view
+      |> element(element_selector)
+      |> render_click()
+
+      updated_idea = Repo.reload(idea) |> Repo.preload([:idea_labels])
+      assert updated_idea.idea_labels |> Enum.empty?()
     end
   end
 
@@ -141,12 +143,16 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
     ".IndexComponent__IdeaCard[data-testid=\"#{idea.id}\"]"
   end
 
-  defp html_selector_idea_card_labelled(idea) do
-    ".IndexComponent__IdeaCard--labelled[data-testid=\"#{idea.id}\"]"
+  defp html_selector_idea_label_badge(idea_label) do
+    ".IndexComponent__IdeaLabelBadge[data-testid=\"#{idea_label.id}\"]"
   end
 
-  defp html_selector_idea_label_link(idea_label) do
-    "a[data-testid=\"#{idea_label.id}\"]"
+  defp html_selector_add_idea_label_to_idea_link(idea_label) do
+    "a[data-testid=\"#{idea_label.id}\"][phx-click=\"add_idea_label_to_idea\"]"
+  end
+
+  defp html_selector_remove_idea_label_from_idea_link(idea_label) do
+    "a[data-testid=\"#{idea_label.id}\"][phx-click=\"remove_idea_label_from_idea\"]"
   end
 
   defp html_selector_idea_label(idea_label) do

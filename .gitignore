@@ -44,7 +44,9 @@ npm-debug.log
 .vscode
 .DS_Store
 
-docker-compose.override.yml
+# Avoiding accidentally adding local docker-compose*.override file to version control that might contain secrets
 docker-compose-prod.override.yml
+docker-compose.override.yml
+docker-compose*.override.yml
 
 ca

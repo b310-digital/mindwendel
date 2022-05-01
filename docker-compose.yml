@@ -47,6 +47,8 @@ services:
       POSTGRES_USER: ${DOCKER_COMPOSE_POSTGRES_USER:-mindwendel-user}
       POSTGRES_PASSWORD: ${DOCKER_COMPOSE_POSTGRES_PASSWORD:-mindwendel-user-password}
       POSTGRES_PORT: ${DOCKER_COMPOSE_POSTGRES_PORT:-5432}
+    ports:
+      - "${DOCKER_COMPOSE_POSTGRES_PORT_PUBLISHED:-5432}:${DOCKER_COMPOSE_POSTGRES_PORT:-5432}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

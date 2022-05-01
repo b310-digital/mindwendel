@@ -8,6 +8,7 @@ defmodule Mindwendel.Brainstormings do
 
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Like
 
@@ -66,17 +67,26 @@ defmodule Mindwendel.Brainstormings do
         order_by: [desc_nulls_last: idea_count.like_count, desc: idea.inserted_at]
 
     Repo.all(idea_query)
-    |> Repo.preload([:link, :likes, :label])
+    |> Repo.preload([:link, :likes, :label, :idea_labels])
   end
 
   def sort_ideas_by_labels(brainstorming_id) do
-    Repo.all(
-      from idea in Idea,
-        left_join: l in assoc(idea, :label),
-        where: idea.brainstorming_id == ^brainstorming_id,
-        order_by: [asc_nulls_last: l.position_order, desc: idea.inserted_at]
+    from(
+      idea in Idea,
+      left_join: l in assoc(idea, :idea_labels),
+      where: idea.brainstorming_id == ^brainstorming_id,
+      preload: [
+        :link,
+        :likes,
+        :idea_labels
+      ],
+      order_by: [
+        asc_nulls_last: l.position_order,
+        desc: idea.inserted_at
+      ]
     )
-    |> Repo.preload([:link, :likes, :label])
+    |> Repo.all()
+    |> Enum.uniq()
   end
 
   @doc """
@@ -93,7 +103,7 @@ defmodule Mindwendel.Brainstormings do
       ** (Ecto.NoResultsError)
 
   """
-  def get_idea!(id), do: Repo.get!(Idea, id) |> Repo.preload([:label])
+  def get_idea!(id), do: Repo.get!(Idea, id) |> Repo.preload([:label, :idea_labels])
 
   @doc """
   Count likes for an idea.
@@ -175,6 +185,31 @@ defmodule Mindwendel.Brainstormings do
     |> broadcast(:idea_updated)
   end
 
+  def add_idea_label_to_idea(%Idea{} = idea, %IdeaLabel{} = idea_label) do
+    idea = Repo.preload(idea, :idea_labels)
+
+    idea_labels =
+      (idea.idea_labels ++ [idea_label])
+      |> Enum.map(&Ecto.Changeset.change/1)
+
+    idea
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:idea_labels, idea_labels)
+    |> Repo.update()
+    |> broadcast(:idea_updated)
+  end
+
+  def remove_idea_label_from_idea(%Idea{} = idea, %IdeaLabel{} = idea_label) do
+    from(idea_idea_label in IdeaIdeaLabel,
+      where:
+        idea_idea_label.idea_id == ^idea.id and
+          idea_idea_label.idea_label_id == ^idea_label.id
+    )
+    |> Repo.delete_all()
+
+    {:ok, get_idea!(idea.id)} |> broadcast(:idea_updated)
+  end
+
   @doc """
   Deletes a idea.
 
@@ -202,7 +237,7 @@ defmodule Mindwendel.Brainstormings do
 
   """
   def change_idea(%Idea{} = idea, attrs \\ %{}) do
-    Repo.preload(idea, :link) |> Idea.changeset(attrs)
+    Repo.preload(idea, [:link, :idea_labels]) |> Idea.changeset(attrs)
   end
 
   @doc """
@@ -241,7 +276,7 @@ defmodule Mindwendel.Brainstormings do
     |> Repo.preload([
       :users,
       labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
-      ideas: [:link, :likes, :label]
+      ideas: [:link, :likes, :label, :idea_labels]
     ])
   end
 
@@ -300,6 +335,7 @@ defmodule Mindwendel.Brainstormings do
     brainstorming
     |> Brainstorming.changeset(attrs)
     |> Repo.update()
+    |> broadcast(:brainstorming_updated)
   end
 
   @doc """
@@ -414,6 +450,16 @@ defmodule Mindwendel.Brainstormings do
     Phoenix.PubSub.subscribe(Mindwendel.PubSub, "brainstormings:" <> brainstorming_id)
   end
 
+  def broadcast({:ok, %Brainstorming{} = brainstorming}, event) do
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> brainstorming.id,
+      {event, brainstorming}
+    )
+
+    {:ok, brainstorming}
+  end
+
   @doc """
   Returns a broadcast status tuple
 
@@ -423,7 +469,7 @@ defmodule Mindwendel.Brainstormings do
       {:ok, %Idea{}}
 
   """
-  def broadcast({:ok, idea}, event) do
+  def broadcast({:ok, %Idea{} = idea}, event) do
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
       "brainstormings:" <> idea.brainstorming_id,

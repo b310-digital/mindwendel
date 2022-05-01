@@ -1,6 +1,7 @@
 defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.IdeaLabelFactory
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Repo
 
@@ -13,14 +14,28 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
 
     brainstorming =
       Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
-      |> Repo.preload(labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order))
+      |> Repo.preload(
+        labels:
+          from(idea_label in IdeaLabel,
+            order_by: idea_label.position_order,
+            preload: [:idea_idea_labels]
+          )
+      )
+
+    changeset = Brainstormings.change_brainstorming(brainstorming, %{})
 
     {
       :ok,
       socket
       |> assign(:brainstorming, brainstorming)
-      |> assign(:changeset, Brainstormings.change_brainstorming(brainstorming, %{}))
+      |> assign(:changeset, changeset)
     }
+  end
+
+  def handle_info(:reset_changeset, socket) do
+    brainstorming = socket.assigns.brainstorming
+    changeset = Brainstormings.change_brainstorming(brainstorming, %{})
+    {:noreply, assign(socket, :changeset, changeset)}
   end
 
   def handle_params(_unsigned_params, uri, socket),
@@ -33,21 +48,29 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
       })
       |> Repo.preload(labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order))
 
+    changeset = Brainstorming.changeset(brainstorming, brainstorming_params)
+
     case Brainstormings.update_brainstorming(brainstorming, brainstorming_params) do
-      {:ok, brainstorming} ->
+      {:ok, brainstorming_updated} ->
+        reset_changeset_timer_ref = reset_changeset_timer(socket)
+
         {
           :noreply,
           socket
-          |> put_flash(:info, gettext("Your brainstorming was successfully updated."))
-          |> assign(:brainstorming, brainstorming)
-          |> assign(:changeset, Brainstorming.changeset(brainstorming, %{}))
+          |> assign(:brainstorming, brainstorming_updated)
+          |> assign(:changeset, changeset)
+          |> assign(:reset_changeset_timer_ref, reset_changeset_timer_ref)
+          |> clear_flash()
         }
 
       {:error, changeset} ->
+        cancel_changeset_timer(socket)
+
         {
           :noreply,
           socket
           |> assign(changeset: changeset)
+          |> put_flash(:error, gettext("Your brainstorming was not saved."))
         }
     end
   end
@@ -55,32 +78,39 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
   def handle_event("add_idea_label", _params, socket) do
     brainstorming = socket.assigns.brainstorming
 
+    idea_label_new = IdeaLabelFactory.build_idea_label(brainstorming)
+
     brainstorming_labels =
       (brainstorming.labels ++
          [
-           %IdeaLabel{
-             name: gettext("cyan"),
-             color: "#0dcaf0",
-             position_order: length(brainstorming.labels) + 1
+           %{
+             idea_label_new
+             | position_order: length(brainstorming.labels) + 1
            }
          ])
       |> Enum.map(&Map.from_struct/1)
 
     case Brainstormings.update_brainstorming(brainstorming, %{labels: brainstorming_labels}) do
       {:ok, brainstorming} ->
+        reset_changeset_timer_ref = reset_changeset_timer(socket)
+
         {
           :noreply,
           socket
-          |> put_flash(:info, gettext("Your brainstorming was successfully updated."))
           |> assign(:brainstorming, brainstorming)
           |> assign(:changeset, Brainstorming.changeset(brainstorming, %{}))
+          |> assign(:reset_changeset_timer_ref, reset_changeset_timer_ref)
+          |> clear_flash()
         }
 
       {:error, changeset} ->
+        cancel_changeset_timer(socket)
+
         {
           :noreply,
           socket
           |> assign(changeset: changeset)
+          |> put_flash(:error, gettext("Your brainstorming was not saved."))
         }
     end
   end
@@ -89,33 +119,37 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
     brainstorming = socket.assigns.brainstorming
 
     brainstorming_labels =
-      Enum.map(
-        brainstorming.labels,
-        fn label ->
-          if label.id == idea_label_id do
-            %{label | delete: true}
-          else
-            label
-          end
+      brainstorming.labels
+      |> Enum.map(fn label ->
+        if label.id == idea_label_id do
+          %{label | delete: true}
+        else
+          label
         end
-      )
+      end)
       |> Enum.map(&Map.from_struct/1)
 
     case Brainstormings.update_brainstorming(brainstorming, %{labels: brainstorming_labels}) do
       {:ok, brainstorming} ->
+        reset_changeset_timer_ref = reset_changeset_timer(socket)
+
         {
           :noreply,
           socket
-          |> put_flash(:info, gettext("Your brainstorming was successfully updated."))
           |> assign(:brainstorming, brainstorming)
           |> assign(:changeset, Brainstorming.changeset(brainstorming, %{}))
+          |> assign(:reset_changeset_timer_ref, reset_changeset_timer_ref)
+          |> clear_flash()
         }
 
       {:error, changeset} ->
+        cancel_changeset_timer(socket)
+
         {
           :noreply,
           socket
           |> assign(changeset: changeset)
+          |> put_flash(:error, gettext("Your brainstorming was not saved."))
         }
     end
   end
@@ -125,5 +159,19 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
       days:
         Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]
     )
+  end
+
+  defp cancel_changeset_timer(socket) do
+    if socket.assigns[:reset_changeset_timer_ref],
+      do: Process.cancel_timer(socket.assigns.reset_changeset_timer_ref)
+
+    socket.assigns[:reset_changeset_timer_ref]
+  end
+
+  defp reset_changeset_timer(socket) do
+    cancel_changeset_timer(socket)
+
+    # Reset changeset after five seconds in order to remove the save tooltip
+    Process.send_after(self(), :reset_changeset, 5 * 1000)
   end
 end

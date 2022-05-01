@@ -24,7 +24,8 @@ services:
       MW_FEATURE_BRAINSTORMING_TEASER: ${DOCKER_COMPOSE_APP_PROD_MW_FEATURE_BRAINSTORMING_TEASER:-true}
 
       # Add a secret key base for mindwendel for encrypting the use session
-      # NOTE: There are multiple commands you can use to generate a secret key base. Pick one command you like, e.g. `date +%s | sha256sum | base64 | head -c 64 ; echo`
+      # NOTE: There are multiple commands you can use to generate a secret key base. Pick one command you like.
+      # E.g. `date +%s | sha256sum | base64 | head -c 64 ; echo`
       # See https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
       SECRET_KEY_BASE: ${DOCKER_COMPOSE_APP_PROD_SECRET_KEY_BASE:?}
 
