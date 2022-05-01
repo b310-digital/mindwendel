@@ -45,10 +45,8 @@ Hooks.NativeSharingButton = {
       this.el.addEventListener('click', (event) => {
         navigator.share(shareData)
         .then() // Do nothing
-        .catch(err => { console.error(`${err}`) }) 
+        .catch(err => { console.log(`Error: ${err}`) }) 
       })
-    } else {
-      this.el.classList.add("d-none")
     }
   }
 }
