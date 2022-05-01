@@ -43,12 +43,12 @@ Hooks.NativeSharingButton = {
      
     if (navigator.share) {
       this.el.addEventListener('click', (event) => {
-          navigator.share(shareData)
-          .then() // Do nothing
-          .catch(err => { console.log(`Error: ${err}`) }) 
-        })
-      }
+        navigator.share(shareData)
+        .then() // Do nothing
+        .catch(err => { console.log(`Error: ${err}`) }) 
+      })
     }
+  }
 }
 
 Hooks.Modal = {
@@ -105,7 +105,6 @@ const buildQrCodeOptions = (qrCodeUrl) => ({
     crossOrigin: "anonymous",
     margin: 20,
   },
-  image: "",
   data: qrCodeUrl || "",
   height: 300,
   type: "svg",
