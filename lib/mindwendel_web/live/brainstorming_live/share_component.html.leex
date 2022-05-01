@@ -3,10 +3,12 @@
   <div class="input-group">
     <input
       aria-describedby="brainstorming-link-copy-to-clipboard-button"
+      aria-label="Url to brainstorming"
       class="form-control"
       id="brainstorming-link-input-readonly"
+      readonly="true"
       type="text"
-      value="<%= @uri %>" aria-label="Url to brainstorming"
+      value="<%= @uri %>"
     />
     <button
       class="btn btn-outline-secondary"
