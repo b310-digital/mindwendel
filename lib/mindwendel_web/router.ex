@@ -1,13 +1,42 @@
 defmodule MindwendelWeb.Router do
   use MindwendelWeb, :router
 
+  @host :mindwendel
+        |> Application.fetch_env!(MindwendelWeb.Endpoint)
+        # |> Keyword.fetch!(:http)
+        # |> Keyword.fetch!(:ip)
+        # |> Tuple.to_list()
+        # |> Enum.join(".")
+        |> Keyword.fetch!(:url)
+        |> Keyword.fetch!(:host)
+
+  @port :mindwendel
+        |> Application.fetch_env!(MindwendelWeb.Endpoint)
+        |> Keyword.fetch!(:http)
+        |> Keyword.fetch!(:port)
+
+  @content_security_policy (case Mix.env() do
+                              :prod ->
+                                "default-src 'self';" <>
+                                  "connect-src wss://#{@host};"
+
+                              _ ->
+                                "default-src 'self' 'unsafe-eval';" <>
+                                  "connect-src ws://0.0.0.0:4000 ws://localhost:4000 http://0.0.0.0:4000 http://localhost:4000;" <>
+                                  "img-src 'self' blob: data:;" <>
+                                  "style-src 'self' 'unsafe-inline'"
+                            end)
+
   pipeline :browser do
     plug :accepts, ["html", "csv"]
     plug :fetch_session
     plug :fetch_live_flash
     plug :put_root_layout, {MindwendelWeb.LayoutView, :root}
     plug :protect_from_forgery
-    plug :put_secure_browser_headers
+
+    plug :put_secure_browser_headers,
+         %{"content-security-policy" => @content_security_policy}
+
     plug Mindwendel.Plugs.SetSessionUserId
   end
 
