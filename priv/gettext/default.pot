@@ -36,12 +36,12 @@ msgid "%{name} - New Idea"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/index_component.html.leex:16
+#: lib/mindwendel_web/live/idea_live/index_component.html.leex:8
 msgid "Are you sure you want to delete this idea?"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:94
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:95
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr ""
 
@@ -51,7 +51,7 @@ msgid "Close"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:47
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:18
 msgid "Copy"
 msgstr ""
 
@@ -66,22 +66,22 @@ msgid "Create!"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:97
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:98
 msgid "Delete"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:92
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:93
 msgid "Delete Brainstorming"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:88
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:89
 msgid "Export to CSV"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:89
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:90
 msgid "Export to HTML"
 msgstr ""
 
@@ -97,7 +97,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/mindwendel_web/live/brainstorming_live/show.html.leex:22
-#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:76
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:80
 msgid "New Idea"
 msgstr ""
 
@@ -107,7 +107,7 @@ msgid "New brainstorming"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:64
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:56
 msgid "New idea"
 msgstr ""
 
@@ -117,12 +117,12 @@ msgid "New idea page (Hotkey: i)"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/index_component.html.leex:79
+#: lib/mindwendel_web/live/idea_live/index_component.html.leex:75
 msgid "No ideas brainstormed"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:76
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:80
 msgid "Open new idea page (Hotkey: i)"
 msgstr ""
 
@@ -194,7 +194,7 @@ msgid "Edit Brainstorming"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:86
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:87
 msgid "Export"
 msgstr ""
 
@@ -218,7 +218,7 @@ msgid "Username"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/idea_live/index_component.html.leex:43
+#: lib/mindwendel_web/live/idea_live/index_component.html.leex:39
 #: lib/mindwendel_web/templates/admin/brainstorming/export.html.leex:3
 msgid "By"
 msgstr ""
@@ -289,7 +289,7 @@ msgid "yellow"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:77
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:78
 msgid "Add idea label"
 msgstr ""
 
@@ -300,12 +300,43 @@ msgstr ""
 
 #, elixir-format
 #: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:26
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:45 lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:68
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:45 lib/mindwendel_web/live/admin/brainstorming_live/edit.html.leex:69
 msgid "Saved"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:67
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:107 lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:148
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:73
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:113 lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:152
 msgid "Your brainstorming was not saved."
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:22
+msgid "Join my brainstorming"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:23
+msgid "Mindwendel Brainstorming"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:31
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:32
+msgid "Share"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/live/brainstorming_live/show.html.leex:67
+msgid "Share brainstorming"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:67
+msgid "Download as png"
+msgstr ""
+
+#, elixir-format
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:56
+msgid "Download as svg"
 msgstr ""
