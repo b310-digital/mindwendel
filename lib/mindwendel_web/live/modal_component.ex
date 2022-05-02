@@ -8,7 +8,7 @@ defmodule MindwendelWeb.ModalComponent do
       phx-target="#<%= @myself %>"
       phx-page-loading
     >
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog <%= assigns.opts[:modal_size] %>" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title"><%= assigns.opts[:title] %></h5>

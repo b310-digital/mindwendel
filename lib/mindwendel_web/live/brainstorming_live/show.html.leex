@@ -28,9 +28,10 @@
           <% end %>
         </div>
         <div class="d-flex justify-content-end">
-          <button class="btn btn-secondary m-1" id="btn-share" phx-hook="ShareBrainstormingLinkButton">
-            <i class="bi-share-fill"></i>
-          </button>
+          <%= live_patch to: Routes.brainstorming_show_path(@socket, :share, @brainstorming), class: "btn btn-secondary m-1", title: gettext("Share") do %>
+            <i class="bi-share-fill"></i> <%= gettext("Share") %>
+          <% end %>
+
           <%= if @brainstorming.option_show_link_to_settings do %>
             <%= link to: Routes.admin_brainstorming_edit_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary m-1" do %>
               <i class="bi-gear-fill"></i>
@@ -39,15 +40,6 @@
         </div>
       </div>
     </div>
-
-  <div class="input-group mb-3 mt-1 d-none" id="brainstorming-sharing-link-block">
-    <%= tag :input, id: "brainstorming-link", type: "text", class: "form-control", value: @uri, aria_describedby: "basic-addon1", readonly: true %>
-    <div class="input-group-append">
-      <button id="button-brainstorming-copy-link" class="btn btn-outline-secondary" type="button" phx-hook="CopyBrainstormingLinkButton">
-        <%= gettext("Copy") %>
-      </button>
-    </div>
-  </div>
 
   <%= if @live_action in [:edit] do %>
     <%= live_modal @socket, MindwendelWeb.BrainstormingLive.FormComponent,
@@ -66,6 +58,18 @@
       brainstorming: @brainstorming,
       current_user: @current_user,
       idea: @idea,
+      return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming) %>
+  <% end %>
+
+  <%= if @live_action in [:share] do %>
+    <%= live_modal @socket, MindwendelWeb.BrainstormingLive.ShareComponent,
+      id: :share,
+      title: gettext("Share brainstorming"),
+      action: :share,
+      brainstorming: @brainstorming,
+      current_user: @current_user,
+      uri: Routes.brainstorming_show_url(@socket, :show, @brainstorming),
+      modal_size: "modal-lg",
       return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming) %>
   <% end %>
 

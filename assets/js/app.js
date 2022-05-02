@@ -20,33 +20,36 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
+import QRCodeStyling from "qr-code-styling";
+import ClipboardJS from "clipboard"
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
 let Hooks = {}
 
 Hooks.CopyBrainstormingLinkButton = {
   mounted() {
-    this.el.addEventListener('click', (event) => {
-      document.querySelector("#brainstorming-link").select()
-      // does not work in safari - apparently there is no single function that works everywhere. Of course.
-      document.execCommand('copy')
-    })
+    new ClipboardJS(this.el);
   }
 }
 
-Hooks.ShareBrainstormingLinkButton = {
+Hooks.NativeSharingButton = {
   mounted() {
-    this.el.addEventListener('click', (event) => {
-        if(navigator.share) {
-          navigator.share({
-            title: 'Mindwendel Brainstorming',
-            text: 'Join my brainstorming',
-            url: document.getElementById("brainstorming-link").value
-          })
-        } else {
-          document.getElementById("brainstorming-sharing-link-block").classList.toggle('d-none');
-        }
-    })
+    const shareData = {
+      title: this.el.getAttribute(`data-native-sharing-button-share-data-title`) || 'Mindwendel Brainstorming',
+      text: this.el.getAttribute(`data-native-sharing-button-share-data-text`) || 'Join my brainstorming',
+      url: this.el.getAttribute(`data-native-sharing-button-share-data-url`) || document.getElementById("brainstorming-link").value
+    }
+     
+    if (navigator.share) {
+      this.el.addEventListener('click', (event) => {
+        navigator.share(shareData)
+        .then() // Do nothing
+        .catch(err => { console.error(`${err}`) }) 
+      })
+    } else {
+      this.el.classList.add("d-none")
+    }
   }
 }
 
@@ -61,9 +64,15 @@ Hooks.Modal = {
     modal.show()
     
     const hideModal = () => modal && modal.hide()
+    
     this.el.addEventListener('submit', hideModal)
-    this.el.querySelector(".form-cancel").addEventListener('click', hideModal)
-    this.el.querySelector(".phx-modal-close").addEventListener('click', hideModal)
+
+    const formCancelElement = this.el.querySelector(".form-cancel")
+    formCancelElement && formCancelElement.addEventListener('click', hideModal)
+    
+    const phxModalCloseElement = this.el.querySelector(".phx-modal-close")
+    phxModalCloseElement && phxModalCloseElement.addEventListener('click', hideModal)
+    
     this.el.addEventListener('keyup', (keyEvent) => {
       if (keyEvent.key === 'Escape') {
         // This will tell the "#modal" div to send a "close" event to the server
@@ -76,6 +85,59 @@ Hooks.Modal = {
       hideModal()
       // To avoid multiple registers
       window.removeEventListener('popstate', hideModal)
+    })
+  }
+}
+
+const buildQrCodeOptions = (qrCodeUrl) => ({
+  backgroundOptions: {
+    color: "#fff",
+  },
+  cornersDotOptions: {
+    type: 'dot'
+  },
+  cornersSquareOptions: {
+    type: 'square'
+  },
+  dotsOptions: {
+    color: '#000000',
+    type: "dots",
+  },
+  imageOptions: {
+    crossOrigin: "anonymous",
+    margin: 20,
+  },
+  data: qrCodeUrl || "",
+  height: 300,
+  type: "svg",
+  width: 300
+})
+
+Hooks.QrCodeCanvas = {
+  mounted() {
+    const qrCodeCanvasElement = this.el
+    const qrCodeUrl = qrCodeCanvasElement.getAttribute("data-qr-code-url")
+    
+    const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
+    const qrCode = new QRCodeStyling(qrCodeOptions)
+            
+    qrCode.append(qrCodeCanvasElement);
+  }
+}
+
+Hooks.QrCodeDownloadButton = {
+  mounted() {
+    const qrCodeUrl = this.el.getAttribute("data-qr-code-url");
+    const qrCodeFilename = this.el.getAttribute("data-qr-code-filename") || qrCodeUrl || "qrcode";
+    const qrCodeFileExtension = this.el.getAttribute("data-qr-code-file-extension") || "png";
+    
+    const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
+    const qrCode = new QRCodeStyling(qrCodeOptions)
+    
+    this.el && this.el.addEventListener('click', () => {
+      qrCode.download({ name: qrCodeFilename, extension: qrCodeFileExtension })
+        .then() // Do nothing
+        .catch(err => { console.log(`Error: ${err}`) }) 
     })
   }
 }
@@ -94,3 +156,4 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
+
