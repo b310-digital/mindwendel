@@ -8,6 +8,14 @@
     <%= live_title_tag assigns[:page_title] || "Mindwendel" %>
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= Routes.static_path(@conn, "/apple-touch-icon.png") %>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<%= Routes.static_path(@conn, "/favicon-32x32.png") %>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<%= Routes.static_path(@conn, "/favicon-16x16.png") %>">
+    <link rel="manifest" href="<%= Routes.static_path(@conn, "/site.webmanifest") %>">
+    <link rel="mask-icon" href="<%= Routes.static_path(@conn, "/safari-pinned-tab.svg") %>" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
   </head>
 
   <body class="d-flex h-100" style="background-color: #000000;">
