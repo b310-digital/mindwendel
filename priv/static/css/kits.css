@@ -1,98 +1,101 @@
 /* CSS taken from https://pad.kits.blog/ with permission of Tim Krieger*/
-#button, body, form {
-    border: none
+#button,
+body,
+form {
+  border: none;
 }
 
 body {
-    background: #fff;
-    font-family: Quicksand, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    font-size: 16px;
-    line-height: 1.42857143;
-    color: #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-size: cover
+  background: #fff;
+  font-family: Quicksand, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  line-height: 1.42857143;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
 }
 
 #wrapper {
-    border-top: none;
-    margin-top: 0;
-    padding: 10px;
-    background: 0 0;
-    box-shadow: none
+  border-top: none;
+  margin-top: 0;
+  padding: 10px;
+  background: 0 0;
+  box-shadow: none;
 }
 
 input {
-    color: #4a5d5c
+  color: #4a5d5c;
 }
 
 #inner {
-    background: 0 0;
-    padding-top: 0;
-    width: 100%;
-    max-width: 400px;
-    margin-bottom: 50px;
-    text-align: center;
-    color: #000000
+  background: 0 0;
+  padding-top: 0;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 50px;
+  text-align: center;
+  color: #000000;
 }
 
 #label {
-    text-shadow: none;
-    color: #333;
-    font-weight: 400;
-    text-align: center
+  text-shadow: none;
+  color: #333;
+  font-weight: 400;
+  text-align: center;
 }
 
 #button {
-    margin: 0 auto;
-    text-align: center;
-    width: 100%;
-    text-shadow: none;
-    font-size: 23px;
-    line-height: 1.8;
-    color: #fff;
-    background: #00a3d3;
-    border-radius: 3px;
-    box-shadow: none;
-    height: 53px;
-    border: none;
-    display: block
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+  text-shadow: none;
+  font-size: 23px;
+  line-height: 1.8;
+  color: #fff;
+  background: #00a3d3;
+  border-radius: 3px;
+  box-shadow: none;
+  height: 53px;
+  border: none;
+  display: block;
 }
 
-button[type=submit] {
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-    color: #fff;
-    background: #00a3d3;
-    border: none;
-    top: 0;
-    opacity: 1;
-    transition: .2s background
+button[type="submit"] {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  color: #fff;
+  background: #00a3d3;
+  border: none;
+  top: 0;
+  opacity: 1;
+  transition: 0.2s background;
 }
 
-#button:hover, button[type=submit]:hover {
-    cursor: pointer;
-    background: #0082a8;
-    color: #fff
+#button:hover,
+button[type="submit"]:hover {
+  cursor: pointer;
+  background: #0082a8;
+  color: #fff;
 }
 
 #padname {
-    height: 38px;
-    width: calc(100% - 45px);
-    padding: 0 12px;
-    position: relative
+  height: 38px;
+  width: calc(100% - 45px);
+  padding: 0 12px;
+  position: relative;
 }
 
 svg#kits_logo {
-    width: 250px;
-    height: auto;
-    margin-bottom: 50px;
-    max-width: 100%
+  width: 250px;
+  height: auto;
+  margin-bottom: 50px;
+  max-width: 100%;
 }
 
-@media only screen and (max-width:420px) {
-    svg#kits_logo {
-        margin-top: 30px
-    }
+@media only screen and (max-width: 420px) {
+  svg#kits_logo {
+    margin-top: 30px;
+  }
 }
