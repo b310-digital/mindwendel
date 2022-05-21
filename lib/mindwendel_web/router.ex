@@ -1,61 +1,47 @@
 defmodule MindwendelWeb.Router do
   use MindwendelWeb, :router
 
-  @host :mindwendel
-        |> Application.fetch_env!(MindwendelWeb.Endpoint)
-        # |> Keyword.fetch!(:http)
-        # |> Keyword.fetch!(:ip)
-        # |> Tuple.to_list()
-        # |> Enum.join(".")
-        |> Keyword.fetch!(:url)
-        |> Keyword.fetch!(:host)
-
-  @port :mindwendel
-        |> Application.fetch_env!(MindwendelWeb.Endpoint)
-        |> Keyword.fetch!(:http)
-        |> Keyword.fetch!(:port)
-
-  @content_security_policy (case Mix.env() do
-                              :prod ->
-                                "default-src 'self';" <>
-                                  "connect-src wss://#{@host};"
-
-                              _ ->
-                                "default-src 'self' 'unsafe-eval';" <>
-                                  "connect-src ws://0.0.0.0:4000 ws://localhost:4000 http://0.0.0.0:4000 http://localhost:4000;" <>
-                                  "img-src 'self' blob: data:;" <>
-                                  "style-src 'self' 'unsafe-inline'"
-                            end)
+  @content_security_policy "default-src 'none';" <>
+                             "script-src  'self' 'unsafe-eval' ;" <>
+                             "connect-src 'self' ;" <>
+                             "img-src     'self' data: ;" <>
+                             "style-src   'self' 'unsafe-inline' ;" <>
+                             "frame-src   'self' ;" <>
+                             "font-src    'self'"
 
   pipeline :browser do
-    plug :accepts, ["html", "csv"]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :put_root_layout, {MindwendelWeb.LayoutView, :root}
-    plug :protect_from_forgery
+    plug(:accepts, ["html", "csv"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:put_root_layout, {MindwendelWeb.LayoutView, :root})
+    plug(:protect_from_forgery)
 
-    plug :put_secure_browser_headers,
-         %{"content-security-policy" => @content_security_policy}
+    plug(
+      :put_secure_browser_headers,
+      %{
+        "content-security-policy" => @content_security_policy
+      }
+    )
 
-    plug Mindwendel.Plugs.SetSessionUserId
+    plug(Mindwendel.Plugs.SetSessionUserId)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", MindwendelWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", StaticPageController, :home
+    get("/", StaticPageController, :home)
 
     scope "/admin", Admin, as: :admin do
-      delete "/brainstormings/:id", BrainstormingController, :delete
-      get "/brainstormings/:id/export", BrainstormingController, :export
-      live "/brainstormings/:id/edit", BrainstormingLive.Edit, :edit
+      delete("/brainstormings/:id", BrainstormingController, :delete)
+      get("/brainstormings/:id/export", BrainstormingController, :export)
+      live("/brainstormings/:id/edit", BrainstormingLive.Edit, :edit)
     end
 
-    post "/brainstormings", BrainstormingController, :create
+    post("/brainstormings", BrainstormingController, :create)
 
     live "/brainstormings/:id", BrainstormingLive.Show, :show
     live "/brainstormings/:id/show/edit", BrainstormingLive.Show, :edit
@@ -79,8 +65,8 @@ defmodule MindwendelWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through :browser
-      live_dashboard "/dashboard", metrics: MindwendelWeb.Telemetry
+      pipe_through(:browser)
+      live_dashboard("/dashboard", metrics: MindwendelWeb.Telemetry)
     end
   end
 end
