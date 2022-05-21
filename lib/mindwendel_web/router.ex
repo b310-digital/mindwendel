@@ -1,13 +1,30 @@
 defmodule MindwendelWeb.Router do
   use MindwendelWeb, :router
 
-  @content_security_policy "default-src 'none';" <>
-                             "script-src  'self' 'unsafe-eval' ;" <>
-                             "connect-src 'self' ;" <>
-                             "img-src     'self' data: ;" <>
-                             "style-src   'self' 'unsafe-inline' ;" <>
-                             "frame-src   'self' ;" <>
-                             "font-src    'self'"
+  @host :mindwendel
+        |> Application.fetch_env!(MindwendelWeb.Endpoint)
+        |> Keyword.fetch!(:url)
+        |> Keyword.fetch!(:host)
+
+  @content_security_policy (case Mix.env() do
+                              :prod ->
+                                "default-src 'none';" <>
+                                  "script-src  'self' 'unsafe-eval' ;" <>
+                                  "connect-src 'self' wss://#{@host};" <>
+                                  "img-src     'self' data: ;" <>
+                                  "style-src   'self' 'unsafe-inline' ;" <>
+                                  "frame-src   'self' ;" <>
+                                  "font-src    'self'"
+
+                              _ ->
+                                "default-src 'none';" <>
+                                  "script-src  'self' 'unsafe-eval' ;" <>
+                                  "connect-src 'self' ;" <>
+                                  "img-src     'self' data: ;" <>
+                                  "style-src   'self' 'unsafe-inline' ;" <>
+                                  "frame-src   'self' ;" <>
+                                  "font-src    'self'"
+                            end)
 
   pipeline :browser do
     plug(:accepts, ["html", "csv"])
@@ -18,9 +35,7 @@ defmodule MindwendelWeb.Router do
 
     plug(
       :put_secure_browser_headers,
-      %{
-        "content-security-policy" => @content_security_policy
-      }
+      %{"content-security-policy" => @content_security_policy}
     )
 
     plug(Mindwendel.Plugs.SetSessionUserId)
