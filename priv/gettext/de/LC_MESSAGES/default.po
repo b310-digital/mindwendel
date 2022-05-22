@@ -23,6 +23,18 @@ msgstr "Wie können wir ..."
 
 #: lib/mindwendel_web/templates/static_page/home.html.heex:14
 #, elixir-autogen, elixir-format
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:14
+msgid "Brainstorm"
+msgstr "Los geht's!"
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:21
+msgid "How might we ..."
+msgstr "Wie können wir ..."
+
+#, elixir-format
+#: lib/mindwendel_web/templates/static_page/home.html.leex:13
 msgid "Ready?"
 msgstr "Fertig?"
 
@@ -384,16 +396,11 @@ msgstr "Bist du sicher, dass das Brainstorming geleert werden soll?"
 msgid "Empty brainstorming"
 msgstr "Leere das Brainstorming"
 #, elixir-format
-#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:49
-msgid "Your brainstorming was successfully updated."
-msgstr "Dein Brainstorming wurde aktualisiert."
-
-#, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+#: lib/mindwendel_web/templates/static_page/home.html.leex:54
 msgid "Legal Disclosure"
 msgstr "Impressum"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+#: lib/mindwendel_web/templates/static_page/home.html.leex:54
 msgid "Privacy"
 msgstr "Datenschutz"
