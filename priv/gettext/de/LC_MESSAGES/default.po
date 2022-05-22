@@ -12,17 +12,17 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:11
+#: lib/mindwendel_web/templates/static_page/home.html.leex:14
 msgid "Brainstorm"
 msgstr "Los geht's!"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:18
+#: lib/mindwendel_web/templates/static_page/home.html.leex:21
 msgid "How might we ..."
 msgstr "Wie können wir ..."
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:10
+#: lib/mindwendel_web/templates/static_page/home.html.leex:13
 msgid "Ready?"
 msgstr "Fertig?"
 
@@ -52,17 +52,17 @@ msgid "Close"
 msgstr "Schließen"
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:18
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:20
 msgid "Copy"
 msgstr "Kopieren"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:9
+#: lib/mindwendel_web/templates/static_page/home.html.leex:12
 msgid "Create a challenge."
 msgstr "Erstelle ein Brainstorming."
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:22
+#: lib/mindwendel_web/templates/static_page/home.html.leex:25
 msgid "Create!"
 msgstr "Erstellen!"
 
@@ -199,7 +199,7 @@ msgstr "Editiere Brainstorming"
 msgid "Export"
 msgstr "Export"
 
-#: lib/mindwendel_web/templates/static_page/home.html.leex:34
+#: lib/mindwendel_web/templates/static_page/home.html.leex:37
 msgid "Your latest brainstormings"
 msgstr "Deine letzten Brainstormings"
 
@@ -245,7 +245,7 @@ msgid "Brainstorming will be deleted "
 msgstr "Brainstorming wird gelöscht in "
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:26
+#: lib/mindwendel_web/templates/static_page/home.html.leex:29
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr "Brainstormings werden nach %{days} Tagen gelöscht."
 
@@ -312,12 +312,12 @@ msgid "Your brainstorming was not saved."
 msgstr "Dein Brainstorming wurde nicht gespeichert."
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:22
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:24
 msgid "Join my brainstorming"
 msgstr "Trete meinem Brainstorming bei."
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:23
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:25
 msgid "Mindwendel Brainstorming"
 msgstr "Mindwendel Brainstorming"
 
@@ -332,27 +332,22 @@ msgstr "Teilen"
 msgid "Share brainstorming"
 msgstr "Teile Dein Brainstorming"
 
-#, elixir-format, fuzzy
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:67
+#, elixir-format
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:70
 msgid "Download as png"
 msgstr "Download als PNG"
 
-#, elixir-format, fuzzy
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:56
+#, elixir-format
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:58
 msgid "Download as svg"
 msgstr "Download als SVG"
 
 #, elixir-format
-#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:49
-msgid "Your brainstorming was successfully updated."
-msgstr "Dein Brainstorming wurde aktualisiert."
-
-#, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+#: lib/mindwendel_web/templates/static_page/home.html.leex:54
 msgid "Legal Disclosure"
 msgstr "Impressum"
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+#: lib/mindwendel_web/templates/static_page/home.html.leex:54
 msgid "Privacy"
 msgstr "Datenschutz"

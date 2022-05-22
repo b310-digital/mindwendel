@@ -11,17 +11,17 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:11
+#: lib/mindwendel_web/templates/static_page/home.html.leex:14
 msgid "Brainstorm"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:18
+#: lib/mindwendel_web/templates/static_page/home.html.leex:21
 msgid "How might we ..."
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:10
+#: lib/mindwendel_web/templates/static_page/home.html.leex:13
 msgid "Ready?"
 msgstr ""
 
@@ -51,17 +51,17 @@ msgid "Close"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:18
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:20
 msgid "Copy"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:9
+#: lib/mindwendel_web/templates/static_page/home.html.leex:12
 msgid "Create a challenge."
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:22
+#: lib/mindwendel_web/templates/static_page/home.html.leex:25
 msgid "Create!"
 msgstr ""
 
@@ -198,7 +198,7 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: lib/mindwendel_web/templates/static_page/home.html.leex:34
+#: lib/mindwendel_web/templates/static_page/home.html.leex:37
 msgid "Your latest brainstormings"
 msgstr ""
 
@@ -244,7 +244,7 @@ msgid "Brainstorming will be deleted "
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:26
+#: lib/mindwendel_web/templates/static_page/home.html.leex:29
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr ""
 
@@ -311,12 +311,12 @@ msgid "Your brainstorming was not saved."
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:22
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:24
 msgid "Join my brainstorming"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:23
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:25
 msgid "Mindwendel Brainstorming"
 msgstr ""
 
@@ -332,21 +332,21 @@ msgid "Share brainstorming"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:67
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:70
 msgid "Download as png"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:56
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.leex:58
 msgid "Download as svg"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+#: lib/mindwendel_web/templates/static_page/home.html.leex:54
 msgid "Legal Disclosure"
 msgstr ""
 
 #, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:49
+#: lib/mindwendel_web/templates/static_page/home.html.leex:54
 msgid "Privacy"
 msgstr ""
