@@ -24,6 +24,8 @@ end
 config :mindwendel, MindwendelWeb.Endpoint,
   force_ssl: [
     hsts: true,
+    # When mindwendel is behind a proxy that handles HTTPS, you may need to tell Plug to parse the proper protocol from the x-forwarded-* header.
+    # See https://hexdocs.pm/plug/Plug.SSL.html#module-x-forwarded
     rewrite_on: [
       :x_forwarded_host,
       :x_forwarded_port,
