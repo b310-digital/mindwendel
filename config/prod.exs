@@ -22,7 +22,10 @@ unless secret_key_base do
 end
 
 config :mindwendel, MindwendelWeb.Endpoint,
-  force_ssl: [hsts: true],
+  force_ssl: [
+    # hsts: true,
+    rewrite_on: [:x_forwarded_host, :x_forwarded_port, :x_forwarded_proto]
+  ],
   http: [
     transport_options: [
       socket_opts: [
