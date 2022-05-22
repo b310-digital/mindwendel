@@ -23,8 +23,12 @@ end
 
 config :mindwendel, MindwendelWeb.Endpoint,
   force_ssl: [
-    # hsts: true,
-    rewrite_on: [:x_forwarded_host, :x_forwarded_port, :x_forwarded_proto]
+    hsts: true,
+    rewrite_on: [
+      :x_forwarded_host,
+      :x_forwarded_port,
+      :x_forwarded_proto
+    ]
   ],
   http: [
     transport_options: [
