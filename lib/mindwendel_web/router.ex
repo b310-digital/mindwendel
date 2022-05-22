@@ -7,10 +7,16 @@ defmodule MindwendelWeb.Router do
         |> Keyword.fetch!(:host)
 
   @content_security_policy (case Mix.env() do
+                              # The `connect-src 'self'` does not resolve to websocket schemes in all browsers, e.g. Safari.
+                              # Therefore, we need to explicitely add the websocket schemes here, e.g. `connect-src ws://localhost:*` or `connect-src wss://#{@host}` .
+                              #
+                              # See the following references:
+                              # - https://github.com/w3c/webappsec-csp/issues/7
+                              # - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/connect-src
                               :prod ->
                                 "default-src 'none';" <>
                                   "script-src  'self' 'unsafe-eval' ;" <>
-                                  "connect-src 'self' wss://#{@host};" <>
+                                  "connect-src 'self' wss://#{@host} ;" <>
                                   "img-src     'self' data: ;" <>
                                   "style-src   'self' 'unsafe-inline' ;" <>
                                   "frame-src   'self' ;" <>
@@ -19,7 +25,7 @@ defmodule MindwendelWeb.Router do
                               _ ->
                                 "default-src 'none';" <>
                                   "script-src  'self' 'unsafe-eval' ;" <>
-                                  "connect-src 'self' ;" <>
+                                  "connect-src 'self' ws://#{@host}:* ws://localhost:* ws://0.0.0.0:* ;" <>
                                   "img-src     'self' data: ;" <>
                                   "style-src   'self' 'unsafe-inline' ;" <>
                                   "frame-src   'self' ;" <>
