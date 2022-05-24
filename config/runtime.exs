@@ -53,6 +53,7 @@ if config_env() != :test do
 
   url_host =
     System.get_env("URL_HOST") ||
+      System.get_env("HOST") ||
       raise """
       Environment variable URL_HOST is missing.
       The URL_HOST should be the domain name (wihtout protocol and port) for accessing your app.
@@ -61,10 +62,20 @@ if config_env() != :test do
   config :mindwendel, MindwendelWeb.Endpoint,
     url: [
       host: url_host,
-      port: String.to_integer(System.get_env("URL_PORT") || System.get_env("PORT") || "4000")
+      port:
+        String.to_integer(
+          System.get_env("MW_ENDPOINT_URL_PORT") ||
+            System.get_env("URL_PORT") ||
+            "80"
+        )
     ],
     http: [
-      port: String.to_integer(System.get_env("URL_PORT") || System.get_env("PORT") || "4000")
+      port:
+        String.to_integer(
+          System.get_env("MW_ENDPOINT_HTTP_PORT") ||
+            System.get_env("PORT") ||
+            "4000"
+        )
     ],
     secret_key_base: secret_key_base
 

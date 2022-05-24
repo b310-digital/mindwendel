@@ -21,22 +21,13 @@ unless secret_key_base do
   )
 end
 
-url_host = System.get_env("URL_HOST")
-
-unless url_host do
-  Logger.warn(
-    "Environment variable URL_HOST is missing.The URL_HOST should be the domain name (wihtout protocol and port) for accessing your app."
-  )
-end
-
 config :mindwendel, MindwendelWeb.Endpoint,
-  url: [
-    host: url_host,
-    port: String.to_integer(System.get_env("URL_PORT") || System.get_env("PORT") || "4000")
-  ],
   http: [
-    port: String.to_integer(System.get_env("URL_PORT") || System.get_env("PORT") || "4000"),
-    transport_options: [socket_opts: [:inet6]]
+    transport_options: [
+      socket_opts: [
+        :inet6
+      ]
+    ]
   ],
   secret_key_base: secret_key_base
 
