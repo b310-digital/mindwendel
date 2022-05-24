@@ -24,10 +24,11 @@ services:
       TEST_DATABASE_NAME: ${DOCKER_COMPOSE_APP_TEST_DATABASE_NAME:-mindwendel-test}
       TEST_DATABASE_USER_PASSWORD: ${DOCKER_COMPOSE_APP_TEST_DATABASE_USER_PASSWORD:-mindwendel-user-password}
       TEST_DATABASE_USER: ${DOCKER_COMPOSE_APP_TEST_DATABASE_USER:-mindwendel-user}
-      URL_HOST: ${DOCKER_COMPOSE_APP_URL_HOST:-0.0.0.0}
+      URL_HOST: ${DOCKER_COMPOSE_APP_URL_HOST:-localhost}
       URL_PORT: ${DOCKER_COMPOSE_APP_URL_PORT:-4000}
+      MW_ENDPOINT_HTTP_PORT: ${DOCKER_COMPOSE_APP_MW_ENDPOINT_HTTP_PORT:-4000}
     ports:
-      - "${DOCKER_COMPOSE_APP_URL_PORT:-4000}:${DOCKER_COMPOSE_APP_PORT:-4000}"
+      - "${DOCKER_COMPOSE_APP_PORT_PUBLISHED:-4000}:${DOCKER_COMPOSE_APP_PORT_TARGET:-4000}"
     depends_on:
       - postgres
     # Mount the lib and test folder to increase development speed (do not use for prod setups!)
