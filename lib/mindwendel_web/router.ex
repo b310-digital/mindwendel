@@ -16,7 +16,7 @@ defmodule MindwendelWeb.Router do
                               :prod ->
                                 "default-src 'none';" <>
                                   "script-src  'self' 'unsafe-eval' ;" <>
-                                  "connect-src 'self' wss://#{@host} ;" <>
+                                  "connect-src 'self' wss: ;" <>
                                   "img-src     'self' data: ;" <>
                                   "style-src   'self' 'unsafe-inline' ;" <>
                                   "frame-src   'self' ;" <>
