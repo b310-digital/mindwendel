@@ -66,8 +66,12 @@ if config_env() != :test do
         String.to_integer(
           System.get_env("MW_ENDPOINT_URL_PORT") ||
             System.get_env("URL_PORT") ||
-            "80"
-        )
+            "443"
+        ),
+      scheme:
+        System.get_env("MW_ENDPOINT_URL_SCHEME") ||
+          System.get_env("URL_SCHEME") ||
+          "https"
     ],
     http: [
       port:

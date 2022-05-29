@@ -1,37 +1,6 @@
 defmodule MindwendelWeb.Router do
   use MindwendelWeb, :router
 
-  @host :mindwendel
-        |> Application.fetch_env!(MindwendelWeb.Endpoint)
-        |> Keyword.fetch!(:url)
-        |> Keyword.fetch!(:host)
-
-  @content_security_policy (case Mix.env() do
-                              # The `connect-src 'self'` does not resolve to websocket schemes in all browsers, e.g. Safari.
-                              # Therefore, we need to explicitely add the websocket schemes here, e.g. `connect-src ws://localhost:*` or `connect-src wss://#{@host}` .
-                              #
-                              # See the following references:
-                              # - https://github.com/w3c/webappsec-csp/issues/7
-                              # - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/connect-src
-                              :prod ->
-                                "default-src 'none';" <>
-                                  "script-src  'self' 'unsafe-eval' ;" <>
-                                  "connect-src 'self' wss://#{@host} ;" <>
-                                  "img-src     'self' data: ;" <>
-                                  "style-src   'self' 'unsafe-inline' ;" <>
-                                  "frame-src   'self' ;" <>
-                                  "font-src    'self'"
-
-                              _ ->
-                                "default-src 'none';" <>
-                                  "script-src  'self' 'unsafe-eval' ;" <>
-                                  "connect-src 'self' ws://#{@host}:* ws://localhost:* ws://0.0.0.0:* ;" <>
-                                  "img-src     'self' data: ;" <>
-                                  "style-src   'self' 'unsafe-inline' ;" <>
-                                  "frame-src   'self' ;" <>
-                                  "font-src    'self'"
-                            end)
-
   pipeline :browser do
     plug(:accepts, ["html", "csv"])
     plug(:fetch_session)
@@ -39,10 +8,21 @@ defmodule MindwendelWeb.Router do
     plug(:put_root_layout, {MindwendelWeb.LayoutView, :root})
     plug(:protect_from_forgery)
 
-    plug(
-      :put_secure_browser_headers,
-      %{"content-security-policy" => @content_security_policy}
-    )
+    # Ususally, you can directly include the csp header in this borwser pipeline like this
+    # plug(
+    #   :put_secure_browser_headers,
+    #   %{"content-security-policy" => @content_security_policy}
+    # )
+    #
+    # See https://furlough.merecomplexities.com/elixir/phoenix/security/2021/02/26/content-security-policy-configuration-in-phoenix.html
+    # See https://elixirforum.com/t/phoenix-blog-post-content-security-policy-configuration-in-phoenix-with-liveview/37809
+    #
+    # However for this to work, we would need to know / define the env var URL_HOST and URL_PORT during compile-time as the router and its pipelines are compiled.
+    # This is certainly a problem when deploying the app with `mix release` as we do not know the URl_HOST etc. at this moment.
+
+    # Therefore, we are setting the CSP header dynamically in a custom plug after we set the other secure browser headers.
+    plug(:put_secure_browser_headers)
+    plug(Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy)
 
     plug(Mindwendel.Plugs.SetSessionUserId)
   end
