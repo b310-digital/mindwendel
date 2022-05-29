@@ -2,31 +2,47 @@ defmodule MindwendelWeb.Router do
   use MindwendelWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html", "csv"]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :put_root_layout, {MindwendelWeb.LayoutView, :root}
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-    plug Mindwendel.Plugs.SetSessionUserId
+    plug(:accepts, ["html", "csv"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:put_root_layout, {MindwendelWeb.LayoutView, :root})
+    plug(:protect_from_forgery)
+
+    # Ususally, you can directly include the csp header in this borwser pipeline like this
+    # plug(
+    #   :put_secure_browser_headers,
+    #   %{"content-security-policy" => @content_security_policy}
+    # )
+    #
+    # See https://furlough.merecomplexities.com/elixir/phoenix/security/2021/02/26/content-security-policy-configuration-in-phoenix.html
+    # See https://elixirforum.com/t/phoenix-blog-post-content-security-policy-configuration-in-phoenix-with-liveview/37809
+    #
+    # However for this to work, we would need to know / define the env var URL_HOST and URL_PORT during compile-time as the router and its pipelines are compiled.
+    # This is certainly a problem when deploying the app with `mix release` as we do not know the URl_HOST etc. at this moment.
+
+    # Therefore, we are setting the CSP header dynamically in a custom plug after we set the other secure browser headers.
+    plug(:put_secure_browser_headers)
+    plug(Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy)
+
+    plug(Mindwendel.Plugs.SetSessionUserId)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", MindwendelWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", StaticPageController, :home
+    get("/", StaticPageController, :home)
 
     scope "/admin", Admin, as: :admin do
-      delete "/brainstormings/:id", BrainstormingController, :delete
-      get "/brainstormings/:id/export", BrainstormingController, :export
-      live "/brainstormings/:id/edit", BrainstormingLive.Edit, :edit
+      delete("/brainstormings/:id", BrainstormingController, :delete)
+      get("/brainstormings/:id/export", BrainstormingController, :export)
+      live("/brainstormings/:id/edit", BrainstormingLive.Edit, :edit)
     end
 
-    post "/brainstormings", BrainstormingController, :create
+    post("/brainstormings", BrainstormingController, :create)
 
     live "/brainstormings/:id", BrainstormingLive.Show, :show
     live "/brainstormings/:id/show/edit", BrainstormingLive.Show, :edit
@@ -50,8 +66,8 @@ defmodule MindwendelWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through :browser
-      live_dashboard "/dashboard", metrics: MindwendelWeb.Telemetry
+      pipe_through(:browser)
+      live_dashboard("/dashboard", metrics: MindwendelWeb.Telemetry)
     end
   end
 end

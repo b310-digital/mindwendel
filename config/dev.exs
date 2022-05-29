@@ -12,6 +12,11 @@ config :mindwendel, Mindwendel.Repo,
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :mindwendel, MindwendelWeb.Endpoint,
+  url: [
+    host: "localhost",
+    port: 4000,
+    scheme: "http"
+  ],
   # Use this when you want to allow external requests
   http: [
     ip: {0, 0, 0, 0}
