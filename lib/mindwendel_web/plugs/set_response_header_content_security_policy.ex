@@ -11,11 +11,11 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
     Plug.Conn.put_resp_header(
       conn,
       @content_secrity_policy_response_header_key,
-      content_secrity_policy_directives()
+      content_security_policy_directives()
     )
   end
 
-  def content_secrity_policy_directives() do
+  def content_security_policy_directives() do
     # Usually, the csp directive `connect-src 'self'` is enough,
     # see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/connect-src .
     #
