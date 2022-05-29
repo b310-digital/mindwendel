@@ -130,4 +130,4 @@ jobs:
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
 
-      - run: mix sobelow --exit High
+      - run: mix sobelow --config
