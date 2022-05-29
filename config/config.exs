@@ -17,7 +17,11 @@ config :mindwendel, MindwendelWeb.Endpoint,
     accepts: ~w(html json),
     layout: false
   ],
-  url: [host: "localhost"],
+  url: [
+    host: "localhost",
+    port: 443,
+    scheme: "https"
+  ],
   pubsub_server: Mindwendel.PubSub,
   live_view: [signing_salt: "MBwQ4WtK"],
   code_reloader: false

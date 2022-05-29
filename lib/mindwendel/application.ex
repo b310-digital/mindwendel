@@ -6,6 +6,20 @@ defmodule Mindwendel.Application do
   use Application
 
   def start(_type, _args) do
+    # The URI module in elixir does not know about the default port for the websocket protocol,
+    # see https://hexdocs.pm/elixir/1.12/URI.html#default_port/1
+    #
+    # Therefore, we are defining the default ports here as suggested by the documentation,
+    # see https://hexdocs.pm/elixir/1.12/URI.html#default_port/2
+    #
+    # We apply the default ports for websockets uri as described here,
+    # see https://tools.ietf.org/id/draft-ietf-hybi-thewebsocketprotocol-09.html#ws_uris
+    #
+    # This lines were necessary to correctly construct websockets uris in this application,
+    # see lib/mindwendel_web/plugs/set_response_header_content_security_policy.ex
+    URI.default_port("ws", 80)
+    URI.default_port("wss", 443)
+
     children = [
       # Start the Ecto repository
       Mindwendel.Repo,
