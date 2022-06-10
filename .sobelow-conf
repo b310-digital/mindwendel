@@ -1,0 +1,6 @@
+[
+  exit: "high",
+  mark_skip_all: true,
+  skip: true,
+  verbose: true
+]

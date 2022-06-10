@@ -109,3 +109,25 @@ jobs:
           restore-keys: ${{ runner.os }}-mix-v4
 
       - run: mix format --check-formatted
+
+  check_mix_sobelow:
+    runs-on: ubuntu-latest
+    container: bitwalker/alpine-elixir-phoenix:1.11
+
+    needs: build_deps
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
+      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
+      # This is why we need to install it
+      - run: apk add tar
+      - uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-v4
+
+      - run: mix sobelow --config
