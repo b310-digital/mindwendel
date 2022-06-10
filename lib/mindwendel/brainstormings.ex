@@ -67,7 +67,12 @@ defmodule Mindwendel.Brainstormings do
         order_by: [desc_nulls_last: idea_count.like_count, desc: idea.inserted_at]
 
     Repo.all(idea_query)
-    |> Repo.preload([:link, :likes, :label, :idea_labels])
+    |> Repo.preload([
+      :link,
+      :likes,
+      :label,
+      :idea_labels
+    ])
   end
 
   def sort_ideas_by_labels(brainstorming_id) do
@@ -276,7 +281,12 @@ defmodule Mindwendel.Brainstormings do
     |> Repo.preload([
       :users,
       labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
-      ideas: [:link, :likes, :label, :idea_labels]
+      ideas: [
+        :link,
+        :likes,
+        :label,
+        :idea_labels
+      ]
     ])
   end
 
@@ -447,7 +457,10 @@ defmodule Mindwendel.Brainstormings do
 
   """
   def subscribe(brainstorming_id) do
-    Phoenix.PubSub.subscribe(Mindwendel.PubSub, "brainstormings:" <> brainstorming_id)
+    Phoenix.PubSub.subscribe(
+      Mindwendel.PubSub,
+      "brainstormings:" <> brainstorming_id
+    )
   end
 
   def broadcast({:ok, %Brainstorming{} = brainstorming}, event) do
@@ -473,7 +486,16 @@ defmodule Mindwendel.Brainstormings do
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
       "brainstormings:" <> idea.brainstorming_id,
-      {event, idea |> Repo.preload([:link, :likes, :label])}
+      {
+        event,
+        idea
+        |> Repo.preload([
+          :link,
+          :likes,
+          :label,
+          :idea_labels
+        ])
+      }
     )
 
     {:ok, idea}
