@@ -19,7 +19,7 @@
       </div>
       <div class="col-sm-12 col-md-12 col-xl-6">
         <div class="d-grid d-md-flex justify-content-md-end">
-          <%= live_patch gettext("New Idea"), to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming), class: "btn btn-primary m-1", title: gettext("New idea page (Hotkey: i)") %>
+          <%= live_patch gettext("New Idea"), to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming), class: "btn btn-primary m-1 d-none d-lg-block", title: gettext("New idea page (Hotkey: i)") %>
           <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
             <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Sort by likes") %>
           <% end %>
