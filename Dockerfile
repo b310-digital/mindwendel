@@ -1,4 +1,3 @@
-
 ARG ALPINE_VERSION=3.13
 
 FROM elixir:1.11-alpine as elixir_alpine
@@ -7,8 +6,12 @@ ENV APP_PATH=/app
 
 RUN apk add \
     --update-cache \
-    nodejs \
-    npm
+    --no-cache \
+    --repository http://dl-cdn.alpinelinux.org/alpine/v3.11/main/ \
+    # Version taken from https://pkgs.alpinelinux.org/packages?name=nodejs&branch=v3.11
+    nodejs=12.22.6-r0 \
+    # Version taken from https://pkgs.alpinelinux.org/packages?name=npm&branch=v3.11
+    npm=12.22.6-r0
 
 RUN mix do local.hex --force, local.rebar --force
 
