@@ -26,7 +26,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
       live(conn, Routes.admin_brainstorming_edit_path(conn, :edit, brainstorming.admin_url_id))
 
     assert edit_live_view
-           |> element("form")
+           |> element("form#form-edit-brainstorming")
            |> render_submit(%{
              brainstorming: %{name: "New brainstorming name"}
            }) =~
@@ -114,7 +114,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
 
     # It should still be there because the idea label is still connected iwth an idea and therefore cannot be deleted.
     assert edit_live_view
-           |> element(".invalid-feedback", "This label is associated with an idea")
+           |> element(".invalid-tooltip", "This label is associated with an idea")
            |> has_element?()
 
     assert edit_live_view

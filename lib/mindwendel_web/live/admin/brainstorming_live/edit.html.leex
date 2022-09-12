@@ -48,7 +48,7 @@
     <h4><%= gettext("Edit Brainstorming") %></h4>
   </div>
   <div class="card-body">
-    <%= f = form_for @changeset, "#", [phx_submit: :save, phx_change: :save] %>
+    <%= f = form_for @changeset, "#", [phx_submit: :save, phx_change: :save, id: "form-edit-brainstorming"] %>
       <div class="mb-3 position-relative">
         <%= label f, :name, class: "form-label" %>
         <%= text_input f, :name, class: "form-control #{if f.errors[:name], do: "is-invalid"} #{if f.source.changes[:name], do: "is-valid"}", phx_debounce: 500, phx_feedback_for: input_id(f, :name) %>
