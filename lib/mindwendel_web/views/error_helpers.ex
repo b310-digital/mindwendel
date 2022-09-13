@@ -9,11 +9,19 @@ defmodule MindwendelWeb.ErrorHelpers do
   Generates tag for inlined form input errors.
   """
   def error_tag(form, field) do
+    error_tag(form, field, error_tag_css_class: "invalid-feedback")
+  end
+
+  def error_tag_tooltip(form, field) do
+    error_tag(form, field, error_tag_css_class: "invalid-tooltip")
+  end
+
+  def error_tag(form, field, error_tag_css_class: error_tag_css_class) do
     form.errors
     |> Keyword.get_values(field)
     |> Enum.map(fn error ->
       content_tag(:span, translate_error(error),
-        class: "invalid-feedback",
+        class: error_tag_css_class,
         phx_feedback_for: input_id(form, field)
       )
     end)
