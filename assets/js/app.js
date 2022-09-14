@@ -22,6 +22,7 @@ import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 import QRCodeStyling from "qr-code-styling";
 import ClipboardJS from "clipboard"
+import {buildQrCodeOptions} from "./qrCodeUtils.js"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
@@ -45,10 +46,8 @@ Hooks.NativeSharingButton = {
       this.el.addEventListener('click', (event) => {
         navigator.share(shareData)
         .then() // Do nothing
-        .catch(err => { console.error(`${err}`) }) 
+        .catch(err => { console.log(`Error: ${err}`) }) 
       })
-    } else {
-      this.el.classList.add("d-none")
     }
   }
 }
@@ -88,30 +87,6 @@ Hooks.Modal = {
     })
   }
 }
-
-const buildQrCodeOptions = (qrCodeUrl) => ({
-  backgroundOptions: {
-    color: "#fff",
-  },
-  cornersDotOptions: {
-    type: 'dot'
-  },
-  cornersSquareOptions: {
-    type: 'square'
-  },
-  dotsOptions: {
-    color: '#000000',
-    type: "dots",
-  },
-  imageOptions: {
-    crossOrigin: "anonymous",
-    margin: 20,
-  },
-  data: qrCodeUrl || "",
-  height: 300,
-  type: "svg",
-  width: 300
-})
 
 Hooks.QrCodeCanvas = {
   mounted() {

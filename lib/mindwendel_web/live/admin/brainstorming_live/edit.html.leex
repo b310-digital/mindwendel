@@ -1,33 +1,67 @@
-<div class="card">
-<div class="card-header">
-  <h4><%= gettext("Administration for brainstorming: %{name}", name: @brainstorming.name) %></h4>
-</div>
-<div class="card-body">
-  <p><%= gettext("Save this link to update / delete your brainstorming later on:") %></p>
-    <%= tag :input, id: "brainstorming-link", type: "text", class: "form-control", value: URI.to_string(@uri), aria_describedby: "basic-addon1", readonly: true %>
+<div class="card mb-3">
+  <div class="card-header">
+    <h4><%= gettext("Administration for brainstorming: %{name}", name: @brainstorming.name) %></h4>
+  </div>
+  <div class="card-body">
+    <p><%= gettext("Save this link to update / delete your brainstorming later on:") %></p>
+    <div class="input-group">
+      <input
+        aria-describedby="brainstorming-link-copy-to-clipboard-button"
+        aria-label="Url to brainstorming"
+        class="form-control"
+        id="brainstorming-link-input-readonly"
+        readonly="true"
+        type="text"
+        value="<%= URI.to_string(@uri) %>"
+      />
+      <button
+        class="btn btn-outline-secondary"
+        data-clipboard-target="#brainstorming-link-input-readonly"
+        id="brainstorming-link-copy-to-clipboard-button"
+        phx-hook="CopyBrainstormingLinkButton"
+        type="button"
+      >
+        <%= gettext("Copy") %>
+      </button>
+      <button
+        aria-label="Share brainstorming"
+        class="btn btn-outline-secondary"
+        data-native-sharing-button-share-data-text="<%= gettext("Join my brainstorming") %>"
+        data-native-sharing-button-share-data-title="<%= gettext("Mindwendel Brainstorming") %>"
+        data-native-sharing-button-share-data-url="<%= URI.to_string(@uri) %>"
+        id="brainstorming-link-share-button"
+        phx-hook="NativeSharingButton"
+      >
+        <i class="bi-share-fill"></i>
+      </button>
+    </div>
     <br />
     <i class="far fa-arrow-alt-circle-right"></i>
     <%= link gettext("Proceed to your brainstorming"), to: Routes.brainstorming_show_path(@socket, :show, @brainstorming), class: "fw-bold" %>
     <br />
     <p>(<%= gettext("Brainstorming will be deleted ") %> <%= Timex.format!(brainstorming_available_until(@brainstorming), "{relative}", :relative) %>)</p>
+  </div>
+</div>
 
-    <h5><%= gettext("Edit Brainstorming") %></h5>
-    <hr />
-
-    <%= f = form_for @changeset, "#", [phx_submit: :save, phx_change: :save] %>
+<div class="card mb-3">
+  <div class="card-header">
+    <h4><%= gettext("Edit Brainstorming") %></h4>
+  </div>
+  <div class="card-body">
+    <%= f = form_for @changeset, "#", [phx_submit: :save, phx_change: :save, id: "form-edit-brainstorming"] %>
       <div class="mb-3 position-relative">
         <%= label f, :name, class: "form-label" %>
         <%= text_input f, :name, class: "form-control #{if f.errors[:name], do: "is-invalid"} #{if f.source.changes[:name], do: "is-valid"}", phx_debounce: 500, phx_feedback_for: input_id(f, :name) %>
-        <%= error_tag f, :name %>
+        <%= error_tag_tooltip f, :name %>
         <%= content_tag(:div,
           class: "valid-tooltip",
           phx_feedback_for: input_id(f, :name)
         ) do %>
-        <%= gettext("Saved") %>
+          <%= gettext("Saved") %>
         <% end %>
       </div>
 
-      <div class="form-check mb-3">
+      <div class="form-check mb-3 position-relative">
         <%= checkbox f, :option_show_link_to_settings, id: "checkbox-option-show-link-to-settings", class: "form-check-input #{if f.source.changes[:option_show_link_to_settings] != nil, do: "is-valid"}" %>
         <%= label f, :option_show_link_to_settings,
             gettext("Show brainstorming settings link for all users"),
@@ -45,32 +79,39 @@
           <%= gettext("Saved") %>
         <% end %>
       </div>
+    </form>
+  </div>
+</div>
 
-      <h5><%= gettext("Edit Brainstorming Labels") %></h5>
-
-      <hr />
-
+<div class="card mb-3">
+  <div class="card-header">
+    <h4><%= gettext("Edit Brainstorming Labels") %></h4>
+  </div>
+  <div class="card-body">
+    <%= f = form_for @changeset, "#", [phx_submit: :save, phx_change: :save] %>
       <div class="row">
-        <%= inputs_for f, :labels, fn p -> %>
-          <div class="input-group has-validation mb-3">
-            <%= color_input p, :color, class: "form-control form-control-color #{if p.errors[:color], do: "is-invalid"}  #{if p.source.changes[:name] || p.source.changes[:color], do: "border-success"}", title: gettext("Choose the label color") %>
-            <%= text_input p, :name, class: "form-control #{if p.errors[:name] || p.errors[:idea_idea_labels] || f.errors[:labels], do: "is-invalid"} #{if p.source.changes[:name] || p.source.changes[:color], do: "is-valid"}", placeholder: gettext("Type the label name"), phx_debounce: 500 %>
-            <button class="btn btn-outline-secondary" type="button" phx-click="remove_idea_label" value="<%= input_value(p, :id) %>"><%= gettext("Remove idea label") %></button>
-            <%= error_tag p, :color %>
-            <%= error_tag p, :name %>
-            <%= if message = p.errors[:idea_idea_labels] do %>
-                <span class="is-invalid"></span>
-                <span class="invalid-feedback" phx_feedback_for="<%= input_id(p, :name)%>"><%= translate_error(message) %></span>
-            <% end %>
-            <%= if message = f.errors[:labels] do %>
-              <span class="invalid-feedback" phx_feedback_for="<%= input_id(f, :labels)%>"><%= translate_error(message) %></span>
-            <% end %>
-            <%= content_tag(:div, class: "valid-tooltip", phx_feedback_for: input_id(f, :labels)) do %>
-              <%= gettext("Saved") %>
-            <% end %>
-          </div>
-        <% end %>
-        <%= error_tag f, :labels %>
+        <div class="col">
+          <%= inputs_for f, :labels, fn p -> %>
+            <div class="input-group has-validation mb-3 ">
+              <%= color_input p, :color, class: "form-control form-control-color #{if p.errors[:color], do: "is-invalid"}  #{if p.source.changes[:name] || p.source.changes[:color], do: "border-success"}", style: "max-width: 50px", title: gettext("Choose the label color") %>
+              <%= text_input p, :name, class: "form-control #{if p.errors[:name] || p.errors[:idea_idea_labels] || f.errors[:labels], do: "is-invalid"} #{if p.source.changes[:name] || p.source.changes[:color], do: "is-valid"}", placeholder: gettext("Type the label name"), phx_debounce: 500 %>
+              <button class="btn btn-outline-secondary" type="button" phx-click="remove_idea_label" value="<%= input_value(p, :id) %>"><%= gettext("Remove idea label") %></button>
+              <%= error_tag_tooltip p, :color %>
+              <%= error_tag_tooltip p, :name %>
+              <%= if message = p.errors[:idea_idea_labels] do %>
+                  <span class="is-invalid"></span>
+                  <span class="invalid-tooltip" phx_feedback_for="<%= input_id(p, :name)%>"><%= translate_error(message) %></span>
+              <% end %>
+              <%= if message = f.errors[:labels] do %>
+                <span class="invalid-tooltip" phx_feedback_for="<%= input_id(f, :labels)%>"><%= translate_error(message) %></span>
+              <% end %>
+              <%= content_tag(:span, class: "valid-tooltip", phx_feedback_for: input_id(f, :labels)) do %>
+                <%= gettext("Saved") %>
+              <% end %>
+            </div>
+          <% end %>
+          <%= error_tag_tooltip f, :labels %>
+        </div>
       </div>
 
       <div class="row mb-3">
@@ -78,24 +119,36 @@
           <button type="button" class="btn btn-secondary" phx-click="add_idea_label"><%= gettext("Add idea label") %></button>
         </div>
       </div>
-
     </form>
+  </div>
+</div>
 
-    <br /><br />
-
-    <br />
-    <h5><%= gettext("Export") %></h5>
-    <hr />
+<div class="card mb-3">
+  <div class="card-header">
+    <h4><%= gettext("Export") %></h4>
+  </div>
+  <div class="card-body">
     <%= link gettext("Export to CSV"), to: Routes.admin_brainstorming_path(@socket, :export, @brainstorming.admin_url_id, _format: "csv"), class: "fw-bold"%><br />
     <%= link gettext("Export to HTML"), to: Routes.admin_brainstorming_path(@socket, :export, @brainstorming.admin_url_id), class: "fw-bold" %>
-    <br /><br />
+  </div>
+</div>
 
-    <h5><%= gettext("Delete Brainstorming") %></h5>
-    <hr />
-    <p><%= gettext("Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone") %></p>
-    <div class="row">
-      <div class="col-lg-12 col-xl-2 d-grid gap-2">
-        <%= button(gettext("Delete"), to: Routes.admin_brainstorming_path(@socket, :delete, @brainstorming.admin_url_id), method: :delete, class: "btn btn-danger") %>
+<div class="card border-danger mb-3">
+  <div class="card-header">
+    <h4><%= gettext("Delete Brainstorming") %></h4>
+  </div>
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col">
+        <p>
+          <%= gettext("Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone") %>
+        </p>
+        <%= button gettext("Delete"),
+          "data-confirm": gettext("Brainstorming delete are you sure"),
+          class: "btn btn-danger",
+          method: :delete,
+          to: Routes.admin_brainstorming_path(@socket, :delete, @brainstorming.admin_url_id)
+        %>
       </div>
     </div>
   </div>
