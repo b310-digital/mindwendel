@@ -5,7 +5,7 @@
 
 - Note 1
 
-## Result
+## Results
 <!-- Add screenshots or other visuals to describe what has changed. -->
 
 - Result 1
