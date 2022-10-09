@@ -40,7 +40,7 @@
         </div>
       </div>
     </div>
-  
+
     <%= if @live_action in [:edit] do %>
       <%= live_modal MindwendelWeb.BrainstormingLive.FormComponent,
         id: @brainstorming.id,
@@ -60,6 +60,17 @@
         idea: @idea,
         return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming) %>
     <% end %>
+
+  <%= if @live_action in [:edit_idea] do %>
+    <%= live_modal @socket, MindwendelWeb.IdeaLive.FormComponent,
+      id: :update,
+      title: gettext("Update idea"),
+      action: :update,
+      brainstorming: @brainstorming,
+      current_user: @current_user,
+      idea: @idea,
+      return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming) %>
+  <% end %>
 
     <%= if @live_action in [:share] do %>
       <%= live_modal MindwendelWeb.BrainstormingLive.ShareComponent,

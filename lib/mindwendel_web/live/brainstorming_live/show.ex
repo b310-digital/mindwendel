@@ -26,6 +26,28 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     }
   end
 
+  def mount(%{"brainstorming_id" => brainstorming_id, "idea_id" => _idea_id}, session, socket) do
+    mount(%{"id" => brainstorming_id}, session, socket)
+  end
+
+  def handle_params(
+        %{"brainstorming_id" => brainstorming_id, "idea_id" => idea_id},
+        uri,
+        socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> assign(:ideas, Brainstormings.list_ideas_for_brainstorming(brainstorming_id))
+      |> assign(:idea, Brainstormings.get_idea!(idea_id))
+      |> assign(:uri, uri)
+      |> apply_action(socket.assigns.live_action,
+        brainstorming_id: brainstorming_id,
+        idea_id: idea_id
+      )
+    }
+  end
+
   @impl true
   def handle_params(%{"id" => id}, uri, socket) do
     {:noreply,
@@ -64,6 +86,10 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     new_ideas = Enum.map(socket.assigns.ideas, fn e -> if e.id == idea.id, do: idea, else: e end)
 
     {:noreply, assign(socket, :ideas, new_ideas)}
+  end
+
+  defp apply_action(socket, :edit_idea, brainstorming_id: _brainstorming_id, idea_id: _idea_id) do
+    socket
   end
 
   defp apply_action(socket, :new_idea, brainstorming_id) do
