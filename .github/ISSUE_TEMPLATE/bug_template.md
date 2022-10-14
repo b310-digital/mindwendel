@@ -1,5 +1,3 @@
-<!--- Provide a general summary of the issue in the Title above -->
-
 ## Further Notes
 <!--- Provide a more detailed introduction to the issue itself, and why you consider it to be a bug -->
 
@@ -7,7 +5,7 @@
 <!--- Tell us what should happen -->
 
 ## Actual Behavior
-<!--- Tell us what happens instead, e.g. add stacktrace -->
+<!--- Tell us what happens instead, e.g. stacktrace -->
 
 ## Steps to Reproduce
 <!--- Provide a link to a live example, or an unambiguous set of steps to -->
@@ -20,7 +18,7 @@
 - Version used:
 - Browser Name and version:
 - Operating System and version (desktop or mobile):
-- Link to brainstorming (if possible)
+- Link to brainstorming (if possible):
 
 ## Checklist
 
