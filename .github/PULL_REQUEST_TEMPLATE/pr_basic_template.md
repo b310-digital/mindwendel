@@ -5,10 +5,11 @@
 
 - Note 1
 
-## Screenshots
+## New Feature / Enhancement
 <!-- Add screenshots or other visuals to describe what has changed. -->
 
-- Screenshot 1
+- Screenshot
+- Screencast
 
 ## Checklist
 
