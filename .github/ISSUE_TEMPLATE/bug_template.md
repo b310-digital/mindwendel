@@ -7,7 +7,7 @@
 <!--- Tell us what should happen -->
 
 ## Actual Behavior
-<!--- Tell us what happens instead -->
+<!--- Tell us what happens instead, e.g. add stacktrace -->
 
 ## Steps to Reproduce
 <!--- Provide a link to a live example, or an unambiguous set of steps to -->
@@ -17,10 +17,10 @@
 
 ## Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->
-* Version used:
-* Browser Name and version:
-* Operating System and version (desktop or mobile):
-* Link to your project:
+- Version used:
+- Browser Name and version:
+- Operating System and version (desktop or mobile):
+- Link to brainstorming (if possible)
 
 ## Checklist
 
