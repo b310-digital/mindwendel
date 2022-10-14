@@ -1,5 +1,3 @@
-<!--- Provide a general summary of the issue in the Title above -->
-
 ## Further Notes
 <!--- Provide a detailed description of the change or addition you are proposing -->
 
