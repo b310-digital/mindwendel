@@ -9,16 +9,11 @@
 ## Actual Behavior
 <!--- Tell us what happens instead -->
 
-## Possible Fix
-<!--- Not obligatory, but suggest a fix or reason for the bug -->
-
 ## Steps to Reproduce
 <!--- Provide a link to a live example, or an unambiguous set of steps to -->
 <!--- reproduce this bug. Include code to reproduce, if relevant -->
 1.
 2.
-3.
-4.
 
 ## Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->
