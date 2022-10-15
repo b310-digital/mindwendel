@@ -17,7 +17,7 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
 
   def content_security_policy_directives() do
     [
-      "default-src 'none' ; ",
+      "default-src 'none' ;",
 
       # Usually, the csp directive `connect-src 'self'` is enough,
       # see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/connect-src .
@@ -25,7 +25,7 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
       # However, the `connect-src 'self'` does not resolve to websocket schemes in all browsers, e.g. Safari,
       # see https://github.com/w3c/webappsec-csp/issues/7 .
       #
-      # Therefore, we need to explicitly add the allowed websocket uris here so that live views will work in safari in combination with CSP policies.
+      # Therefore, we need to explicitly add the allowed websocket uris here so that live views will work in Safari in combination with CSP policies.
       # e.g. `connect-src ws://localhost:*` or `connect-src wss://#{@host}` .
       "connect-src 'self' #{
         %URI{
@@ -33,14 +33,14 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
           host: get_host(),
           port: get_port()
         }
-      } ; ",
-      "font-src    'self' ; ",
-      "frame-src   'self' ; ",
+      } ;",
+      "font-src    'self' ;",
+      "frame-src   'self' ;",
 
       # We add csp sources http: and https: to allow the browser to load the link preview image extracted from the idea body
-      "img-src     'self' data: https: http: ; ",
-      "script-src  'self' 'unsafe-eval' ; ",
-      "style-src   'self' 'unsafe-inline' ; "
+      "img-src     'self' data: https: http: ;",
+      "script-src  'self' 'unsafe-eval' ;",
+      "style-src   'self' 'unsafe-inline' ;"
     ]
     |> Enum.join(" ")
   end
