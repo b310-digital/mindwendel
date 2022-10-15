@@ -9,25 +9,25 @@ defmodule MindwendelServices.UrlPreviewTest do
 
   describe "extract_url" do
     test "extracts the url with no other text" do
-      assert "http://myname.de" = UrlPreview.extract_url("http://myname.de")
+      assert UrlPreview.extract_url("http://myname.de") == "http://myname.de"
     end
 
     test "extracts the url with wrapping text" do
-      assert "http://myname.de" = UrlPreview.extract_url("Some text http://myname.de also here")
+      assert UrlPreview.extract_url("Some text http://myname.de also here") == "http://myname.de"
     end
 
     test "extracts only the first url" do
-      assert "http://myname.de" =
-               UrlPreview.extract_url("http://myname.de http://someothername.de")
+      assert UrlPreview.extract_url("http://myname.de http://someothername.de") ==
+               "http://myname.de"
     end
 
     test "extracts the url with query params" do
-      assert "http://myname.de/blog/1234sometest&query=test" =
-               UrlPreview.extract_url("http://myname.de/blog/1234sometest&query=test")
+      assert UrlPreview.extract_url("http://myname.de/blog/1234sometest&query=test") ==
+               "http://myname.de/blog/1234sometest&query=test"
     end
 
     test "extracts empty string if no url is given" do
-      assert "" = UrlPreview.extract_url("No Url here")
+      assert UrlPreview.extract_url("No Url here") == ""
     end
   end
 
