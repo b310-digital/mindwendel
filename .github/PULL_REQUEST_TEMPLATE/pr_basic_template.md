@@ -10,7 +10,3 @@
 
 - Screenshot
 - Screencast
-
-## Checklist
-
-- [ ] Item 1 
