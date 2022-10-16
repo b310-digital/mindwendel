@@ -11,7 +11,7 @@
 - ...
 
 ## Expected Behavior (Optional)
-<!--- Tell us what should happen -->
+<!--- Tell us what should happen. Leave it empty, if there is no relevant input. -->
 
 ## Environment (Optional)
 <!--- Include as many relevant details about the environment you experienced the bug in -->
