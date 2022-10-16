@@ -1,19 +1,19 @@
 ## Further Notes
 <!--- Provide a more detailed introduction to the issue itself, and why you consider it to be a bug -->
 
-## Expected Behavior
+## Actual Behavior
+<!--- Tell us what happens instead, e.g. stacktrace, screenshots, broken links and steps to reproduce -->
+<!--- Provide a link to a live example, if possible. -->
+
+- Go to link https://www.mindwendel.com/XXXXXXX
+- Click there
+- Boom 💥 => ERROR
+- ...
+
+## Expected Behavior (Optional)
 <!--- Tell us what should happen -->
 
-## Actual Behavior
-<!--- Tell us what happens instead, e.g. stacktrace -->
-
-## Steps to Reproduce
-<!--- Provide a link to a live example, or an unambiguous set of steps to -->
-<!--- reproduce this bug. Include code to reproduce, if relevant -->
-1.
-2.
-
-## Your Environment
+## Environment (Optional)
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 - Version used:
 - Browser Name and version:
@@ -21,5 +21,7 @@
 - Link to brainstorming (if possible):
 
 ## Checklist
+<!-- Add additional tasks to consider -->
 
-- [ ] Item 1
+- [ ] Fix bug
+- [ ] Add test to avoid bug in the future
