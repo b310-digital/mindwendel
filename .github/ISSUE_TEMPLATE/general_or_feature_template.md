@@ -10,4 +10,6 @@
 
 ## Checklist
 
-- [ ] Item 1
+- [ ] Add feature / enhancement
+- [ ] Add test
+- [ ] ...
