@@ -45,7 +45,7 @@ defmodule MindwendelWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {MindwendelWeb.LayoutView, "live.html"}
+        layout: {MindwendelWeb.LayoutView, :live}
 
       unquote(view_helpers())
     end
@@ -82,7 +82,7 @@ defmodule MindwendelWeb do
       use Phoenix.HTML
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
-      import Phoenix.LiveView.Helpers
+      use Phoenix.Component
       import MindwendelWeb.LiveHelpers
 
       # Import basic rendering functionality (render, render_layout, etc)

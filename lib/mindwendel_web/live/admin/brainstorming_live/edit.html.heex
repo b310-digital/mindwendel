@@ -12,7 +12,7 @@
         id="brainstorming-link-input-readonly"
         readonly="true"
         type="text"
-        value="<%= URI.to_string(@uri) %>"
+        value={ URI.to_string(@uri) }
       />
       <button
         class="btn btn-outline-secondary"
@@ -26,9 +26,9 @@
       <button
         aria-label="Share brainstorming"
         class="btn btn-outline-secondary"
-        data-native-sharing-button-share-data-text="<%= gettext("Join my brainstorming") %>"
-        data-native-sharing-button-share-data-title="<%= gettext("Mindwendel Brainstorming") %>"
-        data-native-sharing-button-share-data-url="<%= URI.to_string(@uri) %>"
+        data-native-sharing-button-share-data-text={ gettext("Join my brainstorming") }
+        data-native-sharing-button-share-data-title={ gettext("Mindwendel Brainstorming") }
+        data-native-sharing-button-share-data-url={ URI.to_string(@uri) }
         id="brainstorming-link-share-button"
         phx-hook="NativeSharingButton"
       >
@@ -48,7 +48,7 @@
     <h4><%= gettext("Edit Brainstorming") %></h4>
   </div>
   <div class="card-body">
-    <%= f = form_for @changeset, "#", [phx_submit: :save, phx_change: :save, id: "form-edit-brainstorming"] %>
+    <%= form_for @changeset, "#", [phx_submit: :save, phx_change: :save, id: "form-edit-brainstorming"], fn f -> %>
       <div class="mb-3 position-relative">
         <%= label f, :name, class: "form-label" %>
         <%= text_input f, :name, class: "form-control #{if f.errors[:name], do: "is-invalid"} #{if f.source.changes[:name], do: "is-valid"}", phx_debounce: 500, phx_feedback_for: input_id(f, :name) %>
@@ -79,7 +79,7 @@
           <%= gettext("Saved") %>
         <% end %>
       </div>
-    </form>
+    <% end %>
   </div>
 </div>
 
@@ -88,22 +88,22 @@
     <h4><%= gettext("Edit Brainstorming Labels") %></h4>
   </div>
   <div class="card-body">
-    <%= f = form_for @changeset, "#", [phx_submit: :save, phx_change: :save] %>
+    <%= form_for @changeset, "#", [phx_submit: :save, phx_change: :save], fn f -> %>
       <div class="row">
         <div class="col">
           <%= inputs_for f, :labels, fn p -> %>
             <div class="input-group has-validation mb-3 ">
               <%= color_input p, :color, class: "form-control form-control-color #{if p.errors[:color], do: "is-invalid"}  #{if p.source.changes[:name] || p.source.changes[:color], do: "border-success"}", style: "max-width: 50px", title: gettext("Choose the label color") %>
               <%= text_input p, :name, class: "form-control #{if p.errors[:name] || p.errors[:idea_idea_labels] || f.errors[:labels], do: "is-invalid"} #{if p.source.changes[:name] || p.source.changes[:color], do: "is-valid"}", placeholder: gettext("Type the label name"), phx_debounce: 500 %>
-              <button class="btn btn-outline-secondary" type="button" phx-click="remove_idea_label" value="<%= input_value(p, :id) %>"><%= gettext("Remove idea label") %></button>
+              <button class="btn btn-outline-secondary" type="button" phx-click="remove_idea_label" value={ input_value(p, :id) }><%= gettext("Remove idea label") %></button>
               <%= error_tag_tooltip p, :color %>
               <%= error_tag_tooltip p, :name %>
               <%= if message = p.errors[:idea_idea_labels] do %>
                   <span class="is-invalid"></span>
-                  <span class="invalid-tooltip" phx_feedback_for="<%= input_id(p, :name)%>"><%= translate_error(message) %></span>
+                  <span class="invalid-tooltip" phx_feedback_for={ input_id(p, :name)}><%= translate_error(message) %></span>
               <% end %>
               <%= if message = f.errors[:labels] do %>
-                <span class="invalid-tooltip" phx_feedback_for="<%= input_id(f, :labels)%>"><%= translate_error(message) %></span>
+                <span class="invalid-tooltip" phx_feedback_for={ input_id(f, :labels)}><%= translate_error(message) %></span>
               <% end %>
               <%= content_tag(:span, class: "valid-tooltip", phx_feedback_for: input_id(f, :labels)) do %>
                 <%= gettext("Saved") %>
@@ -119,7 +119,7 @@
           <button type="button" class="btn btn-secondary" phx-click="add_idea_label"><%= gettext("Add idea label") %></button>
         </div>
       </div>
-    </form>
+    <% end %>
   </div>
 </div>
 
