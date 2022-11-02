@@ -9,7 +9,7 @@
 # - https://github.com/erlang/docker-erlang-otp/blob/master/23/alpine/Dockerfile
 ARG ALPINE_VERSION=3.16
 
-FROM elixir:1.13.4-alpine as elixir_alpine
+FROM elixir:1.13.1-alpine as elixir_alpine
 
 ENV APP_PATH=/app
 
