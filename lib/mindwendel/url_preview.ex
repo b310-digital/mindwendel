@@ -51,7 +51,7 @@ defmodule Mindwendel.UrlPreview do
     parsed_document
     |> Floki.find("meta[name=description]")
     |> Floki.attribute("content")
-    |> List.first()
+    |> List.first("")
     |> String.slice(0, 300)
   end
 

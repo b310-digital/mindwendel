@@ -82,7 +82,7 @@ defmodule MindwendelWeb do
       use Phoenix.HTML
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
-      use Phoenix.Component
+      import Phoenix.Component
       import MindwendelWeb.LiveHelpers
 
       # Import basic rendering functionality (render, render_layout, etc)
