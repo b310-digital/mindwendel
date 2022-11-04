@@ -1,5 +1,5 @@
 # IMPORTANT NOTE: To avoid compliation and runtime errors, this ALPINE_VERSION needs to match the alpine version of the stage `production_build`.
-# As the the stage `production_build` uses the docker image `elixir:1.11-alpine` as base image it is not clear which alpine version is used here.
+# As the the stage `production_build` uses the docker image `elixir:1.13.1-alpine` as base image it is not clear which alpine version is used here.
 # Unfortunately, the maintainers of docker image do not provide the possibility to pin the alpine version of the image.
 # However, they also change the underlying alpine version from time to time. This can cause compilation and runtime errors,
 # e.g. https://stackoverflow.com/questions/72609505/issue-with-building-elixir-and-beam-on-alpine-linux .
@@ -9,7 +9,7 @@
 # - https://github.com/erlang/docker-erlang-otp/blob/master/23/alpine/Dockerfile
 ARG ALPINE_VERSION=3.16
 
-FROM elixir:1.11-alpine as elixir_alpine
+FROM elixir:1.13.1-alpine as elixir_alpine
 
 ENV APP_PATH=/app
 

@@ -5,9 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' >
     <%= csrf_meta_tag() %>
-    <%= live_title_tag assigns[:page_title] || "Mindwendel" %>
-    <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    <.live_title>
+      <%= assigns[:page_title] || "Mindwendel" %>
+    </.live_title>
+    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/css/app.css")}/>
+    <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/js/app.js")}></script>
   </head>
 
   <body class="d-flex h-100" style="background-color: #000000;">
