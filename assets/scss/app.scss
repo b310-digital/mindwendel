@@ -1,7 +1,10 @@
-/* This file is for your main application css. */
-@import "../node_modules/nprogress/nprogress.css";
+/* This file is for your main application css. It will be compiled to app.css, which is then loaded by esbuild. */
+@import "../node_modules/nprogress/nprogress";
 @import "_bootstrap_custom.scss";
-@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+
+$bootstrap-icons-font-dir: "../node_modules/bootstrap-icons/font/fonts/";
+
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons";
 @import "live/idea_live/_index_component.scss";
 
 .footer {
@@ -20,7 +23,7 @@ a .bi {
 }
 
 .bg-mindwendel {
-  background-image: url("../static/images/mindwendel.jpg");
+  background-image: url("/images/mindwendel.jpg");
   background-repeat: no-repeat;
   background-size: cover;
 }

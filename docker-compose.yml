@@ -38,7 +38,6 @@ services:
       - /app/_build/
       - /app/deps/
       - /app/assets/node_modules
-      - /app/priv/static
 
   postgres:
     image: postgres:12-alpine
