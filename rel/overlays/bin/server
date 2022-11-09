@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/sh
+cd -P -- "$(dirname -- "$0")"
 
 # Only continue if database is ready
 while ! pg_isready -q -h $DATABASE_HOST -p $DATABASE_PORT -U $DATABASE_USER
@@ -7,5 +8,6 @@ do
   sleep 2
 done
 
-./bin/mindwendel eval "Mindwendel.Release.migrate"
-exec ./bin/mindwendel start
+./mindwendel eval "Mindwendel.Release.migrate"
+
+PHX_SERVER=true exec ./mindwendel start

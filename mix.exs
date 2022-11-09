@@ -46,6 +46,8 @@ defmodule Mindwendel.MixProject do
       {:phoenix_live_dashboard, "0.7.2"},
       {:phoenix_live_reload, "1.3.3", only: :dev},
       {:phoenix_live_view, "0.18.3"},
+      {:esbuild, "0.5.0", runtime: Mix.env() == :dev},
+      {:dart_sass, "0.5.0", runtime: Mix.env() == :dev},
       {:bypass, "~> 2.1", only: :test},
       {:csv, "~> 2.4"},
       {:ecto_sql, "3.8.3"},
@@ -75,7 +77,13 @@ defmodule Mindwendel.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.test.prepare": ["cmd MIX_ENV=test mix ecto.reset"],
       setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      "assets.deploy": [
+        # run sass first, since we'll compile our scss files to css, and include this in esbuild:
+        "sass default --no-source-map --style=compressed",
+        "esbuild default --minify",
+        "phx.digest"
+      ]
     ]
   end
 end
