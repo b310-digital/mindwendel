@@ -27,13 +27,7 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
       #
       # Therefore, we need to explicitly add the allowed websocket uris here so that live views will work in Safari in combination with CSP policies.
       # e.g. `connect-src ws://localhost:*` or `connect-src wss://#{@host}` .
-      "connect-src 'self' #{
-        %URI{
-          scheme: get_websocket_scheme(),
-          host: get_host(),
-          port: get_port()
-        }
-      } ;",
+      "connect-src 'self' #{%URI{scheme: get_websocket_scheme(), host: get_host(), port: get_port()}} ;",
       "font-src    'self' ;",
       "frame-src   'self' ;",
 
