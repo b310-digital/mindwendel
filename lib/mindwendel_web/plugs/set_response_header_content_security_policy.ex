@@ -33,6 +33,10 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
 
       # We add csp sources http: and https: to allow the browser to load the link preview image extracted from the idea body
       "img-src     'self' data: https: http: ;",
+
+      # We need to add csp 'unsafe-eval', otherwise we get an error in development
+      # because webpack js bundle uses `eval` for hot reloading.
+      # TODO: Lets evaluate this for production
       "script-src  'self' 'unsafe-eval' ;",
       "style-src   'self' 'unsafe-inline' ;"
     ]
