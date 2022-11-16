@@ -47,7 +47,7 @@ defmodule Mindwendel.MixProject do
       {:phoenix_live_reload, "1.3.3", only: :dev},
       {:phoenix_live_view, "0.18.3"},
       {:esbuild, "0.5.0", runtime: Mix.env() == :dev},
-      {:dart_sass, "0.5.0", runtime: Mix.env() == :dev},
+      {:dart_sass, "0.5.1", runtime: Mix.env() == :dev},
       {:bypass, "~> 2.1", only: :test},
       {:csv, "~> 2.4"},
       {:ecto_sql, "3.8.3"},

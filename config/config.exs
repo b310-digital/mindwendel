@@ -46,7 +46,7 @@ config :esbuild,
   ]
 
 config :dart_sass,
-  version: "1.44.0",
+  version: "1.56.1",
   default: [
     args: ~w(scss/app.scss scss/app.css),
     cd: Path.expand("../assets", __DIR__)
