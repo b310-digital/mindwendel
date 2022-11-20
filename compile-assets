@@ -1,0 +1,4 @@
+#!/bin/bash
+mix assets.deploy
+mix phx.digest
+mix phx.digest.clean
