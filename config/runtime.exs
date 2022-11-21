@@ -38,8 +38,8 @@ if config_env() != :test do
     database: System.get_env("DATABASE_NAME"),
     hostname: System.get_env("DATABASE_HOST"),
     password: System.get_env("DATABASE_USER_PASSWORD"),
-    pool_size: Integer.parse(System.get_env("POOL_SIZE", "10")),
-    port: Integer.parse(System.get_env("DATABASE_PORT", "5432")),
+    pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
+    port: String.to_integer(System.get_env("DATABASE_PORT", "5432")),
     ssl: System.get_env("DATABASE_SSL", "true") == "true",
     url: System.get_env("DATABASE_URL"),
     username: System.get_env("DATABASE_USER")
@@ -63,7 +63,7 @@ if config_env() != :test do
     url: [
       host: url_host,
       port:
-        Integer.parse(
+        String.to_integer(
           System.get_env("MW_ENDPOINT_URL_PORT") ||
             System.get_env("URL_PORT") ||
             "443"
@@ -75,7 +75,7 @@ if config_env() != :test do
     ],
     http: [
       port:
-        Integer.parse(
+        String.to_integer(
           System.get_env("MW_ENDPOINT_HTTP_PORT") ||
             System.get_env("PORT") ||
             "4000"
@@ -112,7 +112,7 @@ parsed_feature_brainstorming_removal_after_days =
 
 delete_brainstormings_after_days =
   if parsed_feature_brainstorming_removal_after_days != "" do
-    Integer.parse(parsed_feature_brainstorming_removal_after_days)
+    String.to_integer(parsed_feature_brainstorming_removal_after_days)
   else
     30
   end
