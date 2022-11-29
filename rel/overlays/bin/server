@@ -3,8 +3,6 @@ cd -P -- "$(dirname -- "$0")"
 
 # Only continue if database is ready
 while ! pg_isready -q -d $DATABASE_URL -h $DATABASE_HOST -p $DATABASE_PORT -U $DATABASE_USER
-# while ! pg_isready -q -d $DATABASE_URL
-# while ! psql $DATABASE_HOST -c "SELECT 1"
 do
   echo "Waiting for database (host: $DATABASE_HOST, port: $DATABASE_PORT, database_user: $DATABASE_USER"
   sleep 2
