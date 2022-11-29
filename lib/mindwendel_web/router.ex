@@ -52,6 +52,10 @@ defmodule MindwendelWeb.Router do
     live "/brainstormings/:id/show/edit", BrainstormingLive.Show, :edit
     live "/brainstormings/:id/show/new_idea", BrainstormingLive.Show, :new_idea
     live "/brainstormings/:id/show/share", BrainstormingLive.Show, :share
+
+    live "/brainstormings/:brainstorming_id/ideas/:idea_id/edit",
+         BrainstormingLive.Show,
+         :edit_idea
   end
 
   # Other scopes may use custom stacks.

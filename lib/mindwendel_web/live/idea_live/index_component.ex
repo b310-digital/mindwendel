@@ -4,6 +4,17 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
   alias Mindwendel.Brainstormings
 
   @impl true
+  def handle_event("edit", %{"id" => id}, socket) do
+    idea = Brainstormings.get_idea!(id)
+
+    {:noreply,
+     socket
+     |> push_patch(
+       to: Routes.brainstorming_show_path(socket, :edit_idea, idea.brainstorming_id, id)
+     )}
+  end
+
+  @impl true
   def handle_event("delete", %{"id" => id}, socket) do
     idea = Brainstormings.get_idea!(id)
 
