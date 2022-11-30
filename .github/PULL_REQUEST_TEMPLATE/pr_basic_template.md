@@ -5,11 +5,8 @@
 
 - Note 1
 
-## Results
+## New Feature / Enhancement
 <!-- Add screenshots or other visuals to describe what has changed. -->
 
-- Result 1
-
-## Checklist
-
-- [ ] Item 1 
+- Screenshot
+- Screencast

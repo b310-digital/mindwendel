@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # Configure your database
 #
@@ -24,6 +24,9 @@ config :mindwendel, MindwendelWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# See https://github.com/phoenixframework/phoenix/blob/v1.5/CHANGELOG.md#1510-2021-08-06
+config :phoenix, :plug_init_mode, :runtime
 
 config :gettext, :default_locale, "en"
 config :timex, :default_locale, "en"

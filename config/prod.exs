@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 require Logger
 
 # For production, don't forget to configure the url host

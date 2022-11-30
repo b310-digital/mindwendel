@@ -85,9 +85,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
 
       element_selector =
-        "#{html_selector_idea_card(idea)} #{
-          html_selector_add_idea_label_to_idea_link(selected_ideal_label)
-        }"
+        "#{html_selector_idea_card(idea)} #{html_selector_add_idea_label_to_idea_link(selected_ideal_label)}"
 
       assert show_live_view |> has_element?(element_selector)
 
@@ -113,9 +111,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
 
       element_selector =
-        "#{html_selector_idea_card(idea)} #{
-          html_selector_remove_idea_label_from_idea_link(selected_ideal_label)
-        }"
+        "#{html_selector_idea_card(idea)} #{html_selector_remove_idea_label_from_idea_link(selected_ideal_label)}"
 
       assert show_live_view |> has_element?(element_selector)
 

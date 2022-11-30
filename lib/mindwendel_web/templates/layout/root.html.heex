@@ -5,16 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' >
     <%= csrf_meta_tag() %>
-    <%= live_title_tag assigns[:page_title] || "Mindwendel" %>
-    <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    <.live_title>
+      <%= assigns[:page_title] || "Mindwendel" %>
+    </.live_title>
+    <link phx-track-static rel="stylesheet" href={ Routes.static_path(@conn, "/assets/app.css") }/>
+    <script defer phx-track-static type="text/javascript" src={ Routes.static_path(@conn, "/assets/app.js") }></script>
   </head>
 
   <body class="bg-light">
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white border-bottom mb-2">
       <div class="container">
         <%= link to: "/", class: "navbar-brand mb-0 h1" do %>
-          <img src="<%= Routes.static_path(@conn, "/images/mindwendel_logo_black.svg") %>" class="nav-mindwendel-logo" />
+          <img src={ Routes.static_path(@conn, "/images/mindwendel_logo_black.svg") } class="nav-mindwendel-logo" />
         <% end %>
 
         <button
@@ -40,7 +42,7 @@
                 </a>
                 <ul class="dropdown-menu">
                   <%= for brainstorming <- list_brainstormings_for(@current_user, 10) do %>
-                    <a class="dropdown-item <%= if assigns[:brainstorming].id == brainstorming.id, do: "active", else: "" %>" href="<%= Routes.brainstorming_show_path(@conn, :show, brainstorming) %>">
+                    <a class={"dropdown-item #{ if assigns[:brainstorming].id == brainstorming.id, do: "active", else: "" }"} href={ Routes.brainstorming_show_path(@conn, :show, brainstorming) }>
                       <%= brainstorming.name %>
                     </a>
                   <% end %>
@@ -52,7 +54,7 @@
               <li class="nav-item"><hr class="dropdown-divider"></li>
               <%= for brainstorming <- list_brainstormings_for(@current_user, 10) do %>
                 <li class="nav-item d-lg-none">
-                  <a class="nav-link <%= if assigns[:brainstorming].id == brainstorming.id, do: "active", else: "" %>" href="<%= Routes.brainstorming_show_path(@conn, :show, brainstorming) %>">
+                  <a class={"nav-link #{if assigns[:brainstorming].id == brainstorming.id, do: "active", else: "" }"} href={ Routes.brainstorming_show_path(@conn, :show, brainstorming) }>
                     <%= brainstorming.name %>
                   </a>
                 </li>

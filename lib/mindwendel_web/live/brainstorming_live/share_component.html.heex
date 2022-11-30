@@ -1,0 +1,76 @@
+
+<div>
+  <div class="row mb-3">
+    <div class="input-group">
+      <input
+        aria-describedby="brainstorming-link-copy-to-clipboard-button"
+        aria-label="Url to brainstorming"
+        class="form-control"
+        id="brainstorming-link-input-readonly"
+        readonly="true"
+        type="text"
+        value={@uri}
+      />
+      <button
+        class="btn btn-outline-secondary"
+        data-clipboard-target="#brainstorming-link-input-readonly"
+        id="brainstorming-link-copy-to-clipboard-button"
+        phx-hook="CopyBrainstormingLinkButton"
+        type="button"
+      >
+        <%= gettext("Copy") %>
+      </button>
+      <button
+        class="btn btn-outline-secondary"
+        data-native-sharing-button-share-data-text={gettext("Join my brainstorming")}
+        data-native-sharing-button-share-data-title={gettext("Mindwendel Brainstorming")}
+        data-native-sharing-button-share-data-url={@uri}
+        id="brainstorming-link-share-button"
+        phx-hook="NativeSharingButton"
+      >
+        <i class="bi-share-fill"></i>
+      </button>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="row mb-3">
+    <div class="d-flex justify-content-center">
+      <div
+        data-qr-code-url={@uri}
+        id="brainstorming-link-qr-code-canvas"
+        phx-hook="QrCodeCanvas"
+      >
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="d-flex justify-content-center">
+      <a
+        class="btn btn-primary"
+        data-qr-code-file-extension="svg"
+        data-qr-code-filename={@uri}
+        data-qr-code-url={@uri}
+        id="brainstorming-link-qr-code-download-as-svg-button"
+        phx-hook="QrCodeDownloadButton"
+      >
+        <i class="bi-download"></i> <%= gettext("Download as svg") %>
+      </a>
+      &nbsp;
+
+      <a
+        class="btn btn-primary"
+        data-qr-code-file-extension="png"
+        data-qr-code-filename={@uri}
+        data-qr-code-url={@uri}
+        id="brainstorming-link-qr-code-download-as-png-button"
+        phx-hook="QrCodeDownloadButton"
+      >
+        <i class="bi-download"></i> <%= gettext("Download as png") %>
+      </a>
+
+    </div>
+  </div>
+</div>

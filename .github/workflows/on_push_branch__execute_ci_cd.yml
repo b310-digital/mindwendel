@@ -12,16 +12,15 @@ on:
 jobs:
   build_deps:
     runs-on: ubuntu-latest
-    container: bitwalker/alpine-elixir-phoenix:1.11
+    # Currently, this need to be synced manually with the Dockerfile. In the future, the workflow should be changed,
+    # so that a development container is built from the Dockerfile, pushed, and then re-used in the following steps.
+    # This would also remove the need to install cmake manually in each step:
+    container: hexpm/elixir:1.13.1-erlang-24.2-debian-bullseye-20210902-slim
 
     steps:
       # See https://github.com/actions/checkout
       - uses: actions/checkout@v2
 
-      # The following step `actions/cache@v2` needs a tar command that requires the option `--posix` .
-      # The alpine-based docker container that we are using contains a tar command but without a `--posix` option.
-      # This is why we need to install it.
-      - run: apk add tar
       # See https://github.com/actions/checkout
       - uses: actions/cache@v2
         id: cache
@@ -29,7 +28,9 @@ jobs:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-
+      
+      # install hex:
+      - run: mix local.hex --force && mix local.rebar --force
       - run: mix deps.get
         if: steps.cache.outputs.cache-hit != 'true'
 
@@ -37,7 +38,7 @@ jobs:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
     # Docker Hub image that `container-job` executes in
-    container: bitwalker/alpine-elixir-phoenix:1.11
+    container: hexpm/elixir:1.13.1-erlang-24.2-debian-bullseye-20210902-slim
 
     needs: build_deps
 
@@ -73,16 +74,14 @@ jobs:
       # Downloads a copy of the code in your repository before running CI tests
       - uses: actions/checkout@v2
 
-      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
-      # The alpine-based docker container that we are using contains a tar command but without a `--posix` option.
-      # This is why we need to install it
-      - run: apk add tar
       - uses: actions/cache@v2
         with:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-
+      
+      # install hex:
+      - run: mix local.hex --force && mix local.rebar --force
       - run: mix compile
       - run: mix ecto.create
       - run: mix ecto.migrate
@@ -90,7 +89,7 @@ jobs:
 
   check_mix_format:
     runs-on: ubuntu-latest
-    container: bitwalker/alpine-elixir-phoenix:1.11
+    container: hexpm/elixir:1.13.1-erlang-24.2-debian-bullseye-20210902-slim
 
     needs: build_deps
 
@@ -98,36 +97,32 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
-      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
-      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
-      # This is why we need to install it
-      - run: apk add tar
       - uses: actions/cache@v2
         with:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-
+      
+      # install hex:
+      - run: mix local.hex --force && mix local.rebar --force
       - run: mix format --check-formatted
 
   check_mix_sobelow:
     runs-on: ubuntu-latest
-    container: bitwalker/alpine-elixir-phoenix:1.11
+    container: hexpm/elixir:1.13.1-erlang-24.2-debian-bullseye-20210902-slim
 
     needs: build_deps
 
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-
-      # The following step `actions/cache@v2` needs a tar command that requires the option --posix
-      # The alpine-based docker container that we are using contains a tar command but wihtout a `-posix` option.
-      # This is why we need to install it
-      - run: apk add tar
+        
       - uses: actions/cache@v2
         with:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-
+      
+      # install hex:
+      - run: mix local.hex --force && mix local.rebar --force
       - run: mix sobelow --config

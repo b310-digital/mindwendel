@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd $phoenix_dir
+mix assets.deploy
+
+mix phx.digest
+
+if mix help phx.digest.clean 1>/dev/null 2>&1; then
+  mix phx.digest.clean
+fi

@@ -2,16 +2,19 @@
   <div id="ideas" class="row mb-5">
     <%= for idea <- @ideas do %>
       <div class="col-md-6">
-        <div class="card mt-3 shadow-sm p-2 rounded IndexComponent__IdeaCard" data-testid="<%= idea.id %>">
+        <div class="card mt-3 shadow-sm p-2 rounded IndexComponent__IdeaCard" data-testid={idea.id}>
           <div class="card-body-mindwendel-idea">
             <%= if idea.user_id == @current_user.id do %>
               <%= link to: "#", class: "float-end ms-3 mb-3", phx_click: "delete", phx_target: @myself, phx_value_id: idea.id, title: 'Delete', data: [confirm: gettext("Are you sure you want to delete this idea?")] do %>
                 <i class="bi bi-x text-secondary"></i>
               <% end %>
+              <%= live_patch to: Routes.brainstorming_show_path(@socket, :edit_idea, @brainstorming.id, idea.id), class: "float-end ms-3 mb-3", title: gettext("Edit Idea") do %>
+                <i class="bi bi-pencil text-secondary"></i>
+              <% end %>
             <% end %>
 
             <%= for idea_label <- Enum.sort_by(idea.idea_labels, &(&1.position_order)) do %>
-              <span class="IndexComponent__IdeaLabelBadge mb-3" data-testid="<%= idea_label.id %>" style="background-color: <%= idea_label.color %>;"><%= idea_label.name %></span>
+              <span class="IndexComponent__IdeaLabelBadge mb-3" data-testid={idea_label.id} style={"background-color: #{idea_label.color}"}><%= idea_label.name %></span>
             <% end %>
 
             <%= unless idea.link do %>
@@ -54,11 +57,11 @@
               <%= for brainstorming_idea_label <- @brainstorming.labels do %>
                 <%= unless Enum.find(idea.idea_labels, fn idea_label -> idea_label.id == brainstorming_idea_label.id end) do %>
                   <%= link to: "#", class: "text-decoration-none me-1", data_testid: brainstorming_idea_label.id, title: "Label #{brainstorming_idea_label.name}", phx_click: "add_idea_label_to_idea", phx_target: @myself, phx_value_idea_id: idea.id, phx_value_idea_label_id: brainstorming_idea_label.id do %>
-                    <i class="IndexComponent__IdeaLabel" data-testid="<%= brainstorming_idea_label.id %>" style="color: <%= brainstorming_idea_label.color %>;" ></i>
+                    <i class="IndexComponent__IdeaLabel" data-testid={brainstorming_idea_label.id} style={"color: #{brainstorming_idea_label.color};"} ></i>
                   <% end %>
                 <% else %>
                   <%= link to: "#", class: "text-decoration-none me-1", data_testid: brainstorming_idea_label.id, title: "Label #{brainstorming_idea_label.name}", phx_click: "remove_idea_label_from_idea", phx_target: @myself, phx_value_idea_id: idea.id, phx_value_idea_label_id: brainstorming_idea_label.id do %>
-                    <i class="IndexComponent__IdeaLabel--active" data-testid="<%= brainstorming_idea_label.id %>" style="color: <%= brainstorming_idea_label.color %>;" ></i>
+                    <i class="IndexComponent__IdeaLabel--active" data-testid={brainstorming_idea_label.id} style={"color: #{brainstorming_idea_label.color};"} ></i>
                   <% end %>
                 <% end %>
               <% end %>

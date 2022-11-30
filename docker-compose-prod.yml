@@ -1,7 +1,7 @@
 version: "3.8"
 
-# Add this file to extend the docker-compose setup, e.g.:
-# docker-compose -f docker-compose-prod.yml --env-file .env.prod up -d --build --force-recreate
+# Add this file to extend the docker compose setup, e.g.:
+# docker compose -f docker-compose-prod.yml --env-file .env.prod up -d --build --force-recreate
 services:
   app_prod:
     build:

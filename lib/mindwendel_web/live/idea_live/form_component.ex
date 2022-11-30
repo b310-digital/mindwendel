@@ -27,6 +27,28 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     save_idea(socket, socket.assigns.action, idea_params)
   end
 
+  defp save_idea(socket, :update, idea_params) do
+    idea = Brainstormings.get_idea!(idea_params["id"])
+
+    current_user = socket.assigns.current_user
+
+    if idea.user_id == current_user.id do
+      case Brainstormings.update_idea(
+             idea,
+             Map.put(idea_params, "user_id", current_user.id)
+           ) do
+        {:ok, _idea} ->
+          {:noreply,
+           socket
+           |> put_flash(:info, gettext("Idea created updated"))
+           |> push_redirect(to: socket.assigns.return_to)}
+
+        {:error, %Ecto.Changeset{} = changeset} ->
+          {:noreply, assign(socket, changeset: changeset)}
+      end
+    end
+  end
+
   defp save_idea(socket, :new, idea_params) do
     Mindwendel.Accounts.update_user(socket.assigns.current_user, %{
       username: idea_params["username"]
