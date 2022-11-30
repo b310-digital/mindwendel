@@ -126,9 +126,11 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   end
 
   def handle_event("handle_hotkey_i", _, socket) do
-    {:noreply,
-     push_patch(socket,
-       to: Routes.brainstorming_show_path(socket, :new_idea, socket.assigns.brainstorming)
-     )}
+    if socket.assigns.live_action == :show do
+      {:noreply,
+       push_patch(socket,
+         to: Routes.brainstorming_show_path(socket, :new_idea, socket.assigns.brainstorming)
+       )}
+    end
   end
 end
