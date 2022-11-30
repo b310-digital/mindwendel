@@ -15,7 +15,11 @@ defmodule Mindwendel.UrlPreview do
 
   def fetch_url(url \\ "") do
     HTTPoison.start()
-    url |> HTTPoison.get() |> handle_response |> handle_parsing
+
+    url
+    |> HTTPoison.get([], follow_redirect: true)
+    |> handle_response
+    |> handle_parsing
   end
 
   defp handle_parsing({:ok, parsed_document}) do

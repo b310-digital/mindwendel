@@ -8,34 +8,22 @@ defmodule MindwendelServices.UrlPreviewTest do
   end
 
   describe "extract_url" do
-    test "extracts url with no other text" do
-      assert "http://myname.de" = UrlPreview.extract_url("http://myname.de")
+    test "extracts the url with no other text" do
+      assert UrlPreview.extract_url("http://myname.de") == "http://myname.de"
     end
 
-    test "extracts url with wrapping text" do
-      assert "http://myname.de" = UrlPreview.extract_url("Some text http://myname.de also here")
+    test "extracts the url with wrapping text" do
+      assert UrlPreview.extract_url("Some text http://myname.de also here") == "http://myname.de"
     end
 
-    test "extracts first url from different urls" do
-      assert "http://myname.de" =
-               UrlPreview.extract_url("http://myname.de http://someothername.de")
+    test "extracts only the first url" do
+      assert UrlPreview.extract_url("http://myname.de http://someothername.de") ==
+               "http://myname.de"
     end
 
-    test "extracts long url with query params" do
-      assert "http://myname.de/blog/1234sometest&query=test" =
-               UrlPreview.extract_url("http://myname.de/blog/1234sometest&query=test")
-    end
-
-    test "extracts url with final slash" do
-      assert "http://myname.de/" = UrlPreview.extract_url("http://myname.de/")
-    end
-
-    test "extracts https url with final slash" do
-      assert "https://myname.de/" = UrlPreview.extract_url("https://myname.de/")
-    end
-
-    test "extracts https url without final slash" do
-      assert "https://myname.de" = UrlPreview.extract_url("https://myname.de")
+    test "extracts the url with query params" do
+      assert UrlPreview.extract_url("http://myname.de/blog/1234sometest&query=test") ==
+               "http://myname.de/blog/1234sometest&query=test"
     end
 
     test "extracts empty string if no url is given" do
@@ -60,16 +48,19 @@ defmodule MindwendelServices.UrlPreviewTest do
                UrlPreview.fetch_url(endpoint_url(bypass.port) <> "/some_post")
     end
 
-    test "fetches title and meta tags from redirected url", %{bypass: bypass} do
-      # Starting another bypass server on a different port
-      # and use this server as the final endpoint that the initial request is requested to
+    test "fetches title and meta tags with redirect", %{bypass: bypass} do
+      # Start another bypass server on a different port
       other_bypass = Bypass.open(port: bypass.port + 1)
 
       Bypass.expect_once(other_bypass, "GET", "", fn conn ->
         Plug.Conn.resp(
           conn,
           200,
-          "<html><title>Hello mindwendel</title><meta name='description' content='Some text'</meta><meta property='og:image' content='http://some.link.de'></meta></html>"
+          ~H"""
+            <html>
+            <title>Hello mindwendel</title><meta name='description' content='Some text'</meta><meta property='og:image' content='http://some.link.de'></meta></html>
+          """
+          # "<html><title>Hello mindwendel</title><meta name='description' content='Some text'</meta><meta property='og:image' content='http://some.link.de'></meta></html>"
         )
       end)
 
