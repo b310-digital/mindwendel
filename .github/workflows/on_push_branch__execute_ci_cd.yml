@@ -106,6 +106,26 @@ jobs:
       # install hex:
       - run: mix local.hex --force && mix local.rebar --force
       - run: mix format --check-formatted
+  
+  check_mix_gettext_extract_up_to_date:
+    runs-on: ubuntu-latest
+    container: hexpm/elixir:1.13.1-erlang-24.2-debian-bullseye-20210902-slim
+
+    needs: build_deps
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-v4
+      
+      # install hex:
+      - run: mix local.hex --force && mix local.rebar --force
+      - run: mix gettext.extract --check-up-to-date
 
   check_mix_sobelow:
     runs-on: ubuntu-latest
