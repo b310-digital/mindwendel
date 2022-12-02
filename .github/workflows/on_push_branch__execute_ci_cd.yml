@@ -10,6 +10,20 @@ on:
     branches: [master]
 
 jobs:
+  pre_build_mix_format:
+    runs-on: ubuntu-latest
+    container: hexpm/elixir:1.13.1-erlang-24.2-debian-bullseye-20210902-slim
+
+    needs: build_deps
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      # Install hex:
+      - run: mix local.hex --force && mix local.rebar --force
+      - run: mix format --check-formatted
+
   build_deps:
     runs-on: ubuntu-latest
     # Currently, this need to be synced manually with the Dockerfile. In the future, the workflow should be changed,
@@ -19,10 +33,10 @@ jobs:
 
     steps:
       # See https://github.com/actions/checkout
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # See https://github.com/actions/checkout
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         id: cache
         with:
           path: deps
@@ -72,9 +86,9 @@ jobs:
 
     steps:
       # Downloads a copy of the code in your repository before running CI tests
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
@@ -95,9 +109,9 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
@@ -115,9 +129,9 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
@@ -135,9 +149,9 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
