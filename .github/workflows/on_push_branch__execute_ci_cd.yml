@@ -39,13 +39,17 @@ jobs:
       - uses: actions/cache@v3
         id: cache
         with:
-          path: deps
+          path: |
+            _build
+            deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
       # install hex:
       - run: mix local.hex --force && mix local.rebar --force
       - run: mix deps.get
+        if: steps.cache.outputs.cache-hit != 'true'
+      - run: mix compile
         if: steps.cache.outputs.cache-hit != 'true'
 
   check_mix_test:
@@ -90,7 +94,9 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: deps
+          path: |
+            _build
+            deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
@@ -113,7 +119,9 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: deps
+          path: |
+            _build
+            deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
@@ -153,7 +161,9 @@ jobs:
         
       - uses: actions/cache@v3
         with:
-          path: deps
+          path: |
+            _build
+            deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
