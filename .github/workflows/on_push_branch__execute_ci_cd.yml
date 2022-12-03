@@ -36,7 +36,6 @@ jobs:
       - run: mix deps.get
         if: steps.cache.outputs.cache-hit != 'true'
       - run: mix compile
-        if: steps.cache.outputs.cache-hit != 'true'
 
   check_mix_test:
     # Containers must run in Linux based operating systems
