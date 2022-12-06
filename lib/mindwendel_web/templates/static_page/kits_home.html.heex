@@ -1,8 +1,7 @@
-<link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/kits_home.css") %>"/>
+<link phx-track-static rel="stylesheet" href={ Routes.static_path(@conn, "/css/kits_home.css") } />
 <div id="wrapper">
-
   <div id="inner">
-    <img src="<%= Routes.static_path(@conn, "/images/mindwendel.svg") %>" alt="mindwendel" style="width: 100%;">
+    <img src={ Routes.static_path(@conn, "/images/mindwendel.svg") }  alt="mindwendel" style="width: 100%;">
     <br /><br/>
 
     Mit unserem schlanken Tool »mindwendel« sammelst du auf überraschend einfache
@@ -27,14 +26,13 @@
           <span class="badge rounded-pill bg-light text-dark">
             <%= Timex.format!(brainstorming.inserted_at, "{relative}", :relative) %>
           </span></li>
-        </h5>
       <% end %>
     </ul>
   <% end %>
 
   <div class="kits_footer">
       <a href="https://kits.blog/tools/" target="_blank" title="Zurück zur Tools-Seite">
-        <img id="kits_footer_logo" src="<%= Routes.static_path(@conn, "/images/kits_footer.svg") %>" alt="kits">
+        <img id="kits_footer_logo" src={ Routes.static_path(@conn, "/images/kits_footer.svg") }  alt="kits">
       </a>
       <ul class="kits_footer_links">
           <li><a href="https://kits.blog/impressum/" target="_blank">Impressum</a></li>
