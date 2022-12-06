@@ -24,7 +24,24 @@ defmodule MindwendelWeb.Endpoint do
     at: "/",
     from: :mindwendel,
     gzip: false,
-    only: ~w(assets fonts images favicon.ico robots.txt)
+    only: [
+      "assets",
+      "apple-touch-icon.png",
+      "css",
+      "favicon.ico",
+      "fonts",
+      "images",
+      "js",
+      "robots.txt",
+      "browserconfig.xml",
+      "safari-pinned-tab.svg",
+      "site.webmanifest"
+    ],
+    only_matching: [
+      "android-chrome-",
+      "favicon-",
+      "mstile-"
+    ]
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
