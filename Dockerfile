@@ -29,21 +29,21 @@ RUN apt-get -y update && apt-get install -y curl
 
 # install build dependencies
 RUN curl -fsSL $NODE_URL | bash - && \
-  apt-get install -y nodejs \
-  build-essential \
-  inotify-tools \ 
-  postgresql-client \
-  git \
-  cmake && \
-  apt-get clean && \ 
-  rm -f /var/lib/apt/lists/*_*
+    apt-get install -y nodejs \
+    build-essential \
+    inotify-tools \ 
+    postgresql-client \
+    git \
+    cmake && \
+    apt-get clean && \ 
+    rm -f /var/lib/apt/lists/*_*
 
 # prepare build dir
 WORKDIR /app
 
 # install hex + rebar
 RUN mix local.hex --force && \
-  mix local.rebar --force
+    mix local.rebar --force
 
 FROM base as development
 
