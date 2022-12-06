@@ -25,15 +25,15 @@ defmodule MindwendelWeb.Endpoint do
     from: :mindwendel,
     gzip: false,
     only: [
-      "assets",
       "apple-touch-icon.png",
+      "assets",
+      "browserconfig.xml",
       "css",
       "favicon.ico",
       "fonts",
       "images",
       "js",
       "robots.txt",
-      "browserconfig.xml",
       "safari-pinned-tab.svg",
       "site.webmanifest"
     ],
