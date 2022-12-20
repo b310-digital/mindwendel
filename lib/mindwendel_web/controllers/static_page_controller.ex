@@ -11,7 +11,10 @@ defmodule MindwendelWeb.StaticPageController do
       |> MindwendelService.SessionService.get_current_user_id()
       |> Mindwendel.Accounts.get_user()
 
-    render(conn, "kits_home.html",
+    conn
+    |> put_layout(false)
+    |> render(
+      "kits_home.html",
       current_user: current_user,
       brainstorming: %Brainstorming{},
       changeset: Brainstormings.change_brainstorming(%Brainstorming{}, %{})
