@@ -25,17 +25,13 @@ jobs:
       - uses: actions/cache@v3
         id: cache
         with:
-          path: |
-            _build
-            deps
+          path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
-      # install hex:
-      - run: mix local.hex --force && mix local.rebar --force
+      - run: mix do local.hex --force, local.rebar --force
       - run: mix deps.get
         if: steps.cache.outputs.cache-hit != 'true'
-      - run: mix compile
 
   check_mix_test:
     # Containers must run in Linux based operating systems
@@ -79,14 +75,11 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: |
-            _build
-            deps
+          path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
-      # install hex:
-      - run: mix local.hex --force && mix local.rebar --force
+      - run: mix do local.hex --force, local.rebar --force
       - run: mix compile
       - run: mix ecto.create
       - run: mix ecto.migrate
@@ -104,14 +97,12 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: |
-            _build
-            deps
+          path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
-      # install hex:
-      - run: mix local.hex --force && mix local.rebar --force
+      - run: mix do local.hex --force, local.rebar --force
+      
       - run: mix format --check-formatted
   
   check_mix_gettext_extract_up_to_date:
@@ -130,8 +121,8 @@ jobs:
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
-      # install hex:
-      - run: mix local.hex --force && mix local.rebar --force
+      - run: mix do local.hex --force, local.rebar --force
+      - run: mix compile
       - run: mix gettext.extract --check-up-to-date
 
   check_mix_sobelow:
@@ -146,12 +137,10 @@ jobs:
         
       - uses: actions/cache@v3
         with:
-          path: |
-            _build
-            deps
+          path: deps
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
-      # install hex:
-      - run: mix local.hex --force && mix local.rebar --force
+      - run: mix do local.hex --force, local.rebar --force
+      - run: mix compile
       - run: mix sobelow --config
