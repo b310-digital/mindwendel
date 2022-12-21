@@ -60,7 +60,7 @@ defmodule Mindwendel.MixProject do
       {:phoenix, "1.6.15"},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, "0.16.5"},
-      {:sobelow, "~> 0.8", only: :dev}
+      {:sobelow, "~> 0.8", only: :dev},
       {:telemetry_metrics, "0.6.1"},
       {:telemetry_poller, "1.0.0"},
       {:timex, "3.7.8"},
