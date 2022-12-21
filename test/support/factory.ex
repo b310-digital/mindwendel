@@ -1,4 +1,6 @@
 defmodule Mindwendel.Factory do
+  @moduledoc false
+
   alias Mindwendel.Repo
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
