@@ -1,5 +1,7 @@
 # https://hexdocs.pm/phoenix/releases.html
 defmodule Mindwendel.Release do
+  @moduledoc false
+
   @app :mindwendel
 
   def migrate do
