@@ -38,6 +38,50 @@ defmodule Mindwendel.BrainstormingsTest do
     end
   end
 
+  describe "create_brainstorming" do
+    test "empty admin_users", %{brainstorming: brainstorming} do
+      brainstorming = Repo.preload(brainstorming, :admin_users)
+      assert Enum.empty?(brainstorming.admin_users)
+    end
+
+    # test "create a valid brainstorming with admin_user", %{
+    #   brainstorming: brainstorming,
+    #   user: user
+    # } do
+    #   Brainstorming.add_admin_user(brainstorming, user_id)
+
+    #   brainstorming = Repo.preload(brainstorming, :admin_users)
+    #   # brainstorming |> IO.inspect()
+
+    #   {:ok, brainstormin_2} =
+    #     Ecto.Changeset.change(brainstorming)
+    #     |> IO.inspect()
+    #     |> Ecto.Changeset.put_assoc(:admin_users, [user])
+    #     |> IO.inspect()
+    #     |> Mindwendel.Repo.update()
+
+    #   # {:ok, brainstormin_2} = brainstorming |> IO.inspect()
+
+    #   assert Repo.exists?(
+    #            from b in Mindwendel.Brainstormings.BrainstormingAdminUser,
+    #              where: b.brainstorming_id == ^brainstorming.id
+    #          )
+    # end
+  end
+
+  describe "#add_admin_user" do
+    test "adds a user to the brainstorming", %{
+      brainstorming: brainstorming,
+      user: %User{id: user_id} = user
+    } do
+      Brainstormings.add_admin_user(brainstorming, user)
+
+      brainstorming = Repo.preload(brainstorming, :admin_users)
+      assert brainstorming.admin_users |> Enum.map(fn u -> u.id end) == [user.id]
+      assert [%User{id: ^user_id}] = brainstorming.admin_users
+    end
+  end
+
   describe "change brainstorming" do
     test "shortens the brainstorming name if it is too long", %{brainstorming: brainstorming} do
       result =
