@@ -18,7 +18,9 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
   def handle_event("delete", %{"id" => id}, socket) do
     idea = Brainstormings.get_idea!(id)
 
-    if socket.assigns.current_user.id == idea.user_id do
+    %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
+
+    if current_user.id in [idea.user_id | brainstorming.admin_users |> Enum.map(& &1.id)] do
       {:ok, _} = Brainstormings.delete_idea(idea)
     end
 
