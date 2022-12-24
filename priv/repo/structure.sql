@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.10
--- Dumped by pg_dump version 13.6
+-- Dumped from database version 12.13
+-- Dumped by pg_dump version 13.8 (Debian 13.8-0+deb11u1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -57,6 +57,18 @@ $$;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
+
+--
+-- Name: brainstorming_admin_users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.brainstorming_admin_users (
+    brainstorming_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
+);
+
 
 --
 -- Name: brainstorming_users; Type: TABLE; Schema: public; Owner: -
@@ -173,22 +185,6 @@ CREATE TABLE public.links (
 
 
 --
--- Name: oban_beats; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.oban_beats (
-    node text NOT NULL,
-    queue text NOT NULL,
-    nonce text NOT NULL,
-    "limit" integer NOT NULL,
-    paused boolean DEFAULT false NOT NULL,
-    running bigint[] DEFAULT ARRAY[]::integer[] NOT NULL,
-    inserted_at timestamp without time zone DEFAULT timezone('UTC'::text, now()) NOT NULL,
-    started_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: oban_jobs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -223,7 +219,7 @@ CREATE TABLE public.oban_jobs (
 -- Name: TABLE oban_jobs; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.oban_jobs IS '10';
+COMMENT ON TABLE public.oban_jobs IS '11';
 
 
 --
@@ -243,6 +239,18 @@ CREATE SEQUENCE public.oban_jobs_id_seq
 --
 
 ALTER SEQUENCE public.oban_jobs_id_seq OWNED BY public.oban_jobs.id;
+
+
+--
+-- Name: oban_peers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE UNLOGGED TABLE public.oban_peers (
+    name text NOT NULL,
+    node text NOT NULL,
+    started_at timestamp without time zone NOT NULL,
+    expires_at timestamp without time zone NOT NULL
+);
 
 
 --
@@ -272,6 +280,14 @@ CREATE TABLE public.users (
 --
 
 ALTER TABLE ONLY public.oban_jobs ALTER COLUMN id SET DEFAULT nextval('public.oban_jobs_id_seq'::regclass);
+
+
+--
+-- Name: brainstorming_admin_users brainstorming_admin_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.brainstorming_admin_users
+    ADD CONSTRAINT brainstorming_admin_users_pkey PRIMARY KEY (brainstorming_id, user_id);
 
 
 --
@@ -347,6 +363,14 @@ ALTER TABLE ONLY public.oban_jobs
 
 
 --
+-- Name: oban_peers oban_peers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oban_peers
+    ADD CONSTRAINT oban_peers_pkey PRIMARY KEY (name);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -360,6 +384,27 @@ ALTER TABLE ONLY public.schema_migrations
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: brainstorming_admin_users_brainstorming_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX brainstorming_admin_users_brainstorming_id_index ON public.brainstorming_admin_users USING btree (brainstorming_id);
+
+
+--
+-- Name: brainstorming_admin_users_brainstorming_id_user_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX brainstorming_admin_users_brainstorming_id_user_id_index ON public.brainstorming_admin_users USING btree (brainstorming_id, user_id);
+
+
+--
+-- Name: brainstorming_admin_users_user_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX brainstorming_admin_users_user_id_index ON public.brainstorming_admin_users USING btree (user_id);
 
 
 --
@@ -426,13 +471,6 @@ CREATE UNIQUE INDEX likes_idea_id_user_id_index ON public.likes USING btree (ide
 
 
 --
--- Name: oban_beats_inserted_at_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX oban_beats_inserted_at_index ON public.oban_beats USING btree (inserted_at);
-
-
---
 -- Name: oban_jobs_args_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -447,10 +485,10 @@ CREATE INDEX oban_jobs_meta_index ON public.oban_jobs USING gin (meta);
 
 
 --
--- Name: oban_jobs_queue_state_priority_scheduled_at_id_index; Type: INDEX; Schema: public; Owner: -
+-- Name: oban_jobs_state_queue_priority_scheduled_at_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX oban_jobs_queue_state_priority_scheduled_at_id_index ON public.oban_jobs USING btree (queue, state, priority, scheduled_at, id);
+CREATE INDEX oban_jobs_state_queue_priority_scheduled_at_id_index ON public.oban_jobs USING btree (state, queue, priority, scheduled_at, id);
 
 
 --
@@ -458,6 +496,22 @@ CREATE INDEX oban_jobs_queue_state_priority_scheduled_at_id_index ON public.oban
 --
 
 CREATE TRIGGER oban_notify AFTER INSERT ON public.oban_jobs FOR EACH ROW EXECUTE FUNCTION public.oban_jobs_notify();
+
+
+--
+-- Name: brainstorming_admin_users brainstorming_admin_users_brainstorming_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.brainstorming_admin_users
+    ADD CONSTRAINT brainstorming_admin_users_brainstorming_id_fkey FOREIGN KEY (brainstorming_id) REFERENCES public.brainstormings(id) ON DELETE CASCADE;
+
+
+--
+-- Name: brainstorming_admin_users brainstorming_admin_users_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.brainstorming_admin_users
+    ADD CONSTRAINT brainstorming_admin_users_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -575,3 +629,5 @@ INSERT INTO public."schema_migrations" (version) VALUES (20210314114416);
 INSERT INTO public."schema_migrations" (version) VALUES (20210320072725);
 INSERT INTO public."schema_migrations" (version) VALUES (20220220151400);
 INSERT INTO public."schema_migrations" (version) VALUES (20220220162733);
+INSERT INTO public."schema_migrations" (version) VALUES (20221102094926);
+INSERT INTO public."schema_migrations" (version) VALUES (20221220151400);
