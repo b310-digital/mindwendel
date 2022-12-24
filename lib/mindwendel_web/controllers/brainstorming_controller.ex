@@ -1,19 +1,27 @@
 defmodule MindwendelWeb.BrainstormingController do
   use MindwendelWeb, :controller
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Accounts
+  alias Mindwendel.Repo
 
   def create(conn, %{"brainstorming" => brainstorming_params}) do
-    case Brainstormings.create_brainstorming(brainstorming_params) do
-      {:ok, brainstorming} ->
-        conn
-        |> put_flash(
-          :info,
-          gettext(
-            "Your brainstorming was created successfully! Share the link with other people and start brainstorming."
-          )
-        )
-        |> redirect(to: Routes.brainstorming_show_path(conn, :show, brainstorming))
+    current_user =
+      MindwendelService.SessionService.get_current_user_id(conn)
+      |> Accounts.get_or_create_user()
 
+    with {:ok, brainstorming} <- Brainstormings.create_brainstorming(brainstorming_params),
+         {:ok, _brainstorming_admin_user} <-
+           Brainstormings.add_admin_user(brainstorming, current_user) do
+      conn
+      |> put_flash(
+        :info,
+        gettext(
+          "Your brainstorming was created successfully! Share the link with other people and start brainstorming."
+        )
+      )
+      |> redirect(to: Routes.brainstorming_show_path(conn, :show, brainstorming))
+    else
       {:error, _} ->
         conn
         |> put_flash(
