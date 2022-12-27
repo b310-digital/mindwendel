@@ -34,8 +34,8 @@ defmodule Mindwendel.Brainstormings do
   end
 
   def add_moderating_user(%Brainstorming{} = brainstorming, %User{} = user) do
-    %BrainstormingModeratingUser{user_id: user.id, brainstorming_id: brainstorming.id}
-    |> Ecto.Changeset.change()
+    %BrainstormingModeratingUser{brainstorming_id: brainstorming.id, user_id: user.id}
+    |> BrainstormingModeratingUser.changeset()
     |> Repo.insert()
   end
 

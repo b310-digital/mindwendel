@@ -10,4 +10,13 @@ defmodule Mindwendel.Brainstormings.BrainstormingModeratingUser do
 
     timestamps()
   end
+
+  def changeset(%__MODULE__{} = brainstorming_moderating_user) do
+    brainstorming_moderating_user
+    |> Ecto.Changeset.cast(%{}, [:brainstorming_id, :user_id])
+    |> Ecto.Changeset.validate_required([:brainstorming_id, :user_id])
+    |> Ecto.Changeset.unique_constraint([:brainstorming_id, :user_id],
+      name: :brainstorming_moderating_users_pkey
+    )
+  end
 end
