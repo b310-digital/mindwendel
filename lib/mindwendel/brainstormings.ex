@@ -7,9 +7,11 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Repo
 
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
   alias Mindwendel.Brainstormings.Like
 
   @doc """
@@ -29,6 +31,12 @@ defmodule Mindwendel.Brainstormings do
         order_by: [desc: brainstorming.inserted_at],
         limit: ^limit
     )
+  end
+
+  def add_moderating_user(%Brainstorming{} = brainstorming, %User{} = user) do
+    %BrainstormingModeratingUser{brainstorming_id: brainstorming.id, user_id: user.id}
+    |> BrainstormingModeratingUser.changeset()
+    |> Repo.insert()
   end
 
   @doc """
@@ -280,6 +288,7 @@ defmodule Mindwendel.Brainstormings do
     Repo.get!(Brainstorming, id)
     |> Repo.preload([
       :users,
+      :moderating_users,
       labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
       ideas: [
         :link,

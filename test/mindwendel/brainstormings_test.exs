@@ -1,5 +1,6 @@
 defmodule Mindwendel.BrainstormingsTest do
   use Mindwendel.DataCase
+  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
   alias Mindwendel.Factory
 
   alias Mindwendel.Brainstormings
@@ -35,6 +36,45 @@ defmodule Mindwendel.BrainstormingsTest do
                older_brainstorming.id,
                oldest_brainstorming.id
              ]
+    end
+  end
+
+  describe "create_brainstorming" do
+    test "empty moderating_users", %{brainstorming: brainstorming} do
+      brainstorming = Repo.preload(brainstorming, :moderating_users)
+      assert Enum.empty?(brainstorming.moderating_users)
+    end
+  end
+
+  describe "#add_moderating_user" do
+    test "adds a moderating user to the brainstorming", %{
+      brainstorming: brainstorming,
+      user: %User{id: user_id} = user
+    } do
+      Brainstormings.add_moderating_user(brainstorming, user)
+
+      assert 1 = Repo.one(from(bmu in BrainstormingModeratingUser, select: count(bmu.user_id)))
+      assert brainstorming_moderatoring_user = Repo.one(BrainstormingModeratingUser)
+      assert brainstorming_moderatoring_user.user_id == user.id
+      assert brainstorming_moderatoring_user.brainstorming_id == brainstorming.id
+
+      brainstorming = Repo.preload(brainstorming, :moderating_users)
+      assert [%User{id: ^user_id}] = brainstorming.moderating_users
+    end
+
+    test "responds with an error when brainstorming already contains the moderating user", %{
+      brainstorming: brainstorming,
+      user: user
+    } do
+      Brainstormings.add_moderating_user(brainstorming, user)
+
+      assert {:error,
+              %Ecto.Changeset{
+                valid?: false,
+                errors: [
+                  brainstorming_id: {_, [{:constraint, :unique}, _]}
+                ]
+              }} = Brainstormings.add_moderating_user(brainstorming, user)
     end
   end
 
@@ -209,7 +249,7 @@ defmodule Mindwendel.BrainstormingsTest do
       old_brainstorming = Factory.insert!(:brainstorming, inserted_at: ~N[2021-01-01 10:00:00])
       Brainstormings.delete_old_brainstormings()
 
-      refute Repo.exists?(from b in Brainstorming, where: b.id == ^old_brainstorming.id)
+      refute Repo.exists?(from(b in Brainstorming, where: b.id == ^old_brainstorming.id))
     end
 
     test "removes the old brainstormings ideas" do
@@ -223,7 +263,7 @@ defmodule Mindwendel.BrainstormingsTest do
 
       Brainstormings.delete_old_brainstormings()
 
-      refute Repo.exists?(from i in Idea, where: i.id == ^old_idea.id)
+      refute Repo.exists?(from(i in Idea, where: i.id == ^old_idea.id))
     end
 
     test "removes the old brainstormings likes" do
@@ -238,7 +278,7 @@ defmodule Mindwendel.BrainstormingsTest do
       old_like = Factory.insert!(:like, idea: old_idea)
       Brainstormings.delete_old_brainstormings()
 
-      refute Repo.exists?(from l in Like, where: l.id == ^old_like.id)
+      refute Repo.exists?(from(l in Like, where: l.id == ^old_like.id))
     end
 
     test "removes the old brainstormings links" do
@@ -253,7 +293,7 @@ defmodule Mindwendel.BrainstormingsTest do
       old_link = Factory.insert!(:link, idea: old_idea)
       Brainstormings.delete_old_brainstormings()
 
-      refute Repo.exists?(from l in Link, where: l.id == ^old_link.id)
+      refute Repo.exists?(from(l in Link, where: l.id == ^old_link.id))
     end
 
     test "removes the old brainstormings users connection", %{user: user} do
@@ -269,13 +309,13 @@ defmodule Mindwendel.BrainstormingsTest do
       Factory.insert!(:brainstorming, users: [user], inserted_at: ~N[2021-01-01 10:00:00])
       Brainstormings.delete_old_brainstormings()
 
-      assert Repo.exists?(from u in User, where: u.id == ^user.id)
+      assert Repo.exists?(from(u in User, where: u.id == ^user.id))
     end
 
     test "keeps the new brainstorming", %{brainstorming: brainstorming} do
       Brainstormings.delete_old_brainstormings()
 
-      assert Repo.exists?(from b in Brainstorming, where: b.id == ^brainstorming.id)
+      assert Repo.exists?(from(b in Brainstorming, where: b.id == ^brainstorming.id))
     end
   end
 end
