@@ -18,11 +18,11 @@ defmodule MindwendelWeb.BrainstormingControllerTest do
       assert Repo.one(from b in Brainstorming, select: count(b.id)) == 1
     end
 
-    test "adds current user as admin user to the brainstorming", %{conn: conn} do
+    test "adds current user as moderating user to the brainstorming", %{conn: conn} do
       conn = post(conn, Routes.brainstorming_path(conn, :create), brainstorming: @valid_attrs)
 
-      assert %Brainstorming{admin_users: [%User{id: _}]} =
-               Repo.one(Brainstorming) |> Repo.preload(:admin_users)
+      assert %Brainstorming{moderating_users: [%User{id: _}]} =
+               Repo.one(Brainstorming) |> Repo.preload(:moderating_users)
     end
 
     test "redirects to brainstorming show", %{conn: conn} do

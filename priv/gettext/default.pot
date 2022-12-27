@@ -174,7 +174,7 @@ msgstr ""
 msgid "mindwendel could not be found."
 msgstr ""
 
-#: lib/mindwendel_web/controllers/brainstorming_controller.ex:29
+#: lib/mindwendel_web/controllers/brainstorming_controller.ex:27
 #, elixir-autogen, elixir-format
 msgid "Something went wrong when creating a brainstorming. Please try again."
 msgstr ""
@@ -184,7 +184,7 @@ msgstr ""
 msgid "Successfully deleted brainstorming."
 msgstr ""
 
-#: lib/mindwendel_web/controllers/brainstorming_controller.ex:19
+#: lib/mindwendel_web/controllers/brainstorming_controller.ex:17
 #, elixir-autogen, elixir-format
 msgid "Your brainstorming was created successfully! Share the link with other people and start brainstorming."
 msgstr ""

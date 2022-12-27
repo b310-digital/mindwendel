@@ -80,23 +80,23 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
            |> has_element?
   end
 
-  test "edit and update text as admin user", %{
+  test "edit and update text as moderatoring user", %{
     conn: conn,
     brainstorming: brainstorming
   } do
-    admin_user = Factory.insert!(:user)
-    Brainstormings.add_admin_user(brainstorming, admin_user)
+    moderatoring_user = Factory.insert!(:user)
+    Brainstormings.add_moderating_user(brainstorming, moderatoring_user)
 
     {:ok, show_live_view, _html} =
       conn
-      |> init_test_session(%{current_user_id: admin_user.id})
+      |> init_test_session(%{current_user_id: moderatoring_user.id})
       |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
 
     assert show_live_view
            |> element(html_selector_button_idea_edit_link())
            |> render_click()
 
-    new_idea_body = "New idea body by Admin"
+    new_idea_body = "New idea body by moderator"
 
     {:ok, show_live_view, _html} =
       show_live_view
@@ -109,25 +109,25 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
            |> has_element?
   end
 
-  test "does not change user owner of idea after updating text as admin user", %{
+  test "does not change user owner of idea after updating text as moderator user", %{
     conn: conn,
     brainstorming: brainstorming,
     idea: idea,
     user: %User{id: user_id}
   } do
-    admin_user = Factory.insert!(:user)
-    Brainstormings.add_admin_user(brainstorming, admin_user)
+    moderator_user = Factory.insert!(:user)
+    Brainstormings.add_moderating_user(brainstorming, moderator_user)
 
     {:ok, show_live_view, _html} =
       conn
-      |> init_test_session(%{current_user_id: admin_user.id})
+      |> init_test_session(%{current_user_id: moderator_user.id})
       |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
 
     assert show_live_view
            |> element(html_selector_button_idea_edit_link())
            |> render_click()
 
-    new_idea_body = "New idea body by Admin"
+    new_idea_body = "New idea body by moderator"
 
     {:ok, show_live_view, _html} =
       show_live_view
@@ -140,7 +140,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
            |> has_element?
 
     assert Mindwendel.Brainstormings.get_idea!(idea.id).user_id
-    assert admin_user.id != Mindwendel.Brainstormings.get_idea!(idea.id).user_id
+    assert moderator_user.id != Mindwendel.Brainstormings.get_idea!(idea.id).user_id
     assert user_id = Mindwendel.Brainstormings.get_idea!(idea.id).user_id
   end
 

@@ -29,16 +29,16 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaDeleteTest do
   #               <i class="bi bi-x text-secondary"></i>
   #             <% end %>
 
-  test "delete idea as admin user", %{
+  test "delete idea as moderating user", %{
     conn: conn,
     brainstorming: brainstorming
   } do
-    admin_user = Factory.insert!(:user)
-    Brainstormings.add_admin_user(brainstorming, admin_user)
+    moderating_user = Factory.insert!(:user)
+    Brainstormings.add_moderating_user(brainstorming, moderating_user)
 
     {:ok, show_live_view, _html} =
       conn
-      |> init_test_session(%{current_user_id: admin_user.id})
+      |> init_test_session(%{current_user_id: moderating_user.id})
       |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
 
     rendered =
@@ -54,14 +54,14 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaDeleteTest do
 
     # {:ok, show_live_view, _html} =
     #   conn
-    #   |> init_test_session(%{current_user_id: admin_user.id})
+    #   |> init_test_session(%{current_user_id: moderatoring_user.id})
     #   |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
 
     # refute show_live_view
     #        |> element(html_selector_button_idea_delete_link())
     #        |> has_element?
 
-    # new_idea_body = "New idea body by Admin"
+    # new_idea_body = "New idea body by moderatoring user"
 
     # {:ok, show_live_view, _html} =
     #   show_live_view

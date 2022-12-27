@@ -1,8 +1,8 @@
-defmodule Mindwendel.Repo.Migrations.CreateBrainstormingAdminUsers do
+defmodule Mindwendel.Repo.Migrations.CreateBrainstormingModeratingUsers do
   use Ecto.Migration
 
   def change do
-    create table(:brainstorming_admin_users, primary_key: false) do
+    create table(:brainstorming_moderating_users, primary_key: false) do
       add(:brainstorming_id, references(:brainstormings, type: :uuid, on_delete: :delete_all),
         primary_key: true
       )
@@ -12,11 +12,11 @@ defmodule Mindwendel.Repo.Migrations.CreateBrainstormingAdminUsers do
       timestamps()
     end
 
-    create(index(:brainstorming_admin_users, [:brainstorming_id]))
-    create(index(:brainstorming_admin_users, [:user_id]))
+    create(index(:brainstorming_moderating_users, [:brainstorming_id]))
+    create(index(:brainstorming_moderating_users, [:user_id]))
 
     create(
-      unique_index(:brainstorming_admin_users, [
+      unique_index(:brainstorming_moderating_users, [
         :brainstorming_id,
         :user_id
       ])

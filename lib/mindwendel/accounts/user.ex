@@ -5,15 +5,15 @@ defmodule Mindwendel.Accounts.User do
 
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
-  alias Mindwendel.Brainstormings.BrainstormingAdminUser
+  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
   alias Mindwendel.Accounts.BrainstormingUser
 
   schema "users" do
     field :username, :string, default: "Anonymous"
     many_to_many :brainstormings, Brainstorming, join_through: BrainstormingUser
 
-    many_to_many :administrable_brainstormings, Brainstorming,
-      join_through: BrainstormingAdminUser
+    many_to_many :moderated_brainstormings, Brainstorming,
+      join_through: BrainstormingModeratingUser
 
     has_many :ideas, Idea
 

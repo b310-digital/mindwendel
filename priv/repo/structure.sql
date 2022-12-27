@@ -59,10 +59,10 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: brainstorming_admin_users; Type: TABLE; Schema: public; Owner: -
+-- Name: brainstorming_moderating_users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.brainstorming_admin_users (
+CREATE TABLE public.brainstorming_moderating_users (
     brainstorming_id uuid NOT NULL,
     user_id uuid NOT NULL,
     inserted_at timestamp(0) without time zone NOT NULL,
@@ -283,11 +283,11 @@ ALTER TABLE ONLY public.oban_jobs ALTER COLUMN id SET DEFAULT nextval('public.ob
 
 
 --
--- Name: brainstorming_admin_users brainstorming_admin_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: brainstorming_moderating_users brainstorming_moderating_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.brainstorming_admin_users
-    ADD CONSTRAINT brainstorming_admin_users_pkey PRIMARY KEY (brainstorming_id, user_id);
+ALTER TABLE ONLY public.brainstorming_moderating_users
+    ADD CONSTRAINT brainstorming_moderating_users_pkey PRIMARY KEY (brainstorming_id, user_id);
 
 
 --
@@ -387,24 +387,24 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: brainstorming_admin_users_brainstorming_id_index; Type: INDEX; Schema: public; Owner: -
+-- Name: brainstorming_moderating_users_brainstorming_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX brainstorming_admin_users_brainstorming_id_index ON public.brainstorming_admin_users USING btree (brainstorming_id);
-
-
---
--- Name: brainstorming_admin_users_brainstorming_id_user_id_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX brainstorming_admin_users_brainstorming_id_user_id_index ON public.brainstorming_admin_users USING btree (brainstorming_id, user_id);
+CREATE INDEX brainstorming_moderating_users_brainstorming_id_index ON public.brainstorming_moderating_users USING btree (brainstorming_id);
 
 
 --
--- Name: brainstorming_admin_users_user_id_index; Type: INDEX; Schema: public; Owner: -
+-- Name: brainstorming_moderating_users_brainstorming_id_user_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX brainstorming_admin_users_user_id_index ON public.brainstorming_admin_users USING btree (user_id);
+CREATE UNIQUE INDEX brainstorming_moderating_users_brainstorming_id_user_id_index ON public.brainstorming_moderating_users USING btree (brainstorming_id, user_id);
+
+
+--
+-- Name: brainstorming_moderating_users_user_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX brainstorming_moderating_users_user_id_index ON public.brainstorming_moderating_users USING btree (user_id);
 
 
 --
@@ -499,19 +499,19 @@ CREATE TRIGGER oban_notify AFTER INSERT ON public.oban_jobs FOR EACH ROW EXECUTE
 
 
 --
--- Name: brainstorming_admin_users brainstorming_admin_users_brainstorming_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: brainstorming_moderating_users brainstorming_moderating_users_brainstorming_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.brainstorming_admin_users
-    ADD CONSTRAINT brainstorming_admin_users_brainstorming_id_fkey FOREIGN KEY (brainstorming_id) REFERENCES public.brainstormings(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.brainstorming_moderating_users
+    ADD CONSTRAINT brainstorming_moderating_users_brainstorming_id_fkey FOREIGN KEY (brainstorming_id) REFERENCES public.brainstormings(id) ON DELETE CASCADE;
 
 
 --
--- Name: brainstorming_admin_users brainstorming_admin_users_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: brainstorming_moderating_users brainstorming_moderating_users_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.brainstorming_admin_users
-    ADD CONSTRAINT brainstorming_admin_users_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+ALTER TABLE ONLY public.brainstorming_moderating_users
+    ADD CONSTRAINT brainstorming_moderating_users_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --

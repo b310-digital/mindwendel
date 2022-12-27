@@ -11,7 +11,7 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.BrainstormingAdminUser
+  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
   alias Mindwendel.Brainstormings.Like
 
   @doc """
@@ -33,8 +33,8 @@ defmodule Mindwendel.Brainstormings do
     )
   end
 
-  def add_admin_user(%Brainstorming{} = brainstorming, %User{} = user) do
-    %BrainstormingAdminUser{user_id: user.id, brainstorming_id: brainstorming.id}
+  def add_moderating_user(%Brainstorming{} = brainstorming, %User{} = user) do
+    %BrainstormingModeratingUser{user_id: user.id, brainstorming_id: brainstorming.id}
     |> Ecto.Changeset.change()
     |> Repo.insert()
   end
@@ -288,7 +288,7 @@ defmodule Mindwendel.Brainstormings do
     Repo.get!(Brainstorming, id)
     |> Repo.preload([
       :users,
-      :admin_users,
+      :moderating_users,
       labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
       ideas: [
         :link,

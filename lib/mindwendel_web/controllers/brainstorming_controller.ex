@@ -1,9 +1,7 @@
 defmodule MindwendelWeb.BrainstormingController do
   use MindwendelWeb, :controller
   alias Mindwendel.Brainstormings
-  alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Accounts
-  alias Mindwendel.Repo
 
   def create(conn, %{"brainstorming" => brainstorming_params}) do
     current_user =
@@ -11,8 +9,8 @@ defmodule MindwendelWeb.BrainstormingController do
       |> Accounts.get_or_create_user()
 
     with {:ok, brainstorming} <- Brainstormings.create_brainstorming(brainstorming_params),
-         {:ok, _brainstorming_admin_user} <-
-           Brainstormings.add_admin_user(brainstorming, current_user) do
+         {:ok, _brainstorming_moderating_user} <-
+           Brainstormings.add_moderating_user(brainstorming, current_user) do
       conn
       |> put_flash(
         :info,
