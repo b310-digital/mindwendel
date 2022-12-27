@@ -44,30 +44,6 @@ defmodule Mindwendel.BrainstormingsTest do
       brainstorming = Repo.preload(brainstorming, :moderating_users)
       assert Enum.empty?(brainstorming.moderating_users)
     end
-
-    # test "create a valid brainstorming with moderating_user", %{
-    #   brainstorming: brainstorming,
-    #   user: user
-    # } do
-    #   Brainstorming.add_moderating_user(brainstorming, user_id)
-
-    #   brainstorming = Repo.preload(brainstorming, :moderating_users)
-    #   # brainstorming |> IO.inspect()
-
-    #   {:ok, brainstormin_2} =
-    #     Ecto.Changeset.change(brainstorming)
-    #     |> IO.inspect()
-    #     |> Ecto.Changeset.put_assoc(:moderating_users, [user])
-    #     |> IO.inspect()
-    #     |> Mindwendel.Repo.update()
-
-    #   # {:ok, brainstormin_2} = brainstorming |> IO.inspect()
-
-    #   assert Repo.exists?(
-    #            from b in Mindwendel.Brainstormings.BrainstormingModeratingUser,
-    #              where: b.brainstorming_id == ^brainstorming.id
-    #          )
-    # end
   end
 
   describe "#add_moderating_user" do
