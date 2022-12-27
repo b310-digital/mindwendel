@@ -5,6 +5,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   import MindwendelWeb.Gettext
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
   alias Mindwendel.Accounts.User
   alias Mindwendel.Accounts.BrainstormingUser
 
@@ -17,6 +18,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     has_many :ideas, Idea
     has_many :labels, IdeaLabel
     many_to_many :users, User, join_through: BrainstormingUser
+    many_to_many :moderating_users, User, join_through: BrainstormingModeratingUser
 
     timestamps()
   end
