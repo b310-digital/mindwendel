@@ -38,7 +38,7 @@
         <%= form_for @changeset, Routes.brainstorming_path(@conn, :create), fn f -> %>
           <div class="input-group position-relative d-flex flex-wrap align-items-lg-stretch w-100">
             <%= text_input f, :name, class: "form-control rounded-start", placeholder: "Gib deine Frage ein!" %>
-            <%= submit "Erstellen!", class: "btn-primary" %>
+            <%= submit "Erstellen", class: "btn-primary" %>
           </div>
         <% end %>
 
@@ -59,8 +59,7 @@
       <div class="d-flex w-100 g-0 justify-content-around px-3">
         <div>
           <p class="fs-6 text-center">
-            Dieses Tool darf nur in Lehr-Lern-Kontexten genutzt werden. Die Eingabe personenbezogener Daten ist
-            nicht gestattet.
+            Dieses Tool darf nur in Bildungskontexten genutzt werden. Die Eingabe personenbezogener Daten ist nicht gestattet.
           </p>
         </div>
       </div>
