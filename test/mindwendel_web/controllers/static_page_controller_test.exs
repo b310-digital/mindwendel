@@ -39,7 +39,6 @@ defmodule MindwendelWeb.StaticPageControllerTest do
 
       conn = get(conn, Routes.static_page_path(conn, :home))
 
-      assert html_response(conn, 200) =~ "Deine letzten Brainstormings"
       assert html_response(conn, 200) =~ brainstorming.name
     end
 
@@ -54,7 +53,6 @@ defmodule MindwendelWeb.StaticPageControllerTest do
 
       conn = get(conn, Routes.static_page_path(conn, :home))
 
-      refute html_response(conn, 200) =~ "Deine letzten Brainstormings"
       refute html_response(conn, 200) =~ brainstorming.name
     end
   end
