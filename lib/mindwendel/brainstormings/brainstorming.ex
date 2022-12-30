@@ -34,16 +34,6 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     |> gen_admin_url_id(brainstorming)
   end
 
-  def changeset_create(user, attrs) do
-    user
-    |> Ecto.build_assoc(:created_brainstormings,
-      labels: idea_label_factory(),
-      moderating_users: [user],
-      users: [user]
-    )
-    |> changeset(attrs)
-  end
-
   defp gen_admin_url_id(changeset, brainstorming) do
     if brainstorming.admin_url_id do
       changeset

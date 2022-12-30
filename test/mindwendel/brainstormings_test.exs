@@ -1,11 +1,13 @@
 defmodule Mindwendel.BrainstormingsTest do
   use Mindwendel.DataCase
   alias Mindwendel.Brainstormings.BrainstormingModeratingUser
+  alias Mindwendel.Accounts.BrainstormingUser
   alias Mindwendel.Factory
 
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Attachments.Link
   alias Mindwendel.Accounts.User
@@ -36,13 +38,6 @@ defmodule Mindwendel.BrainstormingsTest do
                older_brainstorming.id,
                oldest_brainstorming.id
              ]
-    end
-  end
-
-  describe "create_brainstorming" do
-    test "empty moderating_users", %{brainstorming: brainstorming} do
-      brainstorming = Repo.preload(brainstorming, :moderating_users)
-      assert Enum.empty?(brainstorming.moderating_users)
     end
   end
 
