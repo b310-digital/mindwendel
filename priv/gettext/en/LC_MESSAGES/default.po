@@ -175,7 +175,7 @@ msgstr ""
 msgid "mindwendel could not be found."
 msgstr ""
 
-#: lib/mindwendel_web/controllers/brainstorming_controller.ex:21
+#: lib/mindwendel_web/controllers/brainstorming_controller.ex:26
 #, elixir-autogen, elixir-format
 msgid "Something went wrong when creating a brainstorming. Please try again."
 msgstr ""
@@ -185,7 +185,7 @@ msgstr ""
 msgid "Successfully deleted brainstorming."
 msgstr ""
 
-#: lib/mindwendel_web/controllers/brainstorming_controller.ex:11
+#: lib/mindwendel_web/controllers/brainstorming_controller.ex:16
 #, elixir-autogen, elixir-format
 msgid "Your brainstorming was created successfully! Share the link with other people and start brainstorming."
 msgstr ""
@@ -266,27 +266,27 @@ msgstr ""
 msgid "Type the label name"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:56
+#: lib/mindwendel/brainstormings/brainstorming.ex:59
 #, elixir-autogen, elixir-format
 msgid "cyan"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:57
+#: lib/mindwendel/brainstormings/brainstorming.ex:60
 #, elixir-autogen, elixir-format
 msgid "gray dark"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:58
+#: lib/mindwendel/brainstormings/brainstorming.ex:61
 #, elixir-autogen, elixir-format
 msgid "green"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:59
+#: lib/mindwendel/brainstormings/brainstorming.ex:62
 #, elixir-autogen, elixir-format
 msgid "red"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:60
+#: lib/mindwendel/brainstormings/brainstorming.ex:63
 #, elixir-autogen, elixir-format
 msgid "yellow"
 msgstr ""

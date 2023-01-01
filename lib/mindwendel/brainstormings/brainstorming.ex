@@ -5,6 +5,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   import MindwendelWeb.Gettext
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
   alias Mindwendel.Accounts.User
   alias Mindwendel.Accounts.BrainstormingUser
 
@@ -14,9 +15,11 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     # Todo: The following line can be changed `field :admin_url_id, Ecto.UUID, autogenerate: true`
     # This will automatically generate a UUID for the admin_url_id which would make the method `gen_admin_url_id/2` obsolete.
     field :admin_url_id, :binary_id
+    belongs_to :creating_user, User
     has_many :ideas, Idea
     has_many :labels, IdeaLabel
     many_to_many :users, User, join_through: BrainstormingUser
+    many_to_many :moderating_users, User, join_through: BrainstormingModeratingUser
 
     timestamps()
   end

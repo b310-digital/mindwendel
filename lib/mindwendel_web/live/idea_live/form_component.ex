@@ -30,12 +30,12 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   defp save_idea(socket, :update, idea_params) do
     idea = Brainstormings.get_idea!(idea_params["id"])
 
-    current_user = socket.assigns.current_user
+    %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
-    if idea.user_id == current_user.id do
+    if current_user.id in [idea.user_id | brainstorming.moderating_users |> Enum.map(& &1.id)] do
       case Brainstormings.update_idea(
              idea,
-             Map.put(idea_params, "user_id", current_user.id)
+             Map.put(idea_params, "user_id", idea.user_id || current_user.id)
            ) do
         {:ok, _idea} ->
           {:noreply,

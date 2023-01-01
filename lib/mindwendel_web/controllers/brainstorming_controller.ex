@@ -1,9 +1,14 @@
 defmodule MindwendelWeb.BrainstormingController do
   use MindwendelWeb, :controller
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Accounts
 
   def create(conn, %{"brainstorming" => brainstorming_params}) do
-    case Brainstormings.create_brainstorming(brainstorming_params) do
+    current_user =
+      MindwendelService.SessionService.get_current_user_id(conn)
+      |> Accounts.get_or_create_user()
+
+    case Brainstormings.create_brainstorming(current_user, brainstorming_params) do
       {:ok, brainstorming} ->
         conn
         |> put_flash(

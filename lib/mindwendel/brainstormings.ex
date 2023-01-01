@@ -7,9 +7,11 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Repo
 
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
   alias Mindwendel.Brainstormings.Like
 
   @doc """
@@ -29,6 +31,12 @@ defmodule Mindwendel.Brainstormings do
         order_by: [desc: brainstorming.inserted_at],
         limit: ^limit
     )
+  end
+
+  def add_moderating_user(%Brainstorming{} = brainstorming, %User{} = user) do
+    %BrainstormingModeratingUser{brainstorming_id: brainstorming.id, user_id: user.id}
+    |> BrainstormingModeratingUser.changeset()
+    |> Repo.insert()
   end
 
   @doc """
@@ -280,6 +288,7 @@ defmodule Mindwendel.Brainstormings do
     Repo.get!(Brainstorming, id)
     |> Repo.preload([
       :users,
+      :moderating_users,
       labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
       ideas: [
         :link,
@@ -312,19 +321,27 @@ defmodule Mindwendel.Brainstormings do
   end
 
   @doc """
-  Creates a brainstorming.
+  Creates a brainstorming and associates a user as creating_user, moderatoring user (also called brainstorming admin) and user.
+
+  User hast to be persisted.
 
   ## Examples
 
-      iex> create_brainstorming(%{field: value})
-      {:ok, %Brainstorming{}}
+    current_user =
+        MindwendelService.SessionService.get_current_user_id(conn)
+        |> Accounts.get_or_create_user()
 
-      iex> create_brainstorming(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+    {:ok, %Brainstorming{ ... }} =
+      Brainstormings.create_brainstorming(current_user, %{name: "Brainstorming name"})
 
   """
-  def create_brainstorming(attrs \\ %{}) do
-    %Brainstorming{labels: Brainstorming.idea_label_factory()}
+  def create_brainstorming(%User{} = user, attrs) do
+    user
+    |> Ecto.build_assoc(:created_brainstormings,
+      labels: Brainstorming.idea_label_factory(),
+      moderating_users: [user],
+      users: [user]
+    )
     |> Brainstorming.changeset(attrs)
     |> Repo.insert()
   end
