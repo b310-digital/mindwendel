@@ -10,6 +10,7 @@ defmodule Mindwendel.Accounts.User do
 
   schema "users" do
     field :username, :string, default: "Anonymous"
+    has_many :created_brainstormings, Brainstorming, foreign_key: :creating_user_id
     many_to_many :brainstormings, Brainstorming, join_through: BrainstormingUser
 
     many_to_many :moderated_brainstormings, Brainstorming,

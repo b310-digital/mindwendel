@@ -9,7 +9,8 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
   @create_attrs %{name: "a name"}
 
   defp fixture(:brainstorming) do
-    {:ok, brainstorming} = Brainstormings.create_brainstorming(@create_attrs)
+    user = Factory.insert!(:user)
+    {:ok, brainstorming} = Brainstormings.create_brainstorming(user, @create_attrs)
     brainstorming
   end
 
