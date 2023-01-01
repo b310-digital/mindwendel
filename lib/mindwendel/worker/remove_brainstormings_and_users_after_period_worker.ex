@@ -1,4 +1,6 @@
 defmodule Mindwendel.Worker.RemoveBrainstormingsAndUsersAfterPeriodWorker do
+  @moduledoc false
+
   use Oban.Worker, unique: [fields: [:worker], period: 60]
   alias Mindwendel.Brainstormings
   alias Mindwendel.Accounts

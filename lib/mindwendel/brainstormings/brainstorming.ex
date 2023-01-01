@@ -1,4 +1,6 @@
 defmodule Mindwendel.Brainstormings.Brainstorming do
+  @moduledoc false
+
   use Mindwendel.Schema
 
   import Ecto.Changeset
@@ -12,6 +14,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   schema "brainstormings" do
     field :name, :string
     field :option_show_link_to_settings, :boolean
+    # credo:disable-for-next-line Credo.Check.Design.TagTODO
     # Todo: The following line can be changed `field :admin_url_id, Ecto.UUID, autogenerate: true`
     # This will automatically generate a UUID for the admin_url_id which would make the method `gen_admin_url_id/2` obsolete.
     field :admin_url_id, :binary_id

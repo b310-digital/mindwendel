@@ -1,4 +1,6 @@
 defmodule Mindwendel.CSVFormatter do
+  @moduledoc false
+
   alias Mindwendel.Brainstormings
 
   def ideas_to_csv(ideas) do
