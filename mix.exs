@@ -40,7 +40,6 @@ defmodule Mindwendel.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-
       {:bypass, "~> 2.1", only: :test},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:csv, "~> 2.4"},
@@ -63,7 +62,7 @@ defmodule Mindwendel.MixProject do
       {:sobelow, "~> 0.8", only: :dev},
       {:telemetry_metrics, "0.6.1"},
       {:telemetry_poller, "1.0.0"},
-      {:timex, "3.7.8"},
+      {:timex, "3.7.8"}
     ]
   end
 
