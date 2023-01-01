@@ -1,4 +1,6 @@
 defmodule Mindwendel.Accounts.BrainstormingUser do
+  @moduledoc false
+
   use Mindwendel.Schema
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Accounts.User

@@ -1,4 +1,6 @@
 defmodule Mindwendel.Attachments.Link do
+  @moduledoc false
+
   use Mindwendel.Schema
   import Ecto.Changeset
   alias Mindwendel.Brainstormings.Idea

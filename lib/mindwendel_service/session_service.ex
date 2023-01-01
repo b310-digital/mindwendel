@@ -1,4 +1,6 @@
 defmodule MindwendelService.SessionService do
+  @moduledoc false
+
   @session_key_user_id :current_user_id
 
   def session_key_current_user_id, do: @session_key_user_id

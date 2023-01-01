@@ -1,4 +1,6 @@
 defmodule Mindwendel.Brainstormings.Idea do
+  @moduledoc false
+
   use Mindwendel.Schema
 
   import Ecto.Changeset

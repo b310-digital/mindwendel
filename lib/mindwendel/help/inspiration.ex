@@ -1,4 +1,6 @@
 defmodule Mindwendel.Help.Inspiration do
+  @moduledoc false
+
   use Mindwendel.Schema
 
   import Ecto.Changeset

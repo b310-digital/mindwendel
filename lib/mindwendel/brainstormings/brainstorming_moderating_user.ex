@@ -1,4 +1,6 @@
 defmodule Mindwendel.Brainstormings.BrainstormingModeratingUser do
+  @moduledoc false
+
   use Ecto.Schema
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Accounts.User

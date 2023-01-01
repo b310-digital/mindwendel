@@ -1,4 +1,6 @@
 defmodule MindwendelWeb.ModalComponent do
+  @moduledoc false
+
   use MindwendelWeb, :live_component
 
   @impl true
