@@ -49,6 +49,7 @@ defmodule Mindwendel.MixProject do
       {:floki, ">= 0.27.0"},
       {:gettext, "0.20.0"},
       {:httpoison, "~> 1.7"},
+      {:husky, "~> 1.0", only: :dev, runtime: false},
       {:jason, "1.4.0"},
       {:oban, "2.12.1"},
       {:phoenix_ecto, "4.4.0"},
