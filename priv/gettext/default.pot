@@ -265,27 +265,27 @@ msgstr ""
 msgid "Type the label name"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:59
+#: lib/mindwendel/brainstormings/brainstorming.ex:62
 #, elixir-autogen, elixir-format
 msgid "cyan"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:60
+#: lib/mindwendel/brainstormings/brainstorming.ex:63
 #, elixir-autogen, elixir-format
 msgid "gray dark"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:61
+#: lib/mindwendel/brainstormings/brainstorming.ex:64
 #, elixir-autogen, elixir-format
 msgid "green"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:62
+#: lib/mindwendel/brainstormings/brainstorming.ex:65
 #, elixir-autogen, elixir-format
 msgid "red"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:63
+#: lib/mindwendel/brainstormings/brainstorming.ex:66
 #, elixir-autogen, elixir-format
 msgid "yellow"
 msgstr ""
