@@ -1,5 +1,7 @@
 import Config
 
+config :husky, :json_codec, Jason
+
 # Configure your database
 config :mindwendel, Mindwendel.Repo,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
