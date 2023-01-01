@@ -8,18 +8,17 @@ defmodule MindwendelWeb.BrainstormingController do
       MindwendelService.SessionService.get_current_user_id(conn)
       |> Accounts.get_or_create_user()
 
-    with {:ok, brainstorming} <- Brainstormings.create_brainstorming(brainstorming_params),
-         {:ok, _brainstorming_moderating_user} <-
-           Brainstormings.add_moderating_user(brainstorming, current_user) do
-      conn
-      |> put_flash(
-        :info,
-        gettext(
-          "Your brainstorming was created successfully! Share the link with other people and start brainstorming."
+    case Brainstormings.create_brainstorming(current_user, brainstorming_params) do
+      {:ok, brainstorming} ->
+        conn
+        |> put_flash(
+          :info,
+          gettext(
+            "Your brainstorming was created successfully! Share the link with other people and start brainstorming."
+          )
         )
-      )
-      |> redirect(to: Routes.brainstorming_show_path(conn, :show, brainstorming))
-    else
+        |> redirect(to: Routes.brainstorming_show_path(conn, :show, brainstorming))
+
       {:error, _} ->
         conn
         |> put_flash(

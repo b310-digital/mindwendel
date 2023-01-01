@@ -61,6 +61,10 @@ FROM base as production_builder
 ENV MIX_ENV="prod"
 ENV NODE_ENV="production"
 
+# Setting this env var will avoid warnings from the production config
+# We could leave it as it as no effect on the build output
+ENV SECRET_KEY_BASE="dummy_secret_key_base_to_avoid_warning_from_production_config"
+
 # install mix dependencies
 COPY mix.exs mix.lock ./
 RUN mix deps.get --only $MIX_ENV
