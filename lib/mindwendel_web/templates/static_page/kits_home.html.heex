@@ -1,33 +1,56 @@
-<div class="container-fluid g-0">
-  <div class="row g-0">
-    <div
-      class="col-lg-6 bg-gradient order bg-gradient-primary min-vh-100 d-flex flex-column align-items-center justify-content-between order"
-    >
-      <div></div>
-      <div class="">
-        <img src={ Routes.static_path(@conn, "/images/mindwendel_logo.png") } class="img-fluid d-block" alt="Mindwendel Logo" />
+<div class="order-1">
+  <!-- Footer Block End -->
+  <div class="d-lg-none">
+    <div id="static-footer" class="footer fixed-bottom bg-gradient bg-gradient-primary">
+      <div class="row">
+        <div class="d-flex align-items-center">
+          <div class="col-1 col-sm-2">
+            <%= link to: "/", title: "mindwendel" do %>
+              <img id="static-footer-logo" src={Routes.static_path(@conn, "/images/mindwendel_logo.png")} class="img-fluid d-block" width="100%" alt="mindwendel Logo" />
+            <% end %>
+          </div>
+          <div class="col-11 col-sm-10 d-flex justify-content-end">
+            <a href="https://github.com/kitsteam/mindwendel" class="text-white px-lg-2 p-2 text-decoration-none">GitHub</a>
+            <a href="https://kits.blog/impressum/" class="text-white px-lg-2 p-2 text-decoration-none">Impressum</a>
+            <a href="https://kits.blog/datenschutzerklaerung/" class="text-white p-2 text-decoration-none">Datenschutz</a>
+          </div>
+        </div>
       </div>
-      <div class="d-flex align-items-center pb-4">
-        <a href="https://github.com/kitsteam/mindwendel">
-          <img src={ Routes.static_path(@conn, "/images/github-logo.svg") } class="img-fluid d-block" alt="GitHub Logo"/>
-        </a>
-        <a class="text-white px-sm-2 p-2 text-decoration-none" href="https://github.com/kitsteam/mindwendel">mindwendel</a>
-        <a class="text-white px-lg-2 p-2 text-decoration-none" href="https://kits.blog/impressum/">Impressum</a>
-        <a class="text-white text-decoration-none p-2" href="https://kits.blog/datenschutzerklaerung/">Datenschutz</a>
+    </div>
+  </div>
+  <!-- Footer Block End -->
+
+  <!-- Left Block -->
+  <div class="d-none d-lg-block">
+    <div id="left-column" class="order float-start position-fixed vh-100 bg-gradient bg-gradient-primary w-50 d-flex flex-column align-items-center justify-content-between">
+      <div></div>
+      <div>
+        <%= link to: "/", title: "mindwendel" do %>
+          <img src={Routes.static_path(@conn, "/images/mindwendel_logo.png")} class="img-fluid d-block" alt="mindwendel Logo" />
+        <% end %>
+      </div>
+      <div id="footer-links" class="d-flex align-items-center mb-1">
+        <a href="https://github.com/kitsteam/mindwendel" class="text-white px-lg-2 p-2 text-decoration-none">GitHub</a>
+        <a href="https://kits.blog/impressum/" class="text-white px-lg-2 p-2 text-decoration-none">Impressum</a>
+        <a href="https://kits.blog/datenschutzerklaerung/" class="text-white p-2 text-decoration-none">Datenschutz</a>
+      </div>
+    </div>
+  </div>
+  <!-- End Left Block -->
+
+  <!-- Right Block -->
+  <div class="w-50 float-end d-flex flex-column align-items-stretch justify-content-between vh-100">
+    <div class="g-0 d-flex justify-content-end px-3">
+      <div class="pt-3">
+        <a href="https://kits.blog/tools/"><img src={Routes.static_path(@conn, "/images/kits-logo.svg")} class="img-fluid d-block" alt="Kits Logo"/></a>
       </div>
     </div>
 
-    <div class="col-lg-6 min-vh-100 d-flex flex-column align-items-center justify-content-between">
-      <div class="d-flex w-100 g-0 justify-content-end px-3">
-        <div class="pt-3">
-          <a href="https://kits.blog/tools/">
-            <img src={ Routes.static_path(@conn, "/images/kits-logo.svg") } class="img-fluid d-block" alt="Kits Logo" />
-          </a>
-        </div>
-      </div>
-
-      <div class="px-5">
-        <h1 class="fw-bold">mindwendel</h1>
+    <div class="row g-0 h-100">
+      <div id="content" class="container w-90">
+        <h1 class="fw-bold">
+          <%= link "mindwendel", to: "/", title: "mindwendel", class: "text-decoration-none" %>
+        </h1>
 
         <ul class="list-group list-unstyled mb-3">
           <li class="list-group-item pb-2">Erstelle mit einem Klick ein Brainstorming!</li>
@@ -45,24 +68,28 @@
         <%= if @current_user && !Enum.empty?(@current_user.brainstormings) do %>
           <ul id="mindmaps" class="list-inline pt-4 text-muted lh-lg">
             <%= for brainstorming <- list_brainstormings_for(@current_user) do %>
-                <li>
-                  <%= link brainstorming.name, to: Routes.brainstorming_show_path(@conn, :show, brainstorming), class: "text-decoration-none text-black-50" %>
-                  <span class="badge rounded-pill bg-light text-dark">
-                    <%= Timex.format!(brainstorming.inserted_at, "{relative}", :relative) %>
-                  </span>
-                </li>
+              <li>
+                <%= link brainstorming.name, to: Routes.brainstorming_show_path(@conn, :show, brainstorming), class: "text-decoration-none text-black-50" %>
+                <span class="badge rounded-pill bg-light text-dark">
+                  <%= Timex.format!(brainstorming.inserted_at, "{relative}", :relative) %>
+                </span>
+              </li>
             <% end %>
           </ul>
         <% end %>
       </div>
-
-      <div class="d-flex w-100 g-0 justify-content-around px-3">
-        <div>
-          <p class="fs-6 text-center">
-            Dieses Tool darf nur in Bildungskontexten genutzt werden. Die Eingabe personenbezogener Daten ist nicht gestattet.
-          </p>
-        </div>
-      </div>
     </div>
   </div>
 </div>
+<!-- End Right Block -->
+
+<!--[if IE
+  ]><div
+    class="w-100 text-center bg-dark text-white pt-3 px-4 pb-1 position-fixed"
+    style="z-index: 1000; bottom: 0"
+  >
+    <p onClick="parentNode.remove()">
+      Please use a modern browser for a better browsing experience. <span class="float-right">X</span>
+    </p>
+  </div><!
+[endif]-->
