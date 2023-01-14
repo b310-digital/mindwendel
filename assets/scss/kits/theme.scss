@@ -1,0 +1,113 @@
+// Import customisations first, afterwards import bootstrap::after
+
+@import "colors";
+@import "fonts";
+@import "button";
+@import "gradient";
+@import "form";
+@import "list";
+@import "utilities";
+
+// Required
+@import "./../../node_modules/bootstrap/scss/_functions";
+@import "./../../node_modules/bootstrap/scss/_variables";
+@import "./../../node_modules/bootstrap/scss/_maps";
+@import "./../../node_modules/bootstrap/scss/_mixins";
+@import "./../../node_modules/bootstrap/scss/_utilities";
+@import "./../../node_modules/bootstrap/scss/_root";
+@import "./../../node_modules/bootstrap/scss/_reboot";
+
+@import "./../../node_modules/bootstrap/scss/_type";
+@import "./../../node_modules/bootstrap/scss/_images";
+@import "./../../node_modules/bootstrap/scss/_containers";
+@import "./../../node_modules/bootstrap/scss/_grid";
+@import "./../../node_modules/bootstrap/scss/_tables";
+@import "./../../node_modules/bootstrap/scss/_forms";
+@import "./../../node_modules/bootstrap/scss/_buttons";
+@import "./../../node_modules/bootstrap/scss/_transitions";
+@import "./../../node_modules/bootstrap/scss/_dropdown";
+@import "./../../node_modules/bootstrap/scss/_button-group";
+@import "./../../node_modules/bootstrap/scss/_nav";
+@import "./../../node_modules/bootstrap/scss/_navbar"; // Requires nav
+@import "./../../node_modules/bootstrap/scss/_card";
+@import "./../../node_modules/bootstrap/scss/_breadcrumb";
+@import "./../../node_modules/bootstrap/scss/_accordion";
+@import "./../../node_modules/bootstrap/scss/_pagination";
+@import "./../../node_modules/bootstrap/scss/_badge";
+@import "./../../node_modules/bootstrap/scss/_alert";
+@import "./../../node_modules/bootstrap/scss/_progress";
+@import "./../../node_modules/bootstrap/scss/_list-group";
+@import "./../../node_modules/bootstrap/scss/_close";
+@import "./../../node_modules/bootstrap/scss/_toasts";
+@import "./../../node_modules/bootstrap/scss/_modal"; // Requires transitions
+@import "./../../node_modules/bootstrap/scss/_tooltip";
+@import "./../../node_modules/bootstrap/scss/_popover";
+@import "./../../node_modules/bootstrap/scss/_carousel";
+@import "./../../node_modules/bootstrap/scss/_spinners";
+@import "./../../node_modules/bootstrap/scss/_offcanvas"; // Requires transitions
+@import "./../../node_modules/bootstrap/scss/_placeholders";
+@import "./../../node_modules/bootstrap/scss/_helpers";
+@import "./../../node_modules/bootstrap/scss/utilities/api";
+
+
+
+//
+// Custom styles not related to bootstrap:
+//
+@include media-breakpoint-down(lg) {
+  // starting with LG size we only want one column:
+  .float-end {
+    width: 100% !important;
+    height: auto !important;
+    margin-bottom: 100px;
+  }
+}
+
+#content {
+  margin-top: 3rem;
+}
+
+#static-footer .row {
+  margin: 1rem;
+}
+
+@media screen and (max-height: 812px) {
+  #content {
+    margin-top: 1rem;
+  }
+
+  #static-footer .row {
+    margin: 0.5rem;
+  }
+
+  .form-text.text-muted {
+    font-size: 0.75em;
+  }
+}
+
+@media screen and (max-height: 568px) {
+  #content {
+    margin-top: 0rem;
+  }
+
+  #static-footer .row {
+    margin: 0.5rem;
+  }
+
+  .form-text.text-muted {
+    font-size: 0.65em;
+  }
+}
+
+@media screen and (max-width: 374px) {
+  // for very small display widhts we need to reduce the font size for the footer:
+  #static-footer {
+    font-size: 14px;
+  }
+}
+
+// we don't want the footer logo to grow too big, otherwise the footer becomes too high:
+#static-footer-logo {
+  max-width: 80px !important;
+  min-width: 40px;
+}
