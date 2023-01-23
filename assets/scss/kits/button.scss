@@ -1,25 +1,3 @@
-.btn-primary {
-  background-color: #00456f;
-  border: 0px;
-  color: white;
-  border-radius: 5px;
-}
-
-.btn-secondary {
-  background-color: #00a3d3;
-  border: 0px;
-  color: white !important;
-  border-radius: 5px;
-}
-
-.btn-primary:hover {
-  background-color: #00a3d3;
-}
-
-.btn-secondary:hover {
-  background-color: #00456f;
-}
-
 .btn-group > :not(.btn-check:first-child) + .btn,
 .btn-group > .btn-group:not(:first-child) {
   margin-left: 0px !important;
