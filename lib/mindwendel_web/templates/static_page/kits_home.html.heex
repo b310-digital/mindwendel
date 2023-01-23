@@ -48,6 +48,9 @@
 
     <div class="row g-0 h-100">
       <div id="content" class="container w-90">
+        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+
         <h1 class="fw-bold">
           <%= link "mindwendel", to: "/", title: "mindwendel", class: "text-decoration-none" %>
         </h1>
@@ -60,7 +63,7 @@
 
         <%= form_for @changeset, Routes.brainstorming_path(@conn, :create), fn f -> %>
           <div class="input-group position-relative d-flex flex-wrap align-items-lg-stretch w-100">
-            <%= text_input f, :name, class: "form-control rounded-start", placeholder: "Gib deine Frage ein!" %>
+            <%= text_input f, :name, class: "form-control rounded-start", placeholder: "Gib deine Frage ein!", required: true %>
             <%= submit "Erstellen", class: "btn btn-primary" %>
           </div>
         <% end %>

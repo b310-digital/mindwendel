@@ -19,10 +19,10 @@ defmodule MindwendelWeb.BrainstormingController do
         )
         |> redirect(to: Routes.brainstorming_show_path(conn, :show, brainstorming))
 
-      {:error, _} ->
+      {:error, changeset} ->
         conn
         |> put_flash(
-          :info,
+          :error,
           gettext("Something went wrong when creating a brainstorming. Please try again.")
         )
         |> redirect(to: Routes.static_page_path(conn, :home))
