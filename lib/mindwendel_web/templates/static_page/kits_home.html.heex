@@ -61,7 +61,7 @@
         <%= form_for @changeset, Routes.brainstorming_path(@conn, :create), fn f -> %>
           <div class="input-group position-relative d-flex flex-wrap align-items-lg-stretch w-100">
             <%= text_input f, :name, class: "form-control rounded-start", placeholder: "Gib deine Frage ein!" %>
-            <%= submit "Erstellen", class: "btn-primary" %>
+            <%= submit "Erstellen", class: "btn btn-primary" %>
           </div>
         <% end %>
 
