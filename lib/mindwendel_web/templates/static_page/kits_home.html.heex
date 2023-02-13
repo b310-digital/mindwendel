@@ -6,7 +6,7 @@
         <div class="d-flex align-items-center">
           <div class="col-1 col-sm-2">
             <%= link to: "/", title: "mindwendel" do %>
-              <img id="static-footer-logo" src={Routes.static_path(@conn, "/images/kits-mindwendel-logo.svg")} class="img-fluid d-block" width="100%" alt="mindwendel Logo" />
+              <img id="static-footer-logo" src={Routes.static_path(@conn, "/images/kits-mindwendel-logo-white.svg")} class="img-fluid d-block" width="100%" alt="mindwendel Logo" />
             <% end %>
           </div>
           <div class="col-11 col-sm-10 d-flex justify-content-end">
@@ -26,7 +26,7 @@
       <div></div>
       <div>
         <%= link to: "/", title: "mindwendel" do %>
-          <img src={Routes.static_path(@conn, "/images/kits-mindwendel-logo.svg")} class="img-fluid d-block" width="400px" alt="mindwendel Logo" />
+          <img src={Routes.static_path(@conn, "/images/kits-mindwendel-logo-white.svg")} class="img-fluid d-block" width="400px" alt="mindwendel Logo" />
         <% end %>
       </div>
       <div id="footer-links" class="d-flex align-items-center mb-1">
@@ -47,39 +47,48 @@
     </div>
 
     <div class="row g-0 h-100">
-      <div id="content" class="container w-90">
-        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+      <div id="content" class="container w-90 d-flex align-content-center flex-wrap">
+        <p class="alert alert-secondary" role="alert"><%= get_flash(@conn, :info) %></p>
         <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
 
-        <h1 class="fw-bold">
-          <%= link "mindwendel", to: "/", title: "mindwendel", class: "text-decoration-none" %>
-        </h1>
+        <div id="call-to-action-block">
+          <h1 class="fw-bold">
+            <%= link "mindwendel", to: "/", title: "mindwendel", class: "text-decoration-none" %>
+          </h1>
 
-        <ul class="list-group list-unstyled mb-3">
-          <li class="list-group-item pb-2">Erstelle mit einem Klick ein Brainstorming!</li>
-          <li class="list-group-item pb-2">Lade andere ein!</li>
-          <li class="list-group-item pb-2">Kategorisiere deine Ideen!</li>
-        </ul>
-
-        <%= form_for @changeset, Routes.brainstorming_path(@conn, :create), fn f -> %>
-          <div class="input-group position-relative d-flex flex-wrap align-items-lg-stretch w-100">
-            <%= text_input f, :name, class: "form-control rounded-start", placeholder: "Gib deine Frage ein!", required: true %>
-            <%= submit "Erstellen", class: "btn btn-primary" %>
-          </div>
-        <% end %>
-
-        <%= if @current_user && !Enum.empty?(@current_user.brainstormings) do %>
-          <ul id="mindmaps" class="list-inline pt-4 text-muted lh-lg">
-            <%= for brainstorming <- list_brainstormings_for(@current_user) do %>
-              <li>
-                <%= link brainstorming.name, to: Routes.brainstorming_show_path(@conn, :show, brainstorming), class: "text-decoration-none text-black-50" %>
-                <span class="badge rounded-pill bg-light text-dark">
-                  <%= Timex.format!(brainstorming.inserted_at, "{relative}", :relative) %>
-                </span>
-              </li>
-            <% end %>
+          <ul class="list-group list-unstyled mb-3">
+            <li class="list-group-item pb-2">Erstelle Brainstormings!</li>
+            <li class="list-group-item pb-2">Lade andere ein!</li>
+            <li class="list-group-item pb-2">Kategorisiere deine Ideen!</li>
           </ul>
-        <% end %>
+
+          <%= form_for @changeset, Routes.brainstorming_path(@conn, :create), fn f -> %>
+            <div class="input-group position-relative d-flex flex-wrap align-items-lg-stretch w-100">
+              <%= text_input f, :name, class: "form-control rounded-start", placeholder: "Gib deine Frage ein!", required: true %>
+              <%= submit "Erstellen", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+
+          <p class="form-text text-muted mt-3">
+            Dieses Tool darf nur in Bildungskontexten genutzt werden. Die Eingabe personenbezogener Daten ist
+            nicht gestattet.
+          </p>
+
+          <%= if @current_user && !Enum.empty?(@current_user.brainstormings) do %>
+          <h5 class="mt-4">Letzte Brainstormings</h5>
+            <ul id="mindmaps" class="list-inline text-dark lh-sm">
+              <%= for brainstorming <- list_brainstormings_for(@current_user) do %>
+                <li class="mb-3">
+                  <%= link brainstorming.name, to: Routes.brainstorming_show_path(@conn, :show, brainstorming), class: "text-decoration-none text-break" %>
+                  <br/>
+                  <span class="badge rounded-pill bg-light mt-1 text-dark">
+                    <%= Timex.format!(brainstorming.inserted_at, "{relative}", :relative) %>
+                  </span>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

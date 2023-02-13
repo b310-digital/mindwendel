@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="280" height="281" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g>
+        <path d="M36.2,69.1C36.3,69.3 36.5,69.7 36.6,71.2C36.6,71.7 36.7,72.2 36.7,72.7C36.7,73.2 36.8,73.7 36.8,74.2C36.9,75.4 37,77.6 37.1,79.6C37.2,81.2 37.3,82.8 37.3,83.6C37.5,86 39.5,87.9 42,87.9L43,87.9C43.8,89.5 45.4,90.5 47.2,90.5L52.8,90.5C54.6,90.5 56.2,89.5 57,87.9L57.8,87.9C60.2,87.9 62.3,86 62.5,83.6C62.6,82.8 62.6,81.2 62.7,79.6C62.8,77.6 62.9,75.4 63,74.2C63,73.7 63.1,73.2 63.1,72.6C63.1,72.1 63.2,71.6 63.2,71.1C63.3,69.6 63.5,69.2 63.6,69C64.6,67.3 65.8,65.7 66.9,64.2C70.4,59.2 73.8,54.5 73.8,47.5C73.8,40.7 70.9,34.2 65.8,29.6C60.7,25.1 53.9,22.9 47,23.7C35.1,25.1 25.9,35.6 26,47.6C26.1,54.6 29.4,59.2 32.9,64.1C34.1,65.8 35.2,67.4 36.2,69.1ZM59.4,83.5C59.3,84.3 58.7,84.9 57.8,84.9L42.1,84.9C41.3,84.9 40.6,84.3 40.5,83.5C40.5,83.1 40.4,82.5 40.4,81.7L59.5,81.7C59.5,82.4 59.5,83.1 59.4,83.5ZM59.6,79.5L59.6,80.1L40.4,80.1L40.4,79.5C40.4,78.8 40.3,78 40.3,77.3L59.8,77.3C59.7,78.1 59.7,78.8 59.6,79.5ZM60.1,72.6C60.1,73.1 60,73.5 60,74C60,74.5 59.9,75.1 59.9,75.8L40.1,75.8C40.1,75.1 40,74.5 40,74C40,73.5 39.9,73.1 39.9,72.6L60.1,72.6Z" style="fill:white;fill-rule:nonzero;" fill-opacity="0.63"/>
+        <circle cx="14.3" cy="48.6" r="3.5" style="fill:white;" fill-opacity="0.63"/>
+        <circle cx="85.7" cy="48.6" r="3.5" style="fill:white;" fill-opacity="0.63"/>
+        <circle cx="50" cy="12.8" r="3.5" style="fill:white;" fill-opacity="0.63"/>
+        <g transform="matrix(0.7071,-0.7071,0.7071,0.7071,-44.9844,39.118)">
+            <circle cx="24.7" cy="73.9" r="3.5" style="fill:white;" fill-opacity="0.63"/>
+        </g>
+        <g transform="matrix(0.7071,-0.7071,0.7071,0.7071,5.5596,60.0554)">
+            <circle cx="75.3" cy="23.3" r="3.5" style="fill:white;" fill-opacity="0.63"/>
+        </g>
+        <g transform="matrix(0.7071,-0.7071,0.7071,0.7071,-30.1808,74.8597)">
+            <circle cx="75.3" cy="73.9" r="3.5" style="fill:white;" fill-opacity="0.63"/>
+        </g>
+        <g transform="matrix(0.7071,-0.7071,0.7071,0.7071,-9.2447,24.315)">
+            <circle cx="24.7" cy="23.3" r="3.5" style="fill:white;" fill-opacity="0.63"/>
+        </g>
+    </g>
+</svg>

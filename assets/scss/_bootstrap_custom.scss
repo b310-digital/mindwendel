@@ -1,4 +1,10 @@
-$primary: #00456f;
+@import "kits/colors";
+@import "kits/fonts";
+@import "kits/button";
+@import "kits/gradient";
+@import "kits/form";
+@import "kits/list";
+@import "kits/utilities";
 
 .card-body-mindwendel-idea {
   @extend .card-body;
