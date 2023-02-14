@@ -3,7 +3,5 @@
     "hooks": {
       "pre_push": "mix format --check-formatted && mix credo && mix test"
     }
-  },
-  "asd": {},
-  "asd2": {}
+  }
 }
