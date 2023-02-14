@@ -11,30 +11,18 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:15
+#: lib/mindwendel_web/templates/static_page/home.html.heex:18
 #, elixir-autogen, elixir-format
 msgid "Brainstorm"
 msgstr "Los geht's!"
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:24
+#: lib/mindwendel_web/templates/static_page/home.html.heex:27
 #, elixir-autogen, elixir-format
 msgid "How might we ..."
 msgstr "Wie können wir ..."
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:14
+#: lib/mindwendel_web/templates/static_page/home.html.heex:17
 #, elixir-autogen, elixir-format
-#, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:14
-msgid "Brainstorm"
-msgstr "Los geht's!"
-
-#, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:21
-msgid "How might we ..."
-msgstr "Wie können wir ..."
-
-#, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:13
 msgid "Ready?"
 msgstr "Fertig?"
 
@@ -69,12 +57,12 @@ msgstr "Schließen"
 msgid "Copy"
 msgstr "Kopieren"
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:13
+#: lib/mindwendel_web/templates/static_page/home.html.heex:16
 #, elixir-autogen, elixir-format
 msgid "Create a challenge."
 msgstr "Erstelle ein Brainstorming."
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:30
+#: lib/mindwendel_web/templates/static_page/home.html.heex:33
 #, elixir-autogen, elixir-format
 msgid "Create!"
 msgstr "Erstellen!"
@@ -210,7 +198,7 @@ msgstr "Editiere Brainstorming"
 msgid "Export"
 msgstr "Export"
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:47
+#: lib/mindwendel_web/templates/static_page/home.html.heex:50
 #, elixir-autogen
 msgid "Your latest brainstormings"
 msgstr "Deine letzten Brainstormings"
@@ -251,7 +239,12 @@ msgstr "Zeige Link zur Administration für alle Nutzer"
 msgid "Warning: Please make sure you save the admin link at the top, before hiding the settings link!"
 msgstr "Achtung: Bitte speichere den Admin-Link oben ab, bevor du den Link zur Administration versteckst."
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:34
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:48
+#, elixir-autogen, elixir-format
+msgid "Brainstorming will be deleted "
+msgstr "Brainstorming wird gelöscht in "
+
+#: lib/mindwendel_web/templates/static_page/home.html.heex:37
 #, elixir-autogen, elixir-format
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr "Brainstormings werden nach %{days} Tagen gelöscht."
@@ -402,12 +395,15 @@ msgstr "Likes"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Brainstorming will be deleted %{days}"
 msgstr "Brainstorming wird gelöscht %{days}"
-#, elixir-format
-#: lib/mindwendel_web/templates/static_page/home.html.leex:54
-msgid "Legal Disclosure"
-msgstr "Impressum"
 
 #, elixir-format
 #: lib/mindwendel_web/templates/static_page/home.html.leex:54
+#: lib/mindwendel_web/templates/static_page/home.html.heex:69
+#, elixir-autogen, elixir-format
+msgid "Legal Disclosure"
+msgstr "Impressum"
+
+#: lib/mindwendel_web/templates/static_page/home.html.heex:69
+#, elixir-autogen, elixir-format
 msgid "Privacy"
 msgstr "Datenschutz"
