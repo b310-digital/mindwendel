@@ -1,7 +1,7 @@
 <div class="d-flex w-100 h-100 p-3 pb-0 mx-auto flex-column bg-mindwendel text-white">
   <header class="mb-auto bg-none container">
-    <%= link to: "https://github.com/b310-digital/mindwendel", class: "text-reset text-decoration-none" do %>
-      <img src={Routes.static_path(@conn, "/images/GitHub-Mark-Light-64px.png")} height="40px" class="float-end" />
+    <%= link to: "https://github.com/mindwendel/mindwendel", class: "text-reset text-decoration-none" do %>
+        <img src={Routes.static_path(@conn, "/images/GitHub-Mark-Light-64px.png")} height="40px" class="float-end" />
     <% end %>
     <img
       src={Routes.static_path(@conn, "/images/mindwendel_logo_white.svg")}
@@ -20,7 +20,7 @@
 
     <div class="row">
       <div class="col-md-12 col-lg-5 mt-2">
-        <%= f = form_for @changeset, Routes.brainstorming_path(@conn, :create) %>
+        <%= form_for @changeset, Routes.brainstorming_path(@conn, :create), fn f -> %>
           <div class="input-group">
             <%= text_input(f, :name,
               class: "form-control",
@@ -32,7 +32,7 @@
             <% end %>
             <%= submit(gettext("Create!"), class: "btn btn-primary fw-bold") %>
           </div>
-        </form>
+        <% end %>
         <small class="text-muted">
           <%= gettext("Brainstormings will be deleted after %{days} days.",
             days:
