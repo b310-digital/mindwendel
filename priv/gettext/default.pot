@@ -359,7 +359,7 @@ msgstr ""
 
 #: lib/mindwendel_web/live/idea_live/form_component.ex:43
 #, elixir-autogen, elixir-format
-msgid "Idea created updated"
+msgid "Idea updated"
 msgstr ""
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:69

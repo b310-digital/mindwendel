@@ -356,14 +356,14 @@ msgstr "Bist du sicher, dass das Brainstorming gelöscht werden soll?"
 #: lib/mindwendel_web/live/idea_live/index_component.html.heex:11
 #, elixir-autogen, elixir-format
 msgid "Edit Idea"
-msgstr ""
+msgstr "Idee bearbeiten"
 
 #: lib/mindwendel_web/live/idea_live/form_component.ex:43
 #, elixir-autogen, elixir-format
-msgid "Idea created updated"
-msgstr ""
+msgid "Idea updated"
+msgstr "Idee aktualisiert"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:69
 #, elixir-autogen, elixir-format
 msgid "Update idea"
-msgstr ""
+msgstr "Idee aktualisieren"

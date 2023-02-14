@@ -40,7 +40,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
         {:ok, _idea} ->
           {:noreply,
            socket
-           |> put_flash(:info, gettext("Idea created updated"))
+           |> put_flash(:info, gettext("Idea updated"))
            |> push_redirect(to: socket.assigns.return_to)}
 
         {:error, %Ecto.Changeset{} = changeset} ->
