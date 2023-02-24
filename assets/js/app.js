@@ -17,7 +17,7 @@ import {LiveSocket} from "phoenix_live_view"
 import QRCodeStyling from "qr-code-styling";
 import ClipboardJS from "clipboard"
 import {buildQrCodeOptions} from "./qrCodeUtils.js"
-import "./bootstrap_setup.js"
+import "./column_setup.js"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
