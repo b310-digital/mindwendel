@@ -14,6 +14,8 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Brainstormings.BrainstormingModeratingUser
   alias Mindwendel.Brainstormings.Like
 
+  require Logger
+
   @doc """
   Returns the 3 most recent brainstormings for a a user.
 
@@ -395,8 +397,29 @@ defmodule Mindwendel.Brainstormings do
   """
   def delete_old_brainstormings(after_days \\ 30) do
     date_time = Timex.now() |> Timex.shift(days: -1 * after_days)
+    brainstormings_count = Repo.aggregate(Brainstorming, :count, :id)
 
-    Repo.delete_all(from b in Brainstorming, where: b.inserted_at < ^date_time)
+    old_brainstormings_query = from b in Brainstorming, where: b.inserted_at < ^date_time
+    old_brainstormings_count = Repo.aggregate(old_brainstormings_query, :count, :id)
+
+    Logger.info(
+      "Delete old brainstormings. Count: #{old_brainstormings_count} / #{brainstormings_count}"
+    )
+
+    Logger.info("Starting to delete old brainstormings:")
+    brainstormings = Repo.all(old_brainstormings_query)
+
+    Enum.each(brainstormings, fn brainstorming ->
+      try do
+        delete_brainstorming(brainstorming)
+      rescue
+        e in RuntimeError ->
+          Logger.error("Error while deleting brainstorming: #{brainstorming.id}")
+          Logger.error(e)
+      end
+    end)
+
+    Logger.info("Finished deleting old brainstormings")
   end
 
   @doc """
