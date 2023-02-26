@@ -38,11 +38,12 @@ if config_env() != :test do
     database: System.get_env("DATABASE_NAME"),
     hostname: System.get_env("DATABASE_HOST"),
     password: System.get_env("DATABASE_USER_PASSWORD"),
+    username: System.get_env("DATABASE_USER"),
     pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
     port: String.to_integer(System.get_env("DATABASE_PORT", "5432")),
     ssl: System.get_env("DATABASE_SSL", "true") == "true",
     url: System.get_env("DATABASE_URL"),
-    username: System.get_env("DATABASE_USER")
+    timeout: String.to_integer(System.get_env("DATABASE_TIMEOUT", "15000"))
 
   secret_key_base =
     System.get_env("SECRET_KEY_BASE") ||
@@ -132,7 +133,8 @@ if config_env() == :prod || config_env() == :dev do
     plugins: [
       {Oban.Plugins.Cron,
        crontab: [
-         {"@midnight", Mindwendel.Worker.RemoveBrainstormingsAndUsersAfterPeriodWorker}
+         {System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_CRON", "@midnight"),
+          Mindwendel.Worker.RemoveBrainstormingsAndUsersAfterPeriodWorker}
        ]}
     ],
     queues: [default: 5]
