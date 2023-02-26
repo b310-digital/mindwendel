@@ -133,7 +133,8 @@ if config_env() == :prod || config_env() == :dev do
     plugins: [
       {Oban.Plugins.Cron,
        crontab: [
-         {System.get_env("MW_FEATURE_REMOVAL_AFTER_DAYS_CRON", "@midnight"), Mindwendel.Worker.RemoveBrainstormingsAndUsersAfterPeriodWorker}
+         {System.get_env("MW_FEATURE_REMOVAL_AFTER_DAYS_CRON", "@midnight"),
+          Mindwendel.Worker.RemoveBrainstormingsAndUsersAfterPeriodWorker}
        ]}
     ],
     queues: [default: 5]
