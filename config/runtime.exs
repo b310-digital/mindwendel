@@ -137,5 +137,5 @@ if config_env() == :prod || config_env() == :dev do
           Mindwendel.Worker.RemoveBrainstormingsAndUsersAfterPeriodWorker}
        ]}
     ],
-    queues: [default: 5]
+    queues: [default: 1]
 end
