@@ -4,6 +4,8 @@ defmodule Mindwendel.Accounts do
   alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.Brainstorming
 
+  require Logger
+
   @doc """
   Finds an existing user or creates a new user based on an UUID.
 
@@ -115,6 +117,30 @@ defmodule Mindwendel.Accounts do
 
   def delete_inactive_users(after_days \\ 30) do
     date_time = Timex.now() |> Timex.shift(days: -1 * after_days)
-    Repo.delete_all(from u in User, where: u.updated_at < ^date_time)
+    users_count = Repo.aggregate(User, :count, :id)
+
+    inactive_users_query = from u in User, where: u.updated_at < ^date_time
+    inactive_users_count = Repo.aggregate(inactive_users_query, :count, :id)
+
+    Logger.info("Delete inactive users. Count: #{inactive_users_count} / #{users_count}")
+
+    Logger.info("Starting to delete inactive users:")
+    inactive_users = Repo.all(inactive_users_query)
+
+    Enum.each(inactive_users, fn inactive_user ->
+      try do
+        delete_user(inactive_user)
+      rescue
+        e ->
+          Logger.error("Error while deleting inactive user: #{inactive_user.id}")
+          Logger.error(e)
+      end
+    end)
+
+    Logger.info("Finished deleting old inactive users")
+  end
+
+  def delete_user(%User{} = user) do
+    Repo.delete(user)
   end
 end
