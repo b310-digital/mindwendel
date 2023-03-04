@@ -2,7 +2,7 @@
 @import "../node_modules/nprogress/nprogress";
 @import "_bootstrap_custom.scss";
 
-$bootstrap-icons-font-dir: "../node_modules/bootstrap-icons/font/fonts/";
+$bootstrap-icons-font-dir: "/fonts/bootstrap-icons/";
 
 @import "../node_modules/bootstrap-icons/font/bootstrap-icons";
 @import "live/idea_live/_index_component.scss";
