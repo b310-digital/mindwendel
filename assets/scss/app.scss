@@ -1,10 +1,10 @@
 /* This file is for your main application css. It will be compiled to app.css, which is then loaded by esbuild. */
-@import "../node_modules/nprogress/nprogress";
+@import "nprogress/nprogress";
 @import "_bootstrap_custom.scss";
 
 $bootstrap-icons-font-dir: "/fonts/bootstrap-icons";
 
-@import "../node_modules/bootstrap-icons/font/bootstrap-icons";
+@import "bootstrap-icons/font/bootstrap-icons";
 @import "live/idea_live/_index_component.scss";
 
 @import "live/brainstorming_live/_show.scss";
