@@ -46,7 +46,7 @@ msgstr "Möchtest du die Idee löschen?"
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr "Achtung: Hiermit löschst du das Brainstorming und alle dazugehörigen Ideen. Diese Aktion kann nicht rückgängig gemacht werden."
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:30
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:24
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr "Schließen"
@@ -133,7 +133,7 @@ msgstr "Öffne neue Ideen Dialog (Hotkey: i)"
 msgid "Proceed to your brainstorming"
 msgstr "Weiter zu deinem Brainstorming"
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:31
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:25
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Speichern"
@@ -143,7 +143,7 @@ msgstr "Speichern"
 msgid "Save this link to update / delete your brainstorming later on:"
 msgstr "Speichere diesen Link, um das Brainstorming zukünftig zu bearbeiten oder zu löschen"
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:31
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:25
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr "Speichere..."
@@ -205,17 +205,12 @@ msgstr "Export"
 msgid "Your latest brainstormings"
 msgstr "Deine letzten Brainstormings"
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:21
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:17
 #, elixir-autogen, elixir-format
 msgid "Your idea"
 msgstr "Deine Idee"
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:8
-#, elixir-autogen, elixir-format
-msgid "Required fields are either missing or incorrect:"
-msgstr "Einige Pflichtfelder fehlen oder sind inkorrekt:"
-
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:13
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:7
 #, elixir-autogen, elixir-format
 msgid "Username"
 msgstr "Nutzername"
