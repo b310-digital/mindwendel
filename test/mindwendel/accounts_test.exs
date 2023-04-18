@@ -6,6 +6,8 @@ defmodule Mindwendel.AccountsTest do
   alias Mindwendel.Accounts.BrainstormingUser
   alias Mindwendel.Brainstormings.Brainstorming
 
+  import ExUnit.CaptureLog
+
   setup do
     %{user: Factory.insert!(:user)}
   end
@@ -78,6 +80,58 @@ defmodule Mindwendel.AccountsTest do
     test "does not delete the brainstorming", %{old_brainstorming: old_brainstorming} do
       Accounts.delete_inactive_users()
       assert Repo.exists?(from b in Brainstorming, where: b.id == ^old_brainstorming.id)
+    end
+
+    test "does not delete the user is still attached to ideas", %{
+      old_user: old_user,
+      old_brainstorming: old_brainstorming
+    } do
+      Factory.insert!(:idea, brainstorming: old_brainstorming, user: old_user)
+
+      # we want to make sure that the database is not handling this with a foreign key restraint, but rather that it's handled in the app:
+      {_result, log} =
+        with_log(fn ->
+          Accounts.delete_inactive_users()
+        end)
+
+      assert Repo.exists?(from u in User, where: u.id == ^old_user.id)
+      assert log == ""
+    end
+
+    test "does not delete the user a user is a creating user of a brainstorming", %{
+      old_user: old_user
+    } do
+      Factory.insert!(:brainstorming,
+        creating_user: old_user,
+        inserted_at: ~N[2021-01-01 10:00:00]
+      )
+
+      # we want to make sure that the database is not handling this with a foreign key restraint, but rather that it's handled in the app:
+      {_result, log} =
+        with_log(fn ->
+          Accounts.delete_inactive_users()
+        end)
+
+      assert Repo.exists?(from u in User, where: u.id == ^old_user.id)
+      assert log == ""
+    end
+
+    test "does not delete the user a user is a moderating user of a brainstorming", %{
+      old_user: old_user
+    } do
+      Factory.insert!(:brainstorming,
+        moderating_users: [old_user],
+        inserted_at: ~N[2021-01-01 10:00:00]
+      )
+
+      # we want to make sure that the database is not handling this with a foreign key restraint, but rather that it's handled in the app:
+      {_result, log} =
+        with_log(fn ->
+          Accounts.delete_inactive_users()
+        end)
+
+      assert Repo.exists?(from u in User, where: u.id == ^old_user.id)
+      assert log == ""
     end
   end
 end

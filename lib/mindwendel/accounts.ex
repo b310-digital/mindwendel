@@ -129,7 +129,10 @@ defmodule Mindwendel.Accounts do
 
     Enum.each(inactive_users, fn inactive_user ->
       try do
-        delete_user(inactive_user)
+        # first, check if this user is still a moderating user somewhere. in this case, we don't delete the user. we wait until the other brainstorming has been deleted, and delete this user subsequently:
+        unless user_has_active_brainstormings(inactive_user) do
+          delete_user(inactive_user)
+        end
       rescue
         e ->
           Logger.error("Error while deleting inactive user: #{inactive_user.id}")
@@ -142,5 +145,16 @@ defmodule Mindwendel.Accounts do
 
   def delete_user(%User{} = user) do
     Repo.delete(user)
+  end
+
+  def user_has_active_brainstormings(user) do
+    # check if the user is still listed as creating_user, a moderating user somewhere or if the user is still attached to ideas:
+    still_has(user, :created_brainstormings) || still_has(user, :ideas) ||
+      still_has(user, :moderated_brainstormings)
+  end
+
+  # checks if the user has an open association to assoc
+  defp still_has(user, assoc) do
+    user |> Ecto.assoc(assoc) |> Repo.aggregate(:count, :id) > 0
   end
 end
