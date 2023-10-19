@@ -49,7 +49,7 @@ defmodule Mindwendel.MixProject do
       {:esbuild, "0.5.0", runtime: Mix.env() == :dev},
       {:dart_sass, "0.5.1", runtime: Mix.env() == :dev},
       {:bypass, "~> 2.1", only: :test},
-      {:csv, "~> 2.4"},
+      {:csv, "~> 3.2"},
       {:ecto_sql, "3.8.3"},
       {:floki, ">= 0.27.0"},
       {:gettext, "0.20.0"},
