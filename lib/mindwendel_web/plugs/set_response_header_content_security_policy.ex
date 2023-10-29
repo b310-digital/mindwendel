@@ -1,4 +1,6 @@
 defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
+  @moduledoc false
+
   @content_secrity_policy_response_header_key "content-security-policy"
 
   # @impl true
@@ -36,6 +38,8 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
 
       # We need to add csp 'unsafe-eval', otherwise we get an error in development
       # because webpack js bundle uses `eval` for hot reloading.
+
+      # credo:disable-for-next-line Credo.Check.Design.TagTODO
       # TODO: Lets evaluate this for production
       "script-src  'self' 'unsafe-eval' ;",
       "style-src   'self' 'unsafe-inline' ;"

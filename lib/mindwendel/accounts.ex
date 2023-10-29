@@ -1,4 +1,6 @@
 defmodule Mindwendel.Accounts do
+  @moduledoc false
+
   import Ecto.Query, warn: false
   alias Mindwendel.Repo
   alias Mindwendel.Accounts.User
@@ -85,7 +87,8 @@ defmodule Mindwendel.Accounts do
 
   """
   def merge_brainstorming_user(%Brainstorming{} = brainstorming, %User{} = user) do
-    unless user.id in Enum.map(brainstorming.users, fn e -> e.id end) do
+    # credo:disable-for-next-line Credo.Check.Refactor.UnlessWithElse
+    unless user.id in Enum.map(brainstorming.users, & &1.id) do
       brainstorming_users = [user | brainstorming.users]
 
       updated_brainstorming =

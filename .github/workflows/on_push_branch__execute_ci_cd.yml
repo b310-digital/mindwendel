@@ -124,6 +124,25 @@ jobs:
       - run: mix do local.hex --force, local.rebar --force
       - run: mix compile
       - run: mix gettext.extract --check-up-to-date
+  
+  check_mix_credo:
+    runs-on: ubuntu-latest
+    container: hexpm/elixir:1.13.1-erlang-24.2-debian-bullseye-20210902-slim
+
+    needs: build_deps
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-v4
+      
+      - run: mix do local.hex --force, local.rebar --force
+      - run: mix credo
 
   check_mix_sobelow:
     runs-on: ubuntu-latest

@@ -17,7 +17,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabelsTest do
       brainstorming: existing_brainstorming
     } do
       existing_brainstorming = Repo.preload(existing_brainstorming, :labels)
-      assert Enum.count(existing_brainstorming.labels) == 0
+      assert Enum.empty?(existing_brainstorming.labels)
 
       MigrateIdealLabels.run()
 

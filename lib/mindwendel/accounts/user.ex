@@ -1,4 +1,6 @@
 defmodule Mindwendel.Accounts.User do
+  @moduledoc false
+
   use Mindwendel.Schema
 
   import Ecto.Changeset

@@ -1,4 +1,6 @@
 defmodule Mindwendel.Plugs.SetSessionUserId do
+  @moduledoc false
+
   # @impl true
   def init(opts) do
     opts

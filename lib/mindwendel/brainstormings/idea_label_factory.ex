@@ -1,5 +1,6 @@
 defmodule Mindwendel.Brainstormings.IdeaLabelFactory do
   alias Mindwendel.Brainstormings.Brainstorming
+  @moduledoc false
 
   def build_idea_label(list) when is_list(list) do
     rem(
