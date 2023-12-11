@@ -53,7 +53,7 @@ defmodule Mindwendel.MixProject do
       {:ecto_sql, "3.8.3"},
       {:floki, ">= 0.27.0"},
       {:gettext, "0.20.0"},
-      {:httpoison, "~> 1.7"},
+      {:httpoison, "~> 2.2"},
       {:jason, "1.4.0"},
       {:oban, "2.12.1"},
       {:plug_cowboy, "~> 2.0"},
