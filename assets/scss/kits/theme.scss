@@ -11,6 +11,10 @@
 // Required
 @import "bootstrap/scss/functions";
 @import "bootstrap/scss/variables";
+
+// disable dark mode:
+$enable-dark-mode: false;
+
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/mixins";
 @import "bootstrap/scss/utilities";
