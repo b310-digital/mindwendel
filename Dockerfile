@@ -12,9 +12,9 @@
 #   - https://pkgs.org/ - resource for finding needed packages
 #   - Ex: hexpm/elixir:1.13.1-erlang-24.2-debian-bullseye-20210902-slim
 #
-ARG ELIXIR_VERSION=1.13.4
-ARG OTP_VERSION=24.3.4.15
-ARG DEBIAN_VERSION=bullseye-20231009-slim
+ARG ELIXIR_VERSION=1.15.2
+ARG OTP_VERSION=26.0.2
+ARG DEBIAN_VERSION=bullseye-20230612-slim
 
 ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}"
 ARG RUNNER_IMAGE="debian:${DEBIAN_VERSION}"
@@ -38,6 +38,7 @@ RUN apt-get update && apt-get install -y nodejs \
   build-essential \
   inotify-tools \ 
   postgresql-client \
+  ca-certificates \
   git \
   cmake && \
   apt-get clean && \ 
@@ -107,7 +108,7 @@ RUN mix release
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE} as production
 
-RUN apt-get update -y && apt-get install -y libstdc++6 postgresql-client openssl libncurses5 locales \
+RUN apt-get update -y && apt-get install -y ca-certificates libstdc++6 postgresql-client openssl libncurses5 locales \
   && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 # Set the locale

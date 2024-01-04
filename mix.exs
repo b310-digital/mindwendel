@@ -40,28 +40,28 @@ defmodule Mindwendel.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "1.6.15"},
-      {:phoenix_ecto, "4.4.0"},
+      {:phoenix, "1.6.16"},
+      {:phoenix_ecto, "4.4.3"},
       {:phoenix_html, "3.2.0"},
       {:phoenix_live_dashboard, "0.7.2"},
       {:phoenix_live_reload, "1.3.3", only: :dev},
       {:phoenix_live_view, "0.18.3"},
       {:esbuild, "0.5.0", runtime: Mix.env() == :dev},
       {:dart_sass, "0.5.1", runtime: Mix.env() == :dev},
-      {:bypass, "~> 2.1", only: :test},
-      {:csv, "~> 2.4"},
-      {:ecto_sql, "3.8.3"},
-      {:floki, ">= 0.27.0"},
-      {:gettext, "0.20.0"},
-      {:httpoison, "~> 1.7"},
-      {:jason, "1.4.0"},
-      {:oban, "2.12.1"},
-      {:plug_cowboy, "~> 2.0"},
-      {:postgrex, "0.16.5"},
-      {:sobelow, "~> 0.8", only: :dev},
+      {:bypass, "2.1.0", only: :test},
+      {:csv, "2.5.0"},
+      {:ecto_sql, "3.11.1"},
+      {:floki, "0.35.2"},
+      {:gettext, "0.24.0"},
+      {:httpoison, "2.2.1"},
+      {:jason, "1.4.1"},
+      {:oban, "2.17.1"},
+      {:plug_cowboy, "2.6.1"},
+      {:postgrex, "0.17.4"},
+      {:sobelow, "0.13.0", only: :dev},
       {:telemetry_metrics, "0.6.1"},
       {:telemetry_poller, "1.0.0"},
-      {:timex, "3.7.8"}
+      {:timex, "3.7.11"}
     ]
   end
 

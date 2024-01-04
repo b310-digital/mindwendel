@@ -16,7 +16,7 @@ config :mindwendel, MindwendelWeb.Endpoint,
 secret_key_base = System.get_env("SECRET_KEY_BASE")
 
 unless secret_key_base do
-  Logger.warn(
+  Logger.warning(
     "Environment variable SECRET_KEY_BASE is missing. You can generate one by calling: mix phx.gen.secret"
   )
 end
