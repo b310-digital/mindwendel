@@ -24,7 +24,7 @@ defmodule MindwendelWeb.Router do
     #
     # The static analysis tool sobelow wants us to include the CSP header when calling this plug. It does not recognize that
     # the CSP header is included in a custom plug. This is why we need to skip this check here.
-    # sobelow_skip(["Config.CSP"])
+    sobelow_skip(["Config.CSP"])
     plug(:put_secure_browser_headers)
     plug(Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy)
 
