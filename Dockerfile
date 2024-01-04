@@ -66,6 +66,8 @@ FROM base as production_builder
 # set build ENV
 ENV MIX_ENV="prod"
 ENV NODE_ENV="production"
+# This is required for arm64 builds, see https://elixirforum.com/t/mix-deps-get-memory-explosion-when-doing-cross-platform-docker-build/57157
+ENV ERL_FLAGS="+JPperf true"
 
 # Setting this env var will avoid warnings from the production config
 # We could leave it as it as no effect on the build output
