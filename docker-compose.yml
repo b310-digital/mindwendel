@@ -42,7 +42,7 @@ services:
       - /app/assets/node_modules
 
   postgres:
-    image: postgres:12-alpine
+    image: postgres:15
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
       # IMPORTANT: Do not use these credentials in production. Please use other credentials when deploying this in production

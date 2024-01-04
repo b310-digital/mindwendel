@@ -7,29 +7,29 @@ require Logger
 
 if config_env() != :test do
   unless System.get_env("DATABASE_URL") do
-    Logger.warn(
+    Logger.warning(
       "Environment variable DATABASE_URL is missing, e.g. Database_URL=ecto://USER:PASS@HOST/DATABASE"
     )
   end
 
   unless System.get_env("DATABASE_HOST") do
-    Logger.warn(
+    Logger.warning(
       "Environment variable DATABASE_HOST is missing, e.g. DATABASE_HOST=localhost or DATABASE_HOST=postgres"
     )
   end
 
   unless System.get_env("DATABASE_NAME") do
-    Logger.warn("Environment variable DATABASE_NAME is missing, e.g. DATABASE_NAME=mindwendel")
+    Logger.warning("Environment variable DATABASE_NAME is missing, e.g. DATABASE_NAME=mindwendel")
   end
 
   unless System.get_env("DATABASE_USER") do
-    Logger.warn(
+    Logger.warning(
       "Environment variable DATABASE_USER is missing, e.g. DATABASE_USER=mindwendel_user"
     )
   end
 
   unless System.get_env("DATABASE_USER_PASSWORD") do
-    Logger.warn(
+    Logger.warning(
       "Environment variable DATABASE_USER_PASSWORD is missing, e.g. DATABASE_USER_PASSWORD=mindwendel_user_password"
     )
   end
@@ -41,9 +41,17 @@ if config_env() != :test do
     username: System.get_env("DATABASE_USER"),
     pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
     port: String.to_integer(System.get_env("DATABASE_PORT", "5432")),
-    ssl: System.get_env("DATABASE_SSL", "true") == "true",
     url: System.get_env("DATABASE_URL"),
-    timeout: String.to_integer(System.get_env("DATABASE_TIMEOUT", "15000"))
+    timeout: String.to_integer(System.get_env("DATABASE_TIMEOUT", "15000")),
+    ssl: System.get_env("DATABASE_SSL", "true") == "true",
+    ssl_opts: [
+      verify: :verify_peer,
+      cacerts: :public_key.cacerts_get(),
+      server_name_indication: String.to_charlist(System.get_env("DATABASE_HOST")),
+      customize_hostname_check: [
+        match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+      ]
+    ]
 
   secret_key_base =
     System.get_env("SECRET_KEY_BASE") ||

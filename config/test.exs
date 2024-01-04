@@ -23,7 +23,7 @@ config :mindwendel, MindwendelWeb.Endpoint,
   secret_key_base: "tYWGCQJLcTAYCJ9X9sNj022JQkTkh0ryuPO+ImBLBIFJwcfrm0+gIdryq9QTUUIM"
 
 # Print only warnings and errors during test
-config :logger, level: :warn
+config :logger, level: :warning
 
 # See https://github.com/phoenixframework/phoenix/blob/v1.5/CHANGELOG.md#1510-2021-08-06
 config :phoenix, :plug_init_mode, :runtime
@@ -31,4 +31,4 @@ config :phoenix, :plug_init_mode, :runtime
 config :gettext, :default_locale, "en"
 config :timex, :default_locale, "en"
 
-config :mindwendel, Oban, repo: Mindwendel.Repo, queues: false, plugins: false
+config :mindwendel, Oban, repo: Mindwendel.Repo, testing: :inline
