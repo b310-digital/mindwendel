@@ -4,6 +4,7 @@ defmodule Mindwendel.Application do
   @moduledoc false
 
   use Application
+  require Logger
 
   def start(_type, _args) do
     # The URI module in elixir does not know about the default port for the websocket protocol,
@@ -20,6 +21,9 @@ defmodule Mindwendel.Application do
     URI.default_port("ws", 80)
     URI.default_port("wss", 443)
 
+    # instruct oban to use the default logger for json output:
+    Oban.Telemetry.attach_default_logger()
+
     children = [
       # Start the Ecto repository
       Mindwendel.Repo,
@@ -33,6 +37,17 @@ defmodule Mindwendel.Application do
       # {Mindwendel.Worker, arg}
       {Oban, oban_config()}
     ]
+
+    # when logger_json is defined, we also want it to take care of ecto:
+    if Application.get_env(:qrstorage, :logger_json) do
+      :ok =
+        :telemetry.attach(
+          "logger-json-ecto",
+          [:qrstorage, :repo, :query],
+          &LoggerJSON.Ecto.telemetry_logging_handler/4,
+          Logger.level()
+        )
+    end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
