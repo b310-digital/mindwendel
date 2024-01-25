@@ -1,4 +1,3 @@
-
 <div>
   <div class="row mb-3">
     <div class="input-group">
@@ -33,15 +32,11 @@
     </div>
   </div>
 
-  <hr/>
+  <hr />
 
   <div class="row mb-3">
     <div class="d-flex justify-content-center">
-      <div
-        data-qr-code-url={@uri}
-        id="brainstorming-link-qr-code-canvas"
-        phx-hook="QrCodeCanvas"
-      >
+      <div data-qr-code-url={@uri} id="brainstorming-link-qr-code-canvas" phx-hook="QrCodeCanvas">
       </div>
     </div>
   </div>
@@ -59,7 +54,6 @@
         <i class="bi-download"></i> <%= gettext("Download as svg") %>
       </a>
       &nbsp;
-
       <a
         class="btn btn-primary"
         data-qr-code-file-extension="png"
@@ -70,7 +64,6 @@
       >
         <i class="bi-download"></i> <%= gettext("Download as png") %>
       </a>
-
     </div>
   </div>
 </div>
