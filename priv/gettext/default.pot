@@ -159,7 +159,7 @@ msgstr ""
 msgid "Sort by likes"
 msgstr ""
 
-#: lib/mindwendel_web/templates/error/error_page.html.heex:42
+#: lib/mindwendel_web/templates/error/error_page.html.heex:45
 #, elixir-autogen, elixir-format
 msgid "Try again from home"
 msgstr ""
@@ -169,7 +169,7 @@ msgstr ""
 msgid "Your brainstormings"
 msgstr ""
 
-#: lib/mindwendel_web/templates/error/error_page.html.heex:41
+#: lib/mindwendel_web/templates/error/error_page.html.heex:44
 #, elixir-autogen, elixir-format
 msgid "mindwendel could not be found."
 msgstr ""
