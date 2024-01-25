@@ -96,8 +96,16 @@
     <div class="row g-0 h-100">
       <div id="content" class="container w-90 d-flex align-content-center flex-wrap">
         <div id="call-to-action-block">
-          <p class="alert alert-secondary" role="alert"><%= get_flash(@conn, :info) %></p>
-          <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+          <%= if Phoenix.Flash.get(@flash, :info) do %>
+            <p class="alert alert-secondary" role="alert">
+              <%= Phoenix.Flash.get(@flash, :info) %>
+            </p>
+          <% end %>
+          <%= if Phoenix.Flash.get(@flash, :error) do %>
+            <p class="alert alert-danger" role="alert">
+              <%= Phoenix.Flash.get(@flash, :error) %>
+            </p>
+          <% end %>
 
           <h1 class="fw-bold">
             <%= link("mindwendel", to: "/", title: "mindwendel", class: "text-decoration-none") %>
