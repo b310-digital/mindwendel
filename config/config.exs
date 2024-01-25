@@ -37,7 +37,7 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :esbuild,
-  version: "0.14.1",
+  version: "0.19.11",
   default: [
     args:
       ~w(js/app.js --bundle --target=es2016 --outdir=../priv/static/assets --external:/images/* --loader:.woff=file --loader:.woff2=file),
@@ -46,7 +46,7 @@ config :esbuild,
   ]
 
 config :dart_sass,
-  version: "1.56.1",
+  version: "1.69.7",
   default: [
     args: ~w(scss/app.scss scss/app.css),
     cd: Path.expand("../assets", __DIR__)
