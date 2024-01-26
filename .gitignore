@@ -52,3 +52,6 @@ docker-compose.override.yml
 docker-compose*.override.yml
 
 ca
+
+# devcontainer files:
+.devcontainer

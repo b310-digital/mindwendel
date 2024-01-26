@@ -80,3 +80,6 @@ elixir_buildpack.config
 phoenix_static_buildpack.config
 
 docker-compose*.yml
+
+# ignore devcontainer files:
+.devcontainer
