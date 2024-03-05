@@ -51,7 +51,7 @@ defmodule Mindwendel.MixProject do
       {:bypass, "2.1.0", only: :test},
       {:csv, "3.2.1"},
       {:ecto_sql, "3.11.1"},
-      {:floki, "0.35.3"},
+      {:floki, "0.36.0"},
       {:gettext, "0.24.0"},
       {:httpoison, "2.2.1"},
       {:jason, "1.4.1"},
