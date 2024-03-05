@@ -62,7 +62,7 @@ defmodule Mindwendel.MixProject do
       {:telemetry_metrics, "0.6.2"},
       {:telemetry_poller, "1.0.0"},
       {:timex, "3.7.11"},
-      {:logger_json, "5.1.2"}
+      {:logger_json, "5.1.4"}
     ]
   end
 
