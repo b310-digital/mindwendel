@@ -37,7 +37,7 @@ jobs:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
     # Docker Hub image that `container-job` executes in
-    container: hexpm/elixir:1.15.2-erlang-26.0.2-debian-bullseye-20230612-slim
+    container: hexpm/elixir:1.15.7-erlang-26.2.2-debian-bullseye-20240130-slim
 
     needs: build_deps
 
@@ -87,7 +87,7 @@ jobs:
 
   check_mix_format:
     runs-on: ubuntu-latest
-    container: hexpm/elixir:1.15.2-erlang-26.0.2-debian-bullseye-20230612-slim
+    container: hexpm/elixir:1.15.7-erlang-26.2.2-debian-bullseye-20240130-slim
 
     needs: build_deps
 
@@ -107,7 +107,7 @@ jobs:
   
   check_mix_gettext_extract_up_to_date:
     runs-on: ubuntu-latest
-    container: hexpm/elixir:1.15.2-erlang-26.0.2-debian-bullseye-20230612-slim
+    container: hexpm/elixir:1.15.7-erlang-26.2.2-debian-bullseye-20240130-slim
 
     needs: build_deps
 
@@ -127,7 +127,7 @@ jobs:
 
   check_mix_sobelow:
     runs-on: ubuntu-latest
-    container: hexpm/elixir:1.15.2-erlang-26.0.2-debian-bullseye-20230612-slim
+    container: hexpm/elixir:1.15.7-erlang-26.2.2-debian-bullseye-20240130-slim
 
     needs: build_deps
 
