@@ -16,7 +16,7 @@ defmodule MindwendelWeb.ModalComponent do
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title"><%= assigns.opts[:title] %></h5>
-            <%= live_patch(raw("&times;"), to: @return_to, class: "phx-modal-close") %>
+            <%= live_patch("", to: @return_to, class: "phx-modal-close btn-close") %>
           </div>
           <div class="modal-body">
             <%= live_component(@component, @opts) %>
