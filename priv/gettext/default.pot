@@ -45,7 +45,7 @@ msgstr ""
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:29
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:30
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr ""
@@ -132,11 +132,7 @@ msgstr ""
 msgid "Proceed to your brainstorming"
 msgstr ""
 
-<<<<<<< HEAD
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:35
-=======
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:25
->>>>>>> d594812 (style: Adjust translations)
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:36
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr ""
@@ -146,11 +142,7 @@ msgstr ""
 msgid "Save this link to update / delete your brainstorming later on:"
 msgstr ""
 
-<<<<<<< HEAD
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:37
-=======
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:25
->>>>>>> d594812 (style: Adjust translations)
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:38
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr ""
@@ -212,24 +204,17 @@ msgstr ""
 msgid "Your latest brainstormings"
 msgstr ""
 
-<<<<<<< HEAD
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:20
-=======
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:17
->>>>>>> d594812 (style: Adjust translations)
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:21
 #, elixir-autogen, elixir-format
 msgid "Your idea"
 msgstr ""
 
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:7
-<<<<<<< HEAD
 #, elixir-autogen, elixir-format
 msgid "Required fields are either missing or incorrect:"
 msgstr ""
 
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:12
-=======
->>>>>>> d594812 (style: Adjust translations)
 #, elixir-autogen, elixir-format
 msgid "Username"
 msgstr ""

@@ -2,6 +2,12 @@
   <%= form_for @changeset, "#", [id: "idea-form", phx_target: @myself, phx_change: "validate", phx_submit: "save"], fn f -> %>
     <%= hidden_input(f, :id) %>
 
+    <%= if Enum.count(f.errors) > 0 do %>
+      <div class="alert alert-danger">
+        <%= gettext("Required fields are either missing or incorrect:") %>
+      </div>
+    <% end %>
+
     <div class="form-group">
       <%= label(f, gettext("Username")) %>
       <%= text_input(f, :username, class: "form-control") %>
