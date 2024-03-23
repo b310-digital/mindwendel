@@ -55,6 +55,8 @@ if config_env() != :test do
     ssl: System.get_env("DATABASE_SSL", "true") == "true",
     ssl_opts: [
       verify: :verify_peer,
+      depth: 3,
+      versions: [:"tlsv1.3"],
       cacerts: :public_key.cacerts_get(),
       server_name_indication: String.to_charlist(System.get_env("DATABASE_HOST")),
       customize_hostname_check: [
