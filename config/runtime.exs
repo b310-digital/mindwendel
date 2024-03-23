@@ -42,6 +42,24 @@ if config_env() != :test do
   # disable on prod, because logger_json will take care of this. set to :debug for test and dev
   ecto_log_level = if config_env() == :prod, do: false, else: :debug
 
+  # default ssl_opts:
+  ssl_opts = [
+      verify: :verify_peer,
+      depth: 3,
+      versions: [:"tlsv1.3"],
+      server_name_indication: String.to_charlist(System.get_env("DATABASE_HOST")),
+      customize_hostname_check: [
+        match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+      ]
+    ]
+
+  # either use system certificates or specify files:
+  ssl_opts = if (System.get_env("DB_CERT_FILES")) do
+    ssl_opts ++ [cacertfile: String.split(System.get_env("DB_CERT_FILES"), ",")]
+  else
+    ssl_opts ++ [cacerts: :public_key.cacerts_get()]
+  end
+
   config :mindwendel, Mindwendel.Repo,
     database: System.get_env("DATABASE_NAME"),
     hostname: System.get_env("DATABASE_HOST"),
@@ -53,16 +71,7 @@ if config_env() != :test do
     timeout: String.to_integer(System.get_env("DATABASE_TIMEOUT", "15000")),
     log: ecto_log_level,
     ssl: System.get_env("DATABASE_SSL", "true") == "true",
-    ssl_opts: [
-      verify: :verify_peer,
-      depth: 3,
-      versions: [:"tlsv1.3"],
-      cacerts: :public_key.cacerts_get(),
-      server_name_indication: String.to_charlist(System.get_env("DATABASE_HOST")),
-      customize_hostname_check: [
-        match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
-      ]
-    ]
+    ssl_opts: ssl_opts
 
   secret_key_base =
     System.get_env("SECRET_KEY_BASE") ||
