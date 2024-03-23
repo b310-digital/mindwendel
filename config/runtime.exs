@@ -54,8 +54,8 @@ if config_env() != :test do
     ]
 
   # either use system certificates or specify files:
-  ssl_opts = if (System.get_env("DB_CERT_FILES")) do
-    ssl_opts ++ [cacertfile: String.split(System.get_env("DB_CERT_FILES"), ",")]
+  ssl_opts = if (System.get_env("DATABASE_CERT_FILES")) do
+    ssl_opts ++ [cacertfile: String.split(System.get_env("DATABASE_CERT_FILES"), ",")]
   else
     ssl_opts ++ [cacerts: :public_key.cacerts_get()]
   end
