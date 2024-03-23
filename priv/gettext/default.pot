@@ -10,17 +10,17 @@
 msgid ""
 msgstr ""
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:18
+#: lib/mindwendel_web/templates/static_page/home.html.heex:22
 #, elixir-autogen, elixir-format
 msgid "Brainstorm"
 msgstr ""
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:27
+#: lib/mindwendel_web/templates/static_page/home.html.heex:31
 #, elixir-autogen, elixir-format
 msgid "How might we ..."
 msgstr ""
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:17
+#: lib/mindwendel_web/templates/static_page/home.html.heex:21
 #, elixir-autogen, elixir-format
 msgid "Ready?"
 msgstr ""
@@ -56,12 +56,12 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:16
+#: lib/mindwendel_web/templates/static_page/home.html.heex:20
 #, elixir-autogen, elixir-format
 msgid "Create a challenge."
 msgstr ""
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:33
+#: lib/mindwendel_web/templates/static_page/home.html.heex:37
 #, elixir-autogen, elixir-format
 msgid "Create!"
 msgstr ""
@@ -197,7 +197,7 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:50
+#: lib/mindwendel_web/templates/static_page/home.html.heex:54
 #, elixir-autogen
 msgid "Your latest brainstormings"
 msgstr ""
@@ -238,7 +238,12 @@ msgstr ""
 msgid "Warning: Please make sure you save the admin link at the top, before hiding the settings link!"
 msgstr ""
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:37
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:48
+#, elixir-autogen, elixir-format
+msgid "Brainstorming will be deleted "
+msgstr ""
+
+#: lib/mindwendel_web/templates/static_page/home.html.heex:41
 #, elixir-autogen, elixir-format
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr ""
@@ -359,12 +364,12 @@ msgstr ""
 msgid "Update idea"
 msgstr ""
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:69
+#: lib/mindwendel_web/templates/static_page/home.html.heex:72
 #, elixir-autogen, elixir-format
 msgid "Legal Disclosure"
 msgstr ""
 
-#: lib/mindwendel_web/templates/static_page/home.html.heex:69
+#: lib/mindwendel_web/templates/static_page/home.html.heex:72
 #, elixir-autogen, elixir-format
 msgid "Privacy"
 msgstr ""
