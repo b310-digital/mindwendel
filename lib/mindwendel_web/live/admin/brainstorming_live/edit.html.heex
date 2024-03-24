@@ -120,7 +120,6 @@
               <%= color_input(p, :color,
                 class:
                   "form-control form-control-color #{if p.errors[:color], do: "is-invalid"}  #{if p.source.changes[:name] || p.source.changes[:color], do: "border-success"}",
-                style: "max-width: 50px",
                 title: gettext("Choose the label color")
               ) %>
               <%= text_input(p, :name,

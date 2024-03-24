@@ -29,7 +29,7 @@
 
     <main role="main" class="container" id="main-container">
       <div class="text-center">
-        <h1 style="font-size: 8rem;">
+        <h1 class="heading-error">
           <%= for i <- @status |> Integer.to_string |> String.graphemes do %>
             <%= if i == "0" do %>
               <i class="bi-lightbulb-off text-black"></i>

@@ -31,14 +31,13 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
       "font-src    'self' ;",
       "frame-src   'self' ;",
 
-      # We add csp sources http: and https: to allow the browser to load the link preview image extracted from the idea body
-      "img-src     'self' data: https: http: ;",
+      # We add csp sources https: to allow the browser to load the link preview image extracted from the idea body
+      "img-src     'self' data: https: ;",
 
       # We need to add csp 'unsafe-eval', otherwise we get an error in development
       # because webpack js bundle uses `eval` for hot reloading.
-      # TODO: Lets evaluate this for production
-      "script-src  'self' 'unsafe-eval' ;",
-      "style-src   'self' 'unsafe-inline' ;"
+      "script-src #{get_script_src()} ;",
+      "style-src #{get_style_src()} ;"
     ]
     |> Enum.join(" ")
   end
@@ -48,6 +47,18 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
     |> Application.fetch_env!(MindwendelWeb.Endpoint)
     |> Keyword.fetch!(:url)
     |> Keyword.fetch!(:host)
+  end
+
+  def get_script_src() do
+    if Application.fetch_env!(:mindwendel, :options)[:csp_relax],
+      do: "'self' 'unsafe-eval'",
+      else: "'self'"
+  end
+
+  def get_style_src() do
+    if Application.fetch_env!(:mindwendel, :options)[:csp_relax],
+      do: "'self' 'unsafe-inline'",
+      else: "'self'"
   end
 
   def get_scheme() do

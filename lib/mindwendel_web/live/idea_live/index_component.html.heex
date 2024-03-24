@@ -18,9 +18,11 @@
 
             <%= for idea_label <- Enum.sort_by(idea.idea_labels, &(&1.position_order)) do %>
               <span
+                id={"idea-label-#{uuid()}"}
                 class="IndexComponent__IdeaLabelBadge mb-3"
                 data-testid={idea_label.id}
-                style={"background-color: #{idea_label.color}"}
+                data-color={idea_label.color}
+                phx-hook="SetIdeaLabelBackgroundColor"
               >
                 <%= idea_label.name %>
               </span>
@@ -38,7 +40,7 @@
               <div class="row">
                 <div class="col-md-3">
                   <%= img_tag(idea.link.img_preview_url,
-                    style: "width: 100px; margin: auto; display: block;"
+                    class: "preview-url"
                   ) %>
                 </div>
                 <div class="col-md-9">
@@ -73,18 +75,22 @@
                 <%= unless Enum.find(idea.idea_labels, fn idea_label -> idea_label.id == brainstorming_idea_label.id end) do %>
                   <%= link to: "#", class: "text-decoration-none me-1", data_testid: brainstorming_idea_label.id, title: "Label #{brainstorming_idea_label.name}", phx_click: "add_idea_label_to_idea", phx_target: @myself, phx_value_idea_id: idea.id, phx_value_idea_label_id: brainstorming_idea_label.id do %>
                     <i
+                      id={"idea-label-#{uuid()}"}
                       class="IndexComponent__IdeaLabel"
                       data-testid={brainstorming_idea_label.id}
-                      style={"color: #{brainstorming_idea_label.color};"}
+                      data-color={brainstorming_idea_label.color}
+                      phx-hook="SetIdeaLabelColor"
                     >
                     </i>
                   <% end %>
                 <% else %>
                   <%= link to: "#", class: "text-decoration-none me-1", data_testid: brainstorming_idea_label.id, title: "Label #{brainstorming_idea_label.name}", phx_click: "remove_idea_label_from_idea", phx_target: @myself, phx_value_idea_id: idea.id, phx_value_idea_label_id: brainstorming_idea_label.id do %>
                     <i
+                      id={"idea-label-#{uuid()}"}
                       class="IndexComponent__IdeaLabel--active"
                       data-testid={brainstorming_idea_label.id}
-                      style={"color: #{brainstorming_idea_label.color};"}
+                      data-color={brainstorming_idea_label.color}
+                      phx-hook="SetIdeaLabelColor"
                     >
                     </i>
                   <% end %>

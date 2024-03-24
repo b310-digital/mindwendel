@@ -15,12 +15,12 @@ import { Modal } from "bootstrap"
 //
 
 import "phoenix_html"
-import {Socket} from "phoenix"
+import { Socket } from "phoenix"
 import NProgress from "nprogress"
-import {LiveSocket} from "phoenix_live_view"
+import { LiveSocket } from "phoenix_live_view"
 import QRCodeStyling from "qr-code-styling";
 import ClipboardJS from "clipboard"
-import {buildQrCodeOptions} from "./qrCodeUtils.js"
+import { buildQrCodeOptions } from "./qrCodeUtils.js"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
@@ -39,12 +39,12 @@ Hooks.NativeSharingButton = {
       text: this.el.getAttribute(`data-native-sharing-button-share-data-text`) || 'Join my brainstorming',
       url: this.el.getAttribute(`data-native-sharing-button-share-data-url`) || document.getElementById("brainstorming-link").value
     }
-     
+
     if (navigator.share) {
       this.el.addEventListener('click', (event) => {
         navigator.share(shareData)
-        .then() // Do nothing
-        .catch(err => { console.log(`Error: ${err}`) }) 
+          .then() // Do nothing
+          .catch(err => { console.log(`Error: ${err}`) })
       })
     }
   }
@@ -59,17 +59,17 @@ Hooks.Modal = {
     // See https://fullstackphoenix.com/tutorials/create-a-reusable-modal-with-liveview-component
     const modal = new Modal(this.el, { backdrop: 'static', keyboard: false })
     modal.show()
-    
+
     const hideModal = () => modal && modal.hide()
-    
+
     this.el.addEventListener('submit', hideModal)
 
     const formCancelElement = this.el.querySelector(".form-cancel")
     formCancelElement && formCancelElement.addEventListener('click', hideModal)
-    
+
     const phxModalCloseElement = this.el.querySelector(".phx-modal-close")
     phxModalCloseElement && phxModalCloseElement.addEventListener('click', hideModal)
-    
+
     this.el.addEventListener('keyup', (keyEvent) => {
       if (keyEvent.key === 'Escape') {
         // This will tell the "#modal" div to send a "close" event to the server
@@ -77,7 +77,7 @@ Hooks.Modal = {
         hideModal()
       }
     })
-    
+
     window.addEventListener('popstate', () => {
       hideModal()
       // To avoid multiple registers
@@ -90,10 +90,10 @@ Hooks.QrCodeCanvas = {
   mounted() {
     const qrCodeCanvasElement = this.el
     const qrCodeUrl = qrCodeCanvasElement.getAttribute("data-qr-code-url")
-    
+
     const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
     const qrCode = new QRCodeStyling(qrCodeOptions)
-            
+
     qrCode.append(qrCodeCanvasElement);
   }
 }
@@ -103,19 +103,33 @@ Hooks.QrCodeDownloadButton = {
     const qrCodeUrl = this.el.getAttribute("data-qr-code-url");
     const qrCodeFilename = this.el.getAttribute("data-qr-code-filename") || qrCodeUrl || "qrcode";
     const qrCodeFileExtension = this.el.getAttribute("data-qr-code-file-extension") || "png";
-    
+
     const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
     const qrCode = new QRCodeStyling(qrCodeOptions)
-    
+
     this.el && this.el.addEventListener('click', () => {
       qrCode.download({ name: qrCodeFilename, extension: qrCodeFileExtension })
         .then() // Do nothing
-        .catch(err => { console.log(`Error: ${err}`) }) 
+        .catch(err => { console.log(`Error: ${err}`) })
     })
   }
 }
 
-let liveSocket = new LiveSocket("/live", Socket, { hooks: Hooks, params: {_csrf_token: csrfToken}})
+Hooks.SetIdeaLabelColor = {
+  mounted() {
+    const color = this.el.getAttribute("data-color");
+    this.el.style.color = color;
+  },
+};
+
+Hooks.SetIdeaLabelBackgroundColor = {
+  mounted() {
+    const color = this.el.getAttribute("data-color");
+    this.el.style.backgroundColor = color;
+  },
+};
+
+let liveSocket = new LiveSocket("/live", Socket, { hooks: Hooks, params: { _csrf_token: csrfToken } })
 
 // Show progress bar on live navigation and form submits
 window.addEventListener("phx:page-loading-start", info => NProgress.start())
@@ -129,4 +143,3 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
-
