@@ -20,4 +20,8 @@ defmodule MindwendelWeb.LiveHelpers do
     modal_opts = [id: :modal, return_to: path, component: component, opts: opts]
     live_component(MindwendelWeb.ModalComponent, modal_opts)
   end
+
+  def uuid do
+    Ecto.UUID.generate()
+  end
 end

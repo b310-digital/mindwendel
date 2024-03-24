@@ -42,6 +42,7 @@ a .bi {
 .phx-disconnected {
   cursor: wait;
 }
+
 .phx-disconnected * {
   pointer-events: none;
 }
@@ -63,4 +64,12 @@ a .bi {
 /* Alerts and form errors */
 .alert:empty {
   display: none;
+}
+
+.form-control-color {
+  max-width: 50px;
+}
+
+.heading-error {
+  font-size: 8rem;
 }

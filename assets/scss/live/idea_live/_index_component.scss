@@ -53,6 +53,7 @@
 .IndexComponent__IdeaLabel {
   @extend %bi-icon-before;
   @extend %bi-circle-fill-before;
+
   &:hover {
     @extend %bi-plus-circle-fill-before;
   }
@@ -61,7 +62,14 @@
 .IndexComponent__IdeaLabel--active {
   @extend %bi-icon-before;
   @extend %bi-check-circle-fill-before;
+
   &:hover {
     @extend %bi-x-circle-fill-before;
   }
+}
+
+.preview-url {
+  width: 100px;
+  margin: auto;
+  display: block;
 }

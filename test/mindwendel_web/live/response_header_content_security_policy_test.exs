@@ -57,7 +57,35 @@ defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
 
       assert conn_response
              |> get_resp_header("content-security-policy")
-             |> List.first() =~ ~r/(img-src)\s+('self' data: https: http:) ;/
+             |> List.first() =~ ~r/(img-src)\s+('self' data: https:) ;/
+    end
+  end
+
+  describe "csp directive 'script-src'" do
+    test "allows only self in prod",
+         %{
+           conn: conn,
+           brainstorming: brainstorming
+         } do
+      conn_response = get(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+      assert conn_response
+             |> get_resp_header("content-security-policy")
+             |> List.first() =~ ~r/(script-src)\s+('self') ;/
+    end
+  end
+
+  describe "csp directive 'style-src'" do
+    test "allows only self in prod",
+         %{
+           conn: conn,
+           brainstorming: brainstorming
+         } do
+      conn_response = get(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+      assert conn_response
+             |> get_resp_header("content-security-policy")
+             |> List.first() =~ ~r/(style-src)\s+('self') ;/
     end
   end
 end
