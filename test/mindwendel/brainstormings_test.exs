@@ -1,13 +1,11 @@
 defmodule Mindwendel.BrainstormingsTest do
   use Mindwendel.DataCase
   alias Mindwendel.Brainstormings.BrainstormingModeratingUser
-  alias Mindwendel.Accounts.BrainstormingUser
   alias Mindwendel.Factory
 
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
-  alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Attachments.Link
   alias Mindwendel.Accounts.User

@@ -5,7 +5,6 @@ defmodule MindwendelWeb.BrainstormingControllerTest do
 
   alias Mindwendel.Repo
   alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings
   alias Mindwendel.Accounts.User
 
   describe "create" do
@@ -19,7 +18,7 @@ defmodule MindwendelWeb.BrainstormingControllerTest do
     end
 
     test "adds current user as moderating user to the brainstorming", %{conn: conn} do
-      conn = post(conn, Routes.brainstorming_path(conn, :create), brainstorming: @valid_attrs)
+      post(conn, Routes.brainstorming_path(conn, :create), brainstorming: @valid_attrs)
 
       assert %Brainstorming{moderating_users: [%User{id: _}]} =
                Repo.one(Brainstorming) |> Repo.preload(:moderating_users)

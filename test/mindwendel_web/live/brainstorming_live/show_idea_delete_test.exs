@@ -41,10 +41,9 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaDeleteTest do
       |> init_test_session(%{current_user_id: moderating_user.id})
       |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
 
-    rendered =
-      show_live_view
-      |> element(html_selector_button_idea_delete_link())
-      |> render_click()
+    show_live_view
+    |> element(html_selector_button_idea_delete_link())
+    |> render_click()
 
     refute show_live_view
            |> element(html_selector_button_idea_delete_link())

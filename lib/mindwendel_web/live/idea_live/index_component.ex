@@ -54,10 +54,10 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
     idea_label = Brainstormings.get_idea_label(idea_label_id)
 
     case(Brainstormings.add_idea_label_to_idea(idea, idea_label)) do
-      {:ok, idea} ->
+      {:ok, _idea} ->
         {:noreply, socket}
 
-      {:error, changeset} ->
+      {:error, _changeset} ->
         {:noreply, socket}
     end
   end
@@ -74,10 +74,10 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
     idea_label = Brainstormings.get_idea_label(idea_label_id)
 
     case(Brainstormings.remove_idea_label_from_idea(idea, idea_label)) do
-      {:ok, idea} ->
+      {:ok, _idea} ->
         {:noreply, socket}
 
-      {:error, changeset} ->
+      {:error, _changeset} ->
         {:noreply, socket}
     end
   end
