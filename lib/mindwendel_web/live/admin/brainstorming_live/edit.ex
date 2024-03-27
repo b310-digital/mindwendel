@@ -154,13 +154,6 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
     end
   end
 
-  def brainstorming_available_until(brainstorming) do
-    Timex.shift(brainstorming.inserted_at,
-      days:
-        Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]
-    )
-  end
-
   defp cancel_changeset_timer(socket) do
     if socket.assigns[:reset_changeset_timer_ref],
       do: Process.cancel_timer(socket.assigns.reset_changeset_timer_ref)

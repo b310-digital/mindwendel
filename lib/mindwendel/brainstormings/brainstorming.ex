@@ -63,4 +63,18 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
       %IdeaLabel{name: gettext("yellow"), color: "#ffc107", position_order: 4}
     ]
   end
+
+  def brainstorming_available_until(brainstorming) do
+    available_until =
+      Timex.shift(brainstorming.inserted_at,
+        days:
+          Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]
+      )
+
+    Timex.format!(
+      available_until,
+      "{relative}",
+      :relative
+    )
+  end
 end

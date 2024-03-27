@@ -1,5 +1,8 @@
 defmodule MindwendelWeb.LiveHelpers do
   import Phoenix.LiveView.Helpers
+  import MindwendelWeb.Gettext
+
+  alias Mindwendel.Brainstormings.Brainstorming
 
   @doc """
   Renders a component inside the `MindwendelWeb.ModalComponent` component.
@@ -23,5 +26,15 @@ defmodule MindwendelWeb.LiveHelpers do
 
   def uuid do
     Ecto.UUID.generate()
+  end
+
+  def brainstorming_available_until_full_text(brainstorming) do
+    gettext("Brainstorming will be deleted in %{days}",
+      days: Brainstorming.brainstorming_available_until(brainstorming)
+    )
+  end
+
+  def brainstorming_available_until(brainstorming) do
+    Brainstorming.brainstorming_available_until(brainstorming)
   end
 end
