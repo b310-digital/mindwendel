@@ -141,7 +141,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
 
     assert Mindwendel.Brainstormings.get_idea!(idea.id).user_id
     assert moderator_user.id != Mindwendel.Brainstormings.get_idea!(idea.id).user_id
-    assert user_id = Mindwendel.Brainstormings.get_idea!(idea.id).user_id
+    assert ^user_id = Mindwendel.Brainstormings.get_idea!(idea.id).user_id
   end
 
   defp html_selector_button_idea_edit_link do

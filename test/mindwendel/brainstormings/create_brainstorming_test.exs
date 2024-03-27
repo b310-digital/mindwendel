@@ -6,10 +6,7 @@ defmodule Mindwendel.Brainstormings.CreateBrainstormingTest do
 
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
-  alias Mindwendel.Brainstormings.Like
-  alias Mindwendel.Attachments.Link
   alias Mindwendel.Accounts.User
 
   describe "#create_brainstorming" do
@@ -63,15 +60,15 @@ defmodule Mindwendel.Brainstormings.CreateBrainstormingTest do
         ])
 
       brainstorming_id = brainstorming.id
-      assert [%Brainstorming{id: brainstorming_id}] = user.brainstormings
-      assert [%Brainstorming{id: brainstorming_id}] = user.created_brainstormings
-      assert [%Brainstorming{id: brainstorming_id}] = user.moderated_brainstormings
+      assert [%Brainstorming{id: ^brainstorming_id}] = user.brainstormings
+      assert [%Brainstorming{id: ^brainstorming_id}] = user.created_brainstormings
+      assert [%Brainstorming{id: ^brainstorming_id}] = user.moderated_brainstormings
       assert user.brainstormings == user.created_brainstormings
       assert user.moderated_brainstormings == user.created_brainstormings
     end
 
     test "does not create additional user", %{user: user} do
-      {:ok, brainstorming} = Brainstormings.create_brainstorming(user, @brainstorming_attrs)
+      {:ok, _brainstorming} = Brainstormings.create_brainstorming(user, @brainstorming_attrs)
 
       assert Repo.one(User) == user
     end
