@@ -44,6 +44,16 @@
               <i class="bi-gear-fill"></i>
             <% end %>
           <% end %>
+
+          <div
+            class="deletion-date-hint btn btn-outline-secondary m-1"
+            data-bs-toggle="tooltip"
+            data-bs-placement="auto"
+            data-bs-custom-class="deletion-date-hint-tooltip"
+            data-bs-title={brainstorming_available_until_full_text(@brainstorming)}
+          >
+            <i class="bi-calendar-x"></i> <%= brainstorming_available_until(@brainstorming) %>
+          </div>
         </div>
       </div>
     </div>

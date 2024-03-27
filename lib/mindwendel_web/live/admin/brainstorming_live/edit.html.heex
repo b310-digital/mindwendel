@@ -45,11 +45,7 @@
     ) %>
     <br />
     <p>
-      (<%= gettext("Brainstorming will be deleted ") %> <%= Timex.format!(
-        brainstorming_available_until(@brainstorming),
-        "{relative}",
-        :relative
-      ) %>)
+      (<%= brainstorming_available_until_full_text(@brainstorming) %>)
     </p>
   </div>
 </div>

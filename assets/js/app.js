@@ -2,7 +2,11 @@
 // We include this here, so esbuild can handle e.g. copying fonts to the /priv/static/assets directory
 import "../scss/app.css";
 
-import { Modal } from "bootstrap"
+import { Modal, Tooltip } from "bootstrap"
+
+// activate all tooltips:
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl))
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
