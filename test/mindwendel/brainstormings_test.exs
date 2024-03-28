@@ -1,4 +1,5 @@
 defmodule Mindwendel.BrainstormingsTest do
+  alias Mindwendel.Brainstormings.IdeaIdeaLabel
   use Mindwendel.DataCase
   alias Mindwendel.Brainstormings.BrainstormingModeratingUser
   alias Mindwendel.Factory
@@ -309,6 +310,63 @@ defmodule Mindwendel.BrainstormingsTest do
       Brainstormings.delete_old_brainstormings()
 
       assert Repo.exists?(from(b in Brainstorming, where: b.id == ^brainstorming.id))
+    end
+  end
+
+  describe "empty/1 brainstormings" do
+    test "empty/1 removes all ideas from a brainstorming", %{brainstorming: brainstorming} do
+      brainstorming = brainstorming |> Repo.preload([:ideas])
+      assert Enum.count(brainstorming.ideas) == 1
+      Brainstormings.empty(brainstorming)
+      # reload brainstorming:
+      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
+      brainstorming = brainstorming |> Repo.preload([:ideas])
+      assert Enum.count(brainstorming.ideas) == 0
+    end
+
+    test "empty/1 also clears likes and labels from ideas", %{brainstorming: brainstorming} do
+      idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      like = Factory.insert!(:like, idea: idea)
+
+      {:ok, idea} =
+        Brainstormings.add_idea_label_to_idea(idea, Enum.at(brainstorming.labels, 0))
+
+      idea = idea |> Repo.preload([:idea_labels])
+
+      Brainstormings.empty(brainstorming)
+      # reload brainstorming:
+      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
+
+      assert Enum.count(brainstorming.ideas) == 0
+      assert Repo.get_by(Idea, id: idea.id) == nil
+      assert Repo.get_by(IdeaIdeaLabel, idea_id: idea.id) == nil
+      assert Repo.get_by(Like, id: like.id) == nil
+    end
+
+    test "empty/1 does not removes all ideas from other brainstormings", %{
+      brainstorming: brainstorming
+    } do
+      other_brainstorming = Factory.insert!(:brainstorming)
+
+      Factory.insert!(:idea,
+        brainstorming: other_brainstorming
+      )
+
+      other_brainstorming = other_brainstorming |> Repo.preload([:ideas])
+
+      assert Enum.count(other_brainstorming.ideas) == 1
+      Brainstormings.empty(brainstorming)
+      # reload brainstorming:
+      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
+      brainstorming = brainstorming |> Repo.preload([:ideas])
+      other_brainstorming = other_brainstorming |> Repo.preload([:ideas])
+      assert Enum.count(brainstorming.ideas) == 0
+      assert Enum.count(other_brainstorming.ideas) == 1
     end
   end
 end

@@ -154,6 +154,18 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
     end
   end
 
+  def handle_event("empty", %{"value" => brainstorming_admin_url_id}, socket)
+      when brainstorming_admin_url_id == socket.assigns.brainstorming.admin_url_id do
+    brainstorming = socket.assigns.brainstorming
+
+    Brainstormings.empty(brainstorming)
+
+    {:noreply,
+     redirect(socket,
+       to: Routes.brainstorming_show_path(socket, :show, brainstorming)
+     )}
+  end
+
   defp cancel_changeset_timer(socket) do
     if socket.assigns[:reset_changeset_timer_ref],
       do: Process.cancel_timer(socket.assigns.reset_changeset_timer_ref)

@@ -44,6 +44,7 @@ defmodule MindwendelWeb.Router do
       delete("/brainstormings/:id", BrainstormingController, :delete)
       get("/brainstormings/:id/export", BrainstormingController, :export)
       live("/brainstormings/:id/edit", BrainstormingLive.Edit, :edit)
+      live("/brainstormings/:id/empty", BrainstormingLive.Edit, :empty)
     end
 
     post("/brainstormings", BrainstormingController, :create)

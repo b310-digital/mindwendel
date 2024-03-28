@@ -41,7 +41,7 @@ msgstr ""
 msgid "Are you sure you want to delete this idea?"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:195
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:220
 #, elixir-autogen, elixir-format
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr ""
@@ -67,12 +67,12 @@ msgstr ""
 msgid "Create!"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:199
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:224
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:189
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:214
 #, elixir-autogen, elixir-format
 msgid "Delete Brainstorming"
 msgstr ""
@@ -343,7 +343,7 @@ msgstr "Download as png"
 msgid "Download as svg"
 msgstr "Download as svg"
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:200
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:225
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Brainstorming delete are you sure"
 msgstr "Are you sure that you want to delete this brainstorming?"
@@ -366,4 +366,20 @@ msgstr ""
 #: lib/mindwendel_web/live/live_helpers.ex:32
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Brainstorming will be deleted in %{days}"
+msgstr ""
+
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:195
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Attention: This will delete all ideas in this brainstorming. The brainstorming itself and labels will be left unchanged. This cant be undone."
+msgstr ""
+
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:203
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Brainstorming will be emptied - are you sure"
+msgstr "Are you sure that you want to delete this brainstorming?"
+
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:189
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:205
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Empty brainstorming"
 msgstr ""
