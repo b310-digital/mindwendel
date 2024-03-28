@@ -238,11 +238,6 @@ msgstr ""
 msgid "Warning: Please make sure you save the admin link at the top, before hiding the settings link!"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:48
-#, elixir-autogen, elixir-format
-msgid "Brainstorming will be deleted "
-msgstr ""
-
 #: lib/mindwendel_web/templates/static_page/home.html.heex:41
 #, elixir-autogen, elixir-format
 msgid "Brainstormings will be deleted after %{days} days."
