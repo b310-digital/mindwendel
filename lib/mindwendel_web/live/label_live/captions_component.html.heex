@@ -1,0 +1,14 @@
+<div class="d-flex flex-row justify-content-end">
+  <%= for brainstorming_idea_label <- @brainstorming.labels do %>
+    <div class="m-1">
+      <span
+        class="badge rounded-pill"
+        id={"idea-label-#{uuid()}"}
+        data-color={brainstorming_idea_label.color}
+        phx-hook="SetIdeaLabelBackgroundColor"
+      >
+        <%= brainstorming_idea_label.name %>
+      </span>
+    </div>
+  <% end %>
+</div>
