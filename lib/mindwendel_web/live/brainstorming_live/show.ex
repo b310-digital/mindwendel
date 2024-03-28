@@ -9,7 +9,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   def mount(%{"id" => id}, session, socket) do
     if connected?(socket), do: Brainstormings.subscribe(id)
 
-    current_user_id = MindwendelService.SessionService.get_current_user_id(session)
+    current_user_id = Mindwendel.Services.SessionService.get_current_user_id(session)
 
     brainstorming =
       Brainstormings.get_brainstorming!(id)

@@ -33,7 +33,7 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   end
 
   defp fetch_user(conn, _params) do
-    current_user_id = MindwendelService.SessionService.get_current_user_id(get_session(conn))
+    current_user_id = Mindwendel.Services.SessionService.get_current_user_id(get_session(conn))
     current_user = Mindwendel.Accounts.get_user(current_user_id)
 
     assign(conn, :current_user, current_user)

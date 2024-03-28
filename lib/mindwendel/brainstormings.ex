@@ -330,7 +330,7 @@ defmodule Mindwendel.Brainstormings do
   ## Examples
 
     current_user =
-        MindwendelService.SessionService.get_current_user_id(conn)
+        Mindwendel.Services.SessionService.get_current_user_id(conn)
         |> Accounts.get_or_create_user()
 
     {:ok, %Brainstorming{ ... }} =

@@ -12,7 +12,7 @@ defmodule MindwendelWeb.StaticPageControllerTest do
 
     test "sets current_user_id in session", %{conn: conn} do
       conn = get(conn, Routes.static_page_path(conn, :home))
-      refute MindwendelService.SessionService.get_current_user_id(conn) == nil
+      refute Mindwendel.Services.SessionService.get_current_user_id(conn) == nil
     end
 
     test "does not contain recent brainstormings", %{conn: conn} do
@@ -35,7 +35,7 @@ defmodule MindwendelWeb.StaticPageControllerTest do
 
       conn =
         init_test_session(conn, %{
-          MindwendelService.SessionService.session_key_current_user_id() => user.id
+          Mindwendel.Services.SessionService.session_key_current_user_id() => user.id
         })
 
       conn = get(conn, Routes.static_page_path(conn, :home))
@@ -50,7 +50,7 @@ defmodule MindwendelWeb.StaticPageControllerTest do
 
       conn =
         init_test_session(conn, %{
-          MindwendelService.SessionService.session_key_current_user_id() => user.id
+          Mindwendel.Services.SessionService.session_key_current_user_id() => user.id
         })
 
       conn = get(conn, Routes.static_page_path(conn, :home))
