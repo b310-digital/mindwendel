@@ -37,18 +37,28 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :esbuild,
-  version: "0.19.11",
+  version: "0.20.2",
   default: [
-    args:
-      ~w(js/app.js --bundle --target=es2016 --outdir=../priv/static/assets --external:/images/* --loader:.woff=file --loader:.woff2=file),
+    args: ~w(
+      js/app.js
+      --bundle
+      --target=es2016
+      --outdir=../priv/static/assets
+      --external:/images/*
+      --loader:.woff=file
+      --loader:.woff2=file
+    ),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
 config :dart_sass,
-  version: "1.69.7",
+  version: "1.72.0",
   default: [
-    args: ~w(scss/app.scss scss/app.css),
+    args: ~w(
+      scss/app.scss:../priv/static/assets/app.css
+      --load-path=node_modules
+    ),
     cd: Path.expand("../assets", __DIR__)
   ]
 
