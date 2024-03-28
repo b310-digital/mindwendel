@@ -37,7 +37,7 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :esbuild,
-  version: "0.19.11",
+  version: "0.20.2",
   default: [
     args: ~w(
       js/app.js
@@ -53,7 +53,7 @@ config :esbuild,
   ]
 
 config :dart_sass,
-  version: "1.69.7",
+  version: "1.72.0",
   default: [
     args: ~w(
       scss/app.scss:../priv/static/assets/app.css
