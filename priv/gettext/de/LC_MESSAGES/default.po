@@ -26,12 +26,12 @@ msgstr "Wie können wir ..."
 msgid "Ready?"
 msgstr "Fertig?"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:111
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:112
 #, elixir-autogen, elixir-format
 msgid "%{name} - Edit"
 msgstr "%{name} - Editieren"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:97
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:98
 #, elixir-autogen, elixir-format
 msgid "%{name} - New Idea"
 msgstr "%{name} - Neue Idee"
@@ -92,13 +92,13 @@ msgstr "Export als HTML"
 msgid "Got stuck? Try inspirational teasers!"
 msgstr "Keine Ideen? Hier gibts Gedankenanstöße!"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:63
+#: lib/mindwendel_web/live/idea_live/form_component.ex:61
 #, elixir-autogen, elixir-format
 msgid "Idea created successfully"
 msgstr "Idee erstellt"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:25
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:117
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:121
 #, elixir-autogen, elixir-format
 msgid "New Idea"
 msgstr "Neue Idee"
@@ -123,7 +123,7 @@ msgstr "Neue Idee (Hotkey: i)"
 msgid "No ideas brainstormed"
 msgstr "Bisher keine Ideen"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:120
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:124
 #, elixir-autogen, elixir-format
 msgid "Open new idea page (Hotkey: i)"
 msgstr "Öffne neue Ideen Dialog (Hotkey: i)"
@@ -180,7 +180,7 @@ msgstr "mindwendel konnte nicht gefunden werden."
 msgid "Something went wrong when creating a brainstorming. Please try again."
 msgstr "Leider gab es einen Fehler beim Erstellen des Brainstormings. Bitte probiere es erneut."
 
-#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:31
+#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:32
 #, elixir-autogen, elixir-format
 msgid "Successfully deleted brainstorming."
 msgstr "Brainstorming erfolgreich gelöscht"

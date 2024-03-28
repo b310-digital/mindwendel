@@ -8,7 +8,7 @@ defmodule MindwendelWeb.StaticPageController do
   def home(conn, _params) do
     current_user =
       conn
-      |> MindwendelService.SessionService.get_current_user_id()
+      |> Mindwendel.Services.SessionService.get_current_user_id()
       |> Mindwendel.Accounts.get_user()
 
     render(conn, "home.html",

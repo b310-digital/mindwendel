@@ -139,9 +139,9 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
            |> element(".card-body-mindwendel-idea", new_idea_body)
            |> has_element?
 
-    assert Mindwendel.Brainstormings.get_idea!(idea.id).user_id
-    assert moderator_user.id != Mindwendel.Brainstormings.get_idea!(idea.id).user_id
-    assert ^user_id = Mindwendel.Brainstormings.get_idea!(idea.id).user_id
+    assert Mindwendel.Ideas.get_idea!(idea.id).user_id
+    assert moderator_user.id != Mindwendel.Ideas.get_idea!(idea.id).user_id
+    assert ^user_id = Mindwendel.Ideas.get_idea!(idea.id).user_id
   end
 
   defp html_selector_button_idea_edit_link do

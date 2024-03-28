@@ -60,7 +60,7 @@
             </small>
             <div class="float-end">
               <span class="me-1"><%= length(idea.likes) %></span>
-              <%= unless Mindwendel.Brainstormings.exists_like_for_idea?(idea.id, @current_user.id) do %>
+              <%= unless Mindwendel.Likes.exists_like_for_idea?(idea.id, @current_user.id) do %>
                 <%= link to: "#", phx_click: "like", phx_target: @myself, phx_value_id: idea.id, title: 'Like' do %>
                   <i class="bi-arrow-up-circle"></i>
                 <% end %>

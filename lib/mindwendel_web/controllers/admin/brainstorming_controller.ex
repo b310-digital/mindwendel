@@ -1,13 +1,14 @@
 defmodule MindwendelWeb.Admin.BrainstormingController do
   use MindwendelWeb, :controller
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Ideas
   alias Mindwendel.CSVFormatter
 
   plug :fetch_user
 
   def export(conn, %{"id" => id}) do
     brainstorming = Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
-    ideas = Brainstormings.list_ideas_for_brainstorming(brainstorming.id)
+    ideas = Ideas.list_ideas_for_brainstorming(brainstorming.id)
 
     case get_format(conn) do
       "csv" ->
@@ -33,7 +34,7 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   end
 
   defp fetch_user(conn, _params) do
-    current_user_id = MindwendelService.SessionService.get_current_user_id(get_session(conn))
+    current_user_id = Mindwendel.Services.SessionService.get_current_user_id(get_session(conn))
     current_user = Mindwendel.Accounts.get_user(current_user_id)
 
     assign(conn, :current_user, current_user)

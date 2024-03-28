@@ -3,13 +3,14 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
     if connected?(socket), do: Brainstormings.subscribe(id)
 
-    current_user_id = MindwendelService.SessionService.get_current_user_id(session)
+    current_user_id = Mindwendel.Services.SessionService.get_current_user_id(session)
 
     brainstorming =
       Brainstormings.get_brainstorming!(id)
@@ -38,8 +39,8 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {
       :noreply,
       socket
-      |> assign(:ideas, Brainstormings.list_ideas_for_brainstorming(brainstorming_id))
-      |> assign(:idea, Brainstormings.get_idea!(idea_id))
+      |> assign(:ideas, Ideas.list_ideas_for_brainstorming(brainstorming_id))
+      |> assign(:idea, Ideas.get_idea!(idea_id))
       |> assign(:uri, uri)
       |> apply_action(socket.assigns.live_action,
         brainstorming_id: brainstorming_id,
@@ -52,7 +53,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   def handle_params(%{"id" => id}, uri, socket) do
     {:noreply,
      socket
-     |> assign(:ideas, Brainstormings.list_ideas_for_brainstorming(id))
+     |> assign(:ideas, Ideas.list_ideas_for_brainstorming(id))
      |> assign(:uri, uri)
      |> apply_action(socket.assigns.live_action, id)}
   end
@@ -60,7 +61,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   @impl true
   def handle_info({:idea_added, idea}, socket) do
     # uses the database to sort and update all ideas, instead of appending the idea to the end of list (which would be more performant)
-    new_ideas = Brainstormings.list_ideas_for_brainstorming(idea.brainstorming_id)
+    new_ideas = Ideas.list_ideas_for_brainstorming(idea.brainstorming_id)
     {:noreply, assign(socket, :ideas, new_ideas)}
   end
 
@@ -76,7 +77,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
       :noreply,
       socket
       |> assign(:brainstorming, Brainstormings.get_brainstorming!(brainstorming.id))
-      |> assign(:ideas, Brainstormings.list_ideas_for_brainstorming(brainstorming.id))
+      |> assign(:ideas, Ideas.list_ideas_for_brainstorming(brainstorming.id))
     }
   end
 
@@ -118,11 +119,11 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   @impl true
   def handle_event("sort_by_likes", %{"id" => id}, socket) do
-    {:noreply, assign(socket, :ideas, Brainstormings.list_ideas_for_brainstorming(id))}
+    {:noreply, assign(socket, :ideas, Ideas.list_ideas_for_brainstorming(id))}
   end
 
   def handle_event("sort_by_label", %{"id" => id}, socket) do
-    {:noreply, assign(socket, :ideas, Brainstormings.sort_ideas_by_labels(id))}
+    {:noreply, assign(socket, :ideas, Ideas.sort_ideas_by_labels(id))}
   end
 
   def handle_event("handle_hotkey_i", _, socket) do

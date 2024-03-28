@@ -5,7 +5,7 @@ defmodule MindwendelWeb.BrainstormingController do
 
   def create(conn, %{"brainstorming" => brainstorming_params}) do
     current_user =
-      MindwendelService.SessionService.get_current_user_id(conn)
+      Mindwendel.Services.SessionService.get_current_user_id(conn)
       |> Accounts.get_or_create_user()
 
     case Brainstormings.create_brainstorming(current_user, brainstorming_params) do

@@ -1,8 +1,9 @@
-defmodule Mindwendel.BrainstormingsIdeaTest do
+defmodule Mindwendel.IdeaLabelsTest do
   use Mindwendel.DataCase
   alias Mindwendel.Factory
 
-  alias Mindwendel.Brainstormings
+  alias Mindwendel.Ideas
+  alias Mindwendel.IdeaLabels
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
 
@@ -16,14 +17,14 @@ defmodule Mindwendel.BrainstormingsIdeaTest do
 
   describe "#add_idea_label_to_idea" do
     test "adds IdeaLabel to Idea", %{idea_label: idea_label, idea: idea} do
-      {:ok, idea_changed} = Brainstormings.add_idea_label_to_idea(idea, idea_label)
+      {:ok, idea_changed} = IdeaLabels.add_idea_label_to_idea(idea, idea_label)
 
       assert idea_changed.idea_labels |> Enum.count() == 1
       assert Repo.all(IdeaIdeaLabel) |> Enum.count() == 1
     end
 
     test "creates one IdeaIdeaLabel", %{idea_label: idea_label, idea: idea} do
-      {:ok, _idea_changed} = Brainstormings.add_idea_label_to_idea(idea, idea_label)
+      {:ok, _idea_changed} = IdeaLabels.add_idea_label_to_idea(idea, idea_label)
 
       assert Repo.all(IdeaIdeaLabel) |> Enum.count() == 1
 
@@ -35,7 +36,7 @@ defmodule Mindwendel.BrainstormingsIdeaTest do
     test "does not create additional IdeaLabel", %{idea_label: idea_label, idea: idea} do
       assert Repo.all(IdeaLabel) |> Enum.count() == 1
 
-      {:ok, _idea_changed} = Brainstormings.add_idea_label_to_idea(idea, idea_label)
+      {:ok, _idea_changed} = IdeaLabels.add_idea_label_to_idea(idea, idea_label)
 
       assert Repo.all(IdeaLabel) |> Enum.count() == 1
       assert Repo.one(IdeaLabel) == idea_label
@@ -44,8 +45,8 @@ defmodule Mindwendel.BrainstormingsIdeaTest do
     @tag :skip
     test "does not add the same IdeaLabel twice to Idea", %{idea_label: idea_label, idea: idea} do
       # Calling this method twice does not fail and does not create duplicates
-      {:ok, idea_after_method_call_1} = Brainstormings.add_idea_label_to_idea(idea, idea_label)
-      {:ok, idea_after_method_call_2} = Brainstormings.add_idea_label_to_idea(idea, idea_label)
+      {:ok, idea_after_method_call_1} = IdeaLabels.add_idea_label_to_idea(idea, idea_label)
+      {:ok, idea_after_method_call_2} = IdeaLabels.add_idea_label_to_idea(idea, idea_label)
 
       # There should still be only one IdeaIdeaLabel
       assert Repo.all(IdeaIdeaLabel) |> Enum.count() == 1
@@ -66,14 +67,14 @@ defmodule Mindwendel.BrainstormingsIdeaTest do
         })
 
       {:error, _changeset} =
-        Brainstormings.add_idea_label_to_idea(idea, idea_label_from_another_brainstorming)
+        IdeaLabels.add_idea_label_to_idea(idea, idea_label_from_another_brainstorming)
     end
 
     @tag :skip
     test "update idea_labels", %{idea: idea} do
       idea = Repo.preload(idea, :idea_labels)
       _idea_label = idea.brainstorming.labels |> Enum.at(0)
-      Brainstormings.update_idea(idea, %{idea_labels: []})
+      Ideas.update_idea(idea, %{idea_labels: []})
 
       assert Enum.empty?(idea.idea_labels)
     end
@@ -90,7 +91,7 @@ defmodule Mindwendel.BrainstormingsIdeaTest do
       idea = Repo.preload(idea, [:idea_labels, :idea_idea_labels])
       idea_label = idea.brainstorming.labels |> Enum.at(0)
 
-      Brainstormings.add_idea_label_to_idea(idea, idea_label)
+      IdeaLabels.add_idea_label_to_idea(idea, idea_label)
 
       assert Repo.all(IdeaIdeaLabel) |> Enum.count() == 1
       assert Repo.one(IdeaIdeaLabel).idea_id == idea.id
@@ -107,13 +108,13 @@ defmodule Mindwendel.BrainstormingsIdeaTest do
 
   describe "#delete_idea_label_from_idea" do
     setup %{idea_label: idea_label, idea: idea} do
-      {:ok, idea} = Brainstormings.add_idea_label_to_idea(idea, idea_label)
+      {:ok, idea} = IdeaLabels.add_idea_label_to_idea(idea, idea_label)
       assert Repo.all(IdeaIdeaLabel) |> Enum.count() == 1
       %{idea: idea}
     end
 
     test "removes successfully IdeaLabel from Idea", %{idea_label: idea_label, idea: idea} do
-      Brainstormings.remove_idea_label_from_idea(idea, idea_label)
+      IdeaLabels.remove_idea_label_from_idea(idea, idea_label)
       assert Repo.all(IdeaIdeaLabel) |> Enum.count() == 0
     end
 
@@ -122,8 +123,8 @@ defmodule Mindwendel.BrainstormingsIdeaTest do
       idea: idea
     } do
       # Calling this method twice does not fail
-      Brainstormings.remove_idea_label_from_idea(idea, idea_label)
-      Brainstormings.remove_idea_label_from_idea(idea, idea_label)
+      IdeaLabels.remove_idea_label_from_idea(idea, idea_label)
+      IdeaLabels.remove_idea_label_from_idea(idea, idea_label)
 
       assert Repo.all(IdeaIdeaLabel) |> Enum.count() == 0
     end

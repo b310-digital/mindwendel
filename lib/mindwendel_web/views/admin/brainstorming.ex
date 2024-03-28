@@ -1,9 +1,9 @@
 defmodule MindwendelWeb.Admin.BrainstormingView do
   use MindwendelWeb, :view
-  alias Mindwendel.Brainstormings
+  alias Mindwendel.Likes
 
   def count_likes_for_idea(idea) do
-    Brainstormings.count_likes_for_idea(idea)
+    Likes.count_likes_for_idea(idea)
   end
 
   def brainstorming_available_until(brainstorming) do
