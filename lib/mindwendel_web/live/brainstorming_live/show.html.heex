@@ -105,6 +105,10 @@
       ) %>
     <% end %>
 
+    <%= live_component(MindwendelWeb.LabelLive.CaptionsComponent,
+      brainstorming: @brainstorming
+    ) %>
+
     <%= live_component(MindwendelWeb.IdeaLive.IndexComponent,
       ideas: @ideas,
       brainstorming: @brainstorming,
