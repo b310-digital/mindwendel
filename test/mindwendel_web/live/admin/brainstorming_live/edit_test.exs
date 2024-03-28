@@ -4,8 +4,16 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
 
   alias Mindwendel.Factory
 
+  alias Mindwendel.Brainstormings
+
   setup do
-    %{brainstorming: Factory.insert!(:brainstorming)}
+    brainstorming = Factory.insert!(:brainstorming)
+
+    %{
+      brainstorming: brainstorming,
+      idea:
+        Factory.insert!(:idea, brainstorming: brainstorming, inserted_at: ~N[2021-01-01 15:04:30])
+    }
   end
 
   test "connected mount", %{
@@ -128,6 +136,28 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     assert edit_live_view |> element("input#brainstorming_labels_0_name") |> has_element?
 
     assert edit_live_view |> element("input#brainstorming_labels_4_name") |> has_element?
+  end
+
+  describe "empty brainstorming" do
+    test "handles empty event to delete brainstorming content", %{
+      conn: conn,
+      brainstorming: brainstorming
+    } do
+      {:ok, edit_live_view, _html} =
+        live(conn, Routes.admin_brainstorming_edit_path(conn, :edit, brainstorming.admin_url_id))
+
+      # reload brainstorming to check for changes:
+      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
+      assert Enum.count(brainstorming.ideas) == 1
+
+      edit_live_view
+      |> element("button", "Empty")
+      |> render_click()
+
+      # reload brainstorming to check for changes:
+      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
+      assert Enum.count(brainstorming.ideas) == 0
+    end
   end
 
   defp html_selector_remove_idea_label_button(idea_label) do

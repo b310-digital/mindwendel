@@ -186,6 +186,31 @@
 
 <div class="card border-danger mb-3">
   <div class="card-header">
+    <h4><%= gettext("Empty brainstorming") %></h4>
+  </div>
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col">
+        <p>
+          <%= gettext(
+            "Attention: This will delete all ideas in this brainstorming. The brainstorming itself and labels will be left unchanged. This cant be undone."
+          ) %>
+        </p>
+        <button
+          class="btn btn-danger"
+          phx-click="empty"
+          value={@brainstorming.admin_url_id}
+          data-confirm={gettext("Brainstorming will be emptied - are you sure")}
+        >
+          <%= gettext("Empty brainstorming") %>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card border-danger mb-3">
+  <div class="card-header">
     <h4><%= gettext("Delete Brainstorming") %></h4>
   </div>
   <div class="card-body">
