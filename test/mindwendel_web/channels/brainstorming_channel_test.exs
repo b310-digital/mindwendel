@@ -3,6 +3,7 @@ defmodule MindwendelWeb.BrainstormingChannelTest do
 
   alias Mindwendel.Factory
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Ideas
 
   setup do
     %{
@@ -15,7 +16,7 @@ defmodule MindwendelWeb.BrainstormingChannelTest do
       idea = Factory.insert!(:idea, brainstorming: brainstorming)
 
       Brainstormings.subscribe(brainstorming.id)
-      Brainstormings.update_idea(idea, %{body: "lalala"})
+      Ideas.update_idea(idea, %{body: "lalala"})
       assert_received {:idea_updated, idea_updated}
       # It should not be a %Ecto.Association.NotLoaded<association :idea_labels is not loaded>
       assert idea_updated.idea_labels == []
@@ -26,7 +27,7 @@ defmodule MindwendelWeb.BrainstormingChannelTest do
       other_brainstorming = Factory.insert!(:brainstorming)
 
       Brainstormings.subscribe(other_brainstorming.id)
-      Brainstormings.update_idea(idea, %{body: "lalala"})
+      Ideas.update_idea(idea, %{body: "lalala"})
       refute_received {:idea_updated, _}
     end
   end

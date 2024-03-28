@@ -1,11 +1,11 @@
 defmodule MindwendelWeb.IdeaLive.FormComponent do
   use MindwendelWeb, :live_component
 
-  alias Mindwendel.Brainstormings
+  alias Mindwendel.Ideas
 
   @impl true
   def update(%{idea: idea} = assigns, socket) do
-    changeset = Brainstormings.change_idea(idea)
+    changeset = Ideas.change_idea(idea)
 
     {:ok,
      socket
@@ -17,7 +17,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   def handle_event("validate", %{"idea" => idea_params}, socket) do
     changeset =
       socket.assigns.idea
-      |> Brainstormings.change_idea(idea_params)
+      |> Ideas.change_idea(idea_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :changeset, changeset)}
@@ -28,12 +28,12 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   end
 
   defp save_idea(socket, :update, idea_params) do
-    idea = Brainstormings.get_idea!(idea_params["id"])
+    idea = Ideas.get_idea!(idea_params["id"])
 
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
     if current_user.id in [idea.user_id | brainstorming.moderating_users |> Enum.map(& &1.id)] do
-      case Brainstormings.update_idea(
+      case Ideas.update_idea(
              idea,
              Map.put(idea_params, "user_id", idea.user_id || current_user.id)
            ) do
@@ -54,9 +54,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
       username: idea_params["username"]
     })
 
-    case Brainstormings.create_idea(
-           Map.put(idea_params, "user_id", socket.assigns.current_user.id)
-         ) do
+    case Ideas.create_idea(Map.put(idea_params, "user_id", socket.assigns.current_user.id)) do
       {:ok, _idea} ->
         {:noreply,
          socket

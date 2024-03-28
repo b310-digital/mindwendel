@@ -5,6 +5,7 @@ defmodule Mindwendel.BrainstormingsTest do
   alias Mindwendel.Factory
 
   alias Mindwendel.Brainstormings
+  alias Mindwendel.IdeaLabels
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Like
@@ -84,157 +85,6 @@ defmodule Mindwendel.BrainstormingsTest do
       assert result.changes.name == """
              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores e\
              """
-    end
-  end
-
-  describe "list_ideas_for_brainstorming" do
-    test "orders by like count", %{brainstorming: brainstorming, user: user, idea: idea} do
-      first_idea = Factory.insert!(:idea, brainstorming: brainstorming)
-      third_idea = Factory.insert!(:idea, brainstorming: brainstorming)
-      second_idea = Factory.insert!(:idea, brainstorming: brainstorming)
-
-      another_user = Factory.insert!(:user)
-
-      Brainstormings.add_like(first_idea.id, user.id)
-      Brainstormings.add_like(first_idea.id, another_user.id)
-      Brainstormings.add_like(second_idea.id, user.id)
-
-      ids =
-        Enum.map(Brainstormings.list_ideas_for_brainstorming(brainstorming.id), fn x -> x.id end)
-
-      assert ids == [first_idea.id, second_idea.id, third_idea.id, idea.id]
-    end
-
-    test "orders by date if like count is equal", %{
-      brainstorming: brainstorming,
-      user: user,
-      idea: idea
-    } do
-      older_idea =
-        Factory.insert!(:idea,
-          brainstorming: brainstorming,
-          inserted_at: ~N[2021-01-15 15:04:30]
-        )
-
-      younger_idea =
-        Factory.insert!(:idea,
-          brainstorming: brainstorming,
-          inserted_at: ~N[2021-01-15 15:05:30]
-        )
-
-      Brainstormings.add_like(older_idea.id, user.id)
-      Brainstormings.add_like(younger_idea.id, user.id)
-
-      ids =
-        Enum.map(Brainstormings.list_ideas_for_brainstorming(brainstorming.id), fn x -> x.id end)
-
-      assert ids == [younger_idea.id, older_idea.id, idea.id]
-    end
-  end
-
-  describe "exists_like_for_idea?" do
-    test "returns true if like is given", %{idea: idea, user: user} do
-      Factory.insert!(:like, %{idea_id: idea.id, user_id: user.id})
-      assert Brainstormings.exists_like_for_idea?(idea.id, user.id) == true
-    end
-
-    test "returns false if like is not given", %{idea: idea, user: user} do
-      assert Brainstormings.exists_like_for_idea?(idea.id, user.id) == false
-    end
-  end
-
-  describe "increment_likes_for_idea" do
-    test "adds a like", %{idea: idea, user: user} do
-      Brainstormings.add_like(idea.id, user.id)
-      count = idea |> assoc(:likes) |> Repo.aggregate(:count, :id)
-      assert count == 1
-    end
-
-    test "can't add a second like", %{idea: idea, user: user} do
-      Factory.insert!(:like, %{idea_id: idea.id, user_id: user.id})
-      Brainstormings.add_like(idea.id, user.id)
-      count = idea |> assoc(:likes) |> Repo.aggregate(:count, :id)
-      assert count == 1
-    end
-  end
-
-  describe "delete_likes" do
-    @tag individual_test: "true"
-    test "deletes a like", %{like: like} do
-      count = like.idea |> assoc(:likes) |> Repo.aggregate(:count, :id)
-      assert count == 1
-
-      # delete like:
-      Brainstormings.delete_like(like.idea.id, like.user.id)
-
-      count = like.idea |> assoc(:likes) |> Repo.aggregate(:count, :id)
-      assert count == 0
-    end
-  end
-
-  describe "count_likes_for_idea" do
-    test "count likes", %{like: like} do
-      assert Ecto.assoc(like, :idea)
-             |> Repo.one()
-             |> Brainstormings.count_likes_for_idea() == 1
-    end
-  end
-
-  describe "sort_ideas_by_labels" do
-    test "sorts without ideas" do
-      brainstorming_without_ideas = Factory.insert!(:brainstorming)
-
-      ideas_sorted_by_labels = Brainstormings.sort_ideas_by_labels(brainstorming_without_ideas.id)
-
-      assert ideas_sorted_by_labels |> Enum.empty?()
-      assert ideas_sorted_by_labels == []
-    end
-
-    test "sorts unlabelled ideas based on inserted_at", %{
-      brainstorming: brainstorming,
-      idea: idea_old
-    } do
-      idea_young = Factory.insert!(:idea, %{brainstorming: brainstorming})
-
-      ideas_sorted_by_labels = Brainstormings.sort_ideas_by_labels(brainstorming.id)
-
-      assert ideas_sorted_by_labels |> Enum.map(& &1.id) == [idea_young.id, idea_old.id]
-    end
-
-    test "sorts labelled ideas based on label position order and inserted_at", %{
-      brainstorming: brainstorming,
-      idea: idea_without_label
-    } do
-      brainstorming = brainstorming |> Repo.preload([:labels])
-
-      idea_with_1st_label_older =
-        Factory.insert!(:idea, %{
-          brainstorming: brainstorming,
-          label: Enum.at(brainstorming.labels, 0)
-        })
-
-      idea_with_second_label =
-        Factory.insert!(:idea, %{
-          brainstorming: brainstorming,
-          label: Enum.at(brainstorming.labels, 1)
-        })
-
-      # Created 10 seconds later than idea_with_1st_label_older
-      idea_with_1st_label_younger =
-        Factory.insert!(:idea, %{
-          brainstorming: brainstorming,
-          inserted_at: NaiveDateTime.add(idea_with_1st_label_older.inserted_at, 10),
-          label: Enum.at(brainstorming.labels, 0)
-        })
-
-      ideas_sorted_by_labels = Brainstormings.sort_ideas_by_labels(brainstorming.id)
-
-      assert Enum.map(ideas_sorted_by_labels, & &1.id) == [
-               idea_with_1st_label_younger.id,
-               idea_with_1st_label_older.id,
-               idea_with_second_label.id,
-               idea_without_label.id
-             ]
     end
   end
 
@@ -334,7 +184,7 @@ defmodule Mindwendel.BrainstormingsTest do
       like = Factory.insert!(:like, idea: idea)
 
       {:ok, idea} =
-        Brainstormings.add_idea_label_to_idea(idea, Enum.at(brainstorming.labels, 0))
+        IdeaLabels.add_idea_label_to_idea(idea, Enum.at(brainstorming.labels, 0))
 
       idea = idea |> Repo.preload([:idea_labels])
 

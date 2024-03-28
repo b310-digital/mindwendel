@@ -1,11 +1,13 @@
 defmodule MindwendelWeb.IdeaLive.IndexComponent do
   use MindwendelWeb, :live_component
 
-  alias Mindwendel.Brainstormings
+  alias Mindwendel.Ideas
+  alias Mindwendel.IdeaLabels
+  alias Mindwendel.Likes
 
   @impl true
   def handle_event("edit", %{"id" => id}, socket) do
-    idea = Brainstormings.get_idea!(id)
+    idea = Ideas.get_idea!(id)
 
     {:noreply,
      socket
@@ -16,12 +18,12 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    idea = Brainstormings.get_idea!(id)
+    idea = Ideas.get_idea!(id)
 
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
     if current_user.id in [idea.user_id | brainstorming.moderating_users |> Enum.map(& &1.id)] do
-      {:ok, _} = Brainstormings.delete_idea(idea)
+      {:ok, _} = Ideas.delete_idea(idea)
     end
 
     # broadcast will take care of the removal from the list
@@ -30,14 +32,14 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
 
   @impl true
   def handle_event("like", %{"id" => id}, socket) do
-    Brainstormings.add_like(id, socket.assigns.current_user.id)
+    Likes.add_like(id, socket.assigns.current_user.id)
 
     {:noreply, socket}
   end
 
   @impl true
   def handle_event("unlike", %{"id" => id}, socket) do
-    Brainstormings.delete_like(id, socket.assigns.current_user.id)
+    Likes.delete_like(id, socket.assigns.current_user.id)
 
     {:noreply, socket}
   end
@@ -50,10 +52,10 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
         },
         socket
       ) do
-    idea = Brainstormings.get_idea!(idea_id)
-    idea_label = Brainstormings.get_idea_label(idea_label_id)
+    idea = Ideas.get_idea!(idea_id)
+    idea_label = IdeaLabels.get_idea_label(idea_label_id)
 
-    case(Brainstormings.add_idea_label_to_idea(idea, idea_label)) do
+    case(IdeaLabels.add_idea_label_to_idea(idea, idea_label)) do
       {:ok, _idea} ->
         {:noreply, socket}
 
@@ -70,10 +72,10 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
         },
         socket
       ) do
-    idea = Brainstormings.get_idea!(idea_id)
-    idea_label = Brainstormings.get_idea_label(idea_label_id)
+    idea = Ideas.get_idea!(idea_id)
+    idea_label = IdeaLabels.get_idea_label(idea_label_id)
 
-    case(Brainstormings.remove_idea_label_from_idea(idea, idea_label)) do
+    case(IdeaLabels.remove_idea_label_from_idea(idea, idea_label)) do
       {:ok, _idea} ->
         {:noreply, socket}
 

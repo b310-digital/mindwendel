@@ -2,7 +2,7 @@ defmodule Mindwendel.IdeaTest do
   use Mindwendel.DataCase
   alias Mindwendel.Factory
 
-  alias Mindwendel.Brainstormings
+  alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
 
   describe("Factory.build(:idea)") do
@@ -38,7 +38,7 @@ defmodule Mindwendel.IdeaTest do
     end
 
     test "saves object in database" do
-      assert Brainstormings.list_ideas() |> Enum.count() == 1
+      assert Ideas.list_ideas() |> Enum.count() == 1
     end
   end
 
@@ -75,7 +75,7 @@ defmodule Mindwendel.IdeaTest do
     end
 
     test "update idea_labels", %{idea: idea} do
-      Brainstormings.update_idea(idea, %{idea_labels: []})
+      Ideas.update_idea(idea, %{idea_labels: []})
 
       assert Enum.empty?(idea.idea_labels)
     end

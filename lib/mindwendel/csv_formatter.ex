@@ -1,5 +1,5 @@
 defmodule Mindwendel.CSVFormatter do
-  alias Mindwendel.Brainstormings
+  alias Mindwendel.Likes
 
   def ideas_to_csv(ideas) do
     [["idea", "username", "likes"]]
@@ -9,7 +9,7 @@ defmodule Mindwendel.CSVFormatter do
         &[
           &1.body,
           Gettext.gettext(MindwendelWeb.Gettext, &1.username),
-          Brainstormings.count_likes_for_idea(&1)
+          Likes.count_likes_for_idea(&1)
         ]
       )
     )
