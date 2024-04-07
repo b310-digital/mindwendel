@@ -15,7 +15,7 @@ jobs:
     # Currently, this need to be synced manually with the Dockerfile. In the future, the workflow should be changed,
     # so that a development container is built from the Dockerfile, pushed, and then re-used in the following steps.
     # This would also remove the need to install cmake manually in each step:
-    container: hexpm/elixir:1.15.2-erlang-26.0.2-debian-bullseye-20230612-slim
+    container: hexpm/elixir:1.15.7-erlang-26.2.2-debian-bullseye-20240130-slim
 
     steps:
       # See https://github.com/actions/checkout

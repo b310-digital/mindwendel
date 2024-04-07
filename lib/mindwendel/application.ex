@@ -38,6 +38,19 @@ defmodule Mindwendel.Application do
       {Oban, oban_config()}
     ]
 
+    children =
+      if Application.get_env(:libcluster, :topologies) do
+        Logger.info("Adding Cluster.Supervisor to Supervisor tree")
+
+        children ++
+          [
+            {Cluster.Supervisor,
+             [Application.get_env(:libcluster, :topologies), [name: Mindwendel.ClusterSupervisor]]}
+          ]
+      else
+        children
+      end
+
     # when logger_json is defined, we also want it to take care of ecto:
     if Application.get_env(:qrstorage, :logger_json) do
       :ok =
