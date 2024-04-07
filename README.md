@@ -209,3 +209,8 @@ Logos and text provided with courtesy of kits.
 - https://github.com/gerardo-navarro
 - https://github.com/nwittstruck
 - Lightbulb stock image by LED Supermarket at Pexels: https://www.pexels.com/de-de/foto/die-gluhbirne-577514/
+
+
+## Additonal licence
+
+The mindwendel [logo](https://thenounproject.com/icon/735650/) in this repo – created by [mikicon](https://thenounproject.com/mikicon) – is licenced under [CC BY 3.0 Unported](https://creativecommons.org/licenses/by/3.0/).

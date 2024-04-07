@@ -45,6 +45,10 @@ config :esbuild,
       --target=es2016
       --outdir=../priv/static/assets
       --external:/images/*
+      --external:*.png
+      --external:*.ico
+      --external:*.svg
+      --external:*.webmanifest
       --loader:.woff=file
       --loader:.woff2=file
     ),
@@ -57,6 +61,7 @@ config :dart_sass,
   default: [
     args: ~w(
       scss/app.scss:../priv/static/assets/app.css
+      scss/kits.scss:../priv/static/assets/kits.css
       --load-path=node_modules
     ),
     cd: Path.expand("../assets", __DIR__)

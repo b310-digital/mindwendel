@@ -1,0 +1,13 @@
+$primary: #00456f;
+$secondary: #00a3d3;
+$success: #50c878;
+$danger: #bb3535;
+$warning: #ffaa00;
+$info: #55ffff;
+
+// This scss var determines which text-color is used for which background.
+// Usually, acceptable values are `3`, `4.5` and `7`, see node_modules/bootstrap/scss/_variables.scss .
+// However, we need to adjust this variable for this kits theme
+// because we want to have a light text color when a background with secondary color.
+// This is a project-specific customization / requirement.
+$min-contrast-ratio: 2.9;

@@ -1,0 +1,125 @@
+// Import customisations first, afterwards import bootstrap::after
+
+@import "colors";
+@import "fonts";
+@import "button";
+@import "gradient";
+@import "form";
+@import "list";
+@import "utilities";
+
+// Required
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+
+// disable dark mode:
+$enable-dark-mode: false;
+
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar"; // Requires nav
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/breadcrumb";
+@import "bootstrap/scss/accordion";
+@import "bootstrap/scss/pagination";
+@import "bootstrap/scss/badge";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/progress";
+@import "bootstrap/scss/list-group";
+@import "bootstrap/scss/close";
+@import "bootstrap/scss/toasts";
+@import "bootstrap/scss/modal"; // Requires transitions
+@import "bootstrap/scss/tooltip";
+@import "bootstrap/scss/popover";
+@import "bootstrap/scss/carousel";
+@import "bootstrap/scss/spinners";
+@import "bootstrap/scss/offcanvas"; // Requires transitions
+@import "bootstrap/scss/placeholders";
+@import "bootstrap/scss/helpers";
+@import "bootstrap/scss/utilities/api";
+
+//
+// Custom styles not related to bootstrap:
+//
+@include media-breakpoint-down(lg) {
+  // starting with LG size we only want one column:
+  .float-end {
+    width: 100% !important;
+    height: auto !important;
+    margin-bottom: 100px;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  #call-to-action-block {
+    margin-top: -90px;
+  }
+
+  #content {
+    margin-top: 0rem !important;
+  }
+}
+
+#content {
+  margin-top: 3rem;
+}
+
+#static-footer .row {
+  margin: 1rem;
+}
+
+@media screen and (max-height: 812px) {
+  #content {
+    margin-top: 1rem;
+  }
+
+  #static-footer .row {
+    margin: 0.5rem;
+  }
+
+  .form-text.text-muted {
+    font-size: 0.75em;
+  }
+}
+
+@media screen and (max-height: 568px) {
+  #content {
+    margin-top: 0rem;
+  }
+
+  #static-footer .row {
+    margin: 0.5rem;
+  }
+
+  .form-text.text-muted {
+    font-size: 0.65em;
+  }
+}
+
+@media screen and (max-width: 374px) {
+  // for very small display widhts we need to reduce the font size for the footer:
+  #static-footer {
+    font-size: 14px;
+  }
+}
+
+// we don't want the footer logo to grow too big, otherwise the footer becomes too high:
+#static-footer-logo {
+  max-width: 80px !important;
+  min-width: 40px;
+}

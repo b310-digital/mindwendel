@@ -1,5 +1,11 @@
 // Required
-@import "bootstrap/scss/bootstrap";
+@import "kits/colors";
+@import "kits/fonts";
+@import "kits/button";
+@import "kits/gradient";
+@import "kits/form";
+@import "kits/list";
+@import "kits/utilities";
 
 .card-body-mindwendel-idea {
   @extend .card-body;
@@ -11,3 +17,6 @@
   padding: 0.5rem 0.5rem;
   background-color: inherit;
 }
+
+// Required
+@import "bootstrap/scss/bootstrap";

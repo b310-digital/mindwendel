@@ -1,0 +1,29 @@
+/* Import files: */
+@import "./kits/theme.scss";
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.alert p {
+  margin-bottom: 0;
+}
+
+.alert:empty {
+  display: none;
+}
+
+.bg-light {
+  background-color: var(--bs-gray-200) !important;
+}
+
+#mindmaps a {
+  color: var(--bs-gray-700);
+}
+
+#mindmaps a:hover {
+  color: var(--bs-primary-rgb) !important;
+}

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"
     />
     <%= csrf_meta_tag() %>
     <.live_title>
@@ -26,7 +26,7 @@
       <div class="container">
         <%= link to: "/", class: "navbar-brand mb-0 h1" do %>
           <img
-            src={Routes.static_path(@conn, "/images/mindwendel_logo_black.svg")}
+            src={Routes.static_path(@conn, "/images/kits-mindwendel-logo-blue.svg")}
             class="nav-mindwendel-logo"
           />
         <% end %>

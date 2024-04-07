@@ -2,7 +2,7 @@
 @import "nprogress/nprogress";
 @import "_bootstrap_custom.scss";
 
-$bootstrap-icons-font-dir: "/fonts/bootstrap-icons";
+$bootstrap-icons-font-dir: "/fonts/bootstrap-icons/";
 
 @import "bootstrap-icons/font/bootstrap-icons";
 @import "live/idea_live/_index_component.scss";
@@ -14,7 +14,7 @@ $bootstrap-icons-font-dir: "/fonts/bootstrap-icons";
 }
 
 .nav-mindwendel-logo {
-  height: 25px;
+  height: 35px;
 }
 
 // Taken from the examples shown:

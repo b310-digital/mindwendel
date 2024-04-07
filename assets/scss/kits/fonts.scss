@@ -1,0 +1,22 @@
+@font-face {
+  font-family: FiraSans;
+  src: url("../fonts/FiraSans-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: FiraSans;
+  font-weight: light;
+  src: url("../fonts/FiraSans-Light.otf") format("opentype");
+}
+
+@font-face {
+  font-family: FiraSans;
+  font-weight: bold;
+  src: url("../fonts/FiraSans-Bold.otf") format("opentype");
+}
+
+// Set bootstrap font:
+$font-family-base: FiraSans;
+
+// Font Size - H6
+$h6-font-size: 12px;

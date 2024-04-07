@@ -1,6 +1,6 @@
 <main role="main" class="container">
   <%= if Phoenix.Flash.get(@flash, :info) do %>
-    <p class="alert alert-info" role="alert"><%= Phoenix.Flash.get(@flash, :info) %></p>
+    <p class="alert alert-secondary" role="alert"><%= Phoenix.Flash.get(@flash, :info) %></p>
   <% end %>
   <%= if Phoenix.Flash.get(@flash, :error) do %>
     <p class="alert alert-danger" role="alert"><%= Phoenix.Flash.get(@flash, :error) %></p>
