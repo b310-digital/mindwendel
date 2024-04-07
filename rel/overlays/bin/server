@@ -10,4 +10,14 @@ done
 
 ./mindwendel eval "Mindwendel.Release.migrate"
 
+# This is required for libcluster, see https://hexdocs.pm/libcluster/Cluster.Strategy.Kubernetes.DNS.html
+if [ -n "$POD_IP" ]; then
+  echo "Setting variables for libcluster"
+  export RELEASE_DISTRIBUTION=name
+  export RELEASE_NODE=mindwendel@${POD_IP}
+else
+  echo "Not setting variables for libcluster"
+fi
+
+
 PHX_SERVER=true exec ./mindwendel start

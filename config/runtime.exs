@@ -108,6 +108,22 @@ if config_env() != :test do
   #
   if config_env() == :prod do
     config :mindwendel, MindwendelWeb.Endpoint, server: true
+
+    # Enable libcluster if set:
+    if System.get_env("MW_ENABLE_LIBCLUSTER") == "true" do
+      Logger.info("Configuring libcluster to use Kubernetes.DNS strategy")
+
+      config :libcluster,
+        topologies: [
+          k8s_mindwendel: [
+            strategy: Elixir.Cluster.Strategy.Kubernetes.DNS,
+            config: [
+              service: "mindwendel-cluster",
+              application_name: "mindwendel"
+            ]
+          ]
+        ]
+    end
   end
 
   #
