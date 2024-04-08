@@ -56,7 +56,7 @@ defmodule Mindwendel.MixProject do
       {:httpoison, "2.2.1"},
       {:jason, "1.4.1"},
       {:oban, "2.17.7"},
-      {:plug_cowboy, "2.7.0"},
+      {:plug_cowboy, "2.7.1"},
       {:cowboy, "2.10.0"},
       {:postgrex, "0.17.5"},
       {:sobelow, "0.13.0", only: :dev},
