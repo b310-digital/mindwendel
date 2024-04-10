@@ -20,41 +20,38 @@
       <div class="col-sm-12 col-md-12 col-xl-6">
         <h2 id="brainstorming-title"><%= @brainstorming.name %></h2>
       </div>
-      <div class="col-sm-12 col-md-12 col-xl-6">
-        <div class="d-grid d-md-flex justify-content-md-end">
-          <%= live_patch(gettext("New Idea"),
-            to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming),
-            class: "btn btn-primary m-1",
-            title: gettext("New idea page (Hotkey: i)")
-          ) %>
-          <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
-            <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Sort by likes") %>
-          <% end %>
-          <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_label", phx_value_id: @brainstorming.id, title: gettext("Sort by label") do %>
-            <i class="bi-sort-alpha-up-alt"></i> <%= gettext("Sort by label") %>
-          <% end %>
-        </div>
-        <div class="d-flex justify-content-end">
-          <%= live_patch to: Routes.brainstorming_show_path(@socket, :share, @brainstorming), class: "btn btn-secondary m-1", title: gettext("Share") do %>
-            <i class="bi-share-fill"></i> <%= gettext("Share") %>
-          <% end %>
+    </div>
+    <div class="d-flex justify-content-end flex-wrap">
+      <%= live_patch(gettext("New Idea"),
+        to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming),
+        class: "btn btn-primary m-1 d-none d-md-block",
+        title: gettext("New idea page (Hotkey: i)")
+      ) %>
+      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
+        <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Likes") %>
+      <% end %>
+      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_label", phx_value_id: @brainstorming.id, title: gettext("Sort by label") do %>
+        <i class="bi-sort-alpha-up-alt"></i> <%= gettext("Label") %>
+      <% end %>
 
-          <%= if @brainstorming.option_show_link_to_settings do %>
-            <%= link to: Routes.admin_brainstorming_edit_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary m-1" do %>
-              <i class="bi-gear-fill"></i>
-            <% end %>
-          <% end %>
+      <%= live_patch to: Routes.brainstorming_show_path(@socket, :share, @brainstorming), class: "btn btn-secondary m-1", title: gettext("Share") do %>
+        <i class="bi-share-fill"></i>
+      <% end %>
 
-          <div
-            class="deletion-date-hint btn btn-outline-secondary m-1"
-            data-bs-toggle="tooltip"
-            data-bs-placement="auto"
-            data-bs-custom-class="deletion-date-hint-tooltip"
-            data-bs-title={brainstorming_available_until_full_text(@brainstorming)}
-          >
-            <i class="bi-calendar-x"></i> <%= brainstorming_available_until(@brainstorming) %>
-          </div>
-        </div>
+      <%= if @brainstorming.option_show_link_to_settings do %>
+        <%= link to: Routes.admin_brainstorming_edit_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary m-1" do %>
+          <i class="bi-gear-fill"></i>
+        <% end %>
+      <% end %>
+
+      <div
+        class="deletion-date-hint btn btn-outline-secondary m-1"
+        data-bs-toggle="tooltip"
+        data-bs-placement="auto"
+        data-bs-custom-class="deletion-date-hint-tooltip"
+        data-bs-title={brainstorming_available_until_full_text(@brainstorming)}
+      >
+        <i class="bi-calendar-x"></i> <%= brainstorming_available_until(@brainstorming) %>
       </div>
     </div>
 
