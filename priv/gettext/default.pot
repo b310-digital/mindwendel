@@ -359,11 +359,6 @@ msgstr ""
 msgid "Update idea"
 msgstr ""
 
-#: lib/mindwendel_web/live/live_helpers.ex:32
-#, elixir-autogen, elixir-format
-msgid "Brainstorming will be deleted in %{days}"
-msgstr ""
-
 #: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:195
 #, elixir-autogen, elixir-format
 msgid "Attention: This will delete all ideas in this brainstorming. The brainstorming itself and labels will be left unchanged. This cant be undone."
@@ -388,4 +383,9 @@ msgstr ""
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:31
 #, elixir-autogen, elixir-format
 msgid "Likes"
+msgstr ""
+
+#: lib/mindwendel_web/live/live_helpers.ex:32
+#, elixir-autogen, elixir-format
+msgid "Brainstorming will be deleted %{days}"
 msgstr ""

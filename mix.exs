@@ -40,7 +40,7 @@ defmodule Mindwendel.MixProject do
   defp deps do
     [
       {:phoenix, "1.7.12"},
-      {:phoenix_ecto, "4.5.1"},
+      {:phoenix_ecto, "4.6.1"},
       {:phoenix_html, "3.3.3"},
       {:phoenix_view, "2.0.3"},
       {:phoenix_live_dashboard, "0.7.2"},
@@ -55,7 +55,7 @@ defmodule Mindwendel.MixProject do
       {:gettext, "0.24.0"},
       {:httpoison, "2.2.1"},
       {:jason, "1.4.1"},
-      {:oban, "2.17.9"},
+      {:oban, "2.17.10"},
       {:plug_cowboy, "2.7.1"},
       {:cowboy, "2.12.0"},
       {:postgrex, "0.17.5"},
