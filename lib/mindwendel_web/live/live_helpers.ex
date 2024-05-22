@@ -29,7 +29,7 @@ defmodule MindwendelWeb.LiveHelpers do
   end
 
   def brainstorming_available_until_full_text(brainstorming) do
-    gettext("Brainstorming will be deleted in %{days}",
+    gettext("Brainstorming will be deleted %{days}",
       days: Brainstorming.brainstorming_available_until(brainstorming)
     )
   end
