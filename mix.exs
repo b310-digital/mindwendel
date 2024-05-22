@@ -39,7 +39,7 @@ defmodule Mindwendel.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "1.7.11"},
+      {:phoenix, "1.7.12"},
       {:phoenix_ecto, "4.5.1"},
       {:phoenix_html, "3.3.3"},
       {:phoenix_view, "2.0.3"},
@@ -50,18 +50,18 @@ defmodule Mindwendel.MixProject do
       {:dart_sass, "0.7.0", runtime: Mix.env() == :dev},
       {:bypass, "2.1.0", only: :test},
       {:csv, "3.2.1"},
-      {:ecto_sql, "3.11.1"},
-      {:floki, "0.36.1"},
+      {:ecto_sql, "3.11.2"},
+      {:floki, "0.36.2"},
       {:gettext, "0.24.0"},
       {:httpoison, "2.2.1"},
       {:jason, "1.4.1"},
-      {:oban, "2.17.8"},
+      {:oban, "2.17.9"},
       {:plug_cowboy, "2.7.1"},
-      {:cowboy, "2.10.0"},
+      {:cowboy, "2.12.0"},
       {:postgrex, "0.17.5"},
       {:sobelow, "0.13.0", only: :dev},
       {:telemetry_metrics, "1.0.0"},
-      {:telemetry_poller, "1.0.0"},
+      {:telemetry_poller, "1.1.0"},
       {:timex, "3.7.11"},
       {:logger_json, "5.1.4"},
       {:libcluster, "3.3.3"}
