@@ -41,7 +41,7 @@ defmodule Mindwendel.MixProject do
     [
       {:phoenix, "1.7.12"},
       {:phoenix_ecto, "4.6.1"},
-      {:phoenix_html, "3.3.3"},
+      {:phoenix_html, "3.3.4"},
       {:phoenix_view, "2.0.3"},
       {:phoenix_live_dashboard, "0.7.2"},
       {:phoenix_live_reload, "1.5.3", only: :dev},
