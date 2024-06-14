@@ -3,7 +3,7 @@ name: on_push_branch__execute_ci_cd
 
 on:
   push:
-    branches: [master, 311-chore-improve-build-time-of-ci-pipeline]
+    branches: [master]
   # See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestbranchestags
   pull_request:
     # Only branches and tags on the base are evaluated
@@ -35,6 +35,7 @@ jobs:
       - run: mix do local.hex --force, local.rebar --force
       - run: mix deps.get && mix deps.compile
         if: steps.cache.outputs.cache-hit != 'true'
+      - run: ls .
 
   check_mix_test:
     # Containers must run in Linux based operating systems
