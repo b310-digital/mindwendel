@@ -79,8 +79,8 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: |
-            - deps
-            - _build
+            deps
+            _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
@@ -103,8 +103,8 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: |
-            - deps
-            - _build
+            deps
+            _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
@@ -125,8 +125,8 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: |
-            - deps
-            - _build
+            deps
+            _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
@@ -147,8 +147,8 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: |
-            - deps
-            - _build
+            deps
+            _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
