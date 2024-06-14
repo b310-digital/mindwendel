@@ -49,6 +49,11 @@ if config_env() != :test do
   # disable on prod, because logger_json will take care of this. set to :debug for test and dev
   ecto_log_level = if config_env() == :prod, do: false, else: :debug
 
+  ssl_config =
+    if System.get_env("DATABASE_SSL", "true") == "true",
+      do: [cacerts: :public_key.cacerts_get()],
+      else: nil
+
   config :mindwendel, Mindwendel.Repo,
     start_apps_before_migration: [:logger_json],
     database: System.get_env("DATABASE_NAME"),
@@ -60,15 +65,7 @@ if config_env() != :test do
     url: System.get_env("DATABASE_URL"),
     timeout: String.to_integer(System.get_env("DATABASE_TIMEOUT", "15000")),
     log: ecto_log_level,
-    ssl: System.get_env("DATABASE_SSL", "true") == "true",
-    ssl_opts: [
-      verify: :verify_peer,
-      cacerts: :public_key.cacerts_get(),
-      server_name_indication: String.to_charlist(System.get_env("DATABASE_HOST")),
-      customize_hostname_check: [
-        match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
-      ]
-    ]
+    ssl: ssl_config
 
   secret_key_base =
     System.get_env("SECRET_KEY_BASE") ||
