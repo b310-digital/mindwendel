@@ -27,15 +27,14 @@ jobs:
         id: cache
         with:
           path: |
-            - deps
-            - _build
+            deps
+            _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
       - run: mix do local.hex --force, local.rebar --force
       - run: mix deps.get && mix deps.compile
         if: steps.cache.outputs.cache-hit != 'true'
-      - run: ls .
 
   check_mix_test:
     # Containers must run in Linux based operating systems
