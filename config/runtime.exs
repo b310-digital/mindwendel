@@ -7,13 +7,20 @@ require Logger
 
 if config_env() == :prod do
   # configure logging:
-  config :logger_json, :backend,
-    metadata: [:request_id],
-    json_encoder: Jason,
-    formatter: LoggerJSON.Formatters.BasicLogger
-
-  # override Elixir's Logger with logger_json:
-  config :logger, backends: [LoggerJSON]
+  config :logger, :default_handler,
+    formatter: {
+      LoggerJSON.Formatters.Basic,
+      redactors: [
+        {LoggerJSON.Redactors.RedactKeys,
+         [
+           "password",
+           "key",
+           "token",
+           "ERLANG_COOKIE"
+         ]}
+      ],
+      metadata: {:all_except, [:conn, :domain, :application]}
+    }
 end
 
 if config_env() != :test do
@@ -43,6 +50,7 @@ if config_env() != :test do
   ecto_log_level = if config_env() == :prod, do: false, else: :debug
 
   config :mindwendel, Mindwendel.Repo,
+    start_apps_before_migration: [:logger_json],
     database: System.get_env("DATABASE_NAME"),
     hostname: System.get_env("DATABASE_HOST"),
     password: System.get_env("DATABASE_USER_PASSWORD"),

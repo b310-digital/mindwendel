@@ -4,7 +4,7 @@ defmodule Mindwendel.MixProject do
   def project do
     [
       app: :mindwendel,
-      version: "0.2.1",
+      version: "0.2.2",
       elixir: "~> 1.11",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -63,7 +63,7 @@ defmodule Mindwendel.MixProject do
       {:telemetry_metrics, "1.0.0"},
       {:telemetry_poller, "1.1.0"},
       {:timex, "3.7.11"},
-      {:logger_json, "5.1.4"},
+      {:logger_json, "6.0.3"},
       {:libcluster, "3.3.3"}
     ]
   end
