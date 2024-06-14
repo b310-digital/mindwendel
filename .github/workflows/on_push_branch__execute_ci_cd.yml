@@ -3,7 +3,7 @@ name: on_push_branch__execute_ci_cd
 
 on:
   push:
-    branches: [master]
+    branches: [master, 311-chore-improve-build-time-of-ci-pipeline]
   # See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestbranchestags
   pull_request:
     # Only branches and tags on the base are evaluated
@@ -26,12 +26,14 @@ jobs:
       - uses: actions/cache@v4
         id: cache
         with:
-          path: deps
+          path: |
+            - deps
+            - _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
       - run: mix do local.hex --force, local.rebar --force
-      - run: mix deps.get
+      - run: mix deps.get && mix deps.compile
         if: steps.cache.outputs.cache-hit != 'true'
 
   check_mix_test:
@@ -76,7 +78,9 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          path: deps
+          path: |
+            - deps
+            - _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
@@ -98,7 +102,9 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          path: deps
+          path: |
+            - deps
+            - _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
@@ -118,7 +124,9 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          path: deps
+          path: |
+            - deps
+            - _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
@@ -138,7 +146,9 @@ jobs:
         
       - uses: actions/cache@v4
         with:
-          path: deps
+          path: |
+            - deps
+            - _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
       
