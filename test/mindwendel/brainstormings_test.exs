@@ -171,7 +171,7 @@ defmodule Mindwendel.BrainstormingsTest do
       # reload brainstorming:
       brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
       brainstorming = brainstorming |> Repo.preload([:ideas])
-      assert Enum.count(brainstorming.ideas) == 0
+      assert Enum.empty?(brainstorming.ideas)
     end
 
     test "empty/1 also clears likes and labels from ideas", %{brainstorming: brainstorming} do
@@ -192,7 +192,7 @@ defmodule Mindwendel.BrainstormingsTest do
       # reload brainstorming:
       brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
 
-      assert Enum.count(brainstorming.ideas) == 0
+      assert Enum.empty?(brainstorming.ideas)
       assert Repo.get_by(Idea, id: idea.id) == nil
       assert Repo.get_by(IdeaIdeaLabel, idea_id: idea.id) == nil
       assert Repo.get_by(Like, id: like.id) == nil
@@ -215,7 +215,7 @@ defmodule Mindwendel.BrainstormingsTest do
       brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
       brainstorming = brainstorming |> Repo.preload([:ideas])
       other_brainstorming = other_brainstorming |> Repo.preload([:ideas])
-      assert Enum.count(brainstorming.ideas) == 0
+      assert Enum.empty?(brainstorming.ideas)
       assert Enum.count(other_brainstorming.ideas) == 1
     end
   end
