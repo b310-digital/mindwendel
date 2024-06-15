@@ -33,7 +33,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdeaLabelsToIdeaIdeaLabelsTest d
     idea_2: idea_2
   } do
     assert Repo.all(Idea) |> Enum.count() == 2
-    assert Repo.all(IdeaIdeaLabel) |> Enum.count() == 0
+    assert Enum.empty?(Repo.all(IdeaIdeaLabel))
 
     MigrateIdeaLabelsToIdeaIdeaLabels.run()
 

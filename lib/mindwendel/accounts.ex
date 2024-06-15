@@ -85,6 +85,7 @@ defmodule Mindwendel.Accounts do
 
   """
   def merge_brainstorming_user(%Brainstorming{} = brainstorming, %User{} = user) do
+    # credo:disable-for-next-line
     unless user.id in Enum.map(brainstorming.users, fn e -> e.id end) do
       brainstorming_users = [user | brainstorming.users]
 

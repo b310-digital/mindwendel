@@ -156,7 +156,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
 
       # reload brainstorming to check for changes:
       brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
-      assert Enum.count(brainstorming.ideas) == 0
+      assert Enum.empty?(brainstorming.ideas)
     end
   end
 

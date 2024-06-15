@@ -17,7 +17,6 @@ jobs:
     # This would also remove the need to install cmake manually in each step:
     container: hexpm/elixir:1.15.8-erlang-26.2.5-debian-bullseye-20240513-slim
 
-
     steps:
       # See https://github.com/actions/checkout
       - uses: actions/checkout@v4
@@ -109,7 +108,6 @@ jobs:
           restore-keys: ${{ runner.os }}-mix-v4
       
       - run: mix do local.hex --force, local.rebar --force
-      
       - run: mix format --check-formatted
   
   check_mix_gettext_extract_up_to_date:
@@ -131,7 +129,6 @@ jobs:
           restore-keys: ${{ runner.os }}-mix-v4
       
       - run: mix do local.hex --force, local.rebar --force
-      - run: mix compile
       - run: mix gettext.extract --check-up-to-date
 
   check_mix_sobelow:
@@ -153,5 +150,26 @@ jobs:
           restore-keys: ${{ runner.os }}-mix-v4
       
       - run: mix do local.hex --force, local.rebar --force
-      - run: mix compile
       - run: mix sobelow --config
+
+
+  check_mix_credo:
+    runs-on: ubuntu-latest
+    container: hexpm/elixir:1.15.8-erlang-26.2.5-debian-bullseye-20240513-slim
+
+    needs: build_deps
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        
+      - uses: actions/cache@v4
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-v4
+      
+      - run: mix do local.hex --force, local.rebar --force
+      - run: mix credo
