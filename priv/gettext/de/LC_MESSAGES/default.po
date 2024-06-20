@@ -390,3 +390,8 @@ msgstr "Likes"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Brainstorming will be deleted %{days}"
 msgstr "Brainstorming wird gelöscht %{days}"
+
+#: lib/mindwendel_web/templates/static_page/home.html.heex:59
+#, elixir-autogen, elixir-format
+msgid "Attention: Brainstormings will be deleted %{available_until} after last access!"
+msgstr "Achtung: Brainstormings werden %{available_until} nach dem letzten Zugriff gelöscht!"

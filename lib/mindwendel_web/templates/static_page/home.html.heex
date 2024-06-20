@@ -55,11 +55,16 @@
               </span>
             </h5>
           <% end %>
+          <p>
+            <%= gettext(
+              "Attention: Brainstormings will be deleted %{available_until} after last access!",
+              available_until: brainstormings_available_until()
+            ) %>
+          </p>
         </div>
       </div>
     <% end %>
   </main>
-
   <footer class="mt-auto">
     <p>Made with &hearts; by Gerardo, Jannik and Nicho</p>
   </footer>
