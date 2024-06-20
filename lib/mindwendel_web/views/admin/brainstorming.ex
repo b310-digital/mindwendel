@@ -7,7 +7,7 @@ defmodule MindwendelWeb.Admin.BrainstormingView do
   end
 
   def brainstorming_available_until(brainstorming) do
-    Timex.shift(brainstorming.inserted_at,
+    Timex.shift(brainstorming.last_accessed_at,
       days:
         Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]
     )

@@ -16,6 +16,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     # Todo: The following line can be changed `field :admin_url_id, Ecto.UUID, autogenerate: true`
     # This will automatically generate a UUID for the admin_url_id which would make the method `gen_admin_url_id/2` obsolete.
     field :admin_url_id, :binary_id
+    field :last_accessed_at, :utc_datetime
     belongs_to :creating_user, User
     has_many :ideas, Idea
     has_many :labels, IdeaLabel
@@ -33,6 +34,11 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     |> cast_assoc(:labels)
     |> shorten_name
     |> gen_admin_url_id(brainstorming)
+  end
+
+  def changeset_with_upated_last_accessed_at(brainstorming) do
+    brainstorming
+    |> change(%{last_accessed_at: DateTime.truncate(DateTime.utc_now(), :second)})
   end
 
   defp gen_admin_url_id(changeset, brainstorming) do
@@ -67,7 +73,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
 
   def brainstorming_available_until(brainstorming) do
     available_until =
-      Timex.shift(brainstorming.inserted_at,
+      Timex.shift(brainstorming.last_accessed_at,
         days:
           Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]
       )

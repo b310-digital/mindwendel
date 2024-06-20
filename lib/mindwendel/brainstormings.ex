@@ -83,6 +83,7 @@ defmodule Mindwendel.Brainstormings do
         :idea_labels
       ]
     ])
+    |> update_last_accessed_at
   end
 
   @doc """
@@ -164,7 +165,7 @@ defmodule Mindwendel.Brainstormings do
   end
 
   @doc """
-  Deletes all brainstormings, older than 30 days since creation
+  Deletes all brainstormings, older than 30 days since last_accessed_at
 
   ## Examples
 
@@ -176,7 +177,7 @@ defmodule Mindwendel.Brainstormings do
     date_time = Timex.now() |> Timex.shift(days: -1 * after_days)
     brainstormings_count = Repo.aggregate(Brainstorming, :count, :id)
 
-    old_brainstormings_query = from b in Brainstorming, where: b.inserted_at < ^date_time
+    old_brainstormings_query = from b in Brainstorming, where: b.last_accessed_at < ^date_time
     old_brainstormings_count = Repo.aggregate(old_brainstormings_query, :count, :id)
 
     Logger.info(
@@ -210,6 +211,11 @@ defmodule Mindwendel.Brainstormings do
   """
   def change_brainstorming(%Brainstorming{} = brainstorming, attrs \\ %{}) do
     Brainstorming.changeset(brainstorming, attrs)
+  end
+
+  def update_last_accessed_at(brainstorming) do
+    Repo.update(Brainstorming.changeset_with_upated_last_accessed_at(brainstorming))
+    brainstorming
   end
 
   @doc """

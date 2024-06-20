@@ -90,14 +90,50 @@ defmodule Mindwendel.BrainstormingsTest do
 
   describe "delete_old_brainstormings" do
     test "removes the brainstorming" do
-      old_brainstorming = Factory.insert!(:brainstorming, inserted_at: ~N[2021-01-01 10:00:00])
+      old_brainstorming =
+        Factory.insert!(:brainstorming,
+          last_accessed_at: DateTime.from_naive!(~N[2021-01-01 10:00:00], "Etc/UTC")
+        )
+
       Brainstormings.delete_old_brainstormings()
 
       refute Repo.exists?(from(b in Brainstorming, where: b.id == ^old_brainstorming.id))
     end
 
+    test "removes a recently inactive brainstorming " do
+      days = 30
+
+      inactive_brainstorming =
+        Factory.insert!(:brainstorming,
+          last_accessed_at:
+            DateTime.utc_now() |> Timex.shift(days: -days - 1) |> DateTime.truncate(:second)
+        )
+
+      Brainstormings.delete_old_brainstormings(days)
+
+      refute Repo.exists?(from(b in Brainstorming, where: b.id == ^inactive_brainstorming.id))
+    end
+
+    test "does not remove a recently accessed brainstorming " do
+      days = 30
+
+      active_brainstorming =
+        Factory.insert!(
+          :brainstorming,
+          last_accessed_at:
+            DateTime.utc_now() |> Timex.shift(days: -days + 1) |> DateTime.truncate(:second)
+        )
+
+      Brainstormings.delete_old_brainstormings(days)
+
+      assert Repo.exists?(from(b in Brainstorming, where: b.id == ^active_brainstorming.id))
+    end
+
     test "removes the old brainstormings ideas" do
-      old_brainstorming = Factory.insert!(:brainstorming, inserted_at: ~N[2021-01-01 10:00:00])
+      old_brainstorming =
+        Factory.insert!(:brainstorming,
+          last_accessed_at: DateTime.from_naive!(~N[2021-01-01 10:00:00], "Etc/UTC")
+        )
 
       old_idea =
         Factory.insert!(:idea,
@@ -111,7 +147,10 @@ defmodule Mindwendel.BrainstormingsTest do
     end
 
     test "removes the old brainstormings likes" do
-      old_brainstorming = Factory.insert!(:brainstorming, inserted_at: ~N[2021-01-01 10:00:00])
+      old_brainstorming =
+        Factory.insert!(:brainstorming,
+          last_accessed_at: DateTime.from_naive!(~N[2021-01-01 10:00:00], "Etc/UTC")
+        )
 
       old_idea =
         Factory.insert!(:idea,
@@ -126,7 +165,10 @@ defmodule Mindwendel.BrainstormingsTest do
     end
 
     test "removes the old brainstormings links" do
-      old_brainstorming = Factory.insert!(:brainstorming, inserted_at: ~N[2021-01-01 10:00:00])
+      old_brainstorming =
+        Factory.insert!(:brainstorming,
+          last_accessed_at: DateTime.from_naive!(~N[2021-01-01 10:00:00], "Etc/UTC")
+        )
 
       old_idea =
         Factory.insert!(:idea,
@@ -142,7 +184,10 @@ defmodule Mindwendel.BrainstormingsTest do
 
     test "removes the old brainstormings users connection", %{user: user} do
       old_brainstorming =
-        Factory.insert!(:brainstorming, users: [user], inserted_at: ~N[2021-01-01 10:00:00])
+        Factory.insert!(:brainstorming,
+          users: [user],
+          last_accessed_at: DateTime.from_naive!(~N[2021-01-01 10:00:00], "Etc/UTC")
+        )
 
       Brainstormings.delete_old_brainstormings()
 
@@ -150,9 +195,15 @@ defmodule Mindwendel.BrainstormingsTest do
     end
 
     test "does not remove the user", %{user: user} do
-      Factory.insert!(:brainstorming, users: [user], inserted_at: ~N[2021-01-01 10:00:00])
+      inactive_brainstorming =
+        Factory.insert!(:brainstorming,
+          users: [user],
+          last_accessed_at: DateTime.from_naive!(~N[2021-01-01 10:00:00], "Etc/UTC")
+        )
+
       Brainstormings.delete_old_brainstormings()
 
+      refute Repo.exists?(from(b in Brainstorming, where: b.id == ^inactive_brainstorming.id))
       assert Repo.exists?(from(u in User, where: u.id == ^user.id))
     end
 
