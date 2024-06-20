@@ -98,11 +98,12 @@ defmodule Mindwendel.IdeaLabelsTest do
       assert Repo.one(IdeaIdeaLabel).idea_label_id == idea_label.id
       assert Repo.all(IdeaLabel) |> Enum.count() == 5
 
-      assert Repo.all(
-               from idea_label in IdeaLabel,
-                 where: is_nil(idea_label.brainstorming_id)
+      assert Enum.empty?(
+               Repo.all(
+                 from idea_label in IdeaLabel,
+                   where: is_nil(idea_label.brainstorming_id)
+               )
              )
-             |> Enum.count() == 0
     end
   end
 
@@ -115,7 +116,7 @@ defmodule Mindwendel.IdeaLabelsTest do
 
     test "removes successfully IdeaLabel from Idea", %{idea_label: idea_label, idea: idea} do
       IdeaLabels.remove_idea_label_from_idea(idea, idea_label)
-      assert Repo.all(IdeaIdeaLabel) |> Enum.count() == 0
+      assert Enum.empty?(Repo.all(IdeaIdeaLabel))
     end
 
     test "does not break when removing IdeaLabel that is not connected to Idea yet", %{
@@ -126,7 +127,7 @@ defmodule Mindwendel.IdeaLabelsTest do
       IdeaLabels.remove_idea_label_from_idea(idea, idea_label)
       IdeaLabels.remove_idea_label_from_idea(idea, idea_label)
 
-      assert Repo.all(IdeaIdeaLabel) |> Enum.count() == 0
+      assert Enum.empty?(Repo.all(IdeaIdeaLabel))
     end
   end
 end

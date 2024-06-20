@@ -4,6 +4,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
   alias Mindwendel.Brainstormings
   alias Mindwendel.Factory
+  alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Repo
 
   @create_attrs %{name: "a name"}
@@ -122,6 +123,14 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
       updated_idea = Repo.reload(idea) |> Repo.preload([:idea_labels])
       assert updated_idea.idea_labels |> Enum.empty?()
+    end
+
+    test "updates last_accessed_at date", %{conn: conn, brainstorming: brainstorming} do
+      {:ok, _show_live, _html} =
+        live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+      brainstorming_refreshed = Repo.get(Brainstorming, brainstorming.id)
+      assert brainstorming_refreshed.last_accessed_at > brainstorming.last_accessed_at
     end
   end
 

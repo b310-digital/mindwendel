@@ -4,7 +4,7 @@ defmodule Mindwendel.MixProject do
   def project do
     [
       app: :mindwendel,
-      version: "0.2.1",
+      version: "0.2.2",
       elixir: "~> 1.11",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -41,7 +41,7 @@ defmodule Mindwendel.MixProject do
     [
       {:phoenix, "1.7.12"},
       {:phoenix_ecto, "4.6.1"},
-      {:phoenix_html, "3.3.3"},
+      {:phoenix_html, "3.3.4"},
       {:phoenix_view, "2.0.3"},
       {:phoenix_live_dashboard, "0.7.2"},
       {:phoenix_live_reload, "1.5.3", only: :dev},
@@ -58,12 +58,13 @@ defmodule Mindwendel.MixProject do
       {:oban, "2.17.10"},
       {:plug_cowboy, "2.7.1"},
       {:cowboy, "2.12.0"},
-      {:postgrex, "0.17.5"},
-      {:sobelow, "0.13.0", only: :dev},
+      {:postgrex, "0.18.0"},
+      {:sobelow, "0.13.0", only: [:dev, :test], runtime: false},
+      {:credo, "1.7.7", only: [:dev, :test], runtime: false},
       {:telemetry_metrics, "1.0.0"},
       {:telemetry_poller, "1.1.0"},
       {:timex, "3.7.11"},
-      {:logger_json, "5.1.4"},
+      {:logger_json, "6.0.3"},
       {:libcluster, "3.3.3"}
     ]
   end
