@@ -129,12 +129,9 @@
           <% end %>
 
           <p class="form-text text-muted mt-3">
-            Dieses Tool darf nur in Bildungskontexten genutzt werden. Die Eingabe personenbezogener Daten ist
-            nicht gestattet. <br /><br />
-            <%= gettext(
-              "Attention: Brainstormings will be deleted %{available_until} after last access!",
-              available_until: brainstormings_available_until()
-            ) %>
+            Dieses Tool darf nur in Bildungskontexten genutzt werden. Die Eingabe sensibler Daten ist zu vermeiden.
+            <br /><br />
+            Achtung: Brainstormings werden 24 Monate nach dem letzten Zugriff gelöscht!
           </p>
 
           <%= if @current_user && !Enum.empty?(@current_user.brainstormings) do %>
