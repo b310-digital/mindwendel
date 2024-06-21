@@ -158,7 +158,7 @@ msgstr "Sortiere nach Label"
 msgid "Sort by likes"
 msgstr "Sortiere nach Likes"
 
-#: lib/mindwendel_web/templates/error/error_page.html.heex:42
+#: lib/mindwendel_web/templates/error/error_page.html.heex:45
 #, elixir-autogen, elixir-format
 msgid "Try again from home"
 msgstr "Versuch es auf der Startseite"
@@ -168,7 +168,7 @@ msgstr "Versuch es auf der Startseite"
 msgid "Your brainstormings"
 msgstr "Deine Brainstormings"
 
-#: lib/mindwendel_web/templates/error/error_page.html.heex:41
+#: lib/mindwendel_web/templates/error/error_page.html.heex:44
 #, elixir-autogen, elixir-format
 msgid "mindwendel could not be found."
 msgstr "mindwendel konnte nicht gefunden werden."
@@ -392,6 +392,7 @@ msgid "Brainstorming will be deleted %{days}"
 msgstr "Brainstorming wird gelöscht %{days}"
 
 #: lib/mindwendel_web/templates/static_page/home.html.heex:59
+#: lib/mindwendel_web/templates/static_page/kits_home.html.heex:135
 #, elixir-autogen, elixir-format
 msgid "Attention: Brainstormings will be deleted %{available_until} after last access!"
 msgstr "Achtung: Brainstormings werden %{available_until} nach dem letzten Zugriff gelöscht!"

@@ -391,6 +391,7 @@ msgid "Brainstorming will be deleted %{days}"
 msgstr ""
 
 #: lib/mindwendel_web/templates/static_page/home.html.heex:59
+#: lib/mindwendel_web/templates/static_page/kits_home.html.heex:135
 #, elixir-autogen, elixir-format
 msgid "Attention: Brainstormings will be deleted %{available_until} after last access!"
 msgstr ""
