@@ -1,11 +1,13 @@
 defmodule MindwendelWeb.BrainstormingLive.ShowIdeaDeleteTest do
   use MindwendelWeb.ConnCase
+  use Mindwendel.ChatCompletionsCase
   import Phoenix.LiveViewTest
   alias Mindwendel.Brainstormings
 
   alias Mindwendel.Factory
 
   setup %{conn: conn} do
+    disable_ai()
     brainstorming = Factory.insert!(:brainstorming)
     current_user_id = Ecto.UUID.generate()
     user = Factory.insert!(:user, id: current_user_id)

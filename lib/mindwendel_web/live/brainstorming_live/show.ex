@@ -5,6 +5,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   alias Mindwendel.Brainstormings
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Services.IdeaService
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
@@ -120,6 +121,24 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   @impl true
   def handle_event("sort_by_likes", %{"id" => id}, socket) do
     {:noreply, assign(socket, :ideas, Ideas.list_ideas_for_brainstorming(id))}
+  end
+
+  def handle_event("generate_ai_ideas", %{"id" => id}, socket) do
+    brainstorming =
+      Brainstormings.get_brainstorming!(id)
+
+    ideas = IdeaService.add_ideas_to_brainstorming(brainstorming)
+
+    case length(ideas) do
+      0 ->
+        {:noreply, put_flash(socket, :error, gettext("No ideas generated"))}
+
+      length ->
+        socket = assign(socket, :ideas, Ideas.list_ideas_for_brainstorming(id))
+
+        {:noreply,
+         put_flash(socket, :info, gettext("%{length} idea(s) generated", %{length: length}))}
+    end
   end
 
   def handle_event("sort_by_label", %{"id" => id}, socket) do

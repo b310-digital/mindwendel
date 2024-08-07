@@ -1,11 +1,16 @@
 defmodule MindwendelWeb.BrainstormingLiveTest do
   use MindwendelWeb.ConnCase
+  use Mindwendel.ChatCompletionsCase
   import Phoenix.LiveViewTest
 
   alias Mindwendel.Brainstormings
   alias Mindwendel.Factory
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Repo
+
+  setup do
+    disable_ai()
+  end
 
   @create_attrs %{name: "a name"}
 

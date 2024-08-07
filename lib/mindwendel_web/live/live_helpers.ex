@@ -3,6 +3,7 @@ defmodule MindwendelWeb.LiveHelpers do
   import MindwendelWeb.Gettext
 
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Services.IdeaService
 
   @doc """
   Renders a component inside the `MindwendelWeb.ModalComponent` component.
@@ -36,5 +37,9 @@ defmodule MindwendelWeb.LiveHelpers do
 
   def brainstorming_available_until(brainstorming) do
     Brainstorming.brainstorming_available_until(brainstorming)
+  end
+
+  def idea_generation_enabled? do
+    IdeaService.idea_generation_enabled?()
   end
 end
