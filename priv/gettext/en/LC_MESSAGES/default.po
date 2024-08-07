@@ -294,7 +294,7 @@ msgstr "Are you sure that you want to delete this brainstorming?"
 msgid "Empty brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/live_helpers.ex:32
+#: lib/mindwendel_web/live/live_helpers.ex:33
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Brainstorming will be deleted %{days}"
 msgstr ""

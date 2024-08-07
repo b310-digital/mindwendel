@@ -10,7 +10,7 @@ permissions:
 # Configures this workflow to run every time a change is pushed to the branch called `master`.
 on:
   push:
-    branches: ["master"]
+    branches: ["master", "328-feature-generate-ideas-with-an-llm"]
   release:
     types: [published]
 

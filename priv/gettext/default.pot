@@ -293,7 +293,7 @@ msgstr ""
 msgid "Empty brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/live_helpers.ex:32
+#: lib/mindwendel_web/live/live_helpers.ex:33
 #, elixir-autogen, elixir-format
 msgid "Brainstorming will be deleted %{days}"
 msgstr ""

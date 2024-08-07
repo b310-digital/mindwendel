@@ -227,3 +227,15 @@ if feature_file_upload and (config_env() == :prod || config_env() == :dev) do
     secret_access_key: System.fetch_env!("OBJECT_STORAGE_PASSWORD")
   )
 end
+
+# configure ai only in prod and dev, not test. default is disabled:
+if config_env() == :prod || config_env() == :dev do
+  if System.get_env("MW_AI_ENABLED") == "true" do
+    config :mindwendel, :ai,
+      enabled: true,
+      api_key: System.get_env("MW_AI_API_KEY"),
+      api_base_url: System.get_env("MW_AI_API_BASE_URL")
+  end
+else
+  config :mindwendel, :ai, enabled: false
+end

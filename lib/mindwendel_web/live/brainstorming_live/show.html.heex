@@ -28,6 +28,12 @@
         </.link>
       <% end %>
 
+      <%= if idea_generation_enabled?() do %>
+        <%= link to: "#", class: "btn btn-primary m-1", phx_click: "generate_ai_ideas", phx_value_id: @brainstorming.id, title: gettext("AI") do %>
+          <i class="bi-magic"></i> <%= gettext("AI") %>
+        <% end %>
+      <% end %>
+
       <.link
         patch={~p"/brainstormings/#{@brainstorming.id}/share"}
         class="btn btn-secondary m-1"

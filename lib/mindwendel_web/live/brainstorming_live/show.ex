@@ -8,6 +8,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.LocalStorage
+  alias Mindwendel.Services.IdeaService
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
@@ -199,5 +200,41 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   defp apply_action(socket, :share, _params) do
     socket
     |> assign(:page_title, socket.assigns.brainstorming.name)
+  end
+
+  @impl true
+  def handle_event("sort_by_likes", %{"id" => id}, socket) do
+    {:noreply, assign(socket, :ideas, Ideas.list_ideas_for_brainstorming(id))}
+  end
+
+  def handle_event("sort_by_label", %{"id" => id}, socket) do
+    {:noreply, assign(socket, :ideas, Ideas.sort_ideas_by_labels(id))}
+  end
+
+  def handle_event("generate_ai_ideas", %{"id" => id}, socket) do
+    brainstorming =
+      Brainstormings.get_brainstorming!(id)
+
+    ideas = IdeaService.add_ideas_to_brainstorming(brainstorming)
+
+    case length(ideas) do
+      0 ->
+        {:noreply, put_flash(socket, :error, gettext("No ideas generated"))}
+
+      length ->
+        socket = assign(socket, :ideas, Ideas.list_ideas_for_brainstorming(id))
+
+        {:noreply,
+         put_flash(socket, :info, gettext("%{length} idea(s) generated", %{length: length}))}
+    end
+  end
+
+  def handle_event("handle_hotkey_i", _, socket) do
+    if socket.assigns.live_action == :show do
+      {:noreply,
+       push_patch(socket,
+         to: Routes.brainstorming_show_path(socket, :new_idea, socket.assigns.brainstorming)
+       )}
+    end
   end
 end
