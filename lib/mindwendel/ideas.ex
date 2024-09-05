@@ -75,6 +75,38 @@ defmodule Mindwendel.Ideas do
     |> Enum.uniq()
   end
 
+  def sort_ideas_by_order_position(brainstorming_id) do
+    from(
+      idea in Idea,
+      where: idea.brainstorming_id == ^brainstorming_id,
+      preload: [
+        :link,
+        :likes,
+        :idea_labels
+      ],
+      order_by: [
+        asc: idea.order_position
+      ]
+    )
+    |> Repo.all()
+    |> Enum.uniq()
+  end
+
+  def update_ideas_for_brainstorming_by_likes(id) do
+    idea_count_query =
+      from like in Like,
+        group_by: like.idea_id,
+        select: %{idea_id: like.idea_id, like_count: count(1)}
+
+    from(idea in Idea,
+      inner_join: idea_count in subquery(idea_count_query),
+      on: idea_count.idea_id == idea.id,
+      where: idea.brainstorming_id == ^id,
+      update: [set: [order_position: 1]])
+    |> Repo.update_all([])
+  end
+  # fragment("ROW_NUMBER() OVER (ORDER BY ?)", idea_count.like_count)
+
   @doc """
   Gets a single idea.
 

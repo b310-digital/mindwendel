@@ -14,6 +14,7 @@ defmodule Mindwendel.Brainstormings.Idea do
 
   schema "ideas" do
     field :body, :string
+    field :order_position, :integer
     field :username, :string, default: "Anonymous"
     field :deprecated_label, Ecto.Enum, source: :label, values: @label_values
     has_one :link, Link
