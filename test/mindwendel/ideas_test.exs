@@ -125,20 +125,23 @@ defmodule Mindwendel.IdeasTest do
 
   describe "update_ideas_for_brainstorming_by_likes" do
     test "update ideas", %{brainstorming: brainstorming, user: user, idea: idea} do
+      Factory.insert!(:like, idea: idea, user: user, inserted_at: ~N[2021-01-01 15:04:30])
+      another_user = Factory.insert!(:user)
+      Factory.insert!(:like, idea: idea, user: another_user, inserted_at: ~N[2021-01-01 15:06:30])
+      another_idea = Factory.insert!(:idea, brainstorming: brainstorming)
       idea_count_query =
         from like in Like,
           group_by: like.idea_id,
           select: %{idea_id: like.idea_id, like_count: count(1)}
 
       query = from(idea in Idea,
-        inner_join: idea_count in subquery(idea_count_query),
+        left_join: idea_count in subquery(idea_count_query),
         on: idea_count.idea_id == idea.id,
         where: idea.brainstorming_id == ^brainstorming.id)
 
-      IO.inspect(Repo.all(query))
-
-      IO.puts brainstorming.id
       ideas_updated = Ideas.update_ideas_for_brainstorming_by_likes(brainstorming.id)
+
+      IO.inspect(Repo.all(query))
 
       assert Repo.reload(idea).order_position == 1
     end
