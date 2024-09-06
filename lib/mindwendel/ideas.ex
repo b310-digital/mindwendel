@@ -105,7 +105,7 @@ defmodule Mindwendel.Ideas do
         left_join: idea_counts in subquery(idea_count_query),
         on: idea_counts.idea_id == idea.id,
         where: idea.brainstorming_id == ^id,
-        select: %{idea_id: idea.id, like_count: idea_counts.like_count, idea_rank: over(row_number(), order_by: idea_counts.like_count)})
+        select: %{idea_id: idea.id, like_count: idea_counts.like_count, idea_rank: over(row_number(), order_by: [desc_nulls_last: idea_counts.like_count])})
 
     # update all ideas with their rank
     from(idea in Idea,

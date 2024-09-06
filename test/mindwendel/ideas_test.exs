@@ -5,7 +5,6 @@ defmodule Mindwendel.IdeasTest do
   alias Mindwendel.Likes
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
-  alias Mindwendel.Brainstormings.Like
 
   setup do
     user = Factory.insert!(:user)
@@ -124,26 +123,24 @@ defmodule Mindwendel.IdeasTest do
   end
 
   describe "update_ideas_for_brainstorming_by_likes" do
-    test "update ideas", %{brainstorming: brainstorming, user: user, idea: idea} do
+    test "updates the order position for three ideas", %{brainstorming: brainstorming, idea: idea} do
+      Ideas.update_ideas_for_brainstorming_by_likes(brainstorming.id)
+      assert Repo.reload(idea).order_position == 1
+    end
+
+    test "update ideas in the correct order", %{brainstorming: brainstorming, user: user, idea: idea} do
       Factory.insert!(:like, idea: idea, user: user, inserted_at: ~N[2021-01-01 15:04:30])
       another_user = Factory.insert!(:user)
       Factory.insert!(:like, idea: idea, user: another_user, inserted_at: ~N[2021-01-01 15:06:30])
-      another_idea = Factory.insert!(:idea, brainstorming: brainstorming)
-      idea_count_query =
-        from like in Like,
-          group_by: like.idea_id,
-          select: %{idea_id: like.idea_id, like_count: count(1)}
+      second_idea = Factory.insert!(:idea, brainstorming: brainstorming)
+      Factory.insert!(:like, idea: second_idea, user: another_user, inserted_at: ~N[2021-01-01 15:06:32])
+      third_idea = Factory.insert!(:idea, brainstorming: brainstorming)
+      Ideas.update_ideas_for_brainstorming_by_likes(brainstorming.id)
 
-      query = from(idea in Idea,
-        left_join: idea_count in subquery(idea_count_query),
-        on: idea_count.idea_id == idea.id,
-        where: idea.brainstorming_id == ^brainstorming.id)
+      query = from(idea in Idea, where: idea.brainstorming_id == ^brainstorming.id, order_by: [asc_nulls_last: idea.order_position])
+      ideas_sorted_by_position = Repo.all(query)
 
-      ideas_updated = Ideas.update_ideas_for_brainstorming_by_likes(brainstorming.id)
-
-      IO.inspect(Repo.all(query))
-
-      assert Repo.reload(idea).order_position == 1
+      assert ideas_sorted_by_position |> Enum.map(& &1.id) == [idea.id, second_idea.id, third_idea.id]
     end
   end
 end
