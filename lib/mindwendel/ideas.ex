@@ -120,8 +120,6 @@ defmodule Mindwendel.Ideas do
       update: [set: [order_position: idea_ranks.idea_rank]]
     )
     |> Repo.update_all([])
-
-    Brainstormings.broadcast({:ok, Brainstormings.get_brainstorming!(id)}, :brainstorming_updated)
   end
 
   def update_ideas_for_brainstorming_by_labels(id) do
@@ -146,8 +144,6 @@ defmodule Mindwendel.Ideas do
       update: [set: [order_position: idea_ranks.idea_rank]]
     )
     |> Repo.update_all([])
-
-    Brainstormings.broadcast({:ok, Brainstormings.get_brainstorming!(id)}, :brainstorming_updated)
   end
 
   @doc """
