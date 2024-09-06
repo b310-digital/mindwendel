@@ -82,6 +82,7 @@ defmodule Mindwendel.Ideas do
       preload: [
         :link,
         :likes,
+        :label,
         :idea_labels
       ],
       order_by: [
@@ -104,15 +105,23 @@ defmodule Mindwendel.Ideas do
         left_join: idea_counts in subquery(idea_count_query),
         on: idea_counts.idea_id == idea.id,
         where: idea.brainstorming_id == ^id,
-        select: %{idea_id: idea.id, like_count: idea_counts.like_count, idea_rank: over(row_number(), order_by: [desc_nulls_last: idea_counts.like_count])})
+        select: %{
+          idea_id: idea.id,
+          like_count: idea_counts.like_count,
+          idea_rank: over(row_number(), order_by: [desc_nulls_last: idea_counts.like_count])
+        }
+      )
 
     # update all ideas with their rank
     from(idea in Idea,
-        join: idea_ranks in subquery(idea_rank_query),
-        on: idea_ranks.idea_id == idea.id,
-        where: idea.brainstorming_id == ^id,
-        update: [set: [order_position: idea_ranks.idea_rank]])
+      join: idea_ranks in subquery(idea_rank_query),
+      on: idea_ranks.idea_id == idea.id,
+      where: idea.brainstorming_id == ^id,
+      update: [set: [order_position: idea_ranks.idea_rank]]
+    )
     |> Repo.update_all([])
+
+    Brainstormings.broadcast({:ok, Brainstormings.get_brainstorming!(id)}, :brainstorming_updated)
   end
 
   def update_ideas_for_brainstorming_by_labels(id) do
@@ -120,15 +129,25 @@ defmodule Mindwendel.Ideas do
       from(idea in Idea,
         left_join: l in assoc(idea, :idea_labels),
         where: idea.brainstorming_id == ^id,
-        select: %{idea_id: idea.id, idea_rank: over(row_number(), order_by: [asc_nulls_last: l.position_order, desc: idea.inserted_at])})
+        select: %{
+          idea_id: idea.id,
+          idea_rank:
+            over(row_number(),
+              order_by: [asc_nulls_last: l.position_order, desc: idea.inserted_at]
+            )
+        }
+      )
 
     # update all ideas with their rank
     from(idea in Idea,
-        join: idea_ranks in subquery(idea_rank_query),
-        on: idea_ranks.idea_id == idea.id,
-        where: idea.brainstorming_id == ^id,
-        update: [set: [order_position: idea_ranks.idea_rank]])
+      join: idea_ranks in subquery(idea_rank_query),
+      on: idea_ranks.idea_id == idea.id,
+      where: idea.brainstorming_id == ^id,
+      update: [set: [order_position: idea_ranks.idea_rank]]
+    )
     |> Repo.update_all([])
+
+    Brainstormings.broadcast({:ok, Brainstormings.get_brainstorming!(id)}, :brainstorming_updated)
   end
 
   @doc """
