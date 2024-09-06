@@ -93,19 +93,34 @@ defmodule Mindwendel.Ideas do
   end
 
   def update_ideas_for_brainstorming_by_likes(id) do
-    # retrieve likes for all ideas
     idea_count_query =
       from like in Like,
         group_by: like.idea_id,
         select: %{idea_id: like.idea_id, like_count: count(1)}
 
-    # get rank for all ideas and left join to get all ideas
+    # get the rank for all ideas and left join to get missing ideas without likes
     idea_rank_query =
       from(idea in Idea,
         left_join: idea_counts in subquery(idea_count_query),
         on: idea_counts.idea_id == idea.id,
         where: idea.brainstorming_id == ^id,
         select: %{idea_id: idea.id, like_count: idea_counts.like_count, idea_rank: over(row_number(), order_by: [desc_nulls_last: idea_counts.like_count])})
+
+    # update all ideas with their rank
+    from(idea in Idea,
+        join: idea_ranks in subquery(idea_rank_query),
+        on: idea_ranks.idea_id == idea.id,
+        where: idea.brainstorming_id == ^id,
+        update: [set: [order_position: idea_ranks.idea_rank]])
+    |> Repo.update_all([])
+  end
+
+  def update_ideas_for_brainstorming_by_labels(id) do
+    idea_rank_query =
+      from(idea in Idea,
+        left_join: l in assoc(idea, :idea_labels),
+        where: idea.brainstorming_id == ^id,
+        select: %{idea_id: idea.id, idea_rank: over(row_number(), order_by: [asc_nulls_last: l.position_order, desc: idea.inserted_at])})
 
     # update all ideas with their rank
     from(idea in Idea,
