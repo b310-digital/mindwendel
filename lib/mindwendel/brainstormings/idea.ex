@@ -30,7 +30,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   @doc false
   def changeset(idea, attrs \\ %{}) do
     idea
-    |> cast(attrs, [:username, :body, :brainstorming_id, :deprecated_label, :label_id, :user_id])
+    |> cast(attrs, [:username, :body, :brainstorming_id, :deprecated_label, :label_id, :user_id, :order_position])
     |> validate_required([:username, :body, :brainstorming_id])
     |> validate_length(:body, min: 1, max: 1023)
     |> validate_inclusion(:deprecated_label, @label_values)

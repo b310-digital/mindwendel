@@ -90,7 +90,12 @@ defmodule Mindwendel.Ideas do
       ]
     )
     |> Repo.all()
-    |> Enum.uniq()
+    |> Repo.preload([
+      :link,
+      :likes,
+      :label,
+      :idea_labels
+    ])
   end
 
   def update_ideas_for_brainstorming_by_likes(id) do
@@ -143,6 +148,18 @@ defmodule Mindwendel.Ideas do
       where: idea.brainstorming_id == ^id,
       update: [set: [order_position: idea_ranks.idea_rank]]
     )
+    |> Repo.update_all([])
+  end
+
+  def update_ideas_for_brainstorming_by_user_move(brainstorming_id, idea_id, new_position) do
+    from(idea in Idea,
+      where: idea.brainstorming_id == ^brainstorming_id and idea.order_position >= ^new_position and idea.id != ^idea_id,
+      update: [set: [order_position: idea.order_position + 1]]
+    )
+    |> Repo.update_all([])
+    |> IO.inspect
+
+    from(idea in Idea, where: idea.id == ^idea_id and idea.brainstorming_id == ^brainstorming_id, update: [set: [order_position: ^new_position]])
     |> Repo.update_all([])
   end
 

@@ -1,4 +1,5 @@
 import { Modal, Tooltip } from "bootstrap"
+import sortable from "html5sortable/dist/html5sortable.cjs"
 
 // activate all tooltips:
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -47,6 +48,24 @@ Hooks.NativeSharingButton = {
           .catch(err => { console.log(`Error: ${err}`) })
       })
     }
+  }
+}
+
+// see https://github.com/drag-drop-touch-js/dragdroptouch for mobile support
+Hooks.Sortable = {
+  mounted(){
+    sortable('.sortable')[0].addEventListener('sortupdate', (e) => {
+      this.pushEventTo(this.el, "change_position", {
+        id: e.detail.item.children[0].dataset.id,
+        brainstorming_id: e.detail.item.children[0].dataset.brainstormingId,
+        // on the server, positions start with 1 not 0
+        new_position: e.detail.destination.elementIndex + 1
+      })
+    });
+  },
+  updated(){
+    // According to the documentation of sortable, needs to be reinitted
+    sortable('.sortable');
   }
 }
 
@@ -129,7 +148,9 @@ Hooks.SetIdeaLabelBackgroundColor = {
   },
 };
 
-let liveSocket = new LiveSocket("/live", Socket, { hooks: Hooks, params: { _csrf_token: csrfToken } })
+let liveSocket = new LiveSocket("/live", Socket, { 
+  hooks: Hooks, params: { _csrf_token: csrfToken }
+})
 
 // Show progress bar on live navigation and form submits
 window.addEventListener("phx:page-loading-start", info => NProgress.start())

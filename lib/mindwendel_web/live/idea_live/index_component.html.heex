@@ -1,10 +1,13 @@
 <div>
-  <div id="ideas" class="row mb-5">
+  <div id="ideas" phx-hook="Sortable" class="row mb-5 sortable">
     <%= for idea <- @ideas do %>
       <div class="col-md-6">
         <div
           class="card mt-3 shadow-sm p-2 rounded IndexComponent__IdeaCard"
           data-testid={idea.id}
+          data-id={idea.id}
+          data-brainstorming-id={idea.brainstorming_id}
+          data-position={idea.order_position}
         >
           <div class="card-body-mindwendel-idea">
             <%= if @current_user.id in [idea.user_id | @brainstorming.moderating_users |> Enum.map(& &1.id)] do %>

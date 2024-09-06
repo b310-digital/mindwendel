@@ -190,7 +190,6 @@ defmodule Mindwendel.IdeasTest do
 
     test "update ideas in the correct order", %{
       brainstorming: brainstorming,
-      user: user,
       idea: idea
     } do
       second_idea =
@@ -219,6 +218,42 @@ defmodule Mindwendel.IdeasTest do
                second_idea.id,
                third_idea.id,
                idea.id
+             ]
+    end
+  end
+
+  describe "update_ideas_for_brainstorming_by_user_move" do
+    test "update ideas in the correct order", %{
+      brainstorming: brainstorming,
+      idea: idea
+    } do
+      second_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          order_position: 1
+        )
+
+      third_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          order_position: 2
+        )
+
+      Ideas.update_ideas_for_brainstorming_by_user_move(brainstorming.id, idea.id, 1)
+
+      query =
+        from(idea in Idea,
+          where: idea.brainstorming_id == ^brainstorming.id,
+          order_by: [asc_nulls_last: idea.order_position]
+        )
+
+      ideas_sorted_by_position = Repo.all(query)
+      IO.inspect(ideas_sorted_by_position)
+
+      assert ideas_sorted_by_position |> Enum.map(& &1.id) == [
+               idea.id,
+               second_idea.id,
+               third_idea.id
              ]
     end
   end
