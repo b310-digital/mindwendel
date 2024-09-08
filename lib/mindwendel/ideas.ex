@@ -151,11 +151,19 @@ defmodule Mindwendel.Ideas do
     |> Repo.update_all([])
   end
 
-  def update_ideas_for_brainstorming_by_user_move(brainstorming_id, idea_id, new_position, old_position) do
+  def update_ideas_for_brainstorming_by_user_move(
+        brainstorming_id,
+        idea_id,
+        new_position,
+        old_position
+      ) do
     get_idea!(idea_id) |> update_idea(%{order_position: new_position})
 
     # depending on moving a card bottom up or up to bottom, we need to correct the ordering
-    order = if new_position < old_position, do: [asc: :order_position, desc: :updated_at], else: [asc: :order_position, asc: :updated_at]
+    order =
+      if new_position < old_position,
+        do: [asc: :order_position, desc: :updated_at],
+        else: [asc: :order_position, asc: :updated_at]
 
     idea_rank_query =
       from(idea in Idea,
@@ -163,8 +171,7 @@ defmodule Mindwendel.Ideas do
         windows: [o: [order_by: ^order]],
         select: %{
           idea_id: idea.id,
-          idea_rank:
-            over(row_number(), :o)
+          idea_rank: over(row_number(), :o)
         }
       )
 

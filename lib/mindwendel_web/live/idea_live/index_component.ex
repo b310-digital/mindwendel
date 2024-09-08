@@ -45,9 +45,27 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
     {:noreply, socket}
   end
 
-  def handle_event("change_position", %{"id" => id, "brainstorming_id" => brainstorming_id, "new_position" => new_position, "old_position" => old_position}, socket) do
-    Ideas.update_ideas_for_brainstorming_by_user_move(brainstorming_id, id, new_position, old_position)
-    Brainstormings.broadcast({:ok, Brainstormings.get_brainstorming!(brainstorming_id)}, :brainstorming_updated)
+  def handle_event(
+        "change_position",
+        %{
+          "id" => id,
+          "brainstorming_id" => brainstorming_id,
+          "new_position" => new_position,
+          "old_position" => old_position
+        },
+        socket
+      ) do
+    Ideas.update_ideas_for_brainstorming_by_user_move(
+      brainstorming_id,
+      id,
+      new_position,
+      old_position
+    )
+
+    Brainstormings.broadcast(
+      {:ok, Brainstormings.get_brainstorming!(brainstorming_id)},
+      :brainstorming_updated
+    )
 
     {:noreply, socket}
   end

@@ -1,5 +1,5 @@
 import { Modal, Tooltip } from "bootstrap"
-import sortable from "html5sortable/dist/html5sortable.cjs"
+import Sortable from 'sortablejs';
 
 // activate all tooltips:
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -54,20 +54,19 @@ Hooks.NativeSharingButton = {
 // see https://github.com/drag-drop-touch-js/dragdroptouch for mobile support
 Hooks.Sortable = {
   mounted(){
-    sortable('.sortable', {forcePlaceholderSize: true, placeholderClass: 'card-body-mindwendel-idea-ph-class'})[0].addEventListener('sortupdate', (e) => {
-      this.pushEventTo(this.el, "change_position", {
-        id: e.detail.item.dataset.id,
-        brainstorming_id: e.detail.item.dataset.brainstormingId,
-        // on the server, positions start with 1 not 0
-        new_position: e.detail.destination.elementIndex + 1,
-        old_position: e.detail.origin.elementIndex + 1
-      })
-    });
+    new Sortable(this.el, {
+      onEnd: (event) => {
+        this.pushEventTo(this.el, "change_position", {
+          id: event.item.dataset.id,
+          brainstorming_id: event.item.dataset.brainstormingId,
+          // on the server, positions start with 1 not 0
+          new_position: event.newIndex + 1,
+          old_position: event.oldIndex + 1
+        })
+      }
+    })
+
   },
-  updated(){
-    // According to the documentation of sortable, needs to be reinitted
-    sortable('.sortable');
-  }
 }
 
 Hooks.Modal = {

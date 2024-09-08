@@ -230,16 +230,18 @@ defmodule Mindwendel.IdeasTest do
       second_idea =
         Factory.insert!(:idea,
           brainstorming: brainstorming,
-          order_position: 1
+          order_position: 1,
+          updated_at: ~N[2021-01-01 15:06:30]
         )
 
       third_idea =
         Factory.insert!(:idea,
           brainstorming: brainstorming,
-          order_position: 2
+          order_position: 2,
+          updated_at: ~N[2021-01-01 15:06:30]
         )
 
-      Ideas.update_ideas_for_brainstorming_by_user_move(brainstorming.id, idea.id, 1)
+      Ideas.update_ideas_for_brainstorming_by_user_move(brainstorming.id, idea.id, 1, 3)
 
       query =
         from(idea in Idea,
@@ -248,7 +250,6 @@ defmodule Mindwendel.IdeasTest do
         )
 
       ideas_sorted_by_position = Repo.all(query)
-      IO.inspect(ideas_sorted_by_position)
 
       assert ideas_sorted_by_position |> Enum.map(& &1.id) == [
                idea.id,
