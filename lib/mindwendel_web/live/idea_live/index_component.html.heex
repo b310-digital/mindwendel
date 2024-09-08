@@ -1,9 +1,9 @@
 <div>
-  <div id="ideas" phx-hook="Sortable" class="row mb-5 sortable">
+  <div id="ideas" phx-hook="Sortable" class="mb-5 sortable d-flex flex-wrap justify-content-center">
     <%= for idea <- @ideas do %>
-      <div class="col-md-6">
         <div
-          class="card mt-3 shadow-sm p-2 rounded IndexComponent__IdeaCard"
+          class="card m-3 shadow-sm p-2 rounded IndexComponent__IdeaCard"
+-         style="width: 394px; cursor: grab;"
           data-testid={idea.id}
           data-id={idea.id}
           data-brainstorming-id={idea.brainstorming_id}
@@ -100,7 +100,6 @@
                 <% end %>
               <% end %>
             </div>
-          </div>
         </div>
       </div>
     <% end %>
