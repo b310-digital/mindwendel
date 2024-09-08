@@ -112,7 +112,7 @@ defmodule Mindwendel.Ideas do
         where: idea.brainstorming_id == ^id,
         select: %{
           idea_id: idea.id,
-          like_count: fragment("(CASE WHEN ? IS NOT NULL THEN ? ELSE 0 END)", idea_counts.like_count, idea_counts.like_count),
+          like_count: idea_counts.like_count,
           idea_rank: over(row_number(), order_by: [desc_nulls_last: idea_counts.like_count])
         }
       )
@@ -151,14 +151,16 @@ defmodule Mindwendel.Ideas do
     |> Repo.update_all([])
   end
 
-  def update_ideas_for_brainstorming_by_user_move(brainstorming_id, new_idea_positions) do
-    changesets =
-      new_idea_positions
-      |> Enum.map(fn {id, position} -> %Idea{id: id} |> Ecto.Changeset.cast(%{position: position}) end)
+  def update_ideas_for_brainstorming_by_user_move(brainstorming_id, idea_id, new_position) do
+    from(idea in Idea,
+      where: idea.brainstorming_id == ^brainstorming_id and idea.order_position >= ^new_position and idea.id != ^idea_id,
+      update: [set: [order_position: idea.order_position + 1]]
+    )
+    |> Repo.update_all([])
+    |> IO.inspect
 
-    Repo.transaction(fn ->
-      Enum.each(changesets, &Repo.update!(&1, []))
-    end)
+    from(idea in Idea, where: idea.id == ^idea_id and idea.brainstorming_id == ^brainstorming_id, update: [set: [order_position: ^new_position]])
+    |> Repo.update_all([])
   end
 
   @doc """

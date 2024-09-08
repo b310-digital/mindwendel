@@ -230,8 +230,7 @@ defmodule Mindwendel.IdeasTest do
       second_idea =
         Factory.insert!(:idea,
           brainstorming: brainstorming,
-          order_position: 1,
-          updated_at: ~N[2021-01-01 15:06:30]
+          order_position: 1
         )
 
       third_idea =
@@ -249,6 +248,7 @@ defmodule Mindwendel.IdeasTest do
         )
 
       ideas_sorted_by_position = Repo.all(query)
+      IO.inspect(ideas_sorted_by_position)
 
       assert ideas_sorted_by_position |> Enum.map(& &1.id) == [
                idea.id,

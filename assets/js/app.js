@@ -54,10 +54,12 @@ Hooks.NativeSharingButton = {
 // see https://github.com/drag-drop-touch-js/dragdroptouch for mobile support
 Hooks.Sortable = {
   mounted(){
-    sortable('.sortable', { forcePlaceholderSize: true, placeholderClass: 'card-body-mindwendel-idea-ph-class' })[0].addEventListener('sortupdate', (e) => {
+    sortable('.sortable')[0].addEventListener('sortupdate', (e) => {
       this.pushEventTo(this.el, "change_position", {
-        brainstorming_id: e.detail.item.dataset.brainstormingId,
-        new_idea_positions: e.detail.destination.items.map((item, i) => { return { id: item.dataset.id, position: i + 1 }}),
+        id: e.detail.item.children[0].dataset.id,
+        brainstorming_id: e.detail.item.children[0].dataset.brainstormingId,
+        // on the server, positions start with 1 not 0
+        new_position: e.detail.destination.elementIndex + 1
       })
     });
   },
