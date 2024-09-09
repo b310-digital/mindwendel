@@ -7,9 +7,7 @@
   >
     <%= for idea <- @ideas do %>
       <div
-        class="card m-3 shadow-sm p-2 rounded IndexComponent__IdeaCard"
-        -
-        style="width: 394px;"
+        class="card-mindwendel m-3 shadow-sm p-2 rounded IndexComponent__IdeaCard"
         role={if has_move_permission(@brainstorming, @current_user), do: "button", else: ""}
         data-testid={idea.id}
         data-id={idea.id}
