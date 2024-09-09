@@ -99,6 +99,27 @@
           <%= gettext("Saved") %>
         <% end %>
       </div>
+      <div class="form-check mb-3 position-relative">
+        <%= checkbox(f, :option_allow_manual_ordering,
+          id: "checkbox-allow-manual-ordering-settings",
+          class:
+            "form-check-input #{if f.source.changes[:option_allow_manual_ordering] != nil, do: "is-valid"}"
+        ) %>
+        <%= label(
+          f,
+          :option_allow_manual_ordering,
+          gettext("Allow users to change the order of ideas"),
+          for: "checkbox-allow-manual-ordering-settings",
+          class: "form-check-label"
+        ) %>
+        <br />
+        <%= content_tag(:div,
+          class: "valid-tooltip",
+          phx_feedback_for: input_id(f, :option_allow_manual_ordering)
+        ) do %>
+          <%= gettext("Saved") %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>
