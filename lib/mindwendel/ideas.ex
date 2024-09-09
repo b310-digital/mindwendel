@@ -46,7 +46,7 @@ defmodule Mindwendel.Ideas do
         on: idea_count.idea_id == idea.id,
         where: idea.brainstorming_id == ^id,
         order_by: [
-          asc: idea.order_position,
+          asc_nulls_last: idea.position_order,
           desc: idea.updated_at
         ]
 
@@ -92,7 +92,7 @@ defmodule Mindwendel.Ideas do
       join: idea_ranks in subquery(idea_rank_query),
       on: idea_ranks.idea_id == idea.id,
       where: idea.brainstorming_id == ^id,
-      update: [set: [order_position: idea_ranks.idea_rank]]
+      update: [set: [position_order: idea_ranks.idea_rank]]
     )
     |> Repo.update_all([])
   end
@@ -125,7 +125,7 @@ defmodule Mindwendel.Ideas do
       join: idea_ranks in subquery(idea_rank_query),
       on: idea_ranks.idea_id == idea.id,
       where: idea.brainstorming_id == ^id,
-      update: [set: [order_position: idea_ranks.idea_rank]]
+      update: [set: [position_order: idea_ranks.idea_rank]]
     )
     |> Repo.update_all([])
   end
@@ -145,13 +145,13 @@ defmodule Mindwendel.Ideas do
         new_position,
         old_position
       ) do
-    get_idea!(idea_id) |> update_idea(%{order_position: new_position})
+    get_idea!(idea_id) |> update_idea(%{position_order: new_position})
 
     # depending on moving a card bottom up or up to bottom, we need to correct the ordering
     order =
       if new_position < old_position,
-        do: [asc: :order_position, desc: :updated_at],
-        else: [asc: :order_position, asc: :updated_at]
+        do: [asc: :position_order, desc: :updated_at],
+        else: [asc: :position_order, asc: :updated_at]
 
     idea_rank_query =
       from(idea in Idea,
@@ -167,7 +167,7 @@ defmodule Mindwendel.Ideas do
       join: idea_ranks in subquery(idea_rank_query),
       on: idea_ranks.idea_id == idea.id,
       where: idea.brainstorming_id == ^brainstorming_id,
-      update: [set: [order_position: idea_ranks.idea_rank]]
+      update: [set: [position_order: idea_ranks.idea_rank]]
     )
     |> Repo.update_all([])
   end

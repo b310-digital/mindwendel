@@ -12,7 +12,7 @@
         data-testid={idea.id}
         data-id={idea.id}
         data-brainstorming-id={idea.brainstorming_id}
-        data-position={idea.order_position}
+        data-position={idea.position_order}
       >
         <div class="card-body-mindwendel-idea">
           <%= if @current_user.id in [idea.user_id | @brainstorming.moderating_users |> Enum.map(& &1.id)] do %>

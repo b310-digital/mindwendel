@@ -23,16 +23,16 @@ defmodule Mindwendel.IdeasTest do
       brainstorming: brainstorming,
       idea: idea
     } do
-      second_idea = Factory.insert!(:idea, brainstorming: brainstorming, order_position: 1)
-      third_idea = Factory.insert!(:idea, brainstorming: brainstorming, order_position: 2)
+      second_idea = Factory.insert!(:idea, brainstorming: brainstorming, position_order: 1)
+      third_idea = Factory.insert!(:idea, brainstorming: brainstorming, position_order: 2)
 
       ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id)
 
       assert Enum.map(ideas_sorted_by_position, & &1.id) == [
-               # default is 0, therefore idea comes first
-               idea.id,
+               # default is null, therefore idea comes last
                second_idea.id,
-               third_idea.id
+               third_idea.id,
+               idea.id
              ]
     end
   end
@@ -40,7 +40,7 @@ defmodule Mindwendel.IdeasTest do
   describe "update_ideas_for_brainstorming_by_likes" do
     test "updates the order position for three ideas", %{brainstorming: brainstorming, idea: idea} do
       Ideas.update_ideas_for_brainstorming_by_likes(brainstorming.id)
-      assert Repo.reload(idea).order_position == 1
+      assert Repo.reload(idea).position_order == 1
     end
 
     test "update ideas in the correct order", %{
@@ -65,7 +65,7 @@ defmodule Mindwendel.IdeasTest do
       query =
         from(idea in Idea,
           where: idea.brainstorming_id == ^brainstorming.id,
-          order_by: [asc_nulls_last: idea.order_position]
+          order_by: [asc_nulls_last: idea.position_order]
         )
 
       ideas_sorted_by_position = Repo.all(query)
@@ -81,7 +81,7 @@ defmodule Mindwendel.IdeasTest do
   describe "update_ideas_for_brainstorming_by_labels" do
     test "updates the order position for three ideas", %{brainstorming: brainstorming, idea: idea} do
       Ideas.update_ideas_for_brainstorming_by_labels(brainstorming.id)
-      assert Repo.reload(idea).order_position == 1
+      assert Repo.reload(idea).position_order == 1
     end
 
     test "update ideas in the correct order", %{
@@ -119,14 +119,14 @@ defmodule Mindwendel.IdeasTest do
       second_idea =
         Factory.insert!(:idea,
           brainstorming: brainstorming,
-          order_position: 1,
+          position_order: 1,
           updated_at: ~N[2021-01-01 15:06:30]
         )
 
       third_idea =
         Factory.insert!(:idea,
           brainstorming: brainstorming,
-          order_position: 2,
+          position_order: 2,
           updated_at: ~N[2021-01-01 15:06:30]
         )
 
@@ -135,7 +135,7 @@ defmodule Mindwendel.IdeasTest do
       query =
         from(idea in Idea,
           where: idea.brainstorming_id == ^brainstorming.id,
-          order_by: [asc_nulls_last: idea.order_position]
+          order_by: [asc_nulls_last: idea.position_order]
         )
 
       ideas_sorted_by_position = Repo.all(query)

@@ -14,7 +14,7 @@ defmodule Mindwendel.Brainstormings.Idea do
 
   schema "ideas" do
     field :body, :string
-    field :order_position, :integer
+    field :position_order, :integer
     field :username, :string, default: "Anonymous"
     field :deprecated_label, Ecto.Enum, source: :label, values: @label_values
     has_one :link, Link
@@ -37,7 +37,7 @@ defmodule Mindwendel.Brainstormings.Idea do
       :deprecated_label,
       :label_id,
       :user_id,
-      :order_position
+      :position_order
     ])
     |> validate_required([:username, :body, :brainstorming_id])
     |> validate_length(:body, min: 1, max: 1023)
