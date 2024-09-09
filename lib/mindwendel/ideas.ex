@@ -26,7 +26,7 @@ defmodule Mindwendel.Ideas do
   end
 
   @doc """
-  Returns the list of ideas depending on the brainstorming id.
+  Returns the list of ideas depending on the brainstorming id, ordered by position.
 
   ## Examples
 
@@ -45,7 +45,10 @@ defmodule Mindwendel.Ideas do
         left_join: idea_count in subquery(idea_count_query),
         on: idea_count.idea_id == idea.id,
         where: idea.brainstorming_id == ^id,
-        order_by: [desc_nulls_last: idea_count.like_count, desc: idea.inserted_at]
+        order_by: [
+          asc_nulls_last: idea.position_order,
+          desc: idea.updated_at
+        ]
 
     Repo.all(idea_query)
     |> Repo.preload([
@@ -56,23 +59,117 @@ defmodule Mindwendel.Ideas do
     ])
   end
 
-  def sort_ideas_by_labels(brainstorming_id) do
-    from(
-      idea in Idea,
-      left_join: l in assoc(idea, :idea_labels),
-      where: idea.brainstorming_id == ^brainstorming_id,
-      preload: [
-        :link,
-        :likes,
-        :idea_labels
-      ],
-      order_by: [
-        asc_nulls_last: l.position_order,
-        desc: idea.inserted_at
-      ]
+  @doc """
+  Returns the update result of sorting and updating ideas by likes inside a brainstorming.
+
+  ## Examples
+
+      iex> update_ideas_for_brainstorming_by_likes(3)
+      %{1, nil}
+
+  """
+  def update_ideas_for_brainstorming_by_likes(id) do
+    idea_count_query =
+      from like in Like,
+        group_by: like.idea_id,
+        select: %{idea_id: like.idea_id, like_count: count(1)}
+
+    # get the rank for all ideas and left join to get missing ideas without likes
+    idea_rank_query =
+      from(idea in Idea,
+        left_join: idea_counts in subquery(idea_count_query),
+        on: idea_counts.idea_id == idea.id,
+        where: idea.brainstorming_id == ^id,
+        select: %{
+          idea_id: idea.id,
+          like_count: idea_counts.like_count,
+          idea_rank: over(row_number(), order_by: [desc_nulls_last: idea_counts.like_count])
+        }
+      )
+
+    # update all ideas with their rank
+    from(idea in Idea,
+      join: idea_ranks in subquery(idea_rank_query),
+      on: idea_ranks.idea_id == idea.id,
+      where: idea.brainstorming_id == ^id,
+      update: [set: [position_order: idea_ranks.idea_rank]]
     )
-    |> Repo.all()
-    |> Enum.uniq()
+    |> Repo.update_all([])
+  end
+
+  @doc """
+  Returns the update result of sorting and updating ideas by labels inside a brainstorming.
+
+  ## Examples
+
+      iex> update_ideas_for_brainstorming_by_labels(3)
+      %{1, nil}
+
+  """
+  def update_ideas_for_brainstorming_by_labels(id) do
+    idea_rank_query =
+      from(idea in Idea,
+        left_join: l in assoc(idea, :idea_labels),
+        where: idea.brainstorming_id == ^id,
+        select: %{
+          idea_id: idea.id,
+          idea_rank:
+            over(row_number(),
+              order_by: [asc_nulls_last: l.position_order, desc: idea.inserted_at]
+            )
+        }
+      )
+
+    # update all ideas with their rank
+    from(idea in Idea,
+      join: idea_ranks in subquery(idea_rank_query),
+      on: idea_ranks.idea_id == idea.id,
+      where: idea.brainstorming_id == ^id,
+      update: [set: [position_order: idea_ranks.idea_rank]]
+    )
+    |> Repo.update_all([])
+  end
+
+  @doc """
+  Returns the update result of changing the order of ideas by a user inside a brainstorming.
+
+  ## Examples
+
+      iex> update_ideas_for_brainstorming_by_user_move(3, 1, 1, 3)
+      %{1, nil}
+
+  """
+  def update_ideas_for_brainstorming_by_user_move(
+        brainstorming_id,
+        idea_id,
+        new_position,
+        old_position
+      ) do
+    get_idea!(idea_id) |> update_idea(%{position_order: new_position})
+
+    # depending on moving a card bottom up or up to bottom, we need to correct the ordering
+    order =
+      if new_position < old_position,
+        do: [asc: :position_order, desc: :updated_at],
+        else: [asc: :position_order, asc: :updated_at]
+
+    idea_rank_query =
+      from(idea in Idea,
+        where: idea.brainstorming_id == ^brainstorming_id,
+        windows: [o: [order_by: ^order]],
+        select: %{
+          idea_id: idea.id,
+          idea_rank: over(row_number(), :o)
+        }
+      )
+
+    from(idea in Idea,
+      join: idea_ranks in subquery(idea_rank_query),
+      on: idea_ranks.idea_id == idea.id,
+      where: idea.brainstorming_id == ^brainstorming_id,
+      update: [set: [position_order: idea_ranks.idea_rank]]
+    )
+    |> Repo.update_all([])
   end
 
   @doc """

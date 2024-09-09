@@ -12,6 +12,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   schema "brainstormings" do
     field :name, :string
     field :option_show_link_to_settings, :boolean
+    field :option_allow_manual_ordering, :boolean
     # credo:disable-for-next-line
     # Todo: The following line can be changed `field :admin_url_id, Ecto.UUID, autogenerate: true`
     # This will automatically generate a UUID for the admin_url_id which would make the method `gen_admin_url_id/2` obsolete.
@@ -29,7 +30,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   @doc false
   def changeset(brainstorming, attrs) do
     brainstorming
-    |> cast(attrs, [:name, :option_show_link_to_settings])
+    |> cast(attrs, [:name, :option_show_link_to_settings, :option_allow_manual_ordering])
     |> validate_required([:name])
     |> cast_assoc(:labels)
     |> shorten_name
