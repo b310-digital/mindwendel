@@ -11,3 +11,8 @@
   padding: 0.5rem 0.5rem;
   background-color: inherit;
 }
+
+.card-mindwendel {
+  @extend .card;
+  width: 394px;
+}
