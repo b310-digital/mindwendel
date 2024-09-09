@@ -26,7 +26,7 @@ defmodule Mindwendel.Ideas do
   end
 
   @doc """
-  Returns the list of ideas depending on the brainstorming id.
+  Returns the list of ideas depending on the brainstorming id, ordered by position.
 
   ## Examples
 
@@ -45,7 +45,10 @@ defmodule Mindwendel.Ideas do
         left_join: idea_count in subquery(idea_count_query),
         on: idea_count.idea_id == idea.id,
         where: idea.brainstorming_id == ^id,
-        order_by: [desc_nulls_last: idea_count.like_count, desc: idea.inserted_at]
+        order_by: [
+          asc: idea.order_position,
+          desc: idea.updated_at
+        ]
 
     Repo.all(idea_query)
     |> Repo.preload([
@@ -56,48 +59,15 @@ defmodule Mindwendel.Ideas do
     ])
   end
 
-  def sort_ideas_by_labels(brainstorming_id) do
-    from(
-      idea in Idea,
-      left_join: l in assoc(idea, :idea_labels),
-      where: idea.brainstorming_id == ^brainstorming_id,
-      preload: [
-        :link,
-        :likes,
-        :idea_labels
-      ],
-      order_by: [
-        asc_nulls_last: l.position_order,
-        desc: idea.inserted_at
-      ]
-    )
-    |> Repo.all()
-    |> Enum.uniq()
-  end
+  @doc """
+  Returns the update result of sorting and updating ideas by likes inside a brainstorming.
 
-  def sort_ideas_by_order_position(brainstorming_id) do
-    from(
-      idea in Idea,
-      where: idea.brainstorming_id == ^brainstorming_id,
-      preload: [
-        :link,
-        :likes,
-        :label,
-        :idea_labels
-      ],
-      order_by: [
-        asc: idea.order_position
-      ]
-    )
-    |> Repo.all()
-    |> Repo.preload([
-      :link,
-      :likes,
-      :label,
-      :idea_labels
-    ])
-  end
+  ## Examples
 
+      iex> update_ideas_for_brainstorming_by_likes(3)
+      %{1, nil}
+
+  """
   def update_ideas_for_brainstorming_by_likes(id) do
     idea_count_query =
       from like in Like,
@@ -127,6 +97,15 @@ defmodule Mindwendel.Ideas do
     |> Repo.update_all([])
   end
 
+  @doc """
+  Returns the update result of sorting and updating ideas by labels inside a brainstorming.
+
+  ## Examples
+
+      iex> update_ideas_for_brainstorming_by_labels(3)
+      %{1, nil}
+
+  """
   def update_ideas_for_brainstorming_by_labels(id) do
     idea_rank_query =
       from(idea in Idea,
@@ -151,6 +130,15 @@ defmodule Mindwendel.Ideas do
     |> Repo.update_all([])
   end
 
+  @doc """
+  Returns the update result of changing the order of ideas by a user inside a brainstorming.
+
+  ## Examples
+
+      iex> update_ideas_for_brainstorming_by_user_move(3, 1, 1, 3)
+      %{1, nil}
+
+  """
   def update_ideas_for_brainstorming_by_user_move(
         brainstorming_id,
         idea_id,

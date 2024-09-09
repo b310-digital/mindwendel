@@ -39,7 +39,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {
       :noreply,
       socket
-      |> assign(:ideas, Ideas.sort_ideas_by_order_position(brainstorming_id))
+      |> assign(:ideas, Ideas.list_ideas_for_brainstorming(brainstorming_id))
       |> assign(:idea, Ideas.get_idea!(idea_id))
       |> assign(:uri, uri)
       |> apply_action(socket.assigns.live_action,
@@ -53,7 +53,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   def handle_params(%{"id" => id}, uri, socket) do
     {:noreply,
      socket
-     |> assign(:ideas, Ideas.sort_ideas_by_order_position(id))
+     |> assign(:ideas, Ideas.list_ideas_for_brainstorming(id))
      |> assign(:uri, uri)
      |> apply_action(socket.assigns.live_action, id)}
   end
@@ -61,7 +61,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   @impl true
   def handle_info({:idea_added, idea}, socket) do
     # uses the database to sort and update all ideas, instead of appending the idea to the end of list (which would be more performant)
-    new_ideas = Ideas.sort_ideas_by_order_position(idea.brainstorming_id)
+    new_ideas = Ideas.list_ideas_for_brainstorming(idea.brainstorming_id)
     {:noreply, assign(socket, :ideas, new_ideas)}
   end
 
@@ -77,7 +77,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
       :noreply,
       socket
       |> assign(:brainstorming, Brainstormings.get_brainstorming!(brainstorming.id))
-      |> assign(:ideas, Ideas.sort_ideas_by_order_position(brainstorming.id))
+      |> assign(:ideas, Ideas.list_ideas_for_brainstorming(brainstorming.id))
     }
   end
 
