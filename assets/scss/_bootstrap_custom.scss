@@ -17,5 +17,10 @@
   background-color: inherit;
 }
 
+.card-mindwendel {
+  @extend .card;
+  width: 394px;
+}
+
 // Required
 @import "bootstrap/scss/bootstrap";

@@ -36,7 +36,7 @@ msgstr "%{name} - Editieren"
 msgid "%{name} - New Idea"
 msgstr "%{name} - Neue Idee"
 
-#: lib/mindwendel_web/live/idea_live/index_component.html.heex:21
+#: lib/mindwendel_web/live/idea_live/index_component.html.heex:19
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this idea?"
 msgstr "Möchtest du die Idee löschen?"
@@ -118,7 +118,7 @@ msgstr "Neue Idee"
 msgid "New idea page (Hotkey: i)"
 msgstr "Neue Idee (Hotkey: i)"
 
-#: lib/mindwendel_web/live/idea_live/index_component.html.heex:117
+#: lib/mindwendel_web/live/idea_live/index_component.html.heex:115
 #, elixir-autogen, elixir-format
 msgid "No ideas brainstormed"
 msgstr "Bisher keine Ideen vorhanden"
@@ -218,7 +218,7 @@ msgstr "Einige Pflichtfelder fehlen oder sind inkorrekt:"
 msgid "Username"
 msgstr "Nutzername"
 
-#: lib/mindwendel_web/live/idea_live/index_component.html.heex:65
+#: lib/mindwendel_web/live/idea_live/index_component.html.heex:63
 #: lib/mindwendel_web/templates/admin/brainstorming/export.html.heex:3
 #, elixir-autogen, elixir-format
 msgid "By"
@@ -346,7 +346,7 @@ msgstr "Download als SVG"
 msgid "Brainstorming delete are you sure"
 msgstr "Bist du sicher, dass das Brainstorming gelöscht werden soll?"
 
-#: lib/mindwendel_web/live/idea_live/index_component.html.heex:24
+#: lib/mindwendel_web/live/idea_live/index_component.html.heex:22
 #, elixir-autogen, elixir-format
 msgid "Edit Idea"
 msgstr "Idee bearbeiten"
