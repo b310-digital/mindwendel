@@ -1,4 +1,5 @@
 import { Modal, Tooltip } from "bootstrap"
+import Sortable from 'sortablejs';
 
 // activate all tooltips:
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -26,6 +27,7 @@ import "./column_setup.js"
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
 let Hooks = {}
+let sortable;
 
 Hooks.CopyBrainstormingLinkButton = {
   mounted() {
@@ -48,6 +50,27 @@ Hooks.NativeSharingButton = {
           .catch(err => { console.log(`Error: ${err}`) })
       })
     }
+  }
+}
+
+// see https://github.com/drag-drop-touch-js/dragdroptouch for mobile support
+Hooks.Sortable = {
+  mounted(){
+    sortable = new Sortable(this.el, {
+      disabled: this.el.dataset.sortableEnabled !== 'true',
+      onEnd: (event) => {
+        this.pushEventTo(this.el, "change_position", {
+          id: event.item.dataset.id,
+          brainstorming_id: event.item.dataset.brainstormingId,
+          // on the server, positions start with 1 not 0
+          new_position: event.newIndex + 1,
+          old_position: event.oldIndex + 1
+        })
+      }
+    })
+  },
+  updated(){
+    sortable.option("disabled", this.el.dataset.sortableEnabled !== 'true')
   }
 }
 
@@ -130,7 +153,9 @@ Hooks.SetIdeaLabelBackgroundColor = {
   },
 };
 
-let liveSocket = new LiveSocket("/live", Socket, { hooks: Hooks, params: { _csrf_token: csrfToken } })
+let liveSocket = new LiveSocket("/live", Socket, { 
+  hooks: Hooks, params: { _csrf_token: csrfToken }
+})
 
 // Show progress bar on live navigation and form submits
 window.addEventListener("phx:page-loading-start", info => NProgress.start())

@@ -4,6 +4,7 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
   alias Mindwendel.Ideas
   alias Mindwendel.IdeaLabels
   alias Mindwendel.Likes
+  alias Mindwendel.Brainstormings
 
   @impl true
   def handle_event("edit", %{"id" => id}, socket) do
@@ -42,6 +43,38 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
     Likes.delete_like(id, socket.assigns.current_user.id)
 
     {:noreply, socket}
+  end
+
+  def handle_event(
+        "change_position",
+        %{
+          "id" => id,
+          "brainstorming_id" => brainstorming_id,
+          "new_position" => new_position,
+          "old_position" => old_position
+        },
+        socket
+      ) do
+    brainstorming = Brainstormings.get_brainstorming!(brainstorming_id)
+
+    if has_move_permission(brainstorming, socket.assigns.current_user) do
+      Ideas.update_ideas_for_brainstorming_by_user_move(
+        brainstorming_id,
+        id,
+        new_position,
+        old_position
+      )
+
+      Brainstormings.broadcast(
+        {:ok, brainstorming},
+        :brainstorming_updated
+      )
+
+      {:noreply, socket}
+    else
+      # reset local move change
+      {:noreply, socket |> assign(:brainstorming, brainstorming)}
+    end
   end
 
   def handle_event(

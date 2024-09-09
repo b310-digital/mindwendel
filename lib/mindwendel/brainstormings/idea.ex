@@ -14,6 +14,7 @@ defmodule Mindwendel.Brainstormings.Idea do
 
   schema "ideas" do
     field :body, :string
+    field :position_order, :integer
     field :username, :string, default: "Anonymous"
     field :deprecated_label, Ecto.Enum, source: :label, values: @label_values
     has_one :link, Link
@@ -29,7 +30,15 @@ defmodule Mindwendel.Brainstormings.Idea do
   @doc false
   def changeset(idea, attrs \\ %{}) do
     idea
-    |> cast(attrs, [:username, :body, :brainstorming_id, :deprecated_label, :label_id, :user_id])
+    |> cast(attrs, [
+      :username,
+      :body,
+      :brainstorming_id,
+      :deprecated_label,
+      :label_id,
+      :user_id,
+      :position_order
+    ])
     |> validate_required([:username, :body, :brainstorming_id])
     |> validate_length(:body, min: 1, max: 1023)
     |> validate_inclusion(:deprecated_label, @label_values)
