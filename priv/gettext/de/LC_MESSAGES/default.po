@@ -98,12 +98,11 @@ msgid "Idea created successfully"
 msgstr "Idee erstellt"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:25
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:119
 #, elixir-autogen, elixir-format
 msgid "New Idea"
 msgstr "Neue Idee"
 
-#: lib/mindwendel_web/templates/layout/root.html.heex:50
+#: lib/mindwendel_web/templates/layout/root.html.heex:62
 #, elixir-autogen, elixir-format
 msgid "New brainstorming"
 msgstr "Neues Brainstorming"
@@ -123,7 +122,7 @@ msgstr "Neue Idee (Hotkey: i)"
 msgid "No ideas brainstormed"
 msgstr "Bisher keine Ideen vorhanden"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:122
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:121
 #, elixir-autogen, elixir-format
 msgid "Open new idea page (Hotkey: i)"
 msgstr "Öffne neue Ideen Dialog (Hotkey: i)"
@@ -163,7 +162,7 @@ msgstr "Sortiere nach Likes"
 msgid "Try again from home"
 msgstr "Versuch es auf der Startseite"
 
-#: lib/mindwendel_web/templates/layout/root.html.heex:63
+#: lib/mindwendel_web/templates/layout/root.html.heex:75
 #, elixir-autogen, elixir-format
 msgid "Your brainstormings"
 msgstr "Deine Brainstormings"
@@ -401,3 +400,13 @@ msgstr "Achtung: Brainstormings werden %{available_until} nach dem letzten Zugri
 #, elixir-autogen, elixir-format
 msgid "Allow users to change the order of ideas"
 msgstr "Nutzern das Verschieben von Ideen erlauben"
+
+#: lib/mindwendel_web/templates/layout/root.html.heex:34
+#, elixir-autogen, elixir-format
+msgid "Back"
+msgstr "Zurück"
+
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:118
+#, elixir-autogen, elixir-format
+msgid "+"
+msgstr "+"
