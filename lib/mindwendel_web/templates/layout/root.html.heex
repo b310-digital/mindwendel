@@ -24,11 +24,23 @@
   <body class="bg-light">
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white border-bottom mb-2">
       <div class="container">
-        <%= link to: "/", class: "navbar-brand mb-0 h1" do %>
-          <img
-            src={Routes.static_path(@conn, "/images/kits-mindwendel-logo-blue.svg")}
-            class="nav-mindwendel-logo"
-          />
+        <%= if admin_route(@conn) do %>
+          <span class="nav-mindwendel-caption">
+            <%= link to: Routes.brainstorming_show_path(@conn, :show, assigns[:brainstorming]) do %>
+              <img
+                src={Routes.static_path(@conn, "/images/back.svg")}
+                class="nav-mindwendel-back"
+              />
+              <%= gettext("Back") %>
+            <% end %>
+          </span>
+        <% else %>
+          <%= link to: "/", class: "navbar-brand mb-0 h1" do %>
+            <img
+              src={Routes.static_path(@conn, "/images/kits-mindwendel-logo-blue.svg")}
+              class="nav-mindwendel-logo"
+            />
+          <% end %>
         <% end %>
 
         <button

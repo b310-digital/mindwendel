@@ -17,6 +17,27 @@ $bootstrap-icons-font-dir: "/fonts/bootstrap-icons/";
   height: 35px;
 }
 
+.nav-mindwendel-back {
+  height: 14px;
+  width: 21px;
+  margin-right: 5px;
+}
+
+.nav-mindwendel-caption {
+  margin-right: var(--bs-navbar-brand-margin-end);
+}
+
+.nav-mindwendel-caption a {
+  text-decoration: none;
+  color: var(--bs-navbar-color);
+}
+
+.idea-add-button {
+  width: 50px;
+  height: 50px;
+  font-size: 22px;
+}
+
 // Taken from the examples shown:
 // https://icons.getbootstrap.com/icons/arrow-up-circle/
 button .bi,
@@ -52,7 +73,7 @@ a .bi {
 .phx-modal-close {
   color: #aaa;
   float: right;
-  font-size: 28px;
+  font-size: 14px;
   font-weight: bold;
 }
 
