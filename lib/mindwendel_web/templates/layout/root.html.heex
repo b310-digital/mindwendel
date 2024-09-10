@@ -24,7 +24,7 @@
   <body class="bg-light">
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white border-bottom mb-2">
       <div class="container">
-        <%= if is_admin_route(@conn) do %>
+        <%= if admin_route(@conn) do %>
           <span class="nav-mindwendel-caption">
             <%= link to: Routes.brainstorming_show_path(@conn, :show, assigns[:brainstorming]) do %>
               <img

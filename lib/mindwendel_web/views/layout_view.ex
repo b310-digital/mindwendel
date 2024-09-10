@@ -6,7 +6,7 @@ defmodule MindwendelWeb.LayoutView do
     Brainstormings.list_brainstormings_for(user.id, limit)
   end
 
-  def is_admin_route(conn) do
+  def admin_route(conn) do
     route_scope = conn.request_path |> String.split("/", trim: true) |> List.first()
     route_scope == "admin"
   end
