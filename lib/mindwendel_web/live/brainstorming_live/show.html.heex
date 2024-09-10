@@ -114,14 +114,12 @@
       current_user: @current_user
     ) %>
 
-    <footer class="footer fixed-bottom d-lg-none bg-light">
-      <div class="d-grid gap-2">
-        <%= live_patch(gettext("New Idea"),
-          to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming),
-          class: "btn btn-primary",
-          title: gettext("Open new idea page (Hotkey: i)")
-        ) %>
-      </div>
+    <footer class="footer position-fixed bottom-0 end-0 mb-3 me-2 d-lg-none bg-light">
+      <%= live_patch(gettext("+"),
+        to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming),
+        class: "btn btn-primary rounded-circle idea-add-button",
+        title: gettext("Open new idea page (Hotkey: i)")
+      ) %>
     </footer>
   </div>
 </div>

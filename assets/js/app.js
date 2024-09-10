@@ -1,5 +1,6 @@
 import { Modal, Tooltip } from "bootstrap"
 import Sortable from 'sortablejs';
+import { setIdeaLabelBackgroundColor } from "./label"
 
 // activate all tooltips:
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -57,6 +58,8 @@ Hooks.Sortable = {
   mounted(){
     sortable = new Sortable(this.el, {
       disabled: this.el.dataset.sortableEnabled !== 'true',
+      delayOnTouchOnly: true,
+      delay: 50,
       onEnd: (event) => {
         this.pushEventTo(this.el, "change_position", {
           id: event.item.dataset.id,
@@ -147,9 +150,11 @@ Hooks.SetIdeaLabelColor = {
 
 Hooks.SetIdeaLabelBackgroundColor = {
   mounted() {
-    const color = this.el.getAttribute("data-color");
-    this.el.style.backgroundColor = color;
+    setIdeaLabelBackgroundColor(this.el)
   },
+  updated() {
+    setIdeaLabelBackgroundColor(this.el)
+  }
 };
 
 let liveSocket = new LiveSocket("/live", Socket, { 
