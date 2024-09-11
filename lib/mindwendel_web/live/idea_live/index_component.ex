@@ -1,4 +1,5 @@
 defmodule MindwendelWeb.IdeaLive.IndexComponent do
+  require Logger
   use MindwendelWeb, :live_component
 
   alias Mindwendel.Ideas
@@ -75,6 +76,18 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
       # reset local move change
       {:noreply, socket |> assign(:brainstorming, brainstorming)}
     end
+  end
+
+  def handle_event(
+        "change_position",
+        params,
+        socket
+      ) do
+    Logger.warning(
+      "Handle event 'change_position', missing required params in #{inspect(params)}"
+    )
+
+    {:noreply, socket}
   end
 
   def handle_event(
