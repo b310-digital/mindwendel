@@ -106,7 +106,7 @@ msgstr ""
 msgid "New brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:71
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:73
 #, elixir-autogen, elixir-format
 msgid "New idea"
 msgstr ""
@@ -121,7 +121,7 @@ msgstr ""
 msgid "No ideas brainstormed"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:121
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:123
 #, elixir-autogen, elixir-format
 msgid "Open new idea page (Hotkey: i)"
 msgstr ""
@@ -146,12 +146,12 @@ msgstr ""
 msgid "Saving..."
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:33
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:34
 #, elixir-autogen, elixir-format
 msgid "Sort by label"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:30
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:31
 #, elixir-autogen, elixir-format
 msgid "Sort by likes"
 msgstr ""
@@ -319,12 +319,12 @@ msgstr ""
 msgid "Mindwendel Brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:37
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:39
 #, elixir-autogen, elixir-format
 msgid "Share"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:95
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:97
 #, elixir-autogen, elixir-format
 msgid "Share brainstorming"
 msgstr ""
@@ -354,7 +354,7 @@ msgstr ""
 msgid "Idea created updated"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:83
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:85
 #, elixir-autogen, elixir-format
 msgid "Update idea"
 msgstr ""
@@ -375,12 +375,12 @@ msgstr ""
 msgid "Empty brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:34
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:35
 #, elixir-autogen, elixir-format
 msgid "Label"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:31
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:32
 #, elixir-autogen, elixir-format
 msgid "Likes"
 msgstr ""
@@ -405,7 +405,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:118
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:120
 #, elixir-autogen, elixir-format
 msgid "+"
 msgstr ""

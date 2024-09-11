@@ -107,7 +107,7 @@ msgstr "Neue Idee"
 msgid "New brainstorming"
 msgstr "Neues Brainstorming"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:71
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:73
 #, elixir-autogen, elixir-format
 msgid "New idea"
 msgstr "Neue Idee"
@@ -122,7 +122,7 @@ msgstr "Neue Idee (Hotkey: i)"
 msgid "No ideas brainstormed"
 msgstr "Bisher keine Ideen vorhanden"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:121
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:123
 #, elixir-autogen, elixir-format
 msgid "Open new idea page (Hotkey: i)"
 msgstr "Öffne neue Ideen Dialog (Hotkey: i)"
@@ -147,12 +147,12 @@ msgstr "Speichere diesen Link, um das Brainstorming zukünftig zu bearbeiten ode
 msgid "Saving..."
 msgstr "Speichere..."
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:33
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:34
 #, elixir-autogen, elixir-format
 msgid "Sort by label"
 msgstr "Sortiere nach Label"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:30
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:31
 #, elixir-autogen, elixir-format
 msgid "Sort by likes"
 msgstr "Sortiere nach Likes"
@@ -320,12 +320,12 @@ msgstr "Trete meinem Brainstorming bei."
 msgid "Mindwendel Brainstorming"
 msgstr "Mindwendel Brainstorming"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:37
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:39
 #, elixir-autogen, elixir-format
 msgid "Share"
 msgstr "Teilen"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:95
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:97
 #, elixir-autogen, elixir-format
 msgid "Share brainstorming"
 msgstr "Teile Dein Brainstorming"
@@ -355,7 +355,7 @@ msgstr "Idee bearbeiten"
 msgid "Idea created updated"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:83
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:85
 #, elixir-autogen, elixir-format
 msgid "Update idea"
 msgstr "Idee bearbeiten"
@@ -376,12 +376,12 @@ msgstr "Bist du sicher, dass das Brainstorming geleert werden soll?"
 msgid "Empty brainstorming"
 msgstr "Leere das Brainstorming"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:34
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:35
 #, elixir-autogen, elixir-format
 msgid "Label"
 msgstr "Label"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:31
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:32
 #, elixir-autogen, elixir-format
 msgid "Likes"
 msgstr "Likes"
@@ -406,7 +406,7 @@ msgstr "Nutzern das Verschieben von Ideen erlauben"
 msgid "Back"
 msgstr "Zurück"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:118
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:120
 #, elixir-autogen, elixir-format
 msgid "+"
 msgstr "+"

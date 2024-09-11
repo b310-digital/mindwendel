@@ -1,6 +1,7 @@
 defmodule MindwendelWeb.LiveHelpersTest do
   use MindwendelWeb.ConnCase
   import Phoenix.LiveViewTest
+  alias Mindwendel.Brainstormings
 
   alias Mindwendel.Factory
 

@@ -132,6 +132,78 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       brainstorming_refreshed = Repo.get(Brainstorming, brainstorming.id)
       assert brainstorming_refreshed.last_accessed_at > brainstorming.last_accessed_at
     end
+
+    test "enables dragging for admin", %{conn: conn, brainstorming: brainstorming} do
+      moderating_user = List.first(brainstorming.users)
+      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+
+      {:ok, view, _html} =
+        conn
+        |> init_test_session(%{current_user_id: moderating_user.id})
+        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+      assert view |> has_element?("#ideas[data-sortable-enabled|='true']")
+    end
+
+    test "disables dragging for user", %{conn: conn, brainstorming: brainstorming} do
+      {:ok, view, _html} =
+        conn
+        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+      assert view |> has_element?("#ideas[data-sortable-enabled|='false']")
+    end
+
+    test "enables dragging for user when option is activated", %{
+      conn: conn,
+      brainstorming: brainstorming
+    } do
+      Brainstormings.update_brainstorming(brainstorming, %{option_allow_manual_ordering: true})
+
+      {:ok, view, _html} =
+        conn
+        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+      assert view |> has_element?("#ideas[data-sortable-enabled|='true']")
+    end
+
+    test "contains sort button by likes for admin", %{
+      conn: conn,
+      brainstorming: brainstorming
+    } do
+      moderating_user = List.first(brainstorming.users)
+      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+
+      {:ok, view, _html} =
+        conn
+        |> init_test_session(%{current_user_id: moderating_user.id})
+        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+      assert view |> has_element?(".btn[title|='Sort by likes']")
+    end
+
+    test "does not contain sort button by default for user", %{
+      conn: conn,
+      brainstorming: brainstorming
+    } do
+      {:ok, view, _html} =
+        conn
+        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+      refute view |> has_element?(".btn[title|='Sort by likes']")
+    end
+
+    test "contains sort button for user when option is activated", %{
+      conn: conn,
+      brainstorming: brainstorming
+    } do
+      Brainstormings.update_brainstorming(brainstorming, %{option_allow_manual_ordering: true})
+
+      {:ok, view, _html} =
+        conn
+        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+      assert view |> has_element?(".btn[title|='Sort by likes']")
+    end
   end
 
   describe "new" do

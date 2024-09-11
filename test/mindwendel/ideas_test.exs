@@ -91,13 +91,15 @@ defmodule Mindwendel.IdeasTest do
       second_idea =
         Factory.insert!(:idea,
           brainstorming: brainstorming,
-          label: Enum.at(brainstorming.labels, 0)
+          label: Enum.at(brainstorming.labels, 0),
+          inserted_at: ~N[2022-01-01 15:06:30]
         )
 
       third_idea =
         Factory.insert!(:idea,
           brainstorming: brainstorming,
-          label: Enum.at(brainstorming.labels, 1)
+          label: Enum.at(brainstorming.labels, 1),
+          inserted_at: ~N[2021-01-01 15:06:30]
         )
 
       Ideas.update_ideas_for_brainstorming_by_labels(brainstorming.id)

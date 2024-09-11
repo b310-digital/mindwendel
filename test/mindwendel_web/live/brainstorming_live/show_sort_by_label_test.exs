@@ -1,26 +1,37 @@
 defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
   use MindwendelWeb.ConnCase
   import Phoenix.LiveViewTest
+  alias Mindwendel.Brainstormings
 
   alias Mindwendel.Factory
 
   setup do
-    %{brainstorming: Factory.insert!(:brainstorming)}
+    moderating_user = Factory.insert!(:user)
+    brainstorming = Factory.insert!(:brainstorming)
+    Brainstormings.add_moderating_user(brainstorming, moderating_user)
+    %{brainstorming: brainstorming, moderating_user: moderating_user}
   end
 
   test "contains button \"Sort by labels\"", %{
     conn: conn,
-    brainstorming: brainstorming
+    brainstorming: brainstorming,
+    moderating_user: moderating_user
   } do
     {:ok, show_live_view, _html} =
-      live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+      conn
+      |> init_test_session(%{current_user_id: moderating_user.id})
+      |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
 
     assert show_live_view
            |> has_element?(html_selector_button_sort_by_labels(brainstorming))
   end
 
   # The order of the labels is the defined by the column position_order
-  test "sort ideas by labels", %{conn: conn, brainstorming: brainstorming} do
+  test "sort ideas by labels", %{
+    conn: conn,
+    brainstorming: brainstorming,
+    moderating_user: moderating_user
+  } do
     idea_with_first_label =
       Factory.insert!(:idea, %{
         brainstorming: brainstorming,
@@ -36,7 +47,9 @@ defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
     idea_without_label = Factory.insert!(:idea, %{brainstorming: brainstorming})
 
     {:ok, show_live_view, _html} =
-      live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+      conn
+      |> init_test_session(%{current_user_id: moderating_user.id})
+      |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
 
     rendered =
       show_live_view
