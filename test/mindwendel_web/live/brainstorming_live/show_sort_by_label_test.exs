@@ -27,7 +27,11 @@ defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
   end
 
   # The order of the labels is the defined by the column position_order
-  test "sort ideas by labels", %{conn: conn, brainstorming: brainstorming, moderating_user: moderating_user} do
+  test "sort ideas by labels", %{
+    conn: conn,
+    brainstorming: brainstorming,
+    moderating_user: moderating_user
+  } do
     idea_with_first_label =
       Factory.insert!(:idea, %{
         brainstorming: brainstorming,

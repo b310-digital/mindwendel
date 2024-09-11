@@ -132,6 +132,26 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       brainstorming_refreshed = Repo.get(Brainstorming, brainstorming.id)
       assert brainstorming_refreshed.last_accessed_at > brainstorming.last_accessed_at
     end
+
+    test "enables dragging for admin", %{conn: conn, brainstorming: brainstorming} do
+      moderating_user = List.first(brainstorming.users)
+      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+
+      {:ok, view, _html} =
+        conn
+        |> init_test_session(%{current_user_id: moderating_user.id})
+        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+      assert view |> has_element?("#ideas[data-sortable-enabled|='true']")
+    end
+
+    test "disables dragging for user", %{conn: conn, brainstorming: brainstorming} do
+      {:ok, view, _html} =
+        conn
+        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+      assert view |> has_element?("#ideas[data-sortable-enabled|='false']")
+    end
   end
 
   describe "new" do
