@@ -33,4 +33,15 @@ defmodule MindwendelWeb.LiveHelpersTest do
 
     assert view |> has_element?(".btn[title|='Sort by likes']")
   end
+
+  test "does not contain sort button by default for user", %{
+    conn: conn,
+    brainstorming: brainstorming
+  } do
+    {:ok, view, _html} =
+      conn
+      |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+
+    refute view |> has_element?(".btn[title|='Sort by likes']")
+  end
 end
