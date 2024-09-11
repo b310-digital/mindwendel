@@ -119,14 +119,24 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   @impl true
   def handle_event("sort_by_likes", %{"id" => id}, socket) do
-    Ideas.update_ideas_for_brainstorming_by_likes(id)
-    Brainstormings.broadcast({:ok, Brainstormings.get_brainstorming!(id)}, :brainstorming_updated)
+    brainstorming = Brainstormings.get_brainstorming!(id)
+
+    if has_move_permission(brainstorming, socket.assigns.current_user) do
+      Ideas.update_ideas_for_brainstorming_by_likes(id)
+      Brainstormings.broadcast({:ok, brainstorming}, :brainstorming_updated)
+    end
+
     {:noreply, socket}
   end
 
   def handle_event("sort_by_label", %{"id" => id}, socket) do
-    Ideas.update_ideas_for_brainstorming_by_labels(id)
-    Brainstormings.broadcast({:ok, Brainstormings.get_brainstorming!(id)}, :brainstorming_updated)
+    brainstorming = Brainstormings.get_brainstorming!(id)
+
+    if has_move_permission(brainstorming, socket.assigns.current_user) do
+      Ideas.update_ideas_for_brainstorming_by_labels(id)
+      Brainstormings.broadcast({:ok, brainstorming}, :brainstorming_updated)
+    end
+
     {:noreply, socket}
   end
 

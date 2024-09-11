@@ -27,11 +27,13 @@
         class: "btn btn-primary m-1 d-none d-md-block",
         title: gettext("New idea page (Hotkey: i)")
       ) %>
-      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
-        <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Likes") %>
-      <% end %>
-      <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_label", phx_value_id: @brainstorming.id, title: gettext("Sort by label") do %>
-        <i class="bi-sort-alpha-up-alt"></i> <%= gettext("Label") %>
+      <%= if has_move_permission(@brainstorming, @current_user) do %>
+        <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
+          <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Likes") %>
+        <% end %>
+        <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_label", phx_value_id: @brainstorming.id, title: gettext("Sort by label") do %>
+          <i class="bi-sort-alpha-up-alt"></i> <%= gettext("Label") %>
+        <% end %>
       <% end %>
 
       <%= live_patch to: Routes.brainstorming_show_path(@socket, :share, @brainstorming), class: "btn btn-secondary m-1", title: gettext("Share") do %>
