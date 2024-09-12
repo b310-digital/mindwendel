@@ -109,12 +109,14 @@
       brainstorming: @brainstorming
     ) %>
 
-    <%= live_component(MindwendelWeb.IdeaLive.IndexComponent,
-      ideas: @ideas,
-      brainstorming: @brainstorming,
-      id: @brainstorming.id,
-      current_user: @current_user
-    ) %>
+    <div class="">
+      <%= live_component(MindwendelWeb.IdeaLive.IndexComponent,
+        ideas: @ideas,
+        brainstorming: @brainstorming,
+        id: @brainstorming.id,
+        current_user: @current_user
+      ) %>
+    </div>
 
     <footer class="footer position-fixed bottom-0 end-0 mb-3 me-2 d-lg-none bg-light">
       <%= live_patch(gettext("+"),

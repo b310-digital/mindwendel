@@ -1,8 +1,17 @@
-<div>
+<div class="d-flex overflow-scroll flex-row">
+  <div
+    class="mb-5 d-flex flex-column sortable card-columns w-100 flex-wrap"
+  >
+      <div
+        class="card-mindwendel m-3 shadow-sm p-2 rounded"
+      >
+      NEUE SPALTE
+      </div>
+  </div>
   <div
     id="ideas"
     phx-hook="Sortable"
-    class="mb-5 sortable d-flex flex-wrap justify-content-start"
+    class="mb-5 d-flex sortable card-columns flex-wrap"
     data-sortable-enabled={to_string(has_move_permission(@brainstorming, @current_user))}
   >
     <%= for idea <- @ideas do %>
