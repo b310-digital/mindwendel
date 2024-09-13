@@ -74,6 +74,7 @@ defmodule Mindwendel.Brainstormings do
     Repo.get!(Brainstorming, id)
     |> Repo.preload([
       :users,
+      :lanes,
       :moderating_users,
       labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
       ideas: [

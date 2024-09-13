@@ -57,6 +57,7 @@ Hooks.NativeSharingButton = {
 Hooks.Sortable = {
   mounted(){
     sortable = new Sortable(this.el, {
+      group: { put: true, pull: true },
       disabled: this.el.dataset.sortableEnabled !== 'true',
       delayOnTouchOnly: true,
       delay: 50,
