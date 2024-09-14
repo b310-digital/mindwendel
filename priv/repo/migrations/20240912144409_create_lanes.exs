@@ -1,5 +1,6 @@
 defmodule Mindwendel.Repo.Migrations.CreateLanes do
   use Ecto.Migration
+
   def change do
     create table(:lanes, primary_key: false) do
       add :id, :uuid, primary_key: true
