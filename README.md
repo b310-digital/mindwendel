@@ -4,6 +4,23 @@
 
 Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm and upvote ideas and thoughts within your team. Built from scratch with [Phoenix](https://www.phoenixframework.org).
 
+- [mindwendel](#mindwendel)
+  - [Features](#features)
+  - [Use-cases](#use-cases)
+  - [Getting Started](#getting-started)
+  - [Contributing](#contributing)
+    - [Development](#development)
+    - [Testing](#testing)
+    - [Production](#production)
+      - [Note](#note)
+    - [Build release and production docker image](#build-release-and-production-docker-image)
+    - [Formatting](#formatting)
+  - [Environment Variables](#environment-variables)
+    - [Localization](#localization)
+  - [Contributing](#contributing-1)
+  - [Testimonials](#testimonials)
+  - [Acknowledgements](#acknowledgements)
+
 ## Features
 
 - 5 minute setup (It is not a joke)
