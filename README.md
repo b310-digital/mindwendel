@@ -30,6 +30,7 @@ Brainstorm ...
 ## Getting Started
 
 mindwendel can be run just about anywhere. So checkout our [Installation Guides](./docs/installing_mindwendel.md) for detailed instructions for various deployments.
+If you want to contribute, jump ahead to [Development](#development)!
 
 Here's the TLDR:
 
