@@ -9,6 +9,7 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.BrainstormingModeratingUser
 
@@ -113,6 +114,7 @@ defmodule Mindwendel.Brainstormings do
     user
     |> Ecto.build_assoc(:created_brainstormings,
       labels: Brainstorming.idea_label_factory(),
+      lanes: [%Lane{position_order: 1}],
       moderating_users: [user],
       users: [user]
     )

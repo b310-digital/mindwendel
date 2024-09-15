@@ -25,6 +25,18 @@ defmodule Mindwendel.BrainstormingsTest do
     }
   end
 
+  describe "create_brainstorming" do
+    test "creates a lane", %{user: user} do
+      {:ok, brainstorming} = Brainstormings.create_brainstorming(user, %{name: "test"})
+      assert length(brainstorming.lanes) == 1
+    end
+
+    test "creates labels", %{user: user} do
+      {:ok, brainstorming} = Brainstormings.create_brainstorming(user, %{name: "test"})
+      assert length(brainstorming.labels) == 5
+    end
+  end
+
   describe "list_brainstormings_for" do
     test "returns the 3 most recent brainstormings", %{brainstorming: brainstorming, user: user} do
       older_brainstorming =
