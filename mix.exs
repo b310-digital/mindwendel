@@ -80,7 +80,6 @@ defmodule Mindwendel.MixProject do
     [
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.test.prepare": ["cmd MIX_ENV=test mix ecto.reset"],
       setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.deploy": [
