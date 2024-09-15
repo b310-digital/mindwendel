@@ -1,13 +1,14 @@
 <div id="ideas" class="d-flex overflow-scroll flex-row">
   <%= for lane <- @lanes do %>
     <div>
+    <%= lane.name || "Default Lane" %>
       <div
         id="ideas-col-1"
         class="mb-5 d-flex card-columns flex-column flex-wrap sortable"
         phx-hook="Sortable"
         data-sortable-enabled={to_string(has_move_permission(@brainstorming, @current_user))}
       >
-        <%= for idea <- @ideas do %>
+        <%= for idea <- lane.ideas do %>
           <div
             class="card-mindwendel m-3 shadow-sm p-2 rounded IndexComponent__IdeaCard"
             role={if has_move_permission(@brainstorming, @current_user), do: "button", else: ""}
@@ -111,7 +112,7 @@
           </div>
         <% end %>
 
-        <%= if Enum.empty?(@ideas) do %>
+        <%= if Enum.empty?(lane.ideas) do %>
           <div class="text-center w-100">
             <i class="bi-lightbulb text-secondary lightbulb-large"></i>
             <p><%= gettext("No ideas brainstormed") %></p>
