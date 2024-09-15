@@ -9,6 +9,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
   - [Use-cases](#use-cases)
   - [Getting Started](#getting-started)
   - [Contributing](#contributing)
+    - [Workflow](#workflow)
     - [Development](#development)
     - [Testing](#testing)
     - [Production](#production)
@@ -17,7 +18,6 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
     - [Formatting](#formatting)
   - [Environment Variables](#environment-variables)
     - [Localization](#localization)
-  - [Contributing](#contributing-1)
   - [Testimonials](#testimonials)
   - [Acknowledgements](#acknowledgements)
 
@@ -78,6 +78,14 @@ mindwendel is built on top of:
 - [Phoenix Framework](https://hexdocs.pm/phoenix/installation.html#phoenix)
 - [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_view)
 - [PostgreSQL](https://www.postgresql.org)
+
+### Workflow
+
+1. Fork it (<https://github.com/mindwendel/mindwendel/fork>)
+2. Create your feature branch (`git checkout -b fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin fooBar`)
+5. Create a new Pull Request
 
 ### Development
 
@@ -197,14 +205,6 @@ You can extract new strings to translate by running:
 ```bash
 mix gettext.extract --merge
 ```
-
-## Contributing
-
-1. Fork it (<https://github.com/mindwendel/mindwendel/fork>)
-2. Create your feature branch (`git checkout -b fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin fooBar`)
-5. Create a new Pull Request
 
 ## Testimonials
 
