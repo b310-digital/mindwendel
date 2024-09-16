@@ -10,7 +10,7 @@
 
     <div class="form-group">
       <%= label(f, gettext("Username")) %>
-      <%= text_input(f, :username, class: "form-control") %>
+      <%= text_input(f, :username, class: "form-control", phx_debounce: 300) %>
       <%= if message = f.errors[:username] do %>
         <span><%= translate_error(message) %></span>
       <% end %>
@@ -18,7 +18,7 @@
 
     <div class="form-group">
       <%= label(f, :body, gettext("Your idea")) %>
-      <%= textarea(f, :body, class: "form-control") %>
+      <%= textarea(f, :body, class: "form-control", phx_debounce: 300) %>
       <%= if message = f.errors[:body] do %>
         <span><%= translate_error(message) %></span>
       <% end %>
