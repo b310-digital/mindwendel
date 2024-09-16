@@ -30,6 +30,7 @@ Brainstorm ...
 ## Getting Started
 
 mindwendel can be run just about anywhere. So checkout our [Installation Guides](./docs/installing_mindwendel.md) for detailed instructions for various deployments.
+If you want to contribute, jump ahead to [Development](#development)!
 
 Here's the TLDR:
 
@@ -64,22 +65,22 @@ mindwendel is built on top of:
 
 ### Development
 
-- Startup docker-compose setup
+- Startup docker compose setup
 
   ```bash
-  docker-compose up --build -d
+  docker compose up --build -d
   ```
 
 - Setup the database
 
   ```bash
-  docker-compose exec app mix ecto.setup
+  docker compose exec app mix ecto.setup
   ```
 
 - Start the server
 
 ```bash
-  docker-compose exec app mix phx.server
+  docker compose exec app mix phx.server
 ```
 
 - Go to http://localhost:4000/
@@ -89,29 +90,29 @@ mindwendel is built on top of:
 - Open a shell in the docker container to execute tests, etc.
 
   ```bash
-  docker-compose exec app sh
+  docker compose exec app sh
   ```
 
 - Go to http://localhost:4000/
 
 ### Testing
 
-- Startup docker-compose setup
+- Startup docker compose setup
 
   ```bash
-  docker-compose up --build -d
+  docker compose up --build -d
   ```
 
 - Ensure your database is running and reset your database
 
   ```bash
-  docker-compose exec app mix ecto.test.prepare
+  docker compose exec app mix ecto.test.prepare
   ```
 
 - Run the test
 
   ```bash
-  docker-compose exec app mix test
+  docker compose exec app mix test
   ```
 
 ### Production
@@ -138,7 +139,7 @@ mindwendel is built on top of:
 - Start everything at once (including a forced build):
 
   ```bash
-  docker-compose --file docker-compose-prod.yml --env-file .env.prod up -d --build --force-recreate
+  docker compose --file docker-compose-prod.yml --env-file .env.prod up -d --build --force-recreate
   ```
 
 - Open the browser and go to `http://${URL_HOST}`
