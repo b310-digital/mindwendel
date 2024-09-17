@@ -5,6 +5,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   alias Mindwendel.Brainstormings
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Brainstormings.Lane
 
   @impl true
   def mount(%{"id" => id}, session, socket) do

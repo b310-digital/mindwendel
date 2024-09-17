@@ -1,82 +1,68 @@
 defmodule MindwendelWeb.LaneLive.FormComponent do
   use MindwendelWeb, :live_component
 
-  alias Mindwendel.Brainstormings
-
-  @impl true
-  def render(assigns) do
-    ~H"""
-    <div>
-      <.header>
-        <%= @title %>
-        <:subtitle>Use this form to manage lane records in your database.</:subtitle>
-      </.header>
-
-      <.simple_form
-        for={@form}
-        id="lane-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
-        <.input field={@form[:name]} type="text" label="Name" />
-        <:actions>
-          <.button phx-disable-with="Saving...">Save Lane</.button>
-        </:actions>
-      </.simple_form>
-    </div>
-    """
-  end
+  alias Mindwendel.Lanes
 
   @impl true
   def update(%{lane: lane} = assigns, socket) do
+    changeset = Lanes.change_lane(lane)
+
     {:ok,
      socket
      |> assign(assigns)
-     |> assign_new(:form, fn ->
-       to_form(Brainstormings.change_lane(lane))
-     end)}
+     |> assign(:changeset, changeset)}
   end
 
   @impl true
   def handle_event("validate", %{"lane" => lane_params}, socket) do
-    changeset = Brainstormings.change_lane(socket.assigns.lane, lane_params)
-    {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
+    changeset =
+      socket.assigns.lane
+      |> Lanes.change_lane(lane_params)
+      |> Map.put(:action, :validate)
+
+    {:noreply, assign(socket, :changeset, changeset)}
   end
 
   def handle_event("save", %{"lane" => lane_params}, socket) do
     save_lane(socket, socket.assigns.action, lane_params)
   end
 
-  defp save_lane(socket, :edit, lane_params) do
-    case Brainstormings.update_lane(socket.assigns.lane, lane_params) do
-      {:ok, lane} ->
-        notify_parent({:saved, lane})
+  defp save_lane(socket, :update, lane_params) do
+    lane = Lanes.get_lane!(lane_params["id"])
 
-        {:noreply,
-         socket
-         |> put_flash(:info, "Lane updated successfully")
-         |> push_patch(to: socket.assigns.patch)}
+    %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, form: to_form(changeset))}
+    if current_user.id in [lane.user_id | brainstorming.moderating_users |> Enum.map(& &1.id)] do
+      case Lanes.update_lane(
+             lane,
+             Map.put(lane_params, "user_id", lane.user_id || current_user.id)
+           ) do
+        {:ok, _lane} ->
+          {:noreply,
+           socket
+           |> put_flash(:info, gettext("Lane created updated"))
+           |> push_redirect(to: socket.assigns.return_to)}
+
+        {:error, %Ecto.Changeset{} = changeset} ->
+          {:noreply, assign(socket, changeset: changeset)}
+      end
     end
   end
 
   defp save_lane(socket, :new, lane_params) do
-    case Brainstormings.create_lane(lane_params) do
-      {:ok, lane} ->
-        notify_parent({:saved, lane})
+    Mindwendel.Accounts.update_user(socket.assigns.current_user, %{
+      username: lane_params["username"]
+    })
 
+    case Lanes.create_lane(Map.put(lane_params, "user_id", socket.assigns.current_user.id)) do
+      {:ok, _lane} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Lane created successfully")
-         |> push_patch(to: socket.assigns.patch)}
+         |> put_flash(:info, gettext("Lane created successfully"))
+         |> push_redirect(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, form: to_form(changeset))}
+        {:noreply, assign(socket, changeset: changeset)}
     end
   end
-
-  defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
 end

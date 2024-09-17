@@ -107,6 +107,17 @@
       ) %>
     <% end %>
 
+    <%= if @live_action in [:edit_lane] do %>
+      <%= live_modal(MindwendelWeb.LaneLive.FormComponent,
+        id: :update,
+        title: gettext("Update lane"),
+        action: :update,
+        brainstorming: @brainstorming,
+        lane: @lane,
+        return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming)
+      ) %>
+    <% end %>
+
     <%= if @live_action in [:share] do %>
       <%= live_modal(MindwendelWeb.BrainstormingLive.ShareComponent,
         id: :share,
