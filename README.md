@@ -128,12 +128,6 @@ mindwendel is built on top of:
   docker compose up --build -d
   ```
 
-- Ensure your database is running and reset your database
-
-  ```bash
-  docker compose exec app mix ecto.test.prepare
-  ```
-
 - Run the test
 
   ```bash
