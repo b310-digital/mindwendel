@@ -27,6 +27,11 @@
         class: "btn btn-primary m-1 d-none d-md-block",
         title: gettext("New idea page (Hotkey: i)")
       ) %>
+      <%= live_patch(gettext("New Lane"),
+        to: Routes.brainstorming_show_path(@socket, :new_lane, @brainstorming),
+        class: "btn btn-primary m-1 d-none d-md-block",
+        title: gettext("New lane")
+      ) %>
       <%= if has_move_permission(@brainstorming, @current_user) do %>
         <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
           <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Likes") %>
@@ -75,6 +80,17 @@
         brainstorming: @brainstorming,
         current_user: @current_user,
         idea: @idea,
+        return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming)
+      ) %>
+    <% end %>
+
+    <%= if @live_action in [:new_lane] do %>
+      <%= live_modal(MindwendelWeb.LaneLive.FormComponent,
+        id: :new,
+        title: gettext("New lane"),
+        action: :new,
+        brainstorming: @brainstorming,
+        lane: @lane,
         return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming)
       ) %>
     <% end %>
