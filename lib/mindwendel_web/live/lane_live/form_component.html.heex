@@ -1,0 +1,33 @@
+<div>
+  <%= form_for @changeset, "#", [id: "label-form", phx_target: @myself, phx_change: "validate", phx_submit: "save"], fn f -> %>
+    <%= hidden_input(f, :id) %>
+
+    <%= if Enum.count(f.errors) > 0 do %>
+      <div class="alert alert-danger">
+        <%= gettext("Required fields are either missing or incorrect:") %>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= label(f, gettext("Name")) %>
+      <%= text_input(f, :name, class: "form-control") %>
+      <%= if message = f.errors[:name] do %>
+        <span><%= translate_error(message) %></span>
+      <% end %>
+    </div>
+    <%= hidden_input(f, :brainstorming_id) %>
+
+    <%= live_patch(gettext("Close"),
+      to: @return_to,
+      id: "label-modal-cancel",
+      class: "btn btn-secondary form-cancel me-2",
+      phx_update: "ignore"
+    ) %>
+    <%= submit(gettext("Save"),
+      to: @return_to,
+      phx_disable_with: gettext("Saving..."),
+      class: "btn btn-primary",
+      disabled: !@changeset.valid?
+    ) %>
+  <% end %>
+</div>
