@@ -282,4 +282,55 @@ defmodule Mindwendel.BrainstormingsTest do
       assert Enum.count(other_brainstorming.ideas) == 1
     end
   end
+
+  describe "lanes" do
+    alias Mindwendel.Brainstormings.Lane
+
+    import Mindwendel.BrainstormingsFixtures
+
+    @invalid_attrs %{name: nil, position_order: nil}
+
+    test "get_lane!/1 returns the lane with given id" do
+      lane = lane_fixture()
+      assert Brainstormings.get_lane!(lane.id) == lane
+    end
+
+    test "create_lane/1 with valid data creates a lane" do
+      valid_attrs = %{name: "some name", position_order: 42}
+
+      assert {:ok, %Lane{} = lane} = Brainstormings.create_lane(valid_attrs)
+      assert lane.name == "some name"
+      assert lane.position_order == 42
+    end
+
+    test "create_lane/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Brainstormings.create_lane(@invalid_attrs)
+    end
+
+    test "update_lane/2 with valid data updates the lane" do
+      lane = lane_fixture()
+      update_attrs = %{name: "some updated name", position_order: 43}
+
+      assert {:ok, %Lane{} = lane} = Brainstormings.update_lane(lane, update_attrs)
+      assert lane.name == "some updated name"
+      assert lane.position_order == 43
+    end
+
+    test "update_lane/2 with invalid data returns error changeset" do
+      lane = lane_fixture()
+      assert {:error, %Ecto.Changeset{}} = Brainstormings.update_lane(lane, @invalid_attrs)
+      assert lane == Brainstormings.get_lane!(lane.id)
+    end
+
+    test "delete_lane/1 deletes the lane" do
+      lane = lane_fixture()
+      assert {:ok, %Lane{}} = Brainstormings.delete_lane(lane)
+      assert_raise Ecto.NoResultsError, fn -> Brainstormings.get_lane!(lane.id) end
+    end
+
+    test "change_lane/1 returns a lane changeset" do
+      lane = lane_fixture()
+      assert %Ecto.Changeset{} = Brainstormings.change_lane(lane)
+    end
+  end
 end

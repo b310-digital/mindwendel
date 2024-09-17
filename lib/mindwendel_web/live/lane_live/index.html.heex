@@ -1,0 +1,41 @@
+<.header>
+  Listing Lanes
+  <:actions>
+    <.link patch={~p"/lanes/new"}>
+      <.button>New Lane</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="lanes"
+  rows={@streams.lanes}
+  row_click={fn {_id, lane} -> JS.navigate(~p"/lanes/#{lane}") end}
+>
+  <:col :let={{_id, lane}} label="Name"><%= lane.name %></:col>
+  <:action :let={{_id, lane}}>
+    <div class="sr-only">
+      <.link navigate={~p"/lanes/#{lane}"}>Show</.link>
+    </div>
+    <.link patch={~p"/lanes/#{lane}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, lane}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: lane.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="lane-modal" show on_cancel={JS.patch(~p"/lanes")}>
+  <.live_component
+    module={MindwendelWeb.LaneLive.FormComponent}
+    id={@lane.id || :new}
+    title={@page_title}
+    action={@live_action}
+    lane={@lane}
+    patch={~p"/lanes"}
+  />
+</.modal>
