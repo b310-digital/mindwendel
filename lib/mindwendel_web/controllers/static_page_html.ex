@@ -2,7 +2,7 @@ defmodule MindwendelWeb.StaticPageHTML do
   use MindwendelWeb, :html
   alias Mindwendel.Brainstormings
 
-  embed_templates "../templates/static_page/*"
+  embed_templates "static_page_html/*"
 
   def list_brainstormings_for(user) do
     Brainstormings.list_brainstormings_for(user.id)

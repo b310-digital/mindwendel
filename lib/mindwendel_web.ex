@@ -27,25 +27,10 @@ defmodule MindwendelWeb do
     end
   end
 
-  def view do
-    quote do
-      use Phoenix.View,
-        root: "lib/mindwendel_web/templates",
-        namespace: MindwendelWeb
-
-      # Import convenience functions from controllers
-      import Phoenix.Controller,
-        only: [view_module: 1, view_template: 1]
-
-      # Include shared imports and aliases for views
-      unquote(view_helpers())
-    end
-  end
-
   def html do
     quote do
       # this is temporary https://hexdocs.pm/phoenix_view/Phoenix.View.html#module-replaced-by-phoenix-component
-      import Phoenix.View
+      # import Phoenix.View
 
       use Phoenix.Component
 
@@ -71,6 +56,21 @@ defmodule MindwendelWeb do
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
+    end
+  end
+
+  def view do
+    quote do
+      use Phoenix.View,
+        root: "lib/mindwendel_web/templates",
+        namespace: MindwendelWeb
+
+      # Import convenience functions from controllers
+      import Phoenix.Controller,
+        only: [view_module: 1, view_template: 1]
+
+      # Include shared imports and aliases for views
+      unquote(view_helpers())
     end
   end
 

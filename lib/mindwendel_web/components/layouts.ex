@@ -10,5 +10,6 @@ defmodule MindwendelWeb.Layouts do
   """
   use MindwendelWeb, :html
 
-  embed_templates "../templates/layout/*"
+  # just for migration
+  embed_templates "../templates/layout/static_page*"
 end
