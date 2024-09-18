@@ -11,5 +11,5 @@ defmodule MindwendelWeb.Layouts do
   use MindwendelWeb, :html
 
   # just for migration
-  embed_templates "../templates/layout/static_page*"
+  embed_templates "../templates/layout/*"
 end

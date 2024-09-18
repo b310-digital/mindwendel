@@ -1,10 +1,5 @@
 <div class="d-flex w-100 h-100 p-3 pb-0 mx-auto flex-column bg-mindwendel text-white">
   <header class="mb-auto bg-none container">
-    <img
-      src={Routes.static_path(@conn, "/images/mindwendel_logo_white.svg")}
-      height="40px"
-      class="float-md-start me-3"
-    />
     <h3 class="mb-0">mindwendel</h3>
   </header>
 
@@ -17,13 +12,6 @@
 
     <div class="row">
       <div class="col-md-12 col-lg-5 mt-2">
-      <.simple_form for={@form} phx-change="validate" phx-submit="save">
-        <.input field={@form[:email]} label="Email"/>
-        <.input field={@form[:username]} label="Username" />
-        <:actions>
-          <.button>Save</.button>
-        </:actions>
-      </.simple_form>
         <small class="text-muted">
           <%= gettext("Brainstormings will be deleted after %{days} days.",
             days:
