@@ -1,4 +1,4 @@
-defmodule TestNewPhoenixWeb.Layouts do
+defmodule MindwendelWeb.Layouts do
   @moduledoc """
   This module holds different layouts used by your application.
 
