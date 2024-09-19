@@ -40,7 +40,7 @@
       <div class="row mt-5">
         <div class="col-md-12 col-lg-12 mt-2">
           <h3><%= gettext("Your latest brainstormings") %></h3>
-          <%= for brainstorming <- MindwendelWeb.StaticPageHTML.list_brainstormings_for(@current_user) do %>
+          <%= for brainstorming <- list_brainstormings_for(@current_user) do %>
             <h5>
               <.link href={~p"/brainstormings/#{brainstorming.id}"}>
                 <%= brainstorming.name %>
