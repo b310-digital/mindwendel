@@ -39,10 +39,11 @@
     </div>
     <br />
     <i class="far fa-arrow-alt-circle-right"></i>
-    <%= link(gettext("Proceed to your brainstorming"),
-      to: Routes.brainstorming_show_path(@socket, :show, @brainstorming),
-      class: "fw-bold"
-    ) %>
+    <span class="fw-bold">
+      <.link href={~p"/brainstormings/#{@brainstorming.id}"}>
+        <%= gettext("Proceed to your brainstorming") %>
+      </.link>
+    </span>
     <br />
     <p>
       (<%= brainstorming_available_until_full_text(@brainstorming) %>)
