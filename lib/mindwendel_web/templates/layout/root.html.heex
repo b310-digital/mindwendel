@@ -18,6 +18,18 @@
   <body class="bg-light">
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white border-bottom mb-2">
       <div class="container">
+        <%= if admin_route(@conn) do %>
+          <span class="nav-mindwendel-caption">
+            <a href={~p"/brainstormings/#{assigns[:brainstorming].id}"}>
+              <img src={~p"/images/back.svg"} class="nav-mindwendel-back" />
+              <%= gettext("Back") %>
+            </a>
+          </span>
+        <% else %>
+          <a href={~p"/"} class="navbar-brand mb-0 h1">
+            <img src={~p"/images/mindwendel_logo_black.svg"} class="nav-mindwendel-logo" />
+          </a>
+        <% end %>
         <button
           class="navbar-toggler"
           type="button"
@@ -49,10 +61,29 @@
                 >
                   <%= gettext("Your brainstormings") %>
                 </a>
-                <ul class="dropdown-menu"></ul>
+                <ul class="dropdown-menu">
+                  <%= for brainstorming <- list_brainstormings_for(@current_user, 10) do %>
+                    <a
+                      class={"dropdown-item #{ if assigns[:brainstorming].id == brainstorming.id, do: "active", else: "" }"}
+                      href={~p"/brainstormings/#{brainstorming.id}"}
+                    >
+                      <%= brainstorming.name %>
+                    </a>
+                  <% end %>
+                </ul>
               </li>
 
               <li class="nav-item"><hr class="dropdown-divider" /></li>
+              <%= for brainstorming <- list_brainstormings_for(@current_user, 10) do %>
+                <li class="nav-item d-lg-none">
+                  <a
+                    class={"nav-link #{if assigns[:brainstorming].id == brainstorming.id, do: "active", else: "" }"}
+                    href={~p"/brainstormings/#{brainstorming.id}"}
+                  >
+                    <%= brainstorming.name %>
+                  </a>
+                </li>
+              <% end %>
             <% end %>
           </ul>
         </div>
