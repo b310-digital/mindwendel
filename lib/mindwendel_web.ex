@@ -109,9 +109,9 @@ defmodule MindwendelWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {MindwendelWeb.LayoutView, :live}
+        layout: {MindwendelWeb.Layouts, :app}
 
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
@@ -119,7 +119,7 @@ defmodule MindwendelWeb do
     quote do
       use Phoenix.LiveComponent
 
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
