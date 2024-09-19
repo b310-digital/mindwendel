@@ -17,37 +17,37 @@ defmodule MindwendelWeb do
   and import those modules here.
   """
 
-def static_paths, do: ~w(assets fonts images favicon.ico robots.txt)
+  def static_paths, do: ~w(assets fonts images favicon.ico robots.txt)
 
-def router do
-  quote do
-    use Phoenix.Router, helpers: false
+  def router do
+    quote do
+      use Phoenix.Router, helpers: false
 
-    # Import common connection and controller functions to use in pipelines
-    import Plug.Conn
-    import Phoenix.Controller
-    import Phoenix.LiveView.Router
+      # Import common connection and controller functions to use in pipelines
+      import Plug.Conn
+      import Phoenix.Controller
+      import Phoenix.LiveView.Router
+    end
   end
-end
 
-def channel do
-  quote do
-    use Phoenix.Channel
+  def channel do
+    quote do
+      use Phoenix.Channel
+    end
   end
-end
 
-def controller do
-  quote do
-    use Phoenix.Controller,
-      formats: [:html, :json],
-      layouts: [html: MindwendelWeb.Layouts]
+  def controller do
+    quote do
+      use Phoenix.Controller,
+        formats: [:html, :json],
+        layouts: [html: MindwendelWeb.Layouts]
 
-    import Plug.Conn
-    import MindwendelWeb.Gettext
+      import Plug.Conn
+      import MindwendelWeb.Gettext
 
-    unquote(verified_routes())
+      unquote(verified_routes())
+    end
   end
-end
 
   def html do
     quote do
@@ -55,6 +55,7 @@ end
       # import Phoenix.View
 
       use Phoenix.Component
+      import Phoenix.HTML.Form
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
