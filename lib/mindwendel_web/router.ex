@@ -5,7 +5,7 @@ defmodule MindwendelWeb.Router do
     plug(:accepts, ["html", "csv"])
     plug(:fetch_session)
     plug(:fetch_live_flash)
-    # plug(:put_root_layout, {MindwendelWeb.Layouts, :root})
+    plug(:put_root_layout, {MindwendelWeb.Layouts, :root})
     plug(:protect_from_forgery)
 
     # Ususally, you can directly include the csp header in this borwser pipeline like this
