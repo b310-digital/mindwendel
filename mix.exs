@@ -55,7 +55,7 @@ defmodule Mindwendel.MixProject do
       {:gettext, "0.24.0"},
       {:httpoison, "2.2.1"},
       {:jason, "1.4.4"},
-      {:oban, "2.17.12"},
+      {:oban, "2.18.3"},
       {:plug_cowboy, "2.7.2"},
       {:cowboy, "2.12.0"},
       {:postgrex, "0.19.1"},
@@ -64,7 +64,7 @@ defmodule Mindwendel.MixProject do
       {:telemetry_metrics, "1.0.0"},
       {:telemetry_poller, "1.1.0"},
       {:timex, "3.7.11"},
-      {:logger_json, "6.0.3"},
+      {:logger_json, "6.2.0"},
       {:libcluster, "3.3.3"},
       {:tzdata, "1.1.2"}
     ]
