@@ -160,10 +160,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
 
     Brainstormings.empty(brainstorming)
 
-    {:noreply,
-     redirect(socket,
-       to: Routes.brainstorming_show_path(socket, :show, brainstorming)
-     )}
+    {:noreply, redirect(socket, ~p"/brainstormings/#{brainstorming.id}")}
   end
 
   defp cancel_changeset_timer(socket) do
