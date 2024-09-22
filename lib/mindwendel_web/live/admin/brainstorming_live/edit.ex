@@ -28,7 +28,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
       :ok,
       socket
       |> assign(:brainstorming, brainstorming)
-      |> assign(:changeset, changeset)
+      |> assign(:form, to_form(changeset))
     }
   end
 

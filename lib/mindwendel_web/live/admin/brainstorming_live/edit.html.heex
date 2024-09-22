@@ -56,11 +56,16 @@
     <h4><%= gettext("Edit Brainstorming") %></h4>
   </div>
   <div class="card-body">
-    <.simple_form for={@changeset} phx_submit="save" phx_change="save" id="brainstorming-form">
+    <.simple_form for={@form} phx-submit="save" phx-change="save" id="brainstorming-form">
       <.input field={@form[:name]} type="text" label="Name" />
 
       <div class="form-check mb-3 position-relative">
-        <.input field={@form[:option_show_link_to_settings]} type="checkbox" id="checkbox-option-show-link-to-settings" label={gettext("Show brainstorming settings link for all users")} />
+        <.input
+          field={@form[:option_show_link_to_settings]}
+          type="checkbox"
+          id="checkbox-option-show-link-to-settings"
+          label={gettext("Show brainstorming settings link for all users")}
+        />
         <br />
         <small class="form-text text-muted">
           <%= gettext(
@@ -69,7 +74,12 @@
         </small>
       </div>
       <div class="form-check mb-3 position-relative">
-        <.input field={@form[:option_allow_manual_ordering]} type="checkbox" id="checkbox-allow-manual-ordering-settings" label={gettext("Allow users to change the order of ideas")} />
+        <.input
+          field={@form[:option_allow_manual_ordering]}
+          type="checkbox"
+          id="checkbox-allow-manual-ordering-settings"
+          label={gettext("Allow users to change the order of ideas")}
+        />
       </div>
     </.simple_form>
   </div>
@@ -80,17 +90,16 @@
     <h4><%= gettext("Export") %></h4>
   </div>
   <div class="card-body">
-    <%= link(gettext("Export to CSV"),
-      to:
-        Routes.admin_brainstorming_path(@socket, :export, @brainstorming.admin_url_id,
-          _format: "csv"
-        ),
-      class: "fw-bold"
-    ) %><br />
-    <%= link(gettext("Export to HTML"),
-      to: Routes.admin_brainstorming_path(@socket, :export, @brainstorming.admin_url_id),
-      class: "fw-bold"
-    ) %>
+    <.link
+      class="fw-bold"
+      href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}/export?#{[_format: "csv"]}"}
+    >
+      <%= gettext("Export to CSV") %>
+    </.link>
+    <br />
+    <.link class="fw-bold" href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}/export"}>
+      <%= gettext("Export to HTML") %>
+    </.link>
   </div>
 </div>
 
@@ -131,12 +140,16 @@
             "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
           ) %>
         </p>
-        <%= button(gettext("Delete"),
-          "data-confirm": gettext("Brainstorming delete are you sure"),
-          class: "btn btn-danger",
-          method: :delete,
-          to: Routes.admin_brainstorming_path(@socket, :delete, @brainstorming.admin_url_id)
-        ) %>
+        <%!-- Tobi Todo: I wrapped this in a link but I think in general one should style links to look like buttons instead of using buttons iirc --%>
+        <.link
+          href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}"}
+          data-confirm={gettext("Brainstorming delete are you sure")}
+          method="delete"
+        >
+          <.button class="btn btn-danger">
+            <%= gettext("Delete") %>
+          </.button>
+        </.link>
       </div>
     </div>
   </div>
