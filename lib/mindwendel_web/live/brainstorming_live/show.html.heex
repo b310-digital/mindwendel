@@ -22,7 +22,12 @@
       </div>
     </div>
 
-    <.modal :if={@live_action in [:new, :edit]} id="user-modal" show on_cancel={JS.patch(~p"/brainstormings")}>
+    <.modal
+      :if={@live_action in [:new, :edit]}
+      id="user-modal"
+      show
+      on_cancel={JS.patch(~p"/brainstormings")}
+    >
       <.live_component
         module={MindwendelWeb.BrainstormingLive.FormComponent}
         id={@user.id || :new}
@@ -34,11 +39,13 @@
     </.modal>
 
     <footer class="footer position-fixed bottom-0 end-0 mb-3 me-2 d-lg-none bg-light">
-      <%= live_patch(gettext("+"),
-        to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming),
-        class: "btn btn-primary rounded-circle idea-add-button",
-        title: gettext("Open new idea page (Hotkey: i)")
-      ) %>
+      <.link
+        patch={~p"/brainstormings/#{@brainstorming.id}/show/new_idea"}
+        class="btn btn-primary rounded-circle idea-add-button"
+        title={gettext("Open new idea page (Hotkey: i)")}
+      >
+        <%= gettext("+") %>
+      </.link>
     </footer>
   </div>
 </div>

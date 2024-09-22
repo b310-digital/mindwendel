@@ -51,6 +51,7 @@ defmodule MindwendelWeb.Router do
 
     live "/brainstormings/:id", BrainstormingLive.Show, :show
     live "/brainstormings/:id/show/edit", BrainstormingLive.Show, :edit
+    # Maybe rather "/brainstormings/:id/ideas/new" ?
     live "/brainstormings/:id/show/new_idea", BrainstormingLive.Show, :new_idea
     live "/brainstormings/:id/show/share", BrainstormingLive.Show, :share
 
