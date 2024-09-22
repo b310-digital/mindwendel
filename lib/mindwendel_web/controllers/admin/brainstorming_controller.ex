@@ -20,6 +20,8 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
         )
 
       "html" ->
+        # Can't be fixed right now either way since idea rendering is broken
+        # maybe `MindwendelWeb, :html` moves us forward here
         # TODO:     ** (ArgumentError) no "export" html template defined for MindwendelWeb.Admin.BrainstormingHTML  (the module does not exist)
         conn |> put_layout(false) |> put_root_layout(false) |> render("export.html", ideas: ideas)
     end
