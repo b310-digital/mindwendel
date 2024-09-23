@@ -22,6 +22,61 @@
       </div>
     </div>
 
+    <div class="d-flex justify-content-end flex-wrap">
+      <.link
+        patch={~p"/brainstormings/#{@brainstorming.id}/show/new_idea"}
+        class="btn btn-primary m-1 d-none d-md-block"
+        title={gettext("New idea page (Hotkey: i)")}
+      >
+        <%= gettext("New Idea") %>
+      </.link>
+      <%= if has_move_permission(@brainstorming, @current_user) do %>
+        <.link
+          class="btn btn-primary m-1"
+          phx-click="sort_by_likes"
+          phx-value-id={@brainstorming.id}
+          title={gettext("Sort by likes")}
+        >
+          <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Likes") %>
+        </.link>
+        <.link
+          class="btn btn-primary m-1"
+          phx-click="sort_by_label"
+          phx-value-id={@brainstorming.id}
+          title={gettext("Sort by label")}
+        >
+          <i class="bi-sort-alpha-up-alt"></i> <%= gettext("Label") %>
+        </.link>
+      <% end %>
+
+      <.link
+        patch={~p"/brainstormings/#{@brainstorming.id}"}
+        class="btn btn-secondary m-1"
+        title={gettext("Share")}
+      >
+        <i class="bi-share-fill"></i>
+      </.link>
+
+      <%= if @brainstorming.option_show_link_to_settings do %>
+        <.link
+          href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}/edit"}
+          class="btn btn-secondary m-1"
+        >
+          <i class="bi-gear-fill"></i>
+        </.link>
+      <% end %>
+
+      <div
+        class="deletion-date-hint btn btn-outline-secondary m-1"
+        data-bs-toggle="tooltip"
+        data-bs-placement="auto"
+        data-bs-custom-class="deletion-date-hint-tooltip"
+        data-bs-title={brainstorming_available_until_full_text(@brainstorming)}
+      >
+        <i class="bi-calendar-x"></i> <%= brainstorming_available_until(@brainstorming) %>
+      </div>
+    </div>
+
     <%= live_component(MindwendelWeb.IdeaLive.IndexComponent,
       ideas: @ideas,
       brainstorming: @brainstorming,

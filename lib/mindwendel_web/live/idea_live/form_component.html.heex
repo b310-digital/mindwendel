@@ -1,20 +1,20 @@
-    <div>
-      <.header>
-        <%= @title %>
-        <:subtitle>Use this form to manage user records in your database.</:subtitle>
-      </.header>
+<div>
+  <.header>
+    <%= @title %>
+    <:subtitle>Use this form to manage user records in your database.</:subtitle>
+  </.header>
 
-      <.simple_form
-        for={@form}
-        id="user-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
-        <.input field={@form[:name]} type="text" label="Name" />
-        <.input field={@form[:age]} type="number" label="Age" />
-        <:actions>
-          <.button phx-disable-with="Saving...">Save User</.button>
-        </:actions>
-      </.simple_form>
-    </div>
+  <.simple_form
+    for={@form}
+    id="user-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+  >
+    <.input field={@form[:name]} type="text" label="Name" />
+    <.input field={@form[:age]} type="number" label="Age" />
+    <:actions>
+      <.button phx-disable-with="Saving...">Save User</.button>
+    </:actions>
+  </.simple_form>
+</div>
