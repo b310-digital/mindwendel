@@ -10,7 +10,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:changeset, changeset)}
+     |> assign(:form, to_form(changeset))}
   end
 
   @impl true

@@ -1,20 +1,30 @@
 <div>
   <.header>
     <%= @title %>
-    <:subtitle>Use this form to manage user records in your database.</:subtitle>
   </.header>
 
   <.simple_form
     for={@form}
-    id="user-form"
+    id="idea-form"
     phx-target={@myself}
     phx-change="validate"
     phx-submit="save"
   >
-    <.input field={@form[:name]} type="text" label="Name" />
-    <.input field={@form[:age]} type="number" label="Age" />
+    <.input field={@form[:id]} type="hidden" />
+    <.input field={@form[:username]} type="text" label="username" />
+    <.input field={@form[:body]} type="text" label="body" phx-debounce={300} />
     <:actions>
-      <.button phx-disable-with="Saving...">Save User</.button>
+      <.link
+        patch={~p"/brainstormings/#{@brainstorming.id}/show"}
+        class="btn btn-secondary form-cancel me-2"
+        title={gettext("Close")}
+        phx-update="ignore"
+      >
+        <%= gettext("Close") %>
+      </.link>
+      <.button phx-disable-with={gettext("Saving...")} class="btn btn-primary">
+        <%= gettext("Save") %>
+      </.button>
     </:actions>
   </.simple_form>
 </div>
