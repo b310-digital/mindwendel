@@ -48,12 +48,12 @@
           <% end %>
 
           <%= unless idea.link do %>
-            <%= raw idea.body %>
+            <%= raw(idea.body) %>
           <% end %>
 
           <%= if idea.link do %>
             <.link href={idea.link.url}>
-              <%= raw idea.body %>
+              <%= raw(idea.body) %>
             </.link>
             <hr />
             <div class="row">
@@ -96,7 +96,7 @@
                   data-testid={brainstorming_idea_label.id}
                   phx-click="add_idea_label_to_idea"
                   phx-target={@myself}
-                  phx-value-id={idea.id}
+                  phx-value-idea-id={idea.id}
                   title="Label #{brainstorming_idea_label.name}"
                   phx-value-idea-label-id={brainstorming_idea_label.id}
                 >
@@ -115,7 +115,7 @@
                   data-testid={brainstorming_idea_label.id}
                   phx-click="remove_idea_label_from_idea"
                   phx-target={@myself}
-                  phx-value-id={idea.id}
+                  phx-value-idea-id={idea.id}
                   title="Label #{brainstorming_idea_label.name}"
                   phx-value-idea-label-id={brainstorming_idea_label.id}
                 >

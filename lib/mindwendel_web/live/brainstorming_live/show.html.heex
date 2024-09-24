@@ -50,7 +50,7 @@
       <% end %>
 
       <.link
-        patch={~p"/brainstormings/#{@brainstorming.id}"}
+        patch={~p"/brainstormings/#{@brainstorming.id}/show/share"}
         class="btn btn-secondary m-1"
         title={gettext("Share")}
       >
@@ -136,17 +136,18 @@
 
     <.modal
       :if={@live_action in [:share]}
-      id="idea-modal"
+      id="share-modal"
       show
       on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
     >
       <.live_component
-        module={MindwendelWeb.IdeaLive.FormComponent}
+        module={MindwendelWeb.BrainstormingLive.ShareComponent}
         id={:share}
         title={gettext("Share brainstorming")}
         action={:share}
         brainstorming={@brainstorming}
         current_user={@current_user}
+        uri={~p"/brainstormings/#{@brainstorming.id}"}
       />
     </.modal>
 
