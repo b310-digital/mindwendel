@@ -88,7 +88,7 @@
       :if={@live_action in [:edit]}
       id="brainstorming-modal"
       show
-      on_cancel={JS.patch(~p"/brainstormings")}
+      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
     >
       <.live_component
         module={MindwendelWeb.BrainstormingLive.FormComponent}
@@ -103,7 +103,7 @@
       :if={@live_action in [:new_idea]}
       id="idea-modal"
       show
-      on_cancel={JS.patch(~p"/brainstormings")}
+      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
     >
       <.live_component
         module={MindwendelWeb.IdeaLive.FormComponent}
@@ -113,6 +113,39 @@
         brainstorming={@brainstorming}
         current_user={@current_user}
         idea={@idea}
+      />
+    </.modal>
+
+    <.modal
+      :if={@live_action in [:edit_idea]}
+      id="idea-modal"
+      show
+      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+    >
+      <.live_component
+        module={MindwendelWeb.IdeaLive.FormComponent}
+        id={:update}
+        title={gettext("Update idea")}
+        action={:update}
+        brainstorming={@brainstorming}
+        current_user={@current_user}
+        idea={@idea}
+      />
+    </.modal>
+
+    <.modal
+      :if={@live_action in [:share]}
+      id="idea-modal"
+      show
+      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+    >
+      <.live_component
+        module={MindwendelWeb.IdeaLive.FormComponent}
+        id={:share}
+        title={gettext("Share brainstorming")}
+        action={:share}
+        brainstorming={@brainstorming}
+        current_user={@current_user}
       />
     </.modal>
 
