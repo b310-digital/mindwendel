@@ -77,12 +77,13 @@
       </div>
     </div>
 
-    <%= live_component(MindwendelWeb.IdeaLive.IndexComponent,
-      ideas: @ideas,
-      brainstorming: @brainstorming,
-      id: @brainstorming.id,
-      current_user: @current_user
-    ) %>
+    <.live_component
+      module={MindwendelWeb.IdeaLive.IndexComponent}
+      ideas={@ideas}
+      brainstorming={@brainstorming}
+      id={@brainstorming.id}
+      current_user={@current_user}
+    />
 
     <.modal
       :if={@live_action in [:edit]}

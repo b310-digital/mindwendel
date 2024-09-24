@@ -48,12 +48,12 @@
           <% end %>
 
           <%= unless idea.link do %>
-            <%= Format.text_to_html(idea.body) %>
+            <%= raw idea.body %>
           <% end %>
 
           <%= if idea.link do %>
             <.link href={idea.link.url}>
-              <%= Format.text_to_html(idea.body) %>
+              <%= raw idea.body %>
             </.link>
             <hr />
             <div class="row">

@@ -11,6 +11,7 @@
     phx-submit="save"
   >
     <.input field={@form[:id]} type="hidden" />
+    <.input field={@form[:brainstorming_id]} type="hidden" />
     <.input field={@form[:username]} type="text" label="username" />
     <.input field={@form[:body]} type="text" label="body" phx-debounce={300} />
     <:actions>
