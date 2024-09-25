@@ -115,7 +115,7 @@ mindwendel is built on top of:
 - Open a shell in the docker container to execute tests, etc.
 
   ```bash
-  docker compose exec app sh
+  docker compose exec app bash
   ```
 
 - Go to http://localhost:4000/
