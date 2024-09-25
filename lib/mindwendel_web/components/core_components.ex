@@ -230,8 +230,6 @@ defmodule MindwendelWeb.CoreComponents do
       type={@type}
       class={[
         "btn",
-        @primary && "btn-primary",
-        !@primary && "btn-secondary",
         @class
       ]}
       {@rest}
@@ -387,7 +385,6 @@ defmodule MindwendelWeb.CoreComponents do
 
   def input(%{type: "text", form_group_wrapper: false} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
       <input
         type={@type}
         name={@name}
@@ -401,7 +398,6 @@ defmodule MindwendelWeb.CoreComponents do
         {@rest}
       />
       <.error :for={msg <- @errors}><%= msg %></.error>
-    </div>
     """
   end
 

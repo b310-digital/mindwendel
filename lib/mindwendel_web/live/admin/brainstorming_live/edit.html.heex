@@ -94,12 +94,12 @@
       <div class="row">
         <div class="col">
           <.inputs_for :let={f_label} field={@form[:labels]}>
-            <div class="input-group mb-2 mt-2">
+            <div class="input-group has-validation mb-2 mt-2">
               <.input
                 type="color"
                 field={f_label[:color]}
                 title={gettext("Choose the label color")}
-                class="me-2"
+                class="form-control form-control-color"
               />
               <.input
                 type="text"
@@ -108,10 +108,10 @@
                 field={f_label[:name]}
                 placeholder={gettext("Type the label name")}
               />
-            </div>
-            <.button phx-click="remove_idea_label" value={f_label.data.id}>
+            <.button phx-click="remove_idea_label" value={f_label.data.id} class="btn-outline-secondary">
               <%= gettext("Remove idea label") %>
             </.button>
+            </div>
           </.inputs_for>
         </div>
       </div>

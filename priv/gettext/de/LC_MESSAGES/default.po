@@ -363,7 +363,7 @@ msgstr "Zurück"
 msgid "+"
 msgstr "+"
 
-#: lib/mindwendel_web/components/core_components.ex:520
+#: lib/mindwendel_web/components/core_components.ex:516
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -419,7 +419,7 @@ msgstr ""
 msgid "Edit Brainstorming Labels"
 msgstr "Editiere Brainstorming"
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:113
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:112
 #, elixir-autogen, elixir-format
 msgid "Remove idea label"
 msgstr ""
