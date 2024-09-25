@@ -41,13 +41,13 @@ msgstr ""
 msgid "Are you sure you want to delete this idea?"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:139
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:180
 #, elixir-autogen, elixir-format
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr ""
 
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:17
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:20
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:19
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr ""
@@ -68,22 +68,22 @@ msgstr ""
 msgid "Create!"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:150
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:191
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:133
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:174
 #, elixir-autogen, elixir-format
 msgid "Delete Brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:97
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:138
 #, elixir-autogen, elixir-format
 msgid "Export to CSV"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:101
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:142
 #, elixir-autogen, elixir-format
 msgid "Export to HTML"
 msgstr ""
@@ -133,7 +133,7 @@ msgstr ""
 msgid "Proceed to your brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:23
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:22
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr ""
@@ -143,7 +143,7 @@ msgstr ""
 msgid "Save this link to update / delete your brainstorming later on:"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:22
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:21
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr ""
@@ -183,7 +183,7 @@ msgstr ""
 msgid "Edit Brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:90
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:131
 #, elixir-autogen, elixir-format
 msgid "Export"
 msgstr ""
@@ -292,7 +292,7 @@ msgstr "Download as png"
 msgid "Download as svg"
 msgstr "Download as svg"
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:146
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:187
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Brainstorming delete are you sure"
 msgstr "Are you sure that you want to delete this brainstorming?"
@@ -312,18 +312,18 @@ msgstr ""
 msgid "Update idea"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:114
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:155
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Attention: This will delete all ideas in this brainstorming. The brainstorming itself and labels will be left unchanged. This cant be undone."
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:122
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:163
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Brainstorming will be emptied - are you sure"
 msgstr "Are you sure that you want to delete this brainstorming?"
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:108
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:124
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:149
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:165
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Empty brainstorming"
 msgstr ""
@@ -363,7 +363,7 @@ msgstr ""
 msgid "+"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:486
+#: lib/mindwendel_web/components/core_components.ex:520
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -402,4 +402,29 @@ msgstr ""
 #: lib/mindwendel_web/components/core_components.ex:129
 #, elixir-autogen, elixir-format, fuzzy
 msgid "close"
+msgstr ""
+
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:121
+#, elixir-autogen, elixir-format
+msgid "Add idea label"
+msgstr ""
+
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:101
+#, elixir-autogen, elixir-format
+msgid "Choose the label color"
+msgstr ""
+
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:90
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Edit Brainstorming Labels"
+msgstr ""
+
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:113
+#, elixir-autogen, elixir-format
+msgid "Remove idea label"
+msgstr ""
+
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:109
+#, elixir-autogen, elixir-format
+msgid "Type the label name"
 msgstr ""
