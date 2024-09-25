@@ -185,7 +185,6 @@
             "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
           ) %>
         </p>
-        <%!-- Tobi Todo: I wrapped this in a link but I think in general one should style links to look like buttons instead of using buttons iirc --%>
         <.link
           href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}"}
           data-confirm={gettext("Brainstorming delete are you sure")}
