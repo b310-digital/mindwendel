@@ -108,9 +108,13 @@
                 field={f_label[:name]}
                 placeholder={gettext("Type the label name")}
               />
-            <.button phx-click="remove_idea_label" value={f_label.data.id} class="btn-outline-secondary">
-              <%= gettext("Remove idea label") %>
-            </.button>
+              <.button
+                phx-click="remove_idea_label"
+                value={f_label.data.id}
+                class="btn-outline-secondary"
+              >
+                <%= gettext("Remove idea label") %>
+              </.button>
             </div>
           </.inputs_for>
         </div>

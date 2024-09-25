@@ -385,19 +385,19 @@ defmodule MindwendelWeb.CoreComponents do
 
   def input(%{type: "text", form_group_wrapper: false} = assigns) do
     ~H"""
-      <input
-        type={@type}
-        name={@name}
-        id={@id}
-        value={Phoenix.HTML.Form.normalize_value(@type, @value)}
-        class={[
-          "form-control",
-          @errors == [] && "is-valid",
-          @errors != [] && "is-invalid"
-        ]}
-        {@rest}
-      />
-      <.error :for={msg <- @errors}><%= msg %></.error>
+    <input
+      type={@type}
+      name={@name}
+      id={@id}
+      value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+      class={[
+        "form-control",
+        @errors == [] && "is-valid",
+        @errors != [] && "is-invalid"
+      ]}
+      {@rest}
+    />
+    <.error :for={msg <- @errors}><%= msg %></.error>
     """
   end
 
