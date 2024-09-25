@@ -48,7 +48,7 @@
           <% end %>
 
           <%= unless idea.link do %>
-            <%= raw(idea.body) %>
+            <p class="card-body-mindwendel-idea-text"><%= raw(idea.body) %></p>
           <% end %>
 
           <%= if idea.link do %>
