@@ -202,7 +202,7 @@ defmodule MindwendelWeb.CoreComponents do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
       <%= render_slot(@inner_block, f) %>
-      <div :for={action <- @actions}>
+      <div :for={action <- @actions} class="mt-2">
         <%= render_slot(action, f) %>
       </div>
     </.form>
@@ -275,7 +275,7 @@ defmodule MindwendelWeb.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file month number password
-               range search select tel text textarea time url week)
+               range search select tel text textarea time url week hidden)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -334,6 +334,20 @@ defmodule MindwendelWeb.CoreComponents do
         <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
       </select>
       <.error :for={msg <- @errors}><%= msg %></.error>
+    </div>
+    """
+  end
+
+  def input(%{type: "hidden"} = assigns) do
+    ~H"""
+    <div>
+      <input
+        type="hidden"
+        name={@name}
+        id={@id}
+        value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+        {@rest}
+      />
     </div>
     """
   end
