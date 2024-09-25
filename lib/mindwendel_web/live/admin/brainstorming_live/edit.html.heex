@@ -56,7 +56,7 @@
     <h4><%= gettext("Edit Brainstorming") %></h4>
   </div>
   <div class="card-body">
-    <.simple_form for={@form} phx-submit="save" phx-change="save" id="brainstorming-form">
+    <.simple_form for={@form} phx-submit="save" phx-change="save" id="form-edit-brainstorming">
       <.input field={@form[:name]} type="text" label="Name" />
 
       <div class="form-check mb-3 position-relative">
