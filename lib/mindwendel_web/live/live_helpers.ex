@@ -1,5 +1,4 @@
 defmodule MindwendelWeb.LiveHelpers do
-  import Phoenix.LiveView.Helpers
   import MindwendelWeb.Gettext
 
   alias Mindwendel.Brainstormings.Brainstorming

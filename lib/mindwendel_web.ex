@@ -51,9 +51,6 @@ defmodule MindwendelWeb do
 
   def html do
     quote do
-      # this is temporary https://hexdocs.pm/phoenix_view/Phoenix.View.html#module-replaced-by-phoenix-component
-      # import Phoenix.View
-
       use Phoenix.Component
       import Phoenix.HTML.Form
 
@@ -79,21 +76,6 @@ defmodule MindwendelWeb do
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
-    end
-  end
-
-  def view do
-    quote do
-      use Phoenix.View,
-        root: "lib/mindwendel_web/templates",
-        namespace: MindwendelWeb
-
-      # Import convenience functions from controllers
-      import Phoenix.Controller,
-        only: [view_module: 1, view_template: 1]
-
-      # Include shared imports and aliases for views
-      unquote(view_helpers())
     end
   end
 
@@ -124,24 +106,6 @@ defmodule MindwendelWeb do
       import MindwendelWeb.LiveHelpers
 
       unquote(html_helpers())
-    end
-  end
-
-  defp view_helpers do
-    quote do
-      # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
-
-      # Import LiveView helpers (live_render, live_component, live_patch, etc)
-      import Phoenix.Component
-      import MindwendelWeb.LiveHelpers
-
-      # Import basic rendering functionality (render, render_layout, etc)
-      import Phoenix.View
-
-      import MindwendelWeb.ErrorHelpers
-      import MindwendelWeb.Gettext
-      alias MindwendelWeb.Router.Helpers, as: Routes
     end
   end
 
