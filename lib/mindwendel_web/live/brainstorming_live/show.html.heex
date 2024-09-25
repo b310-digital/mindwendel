@@ -90,11 +90,11 @@
       id="brainstorming-modal"
       show
       on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+      title={@page_title}
     >
       <.live_component
         module={MindwendelWeb.BrainstormingLive.FormComponent}
         id={@brainstorming.id}
-        title={@page_title}
         action={@live_action}
         brainstorming={@brainstorming}
       />
@@ -105,11 +105,11 @@
       id="idea-modal"
       show
       on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+      title={gettext("New idea")}
     >
       <.live_component
         module={MindwendelWeb.IdeaLive.FormComponent}
         id={:new}
-        title={gettext("New idea")}
         action={:new}
         brainstorming={@brainstorming}
         current_user={@current_user}
@@ -122,11 +122,11 @@
       id="idea-modal"
       show
       on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+      title={gettext("Update idea")}
     >
       <.live_component
         module={MindwendelWeb.IdeaLive.FormComponent}
         id={:update}
-        title={gettext("Update idea")}
         action={:update}
         brainstorming={@brainstorming}
         current_user={@current_user}
@@ -139,11 +139,11 @@
       id="share-modal"
       show
       on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+      title={gettext("Share brainstorming")}
     >
       <.live_component
         module={MindwendelWeb.BrainstormingLive.ShareComponent}
         id={:share}
-        title={gettext("Share brainstorming")}
         action={:share}
         brainstorming={@brainstorming}
         current_user={@current_user}

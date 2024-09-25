@@ -37,6 +37,7 @@ defmodule MindwendelWeb.CoreComponents do
 
   """
   attr :id, :string, required: true
+  attr :title, :string, required: false
   attr :show, :boolean, default: false
   attr :on_cancel, JS, default: %JS{}
   slot :inner_block, required: true
@@ -57,7 +58,6 @@ defmodule MindwendelWeb.CoreComponents do
         role="document"
         aria-labelledby={"#{@id}-title"}
         aria-describedby={"#{@id}-description"}
-        role="document"
         aria-modal="true"
         tabindex="0"
       >
@@ -69,15 +69,14 @@ defmodule MindwendelWeb.CoreComponents do
             phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
           >
             <div class="modal-header">
+              <h5 class="modal-title"><%= @title %></h5>
               <button
                 phx-click={JS.exec("data-cancel", to: "##{@id}")}
                 type="button"
                 class="phx-modal-close btn-close"
                 )
                 aria-label={gettext("close")}
-              >
-                <.icon name="hero-x-mark-solid" class="h-5 w-5" />
-              </button>
+              />
             </div>
             <div id={"#{@id}-content"} class="modal-body">
               <%= render_slot(@inner_block) %>
@@ -202,11 +201,9 @@ defmodule MindwendelWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
-        <%= render_slot(@inner_block, f) %>
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
-          <%= render_slot(action, f) %>
-        </div>
+      <%= render_slot(@inner_block, f) %>
+      <div :for={action <- @actions}>
+        <%= render_slot(action, f) %>
       </div>
     </.form>
     """
@@ -223,6 +220,7 @@ defmodule MindwendelWeb.CoreComponents do
   attr :type, :string, default: nil
   attr :class, :string, default: nil
   attr :rest, :global, include: ~w(disabled form name value)
+  attr :primary, :boolean, default: false
 
   slot :inner_block, required: true
 
@@ -231,8 +229,9 @@ defmodule MindwendelWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "btn",
+        @primary && "btn-primary",
+        !@primary && "btn-secondary",
         @class
       ]}
       {@rest}
@@ -311,8 +310,8 @@ defmodule MindwendelWeb.CoreComponents do
       end)
 
     ~H"""
-    <div>
-      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
+    <div class="form-check form-check-inline">
+      <label class="form-check-label">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
         <input
           type="checkbox"
@@ -320,7 +319,7 @@ defmodule MindwendelWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class="form-check-input"
           {@rest}
         />
         <%= @label %>
@@ -332,15 +331,9 @@ defmodule MindwendelWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div>
+    <div class="form-group">
       <.label for={@id}><%= @label %></.label>
-      <select
-        id={@id}
-        name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
-        multiple={@multiple}
-        {@rest}
-      >
+      <select id={@id} name={@name} class="form-control" , multiple={@multiple} {@rest}>
         <option :if={@prompt} value=""><%= @prompt %></option>
         <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
       </select>
@@ -351,15 +344,15 @@ defmodule MindwendelWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div>
+    <div class="form-group" phx-feedback-for={@name}>
       <.label for={@id}><%= @label %></.label>
       <textarea
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 min-h-[6rem]",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          "form-control",
+          @errors == [] && "is-valid",
+          @errors != [] && "is-invalid"
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
@@ -371,7 +364,7 @@ defmodule MindwendelWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div>
+    <div class="form-group" phx-feedback-for={@name}>
       <.label for={@id}><%= @label %></.label>
       <input
         type={@type}
@@ -379,9 +372,9 @@ defmodule MindwendelWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          "form-control",
+          @errors == [] && "is-valid",
+          @errors != [] && "is-invalid"
         ]}
         {@rest}
       />
@@ -398,7 +391,7 @@ defmodule MindwendelWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
+    <label for={@for}>
       <%= render_slot(@inner_block) %>
     </label>
     """
@@ -411,10 +404,9 @@ defmodule MindwendelWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="mt-3 flex gap-3 text-sm leading-6 text-rose-600">
-      <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
+    <div class="invalid-feedback">
       <%= render_slot(@inner_block) %>
-    </p>
+    </div>
     """
   end
 

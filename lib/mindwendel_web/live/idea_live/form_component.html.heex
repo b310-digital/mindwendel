@@ -1,8 +1,4 @@
 <div>
-  <.header>
-    <%= @title %>
-  </.header>
-
   <.simple_form
     for={@form}
     id="idea-form"
@@ -10,10 +6,10 @@
     phx-change="validate"
     phx-submit="save"
   >
+    <.input field={@form[:username]} type="text" label={gettext("Username")} phx-debounce={300} />
+    <.input field={@form[:body]} type="textarea" label={gettext("Your idea")} phx-debounce={300} />
     <.input field={@form[:id]} type="hidden" />
     <.input field={@form[:brainstorming_id]} type="hidden" />
-    <.input field={@form[:username]} type="text" label="username" />
-    <.input field={@form[:body]} type="text" label="body" phx-debounce={300} />
     <:actions>
       <.link
         patch={~p"/brainstormings/#{@brainstorming.id}"}
@@ -23,7 +19,7 @@
       >
         <%= gettext("Close") %>
       </.link>
-      <.button phx-disable-with={gettext("Saving...")} class="btn btn-primary">
+      <.button primary={true} phx-disable-with={gettext("Saving...")} class="btn btn-primary">
         <%= gettext("Save") %>
       </.button>
     </:actions>
