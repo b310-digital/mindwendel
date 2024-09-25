@@ -87,6 +87,47 @@
 
 <div class="card mb-3">
   <div class="card-header">
+    <h4><%= gettext("Edit Brainstorming Labels") %></h4>
+  </div>
+  <div class="card-body">
+    <.simple_form for={@form} phx-change="save">
+      <div class="row">
+        <div class="col">
+          <.inputs_for :let={f_label} field={@form[:labels]}>
+            <div class="input-group mb-2 mt-2">
+              <.input
+                type="color"
+                field={f_label[:color]}
+                title={gettext("Choose the label color")}
+                class="me-2"
+              />
+              <.input
+                type="text"
+                form_group_wrapper={false}
+                phx-debounce={300}
+                field={f_label[:name]}
+                placeholder={gettext("Type the label name")}
+              />
+            </div>
+            <.button phx-click="remove_idea_label" value={f_label.data.id}>
+              <%= gettext("Remove idea label") %>
+            </.button>
+          </.inputs_for>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 d-grid mt-2">
+          <.button type="button" class="btn btn-secondary" phx-click="add_idea_label">
+            <%= gettext("Add idea label") %>
+          </.button>
+        </div>
+      </div>
+    </.simple_form>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">
     <h4><%= gettext("Export") %></h4>
   </div>
   <div class="card-body">

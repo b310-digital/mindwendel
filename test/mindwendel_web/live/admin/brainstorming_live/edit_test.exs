@@ -116,9 +116,9 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     {:ok, edit_live_view, _html} =
       live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
-    edit_live_view
-    |> element(html_selector_remove_idea_label_button(brainstorming_label_first), "Remove")
-    |> render_click()
+    assert edit_live_view
+           |> element(html_selector_remove_idea_label_button(brainstorming_label_first), "Remove")
+           |> render_click()
 
     # It should still be there because the idea label is still connected iwth an idea and therefore cannot be deleted.
     assert edit_live_view
