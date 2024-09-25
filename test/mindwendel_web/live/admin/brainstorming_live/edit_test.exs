@@ -21,7 +21,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     brainstorming: brainstorming
   } do
     {:ok, edit_live_view, _html} =
-      live(conn, Routes.admin_brainstorming_edit_path(conn, :edit, brainstorming.admin_url_id))
+      live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
     assert render(edit_live_view) =~ brainstorming.name
   end
@@ -31,7 +31,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     brainstorming: brainstorming
   } do
     {:ok, edit_live_view, _html} =
-      live(conn, Routes.admin_brainstorming_edit_path(conn, :edit, brainstorming.admin_url_id))
+      live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
     assert edit_live_view
            |> element("form#form-edit-brainstorming")
@@ -46,7 +46,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     brainstorming: brainstorming
   } do
     {:ok, edit_live_view, _html} =
-      live(conn, Routes.admin_brainstorming_edit_path(conn, :edit, brainstorming.admin_url_id))
+      live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
     assert edit_live_view |> element("input#brainstorming_labels_0_name") |> has_element?
     assert edit_live_view |> element("input#brainstorming_labels_1_name") |> has_element?
@@ -61,7 +61,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     brainstorming: brainstorming
   } do
     {:ok, edit_live_view, _html} =
-      live(conn, Routes.admin_brainstorming_edit_path(conn, :edit, brainstorming.admin_url_id))
+      live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
     edit_live_view
     |> element("button", "Add idea label")
@@ -82,7 +82,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     brainstorming: brainstorming
   } do
     {:ok, edit_live_view, _html} =
-      live(conn, Routes.admin_brainstorming_edit_path(conn, :edit, brainstorming.admin_url_id))
+      live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
     brainstorming_label_first = Enum.at(brainstorming.labels, 0)
 
@@ -114,7 +114,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
       )
 
     {:ok, edit_live_view, _html} =
-      live(conn, Routes.admin_brainstorming_edit_path(conn, :edit, brainstorming.admin_url_id))
+      live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
     edit_live_view
     |> element(html_selector_remove_idea_label_button(brainstorming_label_first), "Remove")
@@ -144,7 +144,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
       brainstorming: brainstorming
     } do
       {:ok, edit_live_view, _html} =
-        live(conn, Routes.admin_brainstorming_edit_path(conn, :edit, brainstorming.admin_url_id))
+        live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
       # reload brainstorming to check for changes:
       brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)

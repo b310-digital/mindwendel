@@ -20,7 +20,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
     {:ok, show_live_view, _html} =
       conn
       |> init_test_session(%{current_user_id: moderating_user.id})
-      |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+      |> live(~p"/brainstormings/#{brainstorming.id}")
 
     assert show_live_view
            |> has_element?(html_selector_button_sort_by_labels(brainstorming))
@@ -49,7 +49,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
     {:ok, show_live_view, _html} =
       conn
       |> init_test_session(%{current_user_id: moderating_user.id})
-      |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+      |> live(~p"/brainstormings/#{brainstorming.id}")
 
     rendered =
       show_live_view
