@@ -67,7 +67,7 @@ msgstr ""
 msgid "Create!"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:195
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:194
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr ""
@@ -292,7 +292,7 @@ msgstr ""
 msgid "Download as svg"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:191
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:190
 #, elixir-autogen, elixir-format
 msgid "Brainstorming delete are you sure"
 msgstr ""

@@ -68,7 +68,7 @@ msgstr "Erstelle ein Brainstorming."
 msgid "Create!"
 msgstr "Erstellen!"
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:195
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:194
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr "Löschen"
@@ -293,7 +293,7 @@ msgstr "Download als PNG"
 msgid "Download as svg"
 msgstr "Download als SVG"
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:191
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:190
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Brainstorming delete are you sure"
 msgstr "Bist du sicher, dass das Brainstorming gelöscht werden soll?"
