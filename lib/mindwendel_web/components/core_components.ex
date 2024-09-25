@@ -291,10 +291,7 @@ defmodule MindwendelWeb.CoreComponents do
                 multiple pattern placeholder readonly required rows size step)
 
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
-    # @jannik: According to my information this is a 1.0 feature that we're far removed from
-    # https://www.elixirstreams.com/tips/liveview-used-input
-    # errors = if Phoenix.Component.used_input?(field), do: field.errors, else: []
-
+    IO.inspect(field)
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
     |> assign(:errors, Enum.map(field.errors, &translate_error(&1)))
@@ -310,7 +307,7 @@ defmodule MindwendelWeb.CoreComponents do
       end)
 
     ~H"""
-    <div class="form-check form-check-inline">
+    <div class="form-check form-check-inline" phx-feedback-for={@name}>
       <label class="form-check-label">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
         <input
@@ -331,7 +328,7 @@ defmodule MindwendelWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div class="form-group">
+    <div class="form-group" phx-feedback-for={@name}>
       <.label for={@id}><%= @label %></.label>
       <select id={@id} name={@name} class="form-control" , multiple={@multiple} {@rest}>
         <option :if={@prompt} value=""><%= @prompt %></option>

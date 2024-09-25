@@ -5,12 +5,12 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
 
   @impl true
   def update(%{idea: idea} = assigns, socket) do
-    changeset = Ideas.change_idea(idea)
-
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:form, to_form(changeset))}
+     |> assign_new(:form, fn ->
+      to_form(Ideas.change_idea(idea))
+    end)}
   end
 
   @impl true
