@@ -7,6 +7,7 @@ defmodule Mindwendel.Lanes do
   alias Mindwendel.Repo
 
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Brainstormings
 
   require Logger
 
@@ -69,6 +70,7 @@ defmodule Mindwendel.Lanes do
     %Lane{}
     |> Lane.changeset(attrs)
     |> Repo.insert()
+    |> Brainstormings.broadcast(:lane_added)
   end
 
   @doc """
@@ -87,6 +89,7 @@ defmodule Mindwendel.Lanes do
     lane
     |> Lane.changeset(attrs)
     |> Repo.update()
+    |> Brainstormings.broadcast(:lane_updated)
   end
 
   @doc """
@@ -102,7 +105,7 @@ defmodule Mindwendel.Lanes do
 
   """
   def delete_lane(%Lane{} = lane) do
-    Repo.delete(lane)
+    Repo.delete(lane) |> Brainstormings.broadcast(:lane_removed)
   end
 
   @doc """

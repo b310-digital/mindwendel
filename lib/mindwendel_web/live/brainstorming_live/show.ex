@@ -34,7 +34,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     mount(%{"id" => brainstorming_id}, session, socket)
   end
 
-  def mount(%{"id" => id, "lane_id" => lane_id}, session, socket) do
+  def mount(%{"id" => id, "lane_id" => _lane_id}, session, socket) do
     mount(%{"id" => id}, session, socket)
   end
 
@@ -52,13 +52,16 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
-  @impl true
   def handle_info({:idea_removed, idea}, socket) do
     lanes = Lanes.get_lanes_for_brainstorming(idea.brainstorming_id)
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
-  @impl true
+  def handle_info({:lane_added, lane}, socket) do
+    lanes = Lanes.get_lanes_for_brainstorming(lane.brainstorming_id)
+    {:noreply, assign(socket, :lanes, lanes)}
+  end
+
   def handle_info({:brainstorming_updated, brainstorming}, socket) do
     lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
 
@@ -70,7 +73,6 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     }
   end
 
-  @impl true
   def handle_info({:idea_updated, idea}, socket) do
     # another option is to reload the ideas from the db - but this would trigger a new sorting which might confuse the user
     lanes = Lanes.get_lanes_for_brainstorming(idea.brainstorming_id)
@@ -93,7 +95,6 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   end
 
   defp apply_action(socket, :new_lane, %{"id" => brainstorming_id}) do
-
     socket
     |> assign(:page_title, gettext("%{name} - New Lane", name: socket.assigns.brainstorming.name))
     |> assign(:lane, %Lane{

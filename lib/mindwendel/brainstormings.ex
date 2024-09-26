@@ -276,5 +276,26 @@ defmodule Mindwendel.Brainstormings do
     {:ok, idea}
   end
 
+  def broadcast({:ok, %Lane{} = lane}, event) do
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> lane.brainstorming_id,
+      {
+        event,
+        lane
+        |> Repo.preload(
+          ideas: [
+            :link,
+            :likes,
+            :label,
+            :idea_labels
+          ]
+        )
+      }
+    )
+
+    {:ok, lane}
+  end
+
   def broadcast({:error, _reason} = error, _event), do: error
 end
