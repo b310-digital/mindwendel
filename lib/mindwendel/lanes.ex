@@ -27,6 +27,36 @@ defmodule Mindwendel.Lanes do
   def get_lane!(id), do: Repo.get!(Lane, id)
 
   @doc """
+  Gets lanes for a brainstorming
+
+  Raises `Ecto.NoResultsError` if the Lane does not exist.
+
+  ## Examples
+
+      iex> get_lane!(123)
+      %Lane{}
+
+      iex> get_lane!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_lanes_for_brainstorming(id) do
+    lane_query =
+      from lane in Lane,
+        where: lane.brainstorming_id == ^id
+
+    Repo.all(lane_query)
+    |> Repo.preload(
+      ideas: [
+        :link,
+        :likes,
+        :label,
+        :idea_labels
+      ]
+    )
+  end
+
+  @doc """
   Creates a lane.
 
   ## Examples

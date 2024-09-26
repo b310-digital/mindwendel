@@ -3,6 +3,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Lanes
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Lane
@@ -23,6 +24,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
       :ok,
       socket
       |> assign(:brainstorming, brainstorming)
+      |> assign(:lanes, brainstorming.lanes)
       |> assign(:current_user, current_user)
       |> assign(:inspiration, Mindwendel.Help.random_inspiration())
     }
@@ -40,7 +42,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {
       :noreply,
       socket
-      |> assign(:ideas, Ideas.list_ideas_for_brainstorming(brainstorming_id))
+      |> assign(:lanes, Lanes.get_lanes_for_brainstorming(brainstorming_id))
       |> assign(:idea, Ideas.get_idea!(idea_id))
       |> assign(:uri, uri)
       |> apply_action(socket.assigns.live_action,
@@ -54,40 +56,41 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   def handle_params(%{"id" => id}, uri, socket) do
     {:noreply,
      socket
-     |> assign(:ideas, Ideas.list_ideas_for_brainstorming(id))
+     |> assign(:lanes, Lanes.get_lanes_for_brainstorming(id))
      |> assign(:uri, uri)
      |> apply_action(socket.assigns.live_action, id)}
   end
 
   @impl true
   def handle_info({:idea_added, idea}, socket) do
-    # uses the database to sort and update all ideas, instead of appending the idea to the end of list (which would be more performant)
-    new_ideas = Ideas.list_ideas_for_brainstorming(idea.brainstorming_id)
-    {:noreply, assign(socket, :ideas, new_ideas)}
+    lanes = Lanes.get_lanes_for_brainstorming(idea.brainstorming_id)
+    {:noreply, assign(socket, :lanes, lanes)}
   end
 
   @impl true
   def handle_info({:idea_removed, idea}, socket) do
-    new_ideas = Enum.filter(socket.assigns.ideas, fn x -> x.id != idea.id end)
-    {:noreply, assign(socket, :ideas, new_ideas)}
+    lanes = Lanes.get_lanes_for_brainstorming(idea.brainstorming_id)
+    {:noreply, assign(socket, :lanes, lanes)}
   end
 
   @impl true
   def handle_info({:brainstorming_updated, brainstorming}, socket) do
+    lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
+
     {
       :noreply,
       socket
       |> assign(:brainstorming, Brainstormings.get_brainstorming!(brainstorming.id))
-      |> assign(:ideas, Ideas.list_ideas_for_brainstorming(brainstorming.id))
+      |> assign(:lanes, lanes)
     }
   end
 
   @impl true
   def handle_info({:idea_updated, idea}, socket) do
     # another option is to reload the ideas from the db - but this would trigger a new sorting which might confuse the user
-    new_ideas = Enum.map(socket.assigns.ideas, fn e -> if e.id == idea.id, do: idea, else: e end)
+    lanes = Lanes.get_lanes_for_brainstorming(idea.brainstorming_id)
 
-    {:noreply, assign(socket, :ideas, new_ideas)}
+    {:noreply, assign(socket, :lanes, lanes)}
   end
 
   defp apply_action(socket, :edit_idea, brainstorming_id: _brainstorming_id, idea_id: _idea_id) do
