@@ -92,7 +92,8 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     })
   end
 
-  defp apply_action(socket, :new_lane, brainstorming_id) do
+  defp apply_action(socket, :new_lane, %{"id" => brainstorming_id}) do
+
     socket
     |> assign(:page_title, gettext("%{name} - New Lane", name: socket.assigns.brainstorming.name))
     |> assign(:lane, %Lane{
