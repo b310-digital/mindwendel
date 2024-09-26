@@ -39,47 +39,11 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   end
 
   def handle_params(
-        %{"brainstorming_id" => brainstorming_id, "idea_id" => idea_id},
-        uri,
+        params,
+        _uri,
         socket
       ) do
-    {
-      :noreply,
-      socket
-      |> assign(:lanes, Lanes.get_lanes_for_brainstorming(brainstorming_id))
-      |> assign(:idea, Ideas.get_idea!(idea_id))
-      |> assign(:uri, uri)
-      |> apply_action(socket.assigns.live_action,
-        brainstorming_id: brainstorming_id,
-        idea_id: idea_id
-      )
-    }
-  end
-
-  def handle_params(
-        %{"id" => brainstorming_id, "lane_id" => lane_id},
-        uri,
-        socket
-      ) do
-    {
-      :noreply,
-      socket
-      |> assign(:lanes, Lanes.get_lanes_for_brainstorming(brainstorming_id))
-      |> assign(:uri, uri)
-      |> apply_action(socket.assigns.live_action,
-        brainstorming_id: brainstorming_id,
-        lane_id: lane_id
-      )
-    }
-  end
-
-  @impl true
-  def handle_params(%{"id" => id}, uri, socket) do
-    {:noreply,
-     socket
-     |> assign(:lanes, Lanes.get_lanes_for_brainstorming(id))
-     |> assign(:uri, uri)
-     |> apply_action(socket.assigns.live_action, id)}
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
   @impl true
