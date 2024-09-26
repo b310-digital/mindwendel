@@ -31,7 +31,7 @@
         <%= gettext("New Idea") %>
       </.link>
       <.link
-        patch={~p"/brainstormings/#{@brainstorming.id}/new_lane"}
+        patch={~p"/brainstormings/#{@brainstorming.id}/show/new_lane"}
         class="btn btn-primary m-1 d-none d-md-block"
         title={gettext("New lane")}
       >
@@ -125,6 +125,23 @@
     </.modal>
 
     <.modal
+      :if={@live_action in [:new_lane]}
+      id="lane-modal"
+      show
+      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+      title={gettext("New lane")}
+    >
+      <.live_component
+        module={MindwendelWeb.LaneLive.FormComponent}
+        id={:new}
+        action={:new}
+        brainstorming={@brainstorming}
+        current_user={@current_user}
+        lane={@lane}
+      />
+    </.modal>
+
+    <.modal
       :if={@live_action in [:edit_idea]}
       id="idea-modal"
       show
@@ -143,7 +160,7 @@
 
     <.modal
       :if={@live_action in [:edit_lane]}
-      id="share-modal"
+      id="lane-modal"
       show
       on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
       title={gettext("Update lane")}
@@ -153,8 +170,8 @@
         id={:edit_lane}
         action={:update}
         brainstorming={@brainstorming}
+        current_user={@current_user}
         lane={@lane}
-        uri={~p"/brainstormings/#{@brainstorming.id}"}
       />
     </.modal>
     <.modal

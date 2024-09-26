@@ -33,11 +33,8 @@ defmodule Mindwendel.Lanes do
 
   ## Examples
 
-      iex> get_lane!(123)
-      %Lane{}
-
-      iex> get_lane!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_lanes_for_brainstorming(123)
+      [%Lane{}, ...]
 
   """
   def get_lanes_for_brainstorming(id) do
