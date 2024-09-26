@@ -4,15 +4,27 @@
       <%= lane.name || "Default Lane" %>
 
       <div class="dropdown">
-        <.button class="btn-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button" id={lane.name} aria-haspopup="true" aria-expanded="false">
+        <.button
+          class="btn-secondary dropdown-toggle"
+          data-bs-toggle="dropdown"
+          type="button"
+          id={lane.name}
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
           Lane actions
         </.button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="#">Add idea</a>
-          <a class="dropdown-item" href="#">Sort by likes</a>
-          <a class="dropdown-item" href="#">Sort by label</a>
-          <a class="dropdown-item" href="#">Edit lane</a>
-          <a class="dropdown-item" href="#">Delete lane</a>
+          <.link
+            class="dropdown-item"
+            patch={~p"/brainstormings/#{@brainstorming.id}/show/lanes/#{lane.id}/new_idea"}
+          >
+            Add idea
+          </.link>
+          <.link class="dropdown-item">Sort by likes</.link>
+          <.link class="dropdown-item">Sort by label</.link>
+          <.link class="dropdown-item">Edit lane</.link>
+          <.link class="dropdown-item">Delete lane</.link>
         </div>
       </div>
 

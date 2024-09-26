@@ -24,7 +24,7 @@
 
     <div class="d-flex justify-content-end flex-wrap">
       <.link
-        patch={~p"/brainstormings/#{@brainstorming.id}/show/new_idea"}
+        patch={~p"/brainstormings/#{@brainstorming.id}/lanes/#{List.first(@lanes).id}/new_idea"}
         class="btn btn-primary m-1 d-none d-md-block"
         title={gettext("New idea page (Hotkey: i)")}
       >

@@ -34,6 +34,10 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     mount(%{"id" => brainstorming_id}, session, socket)
   end
 
+  def mount(%{"id" => id, "lane_id" => lane_id}, session, socket) do
+    mount(%{"id" => id}, session, socket)
+  end
+
   def handle_params(
         %{"brainstorming_id" => brainstorming_id, "idea_id" => idea_id},
         uri,
@@ -48,6 +52,23 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
       |> apply_action(socket.assigns.live_action,
         brainstorming_id: brainstorming_id,
         idea_id: idea_id
+      )
+    }
+  end
+
+  def handle_params(
+        %{"id" => brainstorming_id, "lane_id" => lane_id},
+        uri,
+        socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> assign(:lanes, Lanes.get_lanes_for_brainstorming(brainstorming_id))
+      |> assign(:uri, uri)
+      |> apply_action(socket.assigns.live_action,
+        brainstorming_id: brainstorming_id,
+        lane_id: lane_id
       )
     }
   end
@@ -97,12 +118,12 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     socket
   end
 
-  defp apply_action(socket, :new_idea, brainstorming_id) do
+  defp apply_action(socket, :new_idea, %{"id" => id, "lane_id" => lane_id} = params) do
     socket
     |> assign(:page_title, gettext("%{name} - New Idea", name: socket.assigns.brainstorming.name))
     |> assign(:idea, %Idea{
-      brainstorming_id: brainstorming_id,
-      lane_id: List.first(socket.assigns.brainstorming.lanes).id,
+      brainstorming_id: id,
+      lane_id: lane_id,
       username: socket.assigns.current_user.username
     })
   end
