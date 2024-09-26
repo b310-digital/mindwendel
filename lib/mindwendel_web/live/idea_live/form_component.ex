@@ -5,22 +5,19 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
 
   @impl true
   def update(%{idea: idea} = assigns, socket) do
-    changeset = Ideas.change_idea(idea)
-
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:changeset, changeset)}
+     |> assign_new(:form, fn ->
+       to_form(Ideas.change_idea(idea))
+     end)}
   end
 
   @impl true
   def handle_event("validate", %{"idea" => idea_params}, socket) do
-    changeset =
-      socket.assigns.idea
-      |> Ideas.change_idea(idea_params)
-      |> Map.put(:action, :validate)
+    changeset = Ideas.change_idea(socket.assigns.idea, idea_params)
 
-    {:noreply, assign(socket, :changeset, changeset)}
+    {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
   def handle_event("save", %{"idea" => idea_params}, socket) do
@@ -41,10 +38,10 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
           {:noreply,
            socket
            |> put_flash(:info, gettext("Idea created updated"))
-           |> push_redirect(to: socket.assigns.return_to)}
+           |> push_patch(to: ~p"/brainstormings/#{brainstorming.id}")}
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          {:noreply, assign(socket, changeset: changeset)}
+          {:noreply, assign(socket, form: to_form(changeset))}
       end
     end
   end
@@ -59,10 +56,10 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Idea created successfully"))
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> push_patch(to: ~p"/brainstormings/#{idea_params["brainstorming_id"]}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        {:noreply, assign(socket, form: to_form(changeset))}
     end
   end
 end

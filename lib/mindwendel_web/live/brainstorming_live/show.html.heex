@@ -21,29 +21,49 @@
         <h2 id="brainstorming-title"><%= @brainstorming.name %></h2>
       </div>
     </div>
+
     <div class="d-flex justify-content-end flex-wrap">
-      <%= live_patch(gettext("New Idea"),
-        to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming),
-        class: "btn btn-primary m-1 d-none d-md-block",
-        title: gettext("New idea page (Hotkey: i)")
-      ) %>
+      <.link
+        patch={~p"/brainstormings/#{@brainstorming.id}/show/new_idea"}
+        class="btn btn-primary m-1 d-none d-md-block"
+        title={gettext("New idea page (Hotkey: i)")}
+      >
+        <%= gettext("New Idea") %>
+      </.link>
       <%= if has_move_permission(@brainstorming, @current_user) do %>
-        <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_likes", phx_value_id: @brainstorming.id, title: gettext("Sort by likes") do %>
+        <.link
+          class="btn btn-primary m-1"
+          phx-click="sort_by_likes"
+          phx-value-id={@brainstorming.id}
+          title={gettext("Sort by likes")}
+        >
           <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Likes") %>
-        <% end %>
-        <%= link to: "#", class: "btn btn-primary m-1", phx_click: "sort_by_label", phx_value_id: @brainstorming.id, title: gettext("Sort by label") do %>
+        </.link>
+        <.link
+          class="btn btn-primary m-1"
+          phx-click="sort_by_label"
+          phx-value-id={@brainstorming.id}
+          title={gettext("Sort by label")}
+        >
           <i class="bi-sort-alpha-up-alt"></i> <%= gettext("Label") %>
-        <% end %>
+        </.link>
       <% end %>
 
-      <%= live_patch to: Routes.brainstorming_show_path(@socket, :share, @brainstorming), class: "btn btn-secondary m-1", title: gettext("Share") do %>
+      <.link
+        patch={~p"/brainstormings/#{@brainstorming.id}/show/share"}
+        class="btn btn-secondary m-1"
+        title={gettext("Share")}
+      >
         <i class="bi-share-fill"></i>
-      <% end %>
+      </.link>
 
       <%= if @brainstorming.option_show_link_to_settings do %>
-        <%= link to: Routes.admin_brainstorming_edit_path(@socket, :edit, @brainstorming.admin_url_id), class: "btn btn-secondary m-1" do %>
+        <.link
+          href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}/edit"}
+          class="btn btn-secondary m-1"
+        >
           <i class="bi-gear-fill"></i>
-        <% end %>
+        </.link>
       <% end %>
 
       <div
@@ -57,71 +77,88 @@
       </div>
     </div>
 
-    <%= if @live_action in [:edit] do %>
-      <%= live_modal(MindwendelWeb.BrainstormingLive.FormComponent,
-        id: @brainstorming.id,
-        title: @page_title,
-        action: @live_action,
-        brainstorming: @brainstorming,
-        return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming)
-      ) %>
-    <% end %>
+    <.live_component
+      module={MindwendelWeb.IdeaLive.IndexComponent}
+      ideas={@ideas}
+      brainstorming={@brainstorming}
+      id={@brainstorming.id}
+      current_user={@current_user}
+    />
 
-    <%= if @live_action in [:new_idea] do %>
-      <%= live_modal(MindwendelWeb.IdeaLive.FormComponent,
-        id: :new,
-        title: gettext("New idea"),
-        action: :new,
-        brainstorming: @brainstorming,
-        current_user: @current_user,
-        idea: @idea,
-        return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming)
-      ) %>
-    <% end %>
+    <.modal
+      :if={@live_action in [:edit]}
+      id="brainstorming-modal"
+      show
+      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+      title={@page_title}
+    >
+      <.live_component
+        module={MindwendelWeb.BrainstormingLive.FormComponent}
+        id={@brainstorming.id}
+        action={@live_action}
+        brainstorming={@brainstorming}
+      />
+    </.modal>
 
-    <%= if @live_action in [:edit_idea] do %>
-      <%= live_modal(MindwendelWeb.IdeaLive.FormComponent,
-        id: :update,
-        title: gettext("Update idea"),
-        action: :update,
-        brainstorming: @brainstorming,
-        current_user: @current_user,
-        idea: @idea,
-        return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming)
-      ) %>
-    <% end %>
+    <.modal
+      :if={@live_action in [:new_idea]}
+      id="idea-modal"
+      show
+      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+      title={gettext("New idea")}
+    >
+      <.live_component
+        module={MindwendelWeb.IdeaLive.FormComponent}
+        id={:new}
+        action={:new}
+        brainstorming={@brainstorming}
+        current_user={@current_user}
+        idea={@idea}
+      />
+    </.modal>
 
-    <%= if @live_action in [:share] do %>
-      <%= live_modal(MindwendelWeb.BrainstormingLive.ShareComponent,
-        id: :share,
-        title: gettext("Share brainstorming"),
-        action: :share,
-        brainstorming: @brainstorming,
-        current_user: @current_user,
-        uri: Routes.brainstorming_show_url(@socket, :show, @brainstorming),
-        modal_size: "modal-lg",
-        return_to: Routes.brainstorming_show_path(@socket, :show, @brainstorming)
-      ) %>
-    <% end %>
+    <.modal
+      :if={@live_action in [:edit_idea]}
+      id="idea-modal"
+      show
+      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+      title={gettext("Update idea")}
+    >
+      <.live_component
+        module={MindwendelWeb.IdeaLive.FormComponent}
+        id={:update}
+        action={:update}
+        brainstorming={@brainstorming}
+        current_user={@current_user}
+        idea={@idea}
+      />
+    </.modal>
 
-    <%= live_component(MindwendelWeb.LabelLive.CaptionsComponent,
-      ideas: @ideas,
-      brainstorming: @brainstorming
-    ) %>
-
-    <%= live_component(MindwendelWeb.IdeaLive.IndexComponent,
-      ideas: @ideas,
-      brainstorming: @brainstorming,
-      id: @brainstorming.id,
-      current_user: @current_user
-    ) %>
+    <.modal
+      :if={@live_action in [:share]}
+      id="share-modal"
+      show
+      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+      title={gettext("Share brainstorming")}
+    >
+      <.live_component
+        module={MindwendelWeb.BrainstormingLive.ShareComponent}
+        id={:share}
+        action={:share}
+        brainstorming={@brainstorming}
+        current_user={@current_user}
+        uri={~p"/brainstormings/#{@brainstorming.id}"}
+      />
+    </.modal>
 
     <footer class="footer position-fixed bottom-0 end-0 mb-3 me-2 d-lg-none bg-light">
-      <%= live_patch(gettext("+"),
-        to: Routes.brainstorming_show_path(@socket, :new_idea, @brainstorming),
-        class: "btn btn-primary rounded-circle idea-add-button",
-        title: gettext("Open new idea page (Hotkey: i)")
-      ) %>
+      <.link
+        patch={~p"/brainstormings/#{@brainstorming.id}/show/new_idea"}
+        class="btn btn-primary rounded-circle idea-add-button"
+        title={gettext("Open new idea page (Hotkey: i)")}
+      >
+        <%= gettext("+") %>
+      </.link>
     </footer>
   </div>
 </div>

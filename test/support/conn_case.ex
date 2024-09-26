@@ -19,12 +19,12 @@ defmodule MindwendelWeb.ConnCase do
 
   using do
     quote do
+      use MindwendelWeb, :verified_routes
+
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
       import MindwendelWeb.ConnCase
-
-      alias MindwendelWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
       @endpoint MindwendelWeb.Endpoint

@@ -3,7 +3,7 @@ defmodule MindwendelWeb.StaticPageController do
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
 
-  plug :put_root_layout, {MindwendelWeb.LayoutView, :static_page}
+  plug :put_root_layout, {MindwendelWeb.Layouts, :static_page}
 
   def home(conn, _params) do
     current_user =

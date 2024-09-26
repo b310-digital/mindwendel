@@ -13,8 +13,7 @@ config :mindwendel,
 # Configures the endpoint
 config :mindwendel, MindwendelWeb.Endpoint,
   render_errors: [
-    view: MindwendelWeb.ErrorView,
-    accepts: ~w(html json),
+    formats: [html: MindwendelWeb.ErrorHTML, json: MindwendelWeb.ErrorJSON],
     layout: false
   ],
   url: [

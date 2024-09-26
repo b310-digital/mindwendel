@@ -13,7 +13,7 @@ defmodule MindwendelWeb.LiveHelpersTest do
     brainstorming: brainstorming
   } do
     {:ok, _show_live_view, html} =
-      live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+      live(conn, ~p"/brainstormings/#{brainstorming}")
 
     assert html =~ "in 29 days"
   end
