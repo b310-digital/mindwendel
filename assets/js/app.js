@@ -3,8 +3,8 @@ import Sortable from 'sortablejs';
 import { setIdeaLabelBackgroundColor } from "./label"
 
 // activate all tooltips:
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl))
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+[...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured

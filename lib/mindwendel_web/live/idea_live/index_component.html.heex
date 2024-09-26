@@ -3,8 +3,21 @@
     <div>
       <%= lane.name || "Default Lane" %>
 
+      <div class="dropdown">
+        <.button class="btn-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button" id={lane.name} aria-haspopup="true" aria-expanded="false">
+          Lane actions
+        </.button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">Add idea</a>
+          <a class="dropdown-item" href="#">Sort by likes</a>
+          <a class="dropdown-item" href="#">Sort by label</a>
+          <a class="dropdown-item" href="#">Edit lane</a>
+          <a class="dropdown-item" href="#">Delete lane</a>
+        </div>
+      </div>
+
       <div
-        id="ideas-col-1"
+        id={"ideas-col-1-" <> lane.id}
         phx-hook="Sortable"
         class="mb-5 d-flex card-columns flex-column flex-wrap sortable"
         data-sortable-enabled={to_string(has_move_permission(@brainstorming, @current_user))}
