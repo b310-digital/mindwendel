@@ -62,6 +62,16 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
+  def handle_info({:lane_removed, lane}, socket) do
+    lanes = Lanes.get_lanes_for_brainstorming(lane.brainstorming_id)
+    {:noreply, assign(socket, :lanes, lanes)}
+  end
+
+  def handle_info({:lane_updated, lane}, socket) do
+    lanes = Lanes.get_lanes_for_brainstorming(lane.brainstorming_id)
+    {:noreply, assign(socket, :lanes, lanes)}
+  end
+
   def handle_info({:brainstorming_updated, brainstorming}, socket) do
     lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
 
