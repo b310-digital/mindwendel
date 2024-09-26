@@ -17,8 +17,6 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
       Brainstormings.get_brainstorming!(id)
       |> Accounts.merge_brainstorming_user(current_user_id)
 
-    IO.inspect(brainstorming)
-
     current_user = Mindwendel.Accounts.get_user(current_user_id)
 
     {
@@ -101,6 +99,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     |> assign(:page_title, gettext("%{name} - New Idea", name: socket.assigns.brainstorming.name))
     |> assign(:idea, %Idea{
       brainstorming_id: brainstorming_id,
+      lane_id: List.first(socket.assigns.brainstorming.lanes).id,
       username: socket.assigns.current_user.username
     })
   end
