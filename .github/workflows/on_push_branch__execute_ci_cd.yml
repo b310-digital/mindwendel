@@ -30,7 +30,7 @@ jobs:
             _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
+
       - run: mix do local.hex --force, local.rebar --force
       - run: mix deps.get && mix deps.compile
         if: steps.cache.outputs.cache-hit != 'true'
@@ -82,12 +82,12 @@ jobs:
             _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
+
       - run: mix do local.hex --force, local.rebar --force
-      - run: mix compile
+      - run: mix compile --warnings-as-errors
       - run: mix ecto.create
       - run: mix ecto.migrate
-      - run: mix test
+      - run: mix test --warnings-as-errors
 
   check_mix_format:
     runs-on: ubuntu-latest
@@ -106,10 +106,10 @@ jobs:
             _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
+
       - run: mix do local.hex --force, local.rebar --force
       - run: mix format --check-formatted
-  
+
   check_mix_gettext_extract_up_to_date:
     runs-on: ubuntu-latest
     container: hexpm/elixir:1.15.8-erlang-26.2.5-debian-bullseye-20240513-slim
@@ -127,7 +127,7 @@ jobs:
             _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
+
       - run: mix do local.hex --force, local.rebar --force
       - run: mix gettext.extract --check-up-to-date
 
@@ -140,7 +140,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-        
+
       - uses: actions/cache@v4
         with:
           path: |
@@ -148,7 +148,7 @@ jobs:
             _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
+
       - run: mix do local.hex --force, local.rebar --force
       - run: mix sobelow --config
 
@@ -162,7 +162,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-        
+
       - uses: actions/cache@v4
         with:
           path: |
@@ -170,6 +170,6 @@ jobs:
             _build
           key: ${{ runner.os }}-mix-v4-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-v4
-      
+
       - run: mix do local.hex --force, local.rebar --force
       - run: mix credo

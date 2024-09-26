@@ -35,6 +35,7 @@ defmodule Mindwendel.Brainstormings.Idea do
       :username,
       :body,
       :brainstorming_id,
+      :lane_id,
       :deprecated_label,
       :label_id,
       :user_id,

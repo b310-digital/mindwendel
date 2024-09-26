@@ -1,4 +1,6 @@
 defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
+  use MindwendelWeb, :live_view
+
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.IdeaLabelFactory
@@ -6,8 +8,6 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
   alias Mindwendel.Repo
 
   import Ecto.Query
-
-  use MindwendelWeb, :live_view
 
   def mount(%{"id" => id}, _session, socket) do
     if connected?(socket), do: Brainstormings.subscribe(id)
@@ -28,14 +28,14 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
       :ok,
       socket
       |> assign(:brainstorming, brainstorming)
-      |> assign(:changeset, changeset)
+      |> assign(:form, to_form(changeset))
     }
   end
 
   def handle_info(:reset_changeset, socket) do
     brainstorming = socket.assigns.brainstorming
     changeset = Brainstormings.change_brainstorming(brainstorming, %{})
-    {:noreply, assign(socket, :changeset, changeset)}
+    {:noreply, assign(socket, :form, to_form(changeset))}
   end
 
   def handle_params(_unsigned_params, uri, socket),
@@ -58,7 +58,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
           :noreply,
           socket
           |> assign(:brainstorming, brainstorming_updated)
-          |> assign(:changeset, changeset)
+          |> assign(:form, to_form(changeset))
           |> assign(:reset_changeset_timer_ref, reset_changeset_timer_ref)
           |> clear_flash()
         }
@@ -69,7 +69,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
         {
           :noreply,
           socket
-          |> assign(changeset: changeset)
+          |> assign(form: to_form(changeset))
           |> put_flash(:error, gettext("Your brainstorming was not saved."))
         }
     end
@@ -98,7 +98,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
           :noreply,
           socket
           |> assign(:brainstorming, brainstorming)
-          |> assign(:changeset, Brainstorming.changeset(brainstorming, %{}))
+          |> assign(:form, to_form(Brainstorming.changeset(brainstorming, %{})))
           |> assign(:reset_changeset_timer_ref, reset_changeset_timer_ref)
           |> clear_flash()
         }
@@ -109,7 +109,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
         {
           :noreply,
           socket
-          |> assign(changeset: changeset)
+          |> assign(form: to_form(changeset))
           |> put_flash(:error, gettext("Your brainstorming was not saved."))
         }
     end
@@ -137,7 +137,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
           :noreply,
           socket
           |> assign(:brainstorming, brainstorming)
-          |> assign(:changeset, Brainstorming.changeset(brainstorming, %{}))
+          |> assign(:form, to_form(Brainstorming.changeset(brainstorming, %{})))
           |> assign(:reset_changeset_timer_ref, reset_changeset_timer_ref)
           |> clear_flash()
         }
@@ -148,7 +148,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
         {
           :noreply,
           socket
-          |> assign(changeset: changeset)
+          |> assign(form: to_form(changeset))
           |> put_flash(:error, gettext("Your brainstorming was not saved."))
         }
     end
@@ -160,10 +160,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
 
     Brainstormings.empty(brainstorming)
 
-    {:noreply,
-     redirect(socket,
-       to: Routes.brainstorming_show_path(socket, :show, brainstorming)
-     )}
+    {:noreply, push_navigate(socket, to: ~p"/brainstormings/#{brainstorming.id}")}
   end
 
   defp cancel_changeset_timer(socket) do

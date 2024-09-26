@@ -9,7 +9,7 @@ Below, we provide detailed instructions on how to install and run mindwendel in 
 
 ## Running on Docker-Compose
 
-When you use [docker-compose](https://docs.docker.com/compose/), you will be using one or several `docker-compose.yml` files.
+When you use [docker compose](https://docs.docker.com/compose/), you will be using one or several `docker-compose.yml` files.
 
 - Add the following snippets to one of your `docker-compose.yml` file
 
@@ -75,7 +75,7 @@ When you use [docker-compose](https://docs.docker.com/compose/), you will be usi
 - To run mindwendel via Docker-Compose, just type
 
   ```sh
-  docker-compose up
+  docker compose up
   ```
 
 - To create the production database (after having created the containers via up):

@@ -14,7 +14,7 @@ defmodule MindwendelWeb.IdeaLive.IndexComponent do
     {:noreply,
      socket
      |> push_patch(
-       to: Routes.brainstorming_show_path(socket, :edit_idea, idea.brainstorming_id, id)
+       to: ~p"/brainstormings/#{socket.assigns.brainstorming.id}/ideas/#{idea.id}/edit"
      )}
   end
 

@@ -1,42 +1,27 @@
 <div>
-  <%= form_for @changeset, "#", [id: "idea-form", phx_target: @myself, phx_change: "validate", phx_submit: "save"], fn f -> %>
-    <%= hidden_input(f, :id) %>
-
-    <%= if Enum.count(f.errors) > 0 do %>
-      <div class="alert alert-danger">
-        <%= gettext("Required fields are either missing or incorrect:") %>
-      </div>
-    <% end %>
-
-    <div class="form-group">
-      <%= label(f, gettext("Username")) %>
-      <%= text_input(f, :username, class: "form-control") %>
-      <%= if message = f.errors[:username] do %>
-        <span><%= translate_error(message) %></span>
-      <% end %>
-    </div>
-
-    <div class="form-group">
-      <%= label(f, :body, gettext("Your idea")) %>
-      <%= textarea(f, :body, class: "form-control") %>
-      <%= if message = f.errors[:body] do %>
-        <span><%= translate_error(message) %></span>
-      <% end %>
-    </div>
-    <br />
-    <%= hidden_input(f, :brainstorming_id) %>
-
-    <%= live_patch(gettext("Close"),
-      to: @return_to,
-      id: "idea-modal-cancel",
-      class: "btn btn-secondary form-cancel me-2",
-      phx_update: "ignore"
-    ) %>
-    <%= submit(gettext("Save"),
-      to: @return_to,
-      phx_disable_with: gettext("Saving..."),
-      class: "btn btn-primary",
-      disabled: !@changeset.valid?
-    ) %>
-  <% end %>
+  <.simple_form
+    for={@form}
+    id="idea-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+  >
+    <.input field={@form[:username]} type="text" label={gettext("Username")} phx-debounce={300} />
+    <.input field={@form[:body]} type="textarea" label={gettext("Your idea")} phx-debounce={300} />
+    <.input field={@form[:id]} type="hidden" />
+    <.input field={@form[:brainstorming_id]} type="hidden" />
+    <.input field={@form[:lane_id]} type="hidden" />
+    <:actions>
+      <.link
+        patch={~p"/brainstormings/#{@brainstorming.id}"}
+        class="btn btn-secondary form-cancel me-2"
+        title={gettext("Close")}
+      >
+        <%= gettext("Close") %>
+      </.link>
+      <.button class="btn-primary" phx-disable-with={gettext("Saving...")}>
+        <%= gettext("Save") %>
+      </.button>
+    </:actions>
+  </.simple_form>
 </div>
