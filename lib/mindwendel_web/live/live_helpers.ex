@@ -5,7 +5,11 @@ defmodule MindwendelWeb.LiveHelpers do
 
   def has_move_permission(brainstorming, current_user) do
     brainstorming.option_allow_manual_ordering or
-      Enum.member?(brainstorming.moderating_users |> Enum.map(& &1.id), current_user.id)
+      has_moderating_permission(brainstorming, current_user)
+  end
+
+  def has_moderating_permission(brainstorming, current_user) do
+    Enum.member?(brainstorming.moderating_users |> Enum.map(& &1.id), current_user.id)
   end
 
   def uuid do

@@ -28,7 +28,7 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
 
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
-    if current_user.id in (brainstorming.moderating_users |> Enum.map(& &1.id)) do
+    if has_moderating_permission(brainstorming, current_user) do
       {:ok, _} = Lanes.delete_lane(lane)
     end
 

@@ -23,13 +23,15 @@
     </div>
 
     <div class="d-flex justify-content-end flex-wrap">
-      <.link
-        patch={~p"/brainstormings/#{@brainstorming.id}/show/new_lane"}
-        class="btn btn-primary m-1 d-none d-md-block"
-        title={gettext("New lane")}
-      >
-        <%= gettext("New Lane") %>
-      </.link>
+      <%= if has_moderating_permission(@brainstorming, @current_user) do %>
+        <.link
+          patch={~p"/brainstormings/#{@brainstorming.id}/show/new_lane"}
+          class="btn btn-primary m-1 d-none d-md-block"
+          title={gettext("New lane")}
+        >
+          <i class="bi bi-file-plus"></i> <%= gettext("New lane") %>
+        </.link>
+      <% end %>
 
       <.link
         patch={~p"/brainstormings/#{@brainstorming.id}/show/share"}
