@@ -5,22 +5,14 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
   alias Mindwendel.Brainstormings
   alias Mindwendel.Factory
   alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.Repo
 
   import Mindwendel.BrainstormingsFixtures
 
-  @create_attrs %{name: "a name"}
-
-  defp fixture(:brainstorming) do
-    user = Factory.insert!(:user)
-    {:ok, brainstorming} = Brainstormings.create_brainstorming(user, @create_attrs)
-    brainstorming
-  end
-
   defp create_brainstorming(_) do
     brainstorming = brainstorming_fixture()
-    %{brainstorming: brainstorming}
+    lane = Enum.at(brainstorming.lanes, 0)
+    %{brainstorming: brainstorming, lane: lane}
   end
 
   describe "Show" do
@@ -150,12 +142,11 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       assert brainstorming_refreshed.last_accessed_at > brainstorming.last_accessed_at
     end
 
-    test "enables dragging for admin", %{conn: conn, brainstorming: brainstorming} do
+    test "enables dragging for admin", %{conn: conn, brainstorming: brainstorming, lane: lane} do
       moderating_user = List.first(brainstorming.users)
       Brainstormings.add_moderating_user(brainstorming, moderating_user)
-      lane = Enum.at(brainstorming.lanes, 0)
 
-      {:ok, view, html} =
+      {:ok, view, _html} =
         conn
         |> init_test_session(%{current_user_id: moderating_user.id})
         |> live(~p"/brainstormings/#{brainstorming.id}")
@@ -165,17 +156,19 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       assert view |> has_element?(selector)
     end
 
-    test "disables dragging for user", %{conn: conn, brainstorming: brainstorming} do
+    test "disables dragging for user", %{conn: conn, brainstorming: brainstorming, lane: lane} do
       {:ok, view, _html} =
         conn
         |> live(~p"/brainstormings/#{brainstorming.id}")
 
-      assert view |> has_element?("#ideas[data-sortable-enabled|='false']")
+      selector = "#ideas-col-#{lane.id}[data-sortable-enabled|='false']"
+      assert view |> has_element?(selector)
     end
 
     test "enables dragging for user when option is activated", %{
       conn: conn,
-      brainstorming: brainstorming
+      brainstorming: brainstorming,
+      lane: lane
     } do
       Brainstormings.update_brainstorming(brainstorming, %{option_allow_manual_ordering: true})
 
@@ -183,10 +176,12 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         conn
         |> live(~p"/brainstormings/#{brainstorming.id}")
 
-      assert view |> has_element?("#ideas[data-sortable-enabled|='true']")
+      selector = "#ideas-col-#{lane.id}[data-sortable-enabled|='true']"
+
+      assert view |> has_element?(selector)
     end
 
-    test "contains sort button by likes for admin", %{
+    test "contains sort link by likes for admin", %{
       conn: conn,
       brainstorming: brainstorming
     } do
@@ -198,7 +193,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         |> init_test_session(%{current_user_id: moderating_user.id})
         |> live(~p"/brainstormings/#{brainstorming.id}")
 
-      assert view |> has_element?(".btn[title|='Sort by likes']")
+      assert view |> has_element?("a[title|='Sort by likes']")
     end
 
     test "does not contain sort button by default for user", %{
@@ -209,7 +204,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         conn
         |> live(~p"/brainstormings/#{brainstorming.id}")
 
-      refute view |> has_element?(".btn[title|='Sort by likes']")
+      assert view |> has_element?("a[title|='Sort by likes'][class~= 'disabled']")
     end
 
     test "contains sort button for user when option is activated", %{
@@ -222,16 +217,20 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         conn
         |> live(~p"/brainstormings/#{brainstorming.id}")
 
-      assert view |> has_element?(".btn[title|='Sort by likes']")
+      assert view |> has_element?("a[title|='Sort by likes']")
     end
   end
 
   describe "new" do
     setup [:create_brainstorming]
 
-    test "shows username in the idea creation modal", %{conn: conn, brainstorming: brainstorming} do
+    test "shows username in the idea creation modal", %{
+      conn: conn,
+      brainstorming: brainstorming,
+      lane: lane
+    } do
       {:ok, _show_live, html} =
-        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/new_idea")
+        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/lanes/#{lane.id}/new_idea")
 
       assert html =~ "Anonymous"
     end

@@ -1,7 +1,4 @@
 defmodule Mindwendel.BrainstormingsFixtures do
-  alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Accounts.User
-
   alias Mindwendel.Factory
 
   @moduledoc """

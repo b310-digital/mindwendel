@@ -38,6 +38,7 @@
               phx-target={@myself}
               phx-click="sort_by_likes"
               phx-value-id={@brainstorming.id}
+              title={gettext("Sort by likes")}
               phx-value-lane-id={lane.id}
             >
               <i class="bi bi-sort-numeric-down-alt"></i> <%= gettext("Sort by likes") %>
@@ -46,6 +47,7 @@
               class={"dropdown-item #{move_disabled}"}
               phx-target={@myself}
               phx-click="sort_by_label"
+              title={gettext("Sort by label")}
               phx-value-id={@brainstorming.id}
               phx-value-lane_id={lane.id}
             >
@@ -73,7 +75,7 @@
       </div>
 
       <div
-        id={"ideas-col-1-" <> lane.id}
+        id={"ideas-col-" <> lane.id}
         phx-hook="Sortable"
         class="mb-5 d-flex flex-wrap sortable lane-ideas-area"
         data-sortable-enabled={to_string(has_move_permission(@brainstorming, @current_user))}

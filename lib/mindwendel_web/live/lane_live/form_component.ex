@@ -34,7 +34,7 @@ defmodule MindwendelWeb.LaneLive.FormComponent do
   defp save_lane(socket, :update, lane_params) do
     lane = Lanes.get_lane!(lane_params["id"])
 
-    %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
+    %{brainstorming: brainstorming} = socket.assigns
 
     case Lanes.update_lane(lane, lane_params) do
       {:ok, _lane} ->

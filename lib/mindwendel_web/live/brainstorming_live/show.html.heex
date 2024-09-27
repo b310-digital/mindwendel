@@ -167,14 +167,5 @@
         uri={~p"/brainstormings/#{@brainstorming.id}"}
       />
     </.modal>
-    <footer class="footer position-fixed bottom-0 end-0 mb-3 me-2 d-lg-none bg-light">
-      <.link
-        patch={~p"/brainstormings/#{@brainstorming.id}/show/new_idea"}
-        class="btn btn-primary rounded-circle idea-add-button"
-        title={gettext("Open new idea page (Hotkey: i)")}
-      >
-        <%= gettext("+") %>
-      </.link>
-    </footer>
   </div>
 </div>

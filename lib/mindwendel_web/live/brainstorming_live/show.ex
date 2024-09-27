@@ -42,6 +42,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     mount(%{"id" => id}, session, socket)
   end
 
+  @impl true
   def handle_params(
         params,
         _uri,
@@ -97,7 +98,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   defp apply_action(
          socket,
          :edit_idea,
-         %{"brainstorming_id" => brainstorming_id, "idea_id" => idea_id} = params
+         %{"brainstorming_id" => _brainstorming_id, "idea_id" => idea_id}
        ) do
     socket
     |> assign(:idea, Ideas.get_idea!(idea_id))
@@ -106,13 +107,13 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   defp apply_action(
          socket,
          :edit_lane,
-         %{"brainstorming_id" => brainstorming_id, "lane_id" => lane_id} = params
+         %{"brainstorming_id" => _brainstorming_id, "lane_id" => lane_id}
        ) do
     socket
     |> assign(:lane, Lanes.get_lane!(lane_id))
   end
 
-  defp apply_action(socket, :new_idea, %{"id" => id, "lane_id" => lane_id} = params) do
+  defp apply_action(socket, :new_idea, %{"id" => id, "lane_id" => lane_id}) do
     socket
     |> assign(:page_title, gettext("%{name} - New Idea", name: socket.assigns.brainstorming.name))
     |> assign(:idea, %Idea{
@@ -145,6 +146,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     |> assign(:page_title, socket.assigns.brainstorming.name)
   end
 
+  @impl true
   def handle_event("handle_hotkey_i", _, socket) do
     if socket.assigns.live_action == :show do
       {:noreply,
