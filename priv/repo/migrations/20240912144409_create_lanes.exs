@@ -10,12 +10,12 @@ defmodule Mindwendel.Repo.Migrations.CreateLanes do
       timestamps()
     end
 
-    # create index(:lanes, [:brainstorming_id])
+    create index(:lanes, [:brainstorming_id])
 
     alter table(:ideas) do
       add :lane_id, references(:lanes, type: :uuid, on_delete: :delete_all)
     end
 
-    # create index(:ideas, [:brainstorming_id, :lane_id])
+    create index(:ideas, [:brainstorming_id, :lane_id])
   end
 end

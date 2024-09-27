@@ -38,6 +38,23 @@ defmodule Mindwendel.Lanes do
   end
 
   @doc """
+  Get max position order of lanes for a brainstorming
+
+  ## Examples
+
+      iex> get_max_position_order(123)
+      %Lane{}
+
+  """
+  def get_max_position_order(brainstorming_id) do
+    lane_query =
+      from lane in Lane,
+        where: lane.brainstorming_id == ^brainstorming_id
+
+    Repo.aggregate(lane_query, :max, :position_order)
+  end
+
+  @doc """
   Gets lanes for a brainstorming
 
   Raises `Ecto.NoResultsError` if the Lane does not exist.
