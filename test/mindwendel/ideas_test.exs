@@ -36,7 +36,7 @@ defmodule Mindwendel.IdeasTest do
       third_idea =
         Factory.insert!(:idea, brainstorming: brainstorming, lane: lane, position_order: 2)
 
-      ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id, lane.id)
+      ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id)
 
       assert Enum.map(ideas_sorted_by_position, & &1.id) == [
                # default is null, therefore idea comes last
@@ -125,7 +125,7 @@ defmodule Mindwendel.IdeasTest do
         )
 
       Ideas.update_ideas_for_brainstorming_by_labels(brainstorming.id, lane.id)
-      ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id, lane.id)
+      ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id)
 
       assert ideas_sorted_by_position |> Enum.map(& &1.id) == [
                second_idea.id,

@@ -35,7 +35,7 @@ defmodule Mindwendel.Ideas do
       [%Idea{}, ...]
 
   """
-  def list_ideas_for_brainstorming(id, lane_id) do
+  def list_ideas_for_brainstorming(id) do
     idea_count_query =
       from like in Like,
         group_by: like.idea_id,
@@ -45,7 +45,7 @@ defmodule Mindwendel.Ideas do
       from idea in Idea,
         left_join: idea_count in subquery(idea_count_query),
         on: idea_count.idea_id == idea.id,
-        where: idea.brainstorming_id == ^id and idea.lane_id == ^lane_id,
+        where: idea.brainstorming_id == ^id,
         order_by: [
           asc_nulls_last: idea.position_order,
           desc: idea.updated_at

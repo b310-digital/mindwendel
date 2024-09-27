@@ -3,7 +3,6 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateAddLanesToBrainstormingsTest do
 
   use Mindwendel.DataCase
   alias Mindwendel.Factory
-  alias Mindwendel.Repo
   alias Mindwendel.Brainstormings
   alias Mindwendel.Repo.DataMigrations.MigrateAddLanesToBrainstormings
 
