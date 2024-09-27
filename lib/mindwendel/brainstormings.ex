@@ -163,7 +163,7 @@ defmodule Mindwendel.Brainstormings do
 
   def empty(%Brainstorming{} = brainstorming) do
     # we only delete ideas - labels and users should be left intact:
-    Repo.delete_all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
+    Repo.delete_all(from lane in Lane, where: lane.brainstorming_id == ^brainstorming.id)
 
     broadcast({:ok, brainstorming}, :brainstorming_updated)
   end

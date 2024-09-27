@@ -8,7 +8,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateAddLanesToBrainstormingsTest do
   alias Mindwendel.Repo.DataMigrations.MigrateAddLanesToBrainstormings
 
   setup do
-    %{brainstorming: Factory.insert!(:brainstorming)}
+    %{brainstorming: Factory.insert!(:brainstorming, lanes: [])}
   end
 
   describe "#run/0" do

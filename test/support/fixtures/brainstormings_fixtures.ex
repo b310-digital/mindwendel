@@ -14,7 +14,8 @@ defmodule Mindwendel.BrainstormingsFixtures do
       attrs
       |> Enum.into(%{
         name: "some name",
-        position_order: 42
+        position_order: 42,
+        brainstorming_id: brainstorming_fixture().id
       })
       |> Mindwendel.Lanes.create_lane()
 

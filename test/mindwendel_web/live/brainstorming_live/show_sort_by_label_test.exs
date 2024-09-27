@@ -35,16 +35,22 @@ defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
     idea_with_first_label =
       Factory.insert!(:idea, %{
         brainstorming: brainstorming,
-        label: Enum.at(brainstorming.labels, 0)
+        label: Enum.at(brainstorming.labels, 0),
+        lane: Enum.at(brainstorming.lanes, 0)
       })
 
     idea_with_second_label =
       Factory.insert!(:idea, %{
         brainstorming: brainstorming,
-        label: Enum.at(brainstorming.labels, 1)
+        label: Enum.at(brainstorming.labels, 1),
+        lane: Enum.at(brainstorming.lanes, 0)
       })
 
-    idea_without_label = Factory.insert!(:idea, %{brainstorming: brainstorming})
+    idea_without_label =
+      Factory.insert!(:idea, %{
+        brainstorming: brainstorming,
+        lane: Enum.at(brainstorming.lanes, 0)
+      })
 
     {:ok, show_live_view, _html} =
       conn
