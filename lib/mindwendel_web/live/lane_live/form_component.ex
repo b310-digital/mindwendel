@@ -32,7 +32,7 @@ defmodule MindwendelWeb.LaneLive.FormComponent do
 
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
-    if current_user.id in [brainstorming.moderating_users |> Enum.map(& &1.id)] do
+    if current_user.id in (brainstorming.moderating_users |> Enum.map(& &1.id)) do
       case Lanes.update_lane(lane, lane_params) do
         {:ok, _lane} ->
           {:noreply,

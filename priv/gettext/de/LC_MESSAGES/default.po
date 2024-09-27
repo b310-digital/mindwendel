@@ -467,4 +467,4 @@ msgstr ""
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:151
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Update lane"
-msgstr "Idee bearbeiten"
+msgstr "Kategorie bearbeiten"

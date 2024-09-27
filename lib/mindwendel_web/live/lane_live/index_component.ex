@@ -9,13 +9,24 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
   alias Mindwendel.Brainstormings
 
   @impl true
-  def handle_event("edit", %{"id" => id}, socket) do
+  def handle_event("edit_idea", %{"id" => id}, socket) do
     idea = Ideas.get_idea!(id)
 
     {:noreply,
      socket
      |> push_patch(
        to: ~p"/brainstormings/#{socket.assigns.brainstorming.id}/ideas/#{idea.id}/edit"
+     )}
+  end
+
+  @impl true
+  def handle_event("edit_lane", %{"id" => id}, socket) do
+    lane = Lanes.get_lane!(id)
+
+    {:noreply,
+     socket
+     |> push_patch(
+       to: ~p"/brainstormings/#{socket.assigns.brainstorming.id}/lanes/#{lane.id}/edit"
      )}
   end
 
@@ -38,9 +49,6 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
     lane = Lanes.get_lane!(id)
 
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
-
-    IO.inspect(brainstorming.moderating_users |> Enum.map(& &1.id))
-    IO.inspect(current_user.id)
 
     if current_user.id in (brainstorming.moderating_users |> Enum.map(& &1.id)) do
       {:ok, _} = Lanes.delete_lane(lane)

@@ -34,6 +34,10 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     mount(%{"id" => brainstorming_id}, session, socket)
   end
 
+  def mount(%{"brainstorming_id" => brainstorming_id, "lane_id" => _lane_id}, session, socket) do
+    mount(%{"id" => brainstorming_id}, session, socket)
+  end
+
   def mount(%{"id" => id, "lane_id" => _lane_id}, session, socket) do
     mount(%{"id" => id}, session, socket)
   end
@@ -90,8 +94,22 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
-  defp apply_action(socket, :edit_idea, brainstorming_id: _brainstorming_id, idea_id: _idea_id) do
+  defp apply_action(
+         socket,
+         :edit_idea,
+         %{"brainstorming_id" => brainstorming_id, "idea_id" => idea_id} = params
+       ) do
     socket
+    |> assign(:idea, Ideas.get_idea!(idea_id))
+  end
+
+  defp apply_action(
+         socket,
+         :edit_lane,
+         %{"brainstorming_id" => brainstorming_id, "lane_id" => lane_id} = params
+       ) do
+    socket
+    |> assign(:lane, Lanes.get_lane!(lane_id))
   end
 
   defp apply_action(socket, :new_idea, %{"id" => id, "lane_id" => lane_id} = params) do

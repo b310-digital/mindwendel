@@ -23,7 +23,13 @@
           </.link>
           <.link class="dropdown-item">Sort by likes</.link>
           <.link class="dropdown-item">Sort by label</.link>
-          <.link class="dropdown-item">Edit lane</.link>
+          <.link
+            patch={~p"/brainstormings/#{@brainstorming.id}/lanes/#{lane.id}/edit"}
+            class="dropdown-item"
+            title={gettext("Edit Idea")}
+          >
+            Edit lane
+          </.link>
           <.link
             class="dropdown-item"
             phx-click="delete_lane"
