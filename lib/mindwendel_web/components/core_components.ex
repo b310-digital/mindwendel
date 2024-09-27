@@ -707,4 +707,24 @@ defmodule MindwendelWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  @doc """
+  Renders a lane for ideas
+  """
+
+  attr :lane_count, :integer, required: true
+  attr :class, :string, default: nil
+
+  def lane_col(assigns) do
+    ~H"""
+    <div class={[
+      @lane_count == 1 && "lane--full-width",
+      @lane_count == 2 && "lane--half-width",
+      @lane_count >= 3 && "lane",
+      @class
+    ]}>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
 end

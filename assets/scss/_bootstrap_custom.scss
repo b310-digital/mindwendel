@@ -14,12 +14,29 @@
 
 .card-mindwendel {
   @extend .card;
-  width: 370px;
+  width: 290px;
+}
+
+.lane-header {
+  display: inline-block;
+  margin-left: 16px;
 }
 
 .lane {
-  min-width: 402px;
-  min-height: 100%;
-  margin: 5px;
+  width: 322px;
   border-right: 1px dashed grey;
+  flex-shrink: 0;
+
+  &--full-width {
+    width: 100%;
+  }
+
+  &--half-width {
+    width: 100%;
+    border-right: 1px dashed grey;
+  }
+  
+  &--half-width:last-child { border-right: none !important; }
 }
+
+.lane:last-child { border-right: none !important; }
