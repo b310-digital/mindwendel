@@ -27,7 +27,7 @@ import { buildQrCodeOptions } from "./qrCodeUtils.js"
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
 let Hooks = {}
-let sortable;
+const sortables = [];
 
 Hooks.CopyBrainstormingLinkButton = {
   mounted() {
@@ -56,7 +56,7 @@ Hooks.NativeSharingButton = {
 // see https://github.com/drag-drop-touch-js/dragdroptouch for mobile support
 Hooks.Sortable = {
   mounted(){
-    sortable = new Sortable(this.el, {
+    const sortable = new Sortable(this.el, {
       group: { put: true, pull: true },
       disabled: this.el.dataset.sortableEnabled !== 'true',
       delayOnTouchOnly: true,
@@ -72,9 +72,10 @@ Hooks.Sortable = {
         })
       }
     })
+    sortables.push(sortable);
   },
   updated(){
-    sortable.option("disabled", this.el.dataset.sortableEnabled !== 'true')
+    sortables.forEach((sortable) => sortable.option("disabled", this.el.dataset.sortableEnabled !== 'true'));
   }
 }
 
