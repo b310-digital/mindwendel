@@ -21,7 +21,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     field :last_accessed_at, :utc_datetime
     belongs_to :creating_user, User
     has_many :ideas, Idea
-    has_many :lanes, Lane
+    has_many :lanes, Lane, preload_order: [asc: :position_order]
     has_many :labels, IdeaLabel
     many_to_many :users, User, join_through: BrainstormingUser
     many_to_many :moderating_users, User, join_through: BrainstormingModeratingUser

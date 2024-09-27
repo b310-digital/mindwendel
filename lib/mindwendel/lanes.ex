@@ -43,13 +43,17 @@ defmodule Mindwendel.Lanes do
   ## Examples
 
       iex> get_max_position_order(123)
-      %Lane{}
+      1
 
   """
+  def get_max_position_order(nil) do
+    1
+  end
+
   def get_max_position_order(brainstorming_id) do
     lane_query =
       from lane in Lane,
-        where: lane.brainstorming_id == ^brainstorming_id
+        where: lane.brainstorming_id == ^brainstorming_id and not is_nil(lane.position_order)
 
     Repo.aggregate(lane_query, :max, :position_order)
   end
