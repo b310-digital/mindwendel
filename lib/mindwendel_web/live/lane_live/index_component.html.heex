@@ -217,7 +217,7 @@
 
         <%= if Enum.empty?(lane.ideas) do %>
           <div class="text-center w-100">
-            <i class="bi-lightbulb text-secondary lightbulb-large"></i>
+            <i class="bi-lightbulb text-secondary icon-large"></i>
             <p><%= gettext("No ideas brainstormed") %></p>
             <.link
               class="btn btn-outline-primary"
@@ -229,5 +229,17 @@
         <% end %>
       </div>
     </.lane_col>
+  <% end %>
+  <%= if Enum.empty?(@lanes) do %>
+    <div class="text-center w-100">
+      <i class="bi bi-columns icon-large"></i>
+      <p><%= gettext("No lanes available") %></p>
+      <.link
+        class="btn btn-outline-primary"
+        patch={~p"/brainstormings/#{@brainstorming.id}/show/new_lane"}
+      >
+        <i class="bi bi-file-plus"></i> <%= gettext("New lane") %>
+      </.link>
+    </div>
   <% end %>
 </div>

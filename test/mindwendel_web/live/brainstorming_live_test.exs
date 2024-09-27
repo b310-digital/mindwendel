@@ -5,7 +5,10 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
   alias Mindwendel.Brainstormings
   alias Mindwendel.Factory
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.Repo
+
+  import Mindwendel.BrainstormingsFixtures
 
   @create_attrs %{name: "a name"}
 
@@ -16,7 +19,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
   end
 
   defp create_brainstorming(_) do
-    brainstorming = fixture(:brainstorming)
+    brainstorming = brainstorming_fixture()
     %{brainstorming: brainstorming}
   end
 
@@ -31,10 +34,15 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
     end
 
     test "shows ideas belonging to brainstorming", %{conn: conn} do
-      brainstorming = Factory.insert!(:brainstorming)
+      brainstorming = brainstorming_fixture()
 
       brainstorming_ideas =
-        Enum.map(0..2, fn _ -> Factory.insert!(:idea, %{brainstorming: brainstorming}) end)
+        Enum.map(0..2, fn _ ->
+          idea_fixture(%{
+            brainstorming_id: brainstorming.id,
+            lane_id: List.first(brainstorming.lanes).id
+          })
+        end)
 
       {:ok, show_live_view, _html} =
         live(conn, ~p"/brainstormings/#{brainstorming.id}")
@@ -46,8 +54,12 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
     end
 
     test "shows all labels associated to the brainstorming", %{conn: conn} do
-      brainstorming = Factory.insert!(:brainstorming)
-      Factory.insert!(:idea, %{brainstorming: brainstorming})
+      brainstorming = brainstorming_fixture()
+
+      idea_fixture(%{
+        brainstorming_id: brainstorming.id,
+        lane_id: List.first(brainstorming.lanes).id
+      })
 
       {:ok, show_live_view, _html} =
         live(conn, ~p"/brainstormings/#{brainstorming.id}")
@@ -59,13 +71,15 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
     end
 
     test "show active idea label ", %{conn: conn} do
-      brainstorming = Factory.insert!(:brainstorming)
+      brainstorming = brainstorming_fixture()
       selected_ideal_label = Enum.at(brainstorming.labels, 0)
+      lane = Enum.at(brainstorming.lanes, 0)
 
       _idea =
         Factory.insert!(:idea, %{
           idea_labels: [selected_ideal_label],
-          brainstorming: brainstorming
+          brainstorming: brainstorming,
+          lane: lane
         })
 
       {:ok, show_live_view, _html} =
@@ -79,9 +93,10 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
     end
 
     test "applys labels to idea", %{conn: conn} do
-      brainstorming = Factory.insert!(:brainstorming)
+      brainstorming = brainstorming_fixture()
       selected_ideal_label = Enum.at(brainstorming.labels, 0)
-      idea = Factory.insert!(:idea, %{brainstorming: brainstorming})
+      lane = Enum.at(brainstorming.lanes, 0)
+      idea = Factory.insert!(:idea, %{brainstorming: brainstorming, lane: lane})
 
       {:ok, show_live_view, _html} =
         live(conn, ~p"/brainstormings/#{brainstorming.id}")
@@ -100,13 +115,15 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
     end
 
     test "removes labels from idea", %{conn: conn} do
-      brainstorming = Factory.insert!(:brainstorming)
+      brainstorming = brainstorming_fixture()
       selected_ideal_label = Enum.at(brainstorming.labels, 0)
+      lane = Enum.at(brainstorming.lanes, 0)
 
       idea =
         Factory.insert!(:idea, %{
           idea_labels: [selected_ideal_label],
-          brainstorming: brainstorming
+          brainstorming: brainstorming,
+          lane: lane
         })
 
       {:ok, show_live_view, _html} =
@@ -136,13 +153,16 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
     test "enables dragging for admin", %{conn: conn, brainstorming: brainstorming} do
       moderating_user = List.first(brainstorming.users)
       Brainstormings.add_moderating_user(brainstorming, moderating_user)
+      lane = Enum.at(brainstorming.lanes, 0)
 
-      {:ok, view, _html} =
+      {:ok, view, html} =
         conn
         |> init_test_session(%{current_user_id: moderating_user.id})
         |> live(~p"/brainstormings/#{brainstorming.id}")
 
-      assert view |> has_element?("#ideas[data-sortable-enabled|='true']")
+      selector = "#ideas-col-#{lane.id}[data-sortable-enabled|='true']"
+
+      assert view |> has_element?(selector)
     end
 
     test "disables dragging for user", %{conn: conn, brainstorming: brainstorming} do

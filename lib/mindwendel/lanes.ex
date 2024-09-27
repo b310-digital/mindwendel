@@ -80,7 +80,6 @@ defmodule Mindwendel.Lanes do
     %Lane{}
     |> Lane.changeset(attrs)
     |> Repo.insert()
-    |> Brainstormings.broadcast(:lane_added)
   end
 
   @doc """
