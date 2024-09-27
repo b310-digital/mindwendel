@@ -1,6 +1,6 @@
-<div id="lanes" class="d-flex overflow-scroll flex-row">
+<div id="lanes" class="d-flex overflow-x-scroll overflow-y-visible flex-row">
   <%= for lane <- @lanes do %>
-    <div>
+    <div class="h-100">
       <%= lane.name || "Default Lane" %>
 
       <div class="dropdown">
@@ -65,7 +65,7 @@
       <div
         id={"ideas-col-1-" <> lane.id}
         phx-hook="Sortable"
-        class="mb-5 d-flex card-columns flex-column flex-wrap sortable"
+        class="mb-5 d-flex card-columns flex-wrap sortable justify-content-center lane"
         data-sortable-enabled={to_string(has_move_permission(@brainstorming, @current_user))}
         data-lane-id={lane.id}
       >

@@ -14,5 +14,12 @@
 
 .card-mindwendel {
   @extend .card;
-  width: 394px;
+  width: 370px;
+}
+
+.lane {
+  min-width: 402px;
+  min-height: 100%;
+  margin: 5px;
+  border-right: 1px dashed grey;
 }
