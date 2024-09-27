@@ -55,6 +55,7 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
         %{
           "id" => id,
           "brainstorming_id" => brainstorming_id,
+          "lane_id" => lane_id,
           "new_position" => new_position,
           "old_position" => old_position
         },
@@ -65,6 +66,7 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
     if has_move_permission(brainstorming, socket.assigns.current_user) do
       Ideas.update_ideas_for_brainstorming_by_user_move(
         brainstorming_id,
+        lane_id,
         id,
         new_position,
         old_position
