@@ -153,7 +153,7 @@ defmodule Mindwendel.Ideas do
         new_position,
         old_position
       ) do
-    get_idea!(idea_id) |> update_idea(%{position_order: new_position})
+    get_idea!(idea_id) |> update_idea(%{position_order: new_position, lane_id: lane_id})
 
     # depending on moving a card bottom up or up to bottom, we need to correct the ordering
     order =

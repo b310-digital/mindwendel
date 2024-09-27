@@ -67,6 +67,7 @@
         phx-hook="Sortable"
         class="mb-5 d-flex card-columns flex-column flex-wrap sortable"
         data-sortable-enabled={to_string(has_move_permission(@brainstorming, @current_user))}
+        data-lane-id={lane.id}
       >
         <%= for idea <- lane.ideas do %>
           <div
