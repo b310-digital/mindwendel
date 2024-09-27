@@ -9,28 +9,6 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
   alias Mindwendel.Brainstormings
 
   @impl true
-  def handle_event("edit_idea", %{"id" => id}, socket) do
-    idea = Ideas.get_idea!(id)
-
-    {:noreply,
-     socket
-     |> push_patch(
-       to: ~p"/brainstormings/#{socket.assigns.brainstorming.id}/ideas/#{idea.id}/edit"
-     )}
-  end
-
-  @impl true
-  def handle_event("edit_lane", %{"id" => id}, socket) do
-    lane = Lanes.get_lane!(id)
-
-    {:noreply,
-     socket
-     |> push_patch(
-       to: ~p"/brainstormings/#{socket.assigns.brainstorming.id}/lanes/#{lane.id}/edit"
-     )}
-  end
-
-  @impl true
   def handle_event("delete_idea", %{"id" => id}, socket) do
     idea = Ideas.get_idea!(id)
 
@@ -154,5 +132,26 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
       {:error, _changeset} ->
         {:noreply, socket}
     end
+  end
+
+  @impl true
+  def handle_event("sort_by_likes", %{"id" => id, "lane-id" => lane_id}, socket) do
+    brainstorming = Brainstormings.get_brainstorming!(id)
+
+    if has_move_permission(brainstorming, socket.assigns.current_user) do
+      Ideas.update_ideas_for_brainstorming_by_likes(id, lane_id)
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_event("sort_by_label", %{"id" => id, "lane-id" => lane_id}, socket) do
+    brainstorming = Brainstormings.get_brainstorming!(id)
+
+    if has_move_permission(brainstorming, socket.assigns.current_user) do
+      Ideas.update_ideas_for_brainstorming_by_labels(id, lane_id)
+    end
+
+    {:noreply, socket}
   end
 end

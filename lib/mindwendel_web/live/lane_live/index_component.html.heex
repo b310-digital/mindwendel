@@ -21,8 +21,27 @@
           >
             Add idea
           </.link>
-          <.link class="dropdown-item">Sort by likes</.link>
-          <.link class="dropdown-item">Sort by label</.link>
+
+          <%= if has_move_permission(@brainstorming, @current_user) do %>
+            <.link
+              class="dropdown-item"
+              phx-target={@myself}
+              phx-click="sort_by_likes"
+              phx-value-id={@brainstorming.id}
+              phx-value-lane-id={lane.id}
+            >
+              Sort by likes
+            </.link>
+            <.link
+              class="dropdown-item"
+              phx-target={@myself}
+              phx-click="sort_by_label"
+              phx-value-id={@brainstorming.id}
+              phx-value-lane_id={lane.id}
+            >
+              Sort by label
+            </.link>
+          <% end %>
           <.link
             patch={~p"/brainstormings/#{@brainstorming.id}/lanes/#{lane.id}/edit"}
             class="dropdown-item"

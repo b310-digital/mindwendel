@@ -25,7 +25,17 @@ defmodule Mindwendel.Lanes do
       ** (Ecto.NoResultsError)
 
   """
-  def get_lane!(id), do: Repo.get!(Lane, id)
+  def get_lane!(id) do
+    Repo.get!(Lane, id)
+    |> Repo.preload(
+      ideas: [
+        :link,
+        :likes,
+        :label,
+        :idea_labels
+      ]
+    )
+  end
 
   @doc """
   Gets lanes for a brainstorming

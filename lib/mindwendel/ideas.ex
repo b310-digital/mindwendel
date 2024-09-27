@@ -7,6 +7,7 @@ defmodule Mindwendel.Ideas do
   alias Mindwendel.Repo
 
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Lanes
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Idea
 
@@ -68,7 +69,7 @@ defmodule Mindwendel.Ideas do
       %{1, nil}
 
   """
-  def update_ideas_for_brainstorming_by_likes(id) do
+  def update_ideas_for_brainstorming_by_likes(brainstorming_id, lane_id) do
     idea_count_query =
       from like in Like,
         group_by: like.idea_id,
@@ -79,7 +80,7 @@ defmodule Mindwendel.Ideas do
       from(idea in Idea,
         left_join: idea_counts in subquery(idea_count_query),
         on: idea_counts.idea_id == idea.id,
-        where: idea.brainstorming_id == ^id,
+        where: idea.brainstorming_id == ^brainstorming_id and idea.lane_id == ^lane_id,
         select: %{
           idea_id: idea.id,
           like_count: idea_counts.like_count,
@@ -91,10 +92,13 @@ defmodule Mindwendel.Ideas do
     from(idea in Idea,
       join: idea_ranks in subquery(idea_rank_query),
       on: idea_ranks.idea_id == idea.id,
-      where: idea.brainstorming_id == ^id,
+      where: idea.brainstorming_id == ^brainstorming_id and idea.lane_id == ^lane_id,
       update: [set: [position_order: idea_ranks.idea_rank]]
     )
     |> Repo.update_all([])
+
+    lane = Lanes.get_lane!(lane_id)
+    Brainstormings.broadcast({:ok, lane}, :lane_updated)
   end
 
   @doc """
@@ -106,11 +110,11 @@ defmodule Mindwendel.Ideas do
       %{1, nil}
 
   """
-  def update_ideas_for_brainstorming_by_labels(id) do
+  def update_ideas_for_brainstorming_by_labels(brainstorming_id, lane_id) do
     idea_rank_query =
       from(idea in Idea,
         left_join: l in assoc(idea, :idea_labels),
-        where: idea.brainstorming_id == ^id,
+        where: idea.brainstorming_id == ^brainstorming_id and idea.lane_id == ^lane_id,
         select: %{
           idea_id: idea.id,
           idea_rank:
@@ -124,10 +128,13 @@ defmodule Mindwendel.Ideas do
     from(idea in Idea,
       join: idea_ranks in subquery(idea_rank_query),
       on: idea_ranks.idea_id == idea.id,
-      where: idea.brainstorming_id == ^id,
+      where: idea.brainstorming_id == ^brainstorming_id and idea.lane_id == ^lane_id,
       update: [set: [position_order: idea_ranks.idea_rank]]
     )
     |> Repo.update_all([])
+
+    lane = Lanes.get_lane!(lane_id)
+    Brainstormings.broadcast({:ok, lane}, :lane_updated)
   end
 
   @doc """
@@ -141,6 +148,7 @@ defmodule Mindwendel.Ideas do
   """
   def update_ideas_for_brainstorming_by_user_move(
         brainstorming_id,
+        lane_id,
         idea_id,
         new_position,
         old_position
@@ -155,7 +163,7 @@ defmodule Mindwendel.Ideas do
 
     idea_rank_query =
       from(idea in Idea,
-        where: idea.brainstorming_id == ^brainstorming_id,
+        where: idea.brainstorming_id == ^brainstorming_id and idea.lane_id == ^lane_id,
         windows: [o: [order_by: ^order]],
         select: %{
           idea_id: idea.id,
@@ -170,6 +178,9 @@ defmodule Mindwendel.Ideas do
       update: [set: [position_order: idea_ranks.idea_rank]]
     )
     |> Repo.update_all([])
+
+    lane = Lanes.get_lane!(lane_id)
+    Brainstormings.broadcast({:ok, lane}, :lane_updated)
   end
 
   @doc """

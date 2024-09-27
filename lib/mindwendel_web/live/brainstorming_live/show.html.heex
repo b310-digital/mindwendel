@@ -24,37 +24,12 @@
 
     <div class="d-flex justify-content-end flex-wrap">
       <.link
-        patch={~p"/brainstormings/#{@brainstorming.id}/lanes/#{List.first(@lanes).id}/new_idea"}
-        class="btn btn-primary m-1 d-none d-md-block"
-        title={gettext("New idea page (Hotkey: i)")}
-      >
-        <%= gettext("New Idea") %>
-      </.link>
-      <.link
         patch={~p"/brainstormings/#{@brainstorming.id}/show/new_lane"}
         class="btn btn-primary m-1 d-none d-md-block"
         title={gettext("New lane")}
       >
         <%= gettext("New Lane") %>
       </.link>
-      <%= if has_move_permission(@brainstorming, @current_user) do %>
-        <.link
-          class="btn btn-primary m-1"
-          phx-click="sort_by_likes"
-          phx-value-id={@brainstorming.id}
-          title={gettext("Sort by likes")}
-        >
-          <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Likes") %>
-        </.link>
-        <.link
-          class="btn btn-primary m-1"
-          phx-click="sort_by_label"
-          phx-value-id={@brainstorming.id}
-          title={gettext("Sort by label")}
-        >
-          <i class="bi-sort-alpha-up-alt"></i> <%= gettext("Label") %>
-        </.link>
-      <% end %>
 
       <.link
         patch={~p"/brainstormings/#{@brainstorming.id}/show/share"}
