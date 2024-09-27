@@ -1,6 +1,6 @@
 <div
   id="lanes"
-  class="overflow-x-scroll overflow-y-visible"
+  class="overflow-x-scroll overflow-y-visible mt-2"
   style="display: flex; flex-wrap: nowrap; height: 100%;"
 >
   <%= for lane <- @lanes do %>
@@ -75,7 +75,7 @@
       <div
         id={"ideas-col-1-" <> lane.id}
         phx-hook="Sortable"
-        class="mb-5 d-flex flex-wrap sortable"
+        class="mb-5 d-flex flex-wrap sortable lane-ideas-area"
         data-sortable-enabled={to_string(has_move_permission(@brainstorming, @current_user))}
         data-lane-id={lane.id}
       >
