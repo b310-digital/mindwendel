@@ -3,6 +3,7 @@ defmodule Mindwendel.LanesTest do
   alias Mindwendel.Lanes
   alias Mindwendel.Brainstormings.Lane
   import Mindwendel.BrainstormingsFixtures
+  import Mindwendel.LanesFixtures
 
   test "get_lane!/1 returns the lane with given id" do
     lane =

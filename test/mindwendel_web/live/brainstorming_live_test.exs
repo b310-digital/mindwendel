@@ -8,6 +8,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
   alias Mindwendel.Repo
 
   import Mindwendel.BrainstormingsFixtures
+  import Mindwendel.IdeasFixtures
 
   defp create_brainstorming(_) do
     brainstorming = brainstorming_fixture()
