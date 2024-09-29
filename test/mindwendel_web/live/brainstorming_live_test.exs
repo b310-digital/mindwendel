@@ -58,8 +58,12 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         live(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       Enum.each(brainstorming.labels, fn brainstorming_idea_label ->
-        assert show_live_view
-               |> has_element?(html_selector_idea_label(brainstorming_idea_label))
+        assert has_element?(show_live_view, html_selector_idea_label(brainstorming_idea_label))
+
+        assert has_element?(
+                 show_live_view,
+                 html_selector_idea_label_link(brainstorming_idea_label)
+               )
       end)
     end
 
@@ -321,5 +325,9 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
   defp html_selector_idea_label_active(idea_label) do
     ".IndexComponent__IdeaLabel--active[data-testid=\"#{idea_label.id}\"]"
+  end
+
+  defp html_selector_idea_label_link(idea_label) do
+    "a[data-testid=\"#{idea_label.id}\"][title=\"Label #{idea_label.name}\"]"
   end
 end
