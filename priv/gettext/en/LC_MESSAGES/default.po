@@ -71,7 +71,6 @@ msgid "Create!"
 msgstr ""
 
 #: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:195
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:68
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr ""
@@ -435,6 +434,7 @@ msgstr ""
 msgid "Are you sure you want to delete this lane?"
 msgstr ""
 
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:68
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:71
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Delete lane"
@@ -469,4 +469,9 @@ msgstr ""
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:109
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Edit idea"
+msgstr ""
+
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:101
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Delete idea"
 msgstr ""
