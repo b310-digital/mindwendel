@@ -22,7 +22,7 @@
         <%= if admin_route(@conn) do %>
           <span class="nav-mindwendel-caption">
             <a href={~p"/brainstormings/#{assigns[:brainstorming].id}"}>
-              <img src={~p"/images/back.svg"} class="nav-mindwendel-back" />
+              <i class="bi bi-arrow-left"></i>
               <%= gettext("Back") %>
             </a>
           </span>

@@ -9,6 +9,7 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.BrainstormingModeratingUser
 
@@ -76,11 +77,13 @@ defmodule Mindwendel.Brainstormings do
       :users,
       :moderating_users,
       labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
-      ideas: [
-        :link,
-        :likes,
-        :label,
-        :idea_labels
+      lanes: [
+        ideas: [
+          :link,
+          :likes,
+          :label,
+          :idea_labels
+        ]
       ]
     ])
     |> update_last_accessed_at
@@ -112,6 +115,7 @@ defmodule Mindwendel.Brainstormings do
     user
     |> Ecto.build_assoc(:created_brainstormings,
       labels: Brainstorming.idea_label_factory(),
+      lanes: [%Lane{position_order: 1}],
       moderating_users: [user],
       users: [user]
     )
@@ -159,7 +163,7 @@ defmodule Mindwendel.Brainstormings do
 
   def empty(%Brainstorming{} = brainstorming) do
     # we only delete ideas - labels and users should be left intact:
-    Repo.delete_all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
+    Repo.delete_all(from lane in Lane, where: lane.brainstorming_id == ^brainstorming.id)
 
     broadcast({:ok, brainstorming}, :brainstorming_updated)
   end
@@ -270,6 +274,27 @@ defmodule Mindwendel.Brainstormings do
     )
 
     {:ok, idea}
+  end
+
+  def broadcast({:ok, %Lane{} = lane}, event) do
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> lane.brainstorming_id,
+      {
+        event,
+        lane
+        |> Repo.preload(
+          ideas: [
+            :link,
+            :likes,
+            :label,
+            :idea_labels
+          ]
+        )
+      }
+    )
+
+    {:ok, lane}
   end
 
   def broadcast({:error, _reason} = error, _event), do: error

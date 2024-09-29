@@ -23,29 +23,13 @@
     </div>
 
     <div class="d-flex justify-content-end flex-wrap">
-      <.link
-        patch={~p"/brainstormings/#{@brainstorming.id}/show/new_idea"}
-        class="btn btn-primary m-1 d-none d-md-block"
-        title={gettext("New idea page (Hotkey: i)")}
-      >
-        <%= gettext("New Idea") %>
-      </.link>
-      <%= if has_move_permission(@brainstorming, @current_user) do %>
+      <%= if has_moderating_permission(@brainstorming, @current_user) do %>
         <.link
-          class="btn btn-primary m-1"
-          phx-click="sort_by_likes"
-          phx-value-id={@brainstorming.id}
-          title={gettext("Sort by likes")}
+          patch={~p"/brainstormings/#{@brainstorming.id}/show/new_lane"}
+          class="btn btn-primary m-1 d-none d-md-block"
+          title={gettext("New lane")}
         >
-          <i class="bi-sort-numeric-up-alt"></i> <%= gettext("Likes") %>
-        </.link>
-        <.link
-          class="btn btn-primary m-1"
-          phx-click="sort_by_label"
-          phx-value-id={@brainstorming.id}
-          title={gettext("Sort by label")}
-        >
-          <i class="bi-sort-alpha-up-alt"></i> <%= gettext("Label") %>
+          <i class="bi bi-file-plus"></i> <%= gettext("New lane") %>
         </.link>
       <% end %>
 
@@ -78,11 +62,11 @@
     </div>
 
     <.live_component
-      module={MindwendelWeb.IdeaLive.IndexComponent}
-      ideas={@ideas}
+      module={MindwendelWeb.LaneLive.IndexComponent}
       brainstorming={@brainstorming}
       id={@brainstorming.id}
       current_user={@current_user}
+      lanes={@lanes}
     />
 
     <.modal
@@ -118,6 +102,23 @@
     </.modal>
 
     <.modal
+      :if={@live_action in [:new_lane]}
+      id="lane-modal"
+      show
+      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+      title={gettext("New lane")}
+    >
+      <.live_component
+        module={MindwendelWeb.LaneLive.FormComponent}
+        id={:new}
+        action={:new}
+        brainstorming={@brainstorming}
+        current_user={@current_user}
+        lane={@lane}
+      />
+    </.modal>
+
+    <.modal
       :if={@live_action in [:edit_idea]}
       id="idea-modal"
       show
@@ -135,6 +136,22 @@
     </.modal>
 
     <.modal
+      :if={@live_action in [:edit_lane]}
+      id="lane-modal"
+      show
+      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+      title={gettext("Update lane")}
+    >
+      <.live_component
+        module={MindwendelWeb.LaneLive.FormComponent}
+        id={:update}
+        action={:update}
+        brainstorming={@brainstorming}
+        current_user={@current_user}
+        lane={@lane}
+      />
+    </.modal>
+    <.modal
       :if={@live_action in [:share]}
       id="share-modal"
       show
@@ -150,15 +167,5 @@
         uri={~p"/brainstormings/#{@brainstorming.id}"}
       />
     </.modal>
-
-    <footer class="footer position-fixed bottom-0 end-0 mb-3 me-2 d-lg-none bg-light">
-      <.link
-        patch={~p"/brainstormings/#{@brainstorming.id}/show/new_idea"}
-        class="btn btn-primary rounded-circle idea-add-button"
-        title={gettext("Open new idea page (Hotkey: i)")}
-      >
-        <%= gettext("+") %>
-      </.link>
-    </footer>
   </div>
 </div>

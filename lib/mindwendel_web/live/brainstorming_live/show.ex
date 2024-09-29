@@ -3,8 +3,10 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Lanes
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Brainstormings.Lane
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
@@ -22,6 +24,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
       :ok,
       socket
       |> assign(:brainstorming, brainstorming)
+      |> assign(:lanes, brainstorming.lanes)
       |> assign(:current_user, current_user)
       |> assign(:inspiration, Mindwendel.Help.random_inspiration())
     }
@@ -31,74 +34,100 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     mount(%{"id" => brainstorming_id}, session, socket)
   end
 
-  def handle_params(
-        %{"brainstorming_id" => brainstorming_id, "idea_id" => idea_id},
-        uri,
-        socket
-      ) do
-    {
-      :noreply,
-      socket
-      |> assign(:ideas, Ideas.list_ideas_for_brainstorming(brainstorming_id))
-      |> assign(:idea, Ideas.get_idea!(idea_id))
-      |> assign(:uri, uri)
-      |> apply_action(socket.assigns.live_action,
-        brainstorming_id: brainstorming_id,
-        idea_id: idea_id
-      )
-    }
+  def mount(%{"brainstorming_id" => brainstorming_id, "lane_id" => _lane_id}, session, socket) do
+    mount(%{"id" => brainstorming_id}, session, socket)
+  end
+
+  def mount(%{"id" => id, "lane_id" => _lane_id}, session, socket) do
+    mount(%{"id" => id}, session, socket)
   end
 
   @impl true
-  def handle_params(%{"id" => id}, uri, socket) do
-    {:noreply,
-     socket
-     |> assign(:ideas, Ideas.list_ideas_for_brainstorming(id))
-     |> assign(:uri, uri)
-     |> apply_action(socket.assigns.live_action, id)}
+  def handle_params(
+        params,
+        _uri,
+        socket
+      ) do
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
   @impl true
   def handle_info({:idea_added, idea}, socket) do
-    # uses the database to sort and update all ideas, instead of appending the idea to the end of list (which would be more performant)
-    new_ideas = Ideas.list_ideas_for_brainstorming(idea.brainstorming_id)
-    {:noreply, assign(socket, :ideas, new_ideas)}
+    lanes = Lanes.get_lanes_for_brainstorming(idea.brainstorming_id)
+    {:noreply, assign(socket, :lanes, lanes)}
   end
 
-  @impl true
   def handle_info({:idea_removed, idea}, socket) do
-    new_ideas = Enum.filter(socket.assigns.ideas, fn x -> x.id != idea.id end)
-    {:noreply, assign(socket, :ideas, new_ideas)}
+    lanes = Lanes.get_lanes_for_brainstorming(idea.brainstorming_id)
+    {:noreply, assign(socket, :lanes, lanes)}
   end
 
-  @impl true
+  def handle_info({:lane_added, lane}, socket) do
+    lanes = Lanes.get_lanes_for_brainstorming(lane.brainstorming_id)
+    {:noreply, assign(socket, :lanes, lanes)}
+  end
+
+  def handle_info({:lane_removed, lane}, socket) do
+    lanes = Lanes.get_lanes_for_brainstorming(lane.brainstorming_id)
+    {:noreply, assign(socket, :lanes, lanes)}
+  end
+
+  def handle_info({:lane_updated, lane}, socket) do
+    lanes = Lanes.get_lanes_for_brainstorming(lane.brainstorming_id)
+    {:noreply, assign(socket, :lanes, lanes)}
+  end
+
   def handle_info({:brainstorming_updated, brainstorming}, socket) do
+    lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
+
     {
       :noreply,
       socket
       |> assign(:brainstorming, Brainstormings.get_brainstorming!(brainstorming.id))
-      |> assign(:ideas, Ideas.list_ideas_for_brainstorming(brainstorming.id))
+      |> assign(:lanes, lanes)
     }
   end
 
-  @impl true
   def handle_info({:idea_updated, idea}, socket) do
     # another option is to reload the ideas from the db - but this would trigger a new sorting which might confuse the user
-    new_ideas = Enum.map(socket.assigns.ideas, fn e -> if e.id == idea.id, do: idea, else: e end)
+    lanes = Lanes.get_lanes_for_brainstorming(idea.brainstorming_id)
 
-    {:noreply, assign(socket, :ideas, new_ideas)}
+    {:noreply, assign(socket, :lanes, lanes)}
   end
 
-  defp apply_action(socket, :edit_idea, brainstorming_id: _brainstorming_id, idea_id: _idea_id) do
+  defp apply_action(
+         socket,
+         :edit_idea,
+         %{"brainstorming_id" => _brainstorming_id, "idea_id" => idea_id}
+       ) do
     socket
+    |> assign(:idea, Ideas.get_idea!(idea_id))
   end
 
-  defp apply_action(socket, :new_idea, brainstorming_id) do
+  defp apply_action(
+         socket,
+         :edit_lane,
+         %{"brainstorming_id" => _brainstorming_id, "lane_id" => lane_id}
+       ) do
+    socket
+    |> assign(:lane, Lanes.get_lane!(lane_id))
+  end
+
+  defp apply_action(socket, :new_idea, %{"id" => id, "lane_id" => lane_id}) do
     socket
     |> assign(:page_title, gettext("%{name} - New Idea", name: socket.assigns.brainstorming.name))
     |> assign(:idea, %Idea{
-      brainstorming_id: brainstorming_id,
+      brainstorming_id: id,
+      lane_id: lane_id,
       username: socket.assigns.current_user.username
+    })
+  end
+
+  defp apply_action(socket, :new_lane, %{"id" => brainstorming_id}) do
+    socket
+    |> assign(:page_title, gettext("%{name} - New Lane", name: socket.assigns.brainstorming.name))
+    |> assign(:lane, %Lane{
+      brainstorming_id: brainstorming_id
     })
   end
 
@@ -118,28 +147,6 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   end
 
   @impl true
-  def handle_event("sort_by_likes", %{"id" => id}, socket) do
-    brainstorming = Brainstormings.get_brainstorming!(id)
-
-    if has_move_permission(brainstorming, socket.assigns.current_user) do
-      Ideas.update_ideas_for_brainstorming_by_likes(id)
-      Brainstormings.broadcast({:ok, brainstorming}, :brainstorming_updated)
-    end
-
-    {:noreply, socket}
-  end
-
-  def handle_event("sort_by_label", %{"id" => id}, socket) do
-    brainstorming = Brainstormings.get_brainstorming!(id)
-
-    if has_move_permission(brainstorming, socket.assigns.current_user) do
-      Ideas.update_ideas_for_brainstorming_by_labels(id)
-      Brainstormings.broadcast({:ok, brainstorming}, :brainstorming_updated)
-    end
-
-    {:noreply, socket}
-  end
-
   def handle_event("handle_hotkey_i", _, socket) do
     if socket.assigns.live_action == :show do
       {:noreply,

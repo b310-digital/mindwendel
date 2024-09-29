@@ -3,8 +3,8 @@ import Sortable from 'sortablejs';
 import { setIdeaLabelBackgroundColor } from "./label"
 
 // activate all tooltips:
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl))
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+[...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
@@ -27,7 +27,7 @@ import { buildQrCodeOptions } from "./qrCodeUtils.js"
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
 let Hooks = {}
-let sortable;
+const sortables = [];
 
 Hooks.CopyBrainstormingLinkButton = {
   mounted() {
@@ -56,7 +56,8 @@ Hooks.NativeSharingButton = {
 // see https://github.com/drag-drop-touch-js/dragdroptouch for mobile support
 Hooks.Sortable = {
   mounted(){
-    sortable = new Sortable(this.el, {
+    const sortable = new Sortable(this.el, {
+      group: { put: true, pull: true },
       disabled: this.el.dataset.sortableEnabled !== 'true',
       delayOnTouchOnly: true,
       delay: 50,
@@ -64,15 +65,17 @@ Hooks.Sortable = {
         this.pushEventTo(this.el, "change_position", {
           id: event.item.dataset.id,
           brainstorming_id: event.item.dataset.brainstormingId,
+          lane_id: event.to.dataset.laneId || event.item.dataset.laneId,
           // on the server, positions start with 1 not 0
           new_position: event.newIndex + 1,
           old_position: event.oldIndex + 1
         })
       }
     })
+    sortables.push(sortable);
   },
   updated(){
-    sortable.option("disabled", this.el.dataset.sortableEnabled !== 'true')
+    sortables.forEach((sortable) => sortable.option("disabled", this.el.dataset.sortableEnabled !== 'true'));
   }
 }
 

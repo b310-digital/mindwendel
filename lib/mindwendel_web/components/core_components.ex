@@ -593,11 +593,8 @@ defmodule MindwendelWeb.CoreComponents do
   def back(assigns) do
     ~H"""
     <div class="mt-16">
-      <.link
-        navigate={@navigate}
-        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
-      >
-        <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
+      <.link navigate={@navigate}>
+        <i class="bi bi-arrow-left"></i>
         <%= render_slot(@inner_block) %>
       </.link>
     </div>
@@ -706,5 +703,26 @@ defmodule MindwendelWeb.CoreComponents do
   """
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
+  end
+
+  @doc """
+  Renders a lane for ideas
+  """
+
+  attr :lane_count, :integer, required: true
+  attr :class, :string, default: nil
+  slot :inner_block, required: true
+
+  def lane_col(assigns) do
+    ~H"""
+    <div class={[
+      @lane_count == 1 && "lane lane--full-width",
+      @lane_count == 2 && "lane lane--half-width",
+      @lane_count >= 3 && "lane lane--column-width",
+      @class
+    ]}>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
   end
 end

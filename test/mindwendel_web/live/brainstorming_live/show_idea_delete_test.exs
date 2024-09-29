@@ -9,11 +9,13 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaDeleteTest do
     brainstorming = Factory.insert!(:brainstorming)
     current_user_id = Ecto.UUID.generate()
     user = Factory.insert!(:user, id: current_user_id)
+    lane = Enum.at(brainstorming.lanes, 0)
 
     idea =
       Factory.insert!(:idea, %{
         brainstorming: brainstorming,
-        user_id: current_user_id
+        user_id: current_user_id,
+        lane: lane
       })
 
     %{
@@ -74,6 +76,6 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaDeleteTest do
   end
 
   defp html_selector_button_idea_delete_link do
-    "a[@title='Delete']"
+    "a[@title='Delete idea']"
   end
 end
