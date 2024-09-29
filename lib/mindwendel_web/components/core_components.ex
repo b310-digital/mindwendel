@@ -711,6 +711,7 @@ defmodule MindwendelWeb.CoreComponents do
 
   attr :lane_count, :integer, required: true
   attr :class, :string, default: nil
+  slot :inner_block, required: true
 
   def lane_col(assigns) do
     ~H"""
