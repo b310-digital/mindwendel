@@ -291,9 +291,11 @@ defmodule MindwendelWeb.CoreComponents do
                 multiple pattern placeholder readonly required rows size step)
 
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+    errors = if Phoenix.Component.used_input?(field), do: field.errors, else: []
+
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
-    |> assign(:errors, Enum.map(field.errors, &translate_error(&1)))
+    |> assign(:errors, Enum.map(errors, &translate_error(&1)))
     |> assign_new(:name, fn -> if assigns.multiple, do: field.name <> "[]", else: field.name end)
     |> assign_new(:value, fn -> field.value end)
     |> input()
@@ -306,7 +308,7 @@ defmodule MindwendelWeb.CoreComponents do
       end)
 
     ~H"""
-    <div class="form-check form-check-inline" phx-feedback-for={@name}>
+    <div class="form-check form-check-inline">
       <label class="form-check-label">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
         <input
@@ -327,7 +329,7 @@ defmodule MindwendelWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div class="form-group" phx-feedback-for={@name}>
+    <div class="form-group">
       <.label for={@id}><%= @label %></.label>
       <select id={@id} name={@name} class="form-control" , multiple={@multiple} {@rest}>
         <option :if={@prompt} value=""><%= @prompt %></option>
@@ -366,7 +368,7 @@ defmodule MindwendelWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div class="form-group" phx-feedback-for={@name}>
+    <div class="form-group">
       <.label for={@id}><%= @label %></.label>
       <textarea
         id={@id}
@@ -404,7 +406,7 @@ defmodule MindwendelWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div class="form-group" phx-feedback-for={@name}>
+    <div class="form-group">
       <.label for={@id}><%= @label %></.label>
       <input
         type={@type}
