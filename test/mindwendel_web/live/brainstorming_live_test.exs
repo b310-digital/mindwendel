@@ -246,6 +246,42 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
       assert view |> has_element?("a[title|='Delete lane']:not(.disabled)")
     end
+
+    test "deletes the lane as moderating user", %{
+      conn: conn,
+      brainstorming: brainstorming,
+      lane: lane
+    } do
+      moderating_user = List.first(brainstorming.users)
+      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+
+      {:ok, view, _html} =
+        conn
+        |> init_test_session(%{current_user_id: moderating_user.id})
+        |> live(~p"/brainstormings/#{brainstorming.id}")
+
+      view
+      |> element("a[title|='Delete lane']")
+      |> render_click(%{id: lane.id})
+
+      refute view |> has_element?("div[class~= 'lane']")
+    end
+
+    test "ignores user clicks on delete lane", %{
+      conn: conn,
+      brainstorming: brainstorming,
+      lane: lane
+    } do
+      {:ok, view, _html} =
+        conn
+        |> live(~p"/brainstormings/#{brainstorming.id}")
+
+      view
+      |> element("a[title|='Delete lane']")
+      |> render_click(%{id: lane.id})
+
+      assert view |> has_element?("div[class~= 'lane']")
+    end
   end
 
   describe "new" do
