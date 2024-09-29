@@ -44,6 +44,7 @@ defmodule Mindwendel.Brainstormings.Lane do
   end
 
   defp generate_position_order(brainstorming_id) do
-    Lanes.get_max_position_order(brainstorming_id) + 1
+    max = Lanes.get_max_position_order(brainstorming_id)
+    if max, do: max + 1, else: 1
   end
 end
