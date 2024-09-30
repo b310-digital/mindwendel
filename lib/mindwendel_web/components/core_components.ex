@@ -718,10 +718,10 @@ defmodule MindwendelWeb.CoreComponents do
   def lane_col(assigns) do
     ~H"""
     <div class={[
-      @lane_count == 1 && "lane lane--full-width",
-      @lane_count == 2 && "lane lane--half-width",
-      @lane_count == 3 && "lane lane--third-width",
-      @lane_count > 3 && "lane lane--column-width",
+      @lane_count == 1 && "col-12",
+      @lane_count == 2 && "col-12 col-md-6",
+      @lane_count == 3 && "col-12 col-md-4",
+      @lane_count > 3 && "col-12 col-md-3",
       @class
     ]}>
       <%= render_slot(@inner_block) %>

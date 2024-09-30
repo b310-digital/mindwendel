@@ -104,23 +104,4 @@ a .bi {
   margin-right: 5px;
   margin-left: 5px;
   padding-top: 16px;
-
-  &--column-width {
-    width: 312px;
-    flex-shrink: 0;
-  }
-
-  &--full-width {
-    width: 100%;
-    padding-right: 6px;
-    padding-left: 6px;
-  }
-
-  &--half-width {
-    width: 50%;
-  }
-
-  &--third-width {
-    width: 33%;
-  }
 }
