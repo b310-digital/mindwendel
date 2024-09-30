@@ -79,7 +79,6 @@ Hooks.Sortable = {
   }
 }
 
-let modal;
 Hooks.Modal = {
   mounted() {
     // The live component gets removed by using push_redirect on the server (see form_component.ex).
@@ -87,7 +86,7 @@ Hooks.Modal = {
     // Therefore, we try to close the modal during a callback to essentially sync bootstrap modal state with the live view.
     // An alternative would be, to close the modal in JS and use pushEvent from here to continue execution on the server.
     // See https://fullstackphoenix.com/tutorials/create-a-reusable-modal-with-liveview-component
-    modal = new Modal(this.el, { backdrop: 'static', keyboard: false })
+    const modal = new Modal(this.el, { backdrop: 'static', keyboard: false })
     modal.show()
 
     const hideModal = () => modal && modal.hide()
