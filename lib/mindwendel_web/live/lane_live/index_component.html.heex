@@ -84,7 +84,17 @@
           data-sortable-enabled={to_string(has_move_permission(@brainstorming, @current_user))}
           data-lane-id={lane.id}
         >
-          <% width_class = if length(@lanes) > 2, do: "w-100", else: "" %>
+          <% width_class =
+            cond do
+              length(@lanes) == 1 ->
+                ""
+
+              length(@lanes) == 2 ->
+                "card-mindwendel--half-width"
+
+              true ->
+                "card-mindwendel--full-width"
+            end %>
           <%= for idea <- lane.ideas do %>
             <div
               class={"card-mindwendel m-3 shadow-sm p-2 rounded IndexComponent__IdeaCard #{width_class}"}
