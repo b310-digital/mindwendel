@@ -409,7 +409,7 @@ msgstr "%{name} - Neue Idee"
 #: lib/mindwendel_web/live/lane_live/form_component.ex:58
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Lane created successfully"
-msgstr "Idee erstellt"
+msgstr "Spalte erfolgreich erstellt"
 
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:11
 #, elixir-autogen, elixir-format

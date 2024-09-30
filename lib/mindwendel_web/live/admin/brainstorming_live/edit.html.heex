@@ -116,6 +116,9 @@
               >
                 <%= gettext("Remove idea label") %>
               </.button>
+              <.error :for={msg <- Enum.map(f_label[:name].errors, &translate_error(&1))}>
+                <%= msg %>
+              </.error>
             </div>
           </.inputs_for>
         </div>
