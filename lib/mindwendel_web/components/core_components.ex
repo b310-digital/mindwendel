@@ -46,9 +46,9 @@ defmodule MindwendelWeb.CoreComponents do
     ~H"""
     <div
       id={@id}
-      phx-mounted={@show && show_modal(@id)}
-      phx-remove={hide_modal(@id)}
+      phx-hook="Modal"
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
+      phx-remove={hide_modal(@id)}
       class="modal fade show"
       tabindex="-1"
       role="dialog"
@@ -66,7 +66,6 @@ defmodule MindwendelWeb.CoreComponents do
             id={"#{@id}-container"}
             phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
             phx-key="escape"
-            phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
           >
             <div class="modal-header">
               <h5 class="modal-title"><%= @title %></h5>
@@ -399,7 +398,6 @@ defmodule MindwendelWeb.CoreComponents do
       ]}
       {@rest}
     />
-    <.error :for={msg <- @errors}><%= msg %></.error>
     """
   end
 
