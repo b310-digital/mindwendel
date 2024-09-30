@@ -334,7 +334,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:516
+#: lib/mindwendel_web/components/core_components.ex:518
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""

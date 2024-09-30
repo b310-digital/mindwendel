@@ -41,7 +41,7 @@ defmodule MindwendelWeb.LaneLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Lane updated"))
-         |> push_redirect(to: ~p"/brainstormings/#{brainstorming.id}")}
+         |> push_navigate(to: ~p"/brainstormings/#{brainstorming.id}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}
@@ -56,7 +56,7 @@ defmodule MindwendelWeb.LaneLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Lane created successfully"))
-         |> push_redirect(to: ~p"/brainstormings/#{brainstorming.id}")}
+         |> push_navigate(to: ~p"/brainstormings/#{brainstorming.id}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}
