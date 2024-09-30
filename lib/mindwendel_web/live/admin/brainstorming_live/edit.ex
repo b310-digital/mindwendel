@@ -43,8 +43,6 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
     do: {:noreply, assign(socket, uri: URI.parse(uri))}
 
   def handle_event("save", %{"brainstorming" => brainstorming_params}, socket) do
-    IO.inspect(brainstorming_params)
-
     brainstorming =
       Brainstormings.get_brainstorming_by!(%{
         admin_url_id: socket.assigns.brainstorming.admin_url_id
