@@ -14,9 +14,12 @@ defmodule Mindwendel.IdeasTest do
       brainstorming: brainstorming,
       idea:
         Factory.insert!(:idea,
+          body: "first idea",
           brainstorming: brainstorming,
           lane: lane,
-          inserted_at: ~N[2021-01-01 15:04:30]
+          inserted_at: ~N[2021-01-01 15:04:30],
+          updated_at: ~N[2021-01-01 15:04:30],
+          position_order: 1
         ),
       user: user,
       like: Factory.insert!(:like, :with_idea_and_user),
@@ -31,18 +34,17 @@ defmodule Mindwendel.IdeasTest do
       idea: idea
     } do
       second_idea =
-        Factory.insert!(:idea, brainstorming: brainstorming, lane: lane, position_order: 1)
+        Factory.insert!(:idea, brainstorming: brainstorming, lane: lane, position_order: 2)
 
       third_idea =
-        Factory.insert!(:idea, brainstorming: brainstorming, lane: lane, position_order: 2)
+        Factory.insert!(:idea, brainstorming: brainstorming, lane: lane, position_order: 3)
 
       ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id)
 
       assert Enum.map(ideas_sorted_by_position, & &1.id) == [
-               # default is null, therefore idea comes last
+               idea.id,
                second_idea.id,
-               third_idea.id,
-               idea.id
+               third_idea.id
              ]
     end
   end
@@ -136,28 +138,36 @@ defmodule Mindwendel.IdeasTest do
   end
 
   describe "update_ideas_for_brainstorming_by_user_move" do
-    test "update ideas in the correct order", %{
+    test "update idea to the first position", %{
       brainstorming: brainstorming,
       idea: idea,
       lane: lane
     } do
       second_idea =
         Factory.insert!(:idea,
-          brainstorming: brainstorming,
-          lane: lane,
-          position_order: 1,
-          updated_at: ~N[2021-01-01 15:06:30]
-        )
-
-      third_idea =
-        Factory.insert!(:idea,
+          body: "second",
           brainstorming: brainstorming,
           lane: lane,
           position_order: 2,
           updated_at: ~N[2021-01-01 15:06:30]
         )
 
-      Ideas.update_ideas_for_brainstorming_by_user_move(brainstorming.id, lane.id, idea.id, 1, 3)
+      third_idea =
+        Factory.insert!(:idea,
+          body: "third",
+          brainstorming: brainstorming,
+          lane: lane,
+          position_order: 3,
+          updated_at: ~N[2021-01-01 15:06:30]
+        )
+
+      Ideas.update_ideas_for_brainstorming_by_user_move(
+        brainstorming.id,
+        lane.id,
+        third_idea.id,
+        1,
+        3
+      )
 
       query =
         from(idea in Idea,
@@ -168,10 +178,50 @@ defmodule Mindwendel.IdeasTest do
       ideas_sorted_by_position = Repo.all(query)
 
       assert ideas_sorted_by_position |> Enum.map(& &1.id) == [
+               third_idea.id,
                idea.id,
-               second_idea.id,
-               third_idea.id
+               second_idea.id
              ]
     end
+  end
+
+  test "update idea to the last position", %{
+    brainstorming: brainstorming,
+    idea: idea,
+    lane: lane
+  } do
+    second_idea =
+      Factory.insert!(:idea,
+        body: "second",
+        brainstorming: brainstorming,
+        lane: lane,
+        position_order: 2,
+        updated_at: ~N[2021-01-01 15:06:30]
+      )
+
+    third_idea =
+      Factory.insert!(:idea,
+        body: "third",
+        brainstorming: brainstorming,
+        lane: lane,
+        position_order: 3,
+        updated_at: ~N[2021-01-01 15:06:30]
+      )
+
+    Ideas.update_ideas_for_brainstorming_by_user_move(brainstorming.id, lane.id, idea.id, 3, 1)
+
+    query =
+      from(idea in Idea,
+        where: idea.brainstorming_id == ^brainstorming.id and idea.lane_id == ^lane.id,
+        order_by: [asc_nulls_last: idea.position_order]
+      )
+
+    ideas_sorted_by_position = Repo.all(query)
+
+    assert ideas_sorted_by_position |> Enum.map(& &1.id) == [
+             second_idea.id,
+             third_idea.id,
+             idea.id
+           ]
   end
 end
