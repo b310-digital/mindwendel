@@ -13,7 +13,8 @@ defmodule Mindwendel.MixProject do
       # This was necessary when executing `mix test` and was thrown by priv/repo/data_migrations/migrate_idea_labels.exs .
       # The following line avoids a warning in the test, see https://elixirforum.com/t/the-inspect-protocol-has-already-been-consolidated-for-ecto-schema-with-redacted-field/34992/14
       # Apparently, it should have been resolved in the latest version of phoenix. But, we will see.
-      consolidate_protocols: Mix.env() != :test
+      consolidate_protocols: Mix.env() != :test,
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
@@ -26,6 +27,18 @@ defmodule Mindwendel.MixProject do
       extra_applications: [
         :logger,
         :runtime_tools
+      ]
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "coveralls.cobertura": :test
       ]
     ]
   end
@@ -59,6 +72,7 @@ defmodule Mindwendel.MixProject do
       {:postgrex, "0.19.1"},
       {:sobelow, "0.13.0", only: [:dev, :test], runtime: false},
       {:credo, "1.7.7", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.18"},
       {:telemetry_metrics, "1.0.0"},
       {:telemetry_poller, "1.1.0"},
       {:timex, "3.7.11"},
