@@ -101,8 +101,6 @@ Hooks.Modal = {
 
     this.el.addEventListener('keyup', (keyEvent) => {
       if (keyEvent.key === 'Escape') {
-        // This will tell the "#modal" div to send a "close" event to the server
-        this.pushEventTo("#modal", "close")
         hideModal()
       }
     })

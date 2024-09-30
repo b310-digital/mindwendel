@@ -46,9 +46,9 @@ defmodule MindwendelWeb.CoreComponents do
     ~H"""
     <div
       id={@id}
-      phx-mounted={@show && show_modal(@id)}
-      phx-remove={hide_modal(@id)}
+      phx-hook="Modal"
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
+      phx-remove={hide_modal(@id)}
       class="modal fade show"
       tabindex="-1"
       role="dialog"
@@ -66,7 +66,6 @@ defmodule MindwendelWeb.CoreComponents do
             id={"#{@id}-container"}
             phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
             phx-key="escape"
-            phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
           >
             <div class="modal-header">
               <h5 class="modal-title"><%= @title %></h5>
@@ -399,7 +398,6 @@ defmodule MindwendelWeb.CoreComponents do
       ]}
       {@rest}
     />
-    <.error :for={msg <- @errors}><%= msg %></.error>
     """
   end
 
@@ -718,9 +716,10 @@ defmodule MindwendelWeb.CoreComponents do
   def lane_col(assigns) do
     ~H"""
     <div class={[
-      @lane_count == 1 && "lane lane--full-width",
-      @lane_count == 2 && "lane lane--half-width",
-      @lane_count >= 3 && "lane lane--column-width",
+      @lane_count == 1 && "col-12",
+      @lane_count == 2 && "col-12 col-md-6",
+      @lane_count == 3 && "col-12 col-md-4",
+      @lane_count > 3 && "col-12 col-md-3",
       @class
     ]}>
       <%= render_slot(@inner_block) %>
