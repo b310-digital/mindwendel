@@ -77,6 +77,22 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     assert edit_live_view |> element("input#brainstorming_labels_6_name") |> has_element?
   end
 
+  test "saves input changes to label", %{
+    conn: conn,
+    brainstorming: brainstorming
+  } do
+    {:ok, edit_live_view, _html} =
+      live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
+
+    assert edit_live_view
+           |> form("#form-labels", %{brainstorming: %{labels: %{"0": %{name: "new label"}}}})
+           |> render_change()
+
+    assert Brainstormings.get_brainstorming!(brainstorming.id).labels
+           |> Enum.map(fn a -> a.name end)
+           |> Enum.member?("new label")
+  end
+
   test "removes idea label", %{
     conn: conn,
     brainstorming: brainstorming

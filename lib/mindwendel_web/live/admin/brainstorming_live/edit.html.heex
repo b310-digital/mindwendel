@@ -90,7 +90,7 @@
     <h4><%= gettext("Edit Brainstorming Labels") %></h4>
   </div>
   <div class="card-body">
-    <.simple_form for={@form} phx-submit="save">
+    <.simple_form id="form-labels" for={@form} phx-change="save" phx-submit="save">
       <div class="row">
         <div class="col">
           <.inputs_for :let={f_label} field={@form[:labels]}>
