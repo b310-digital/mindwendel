@@ -12,7 +12,7 @@
           class="btn btn-primary btn-sm"
           patch={~p"/brainstormings/#{@brainstorming.id}/show/lanes/#{lane.id}/new_idea"}
         >
-          <i class="bi bi-plus-lg"></i>
+          <i class="bi bi-plus-lg"></i> <%= gettext("Add idea") %>
         </.link>
         <div class="dropdown d-inline">
           <.button
@@ -77,13 +77,14 @@
       <div
         id={"ideas-col-" <> lane.id}
         phx-hook="Sortable"
-        class="mb-5 d-flex flex-wrap sortable lane-ideas-area"
+        class="mb-5 d-flex flex-wrap justify-content-start sortable lane-ideas-area"
         data-sortable-enabled={to_string(has_move_permission(@brainstorming, @current_user))}
         data-lane-id={lane.id}
       >
+        <% width_class = if length(@lanes) > 2, do: "w-100", else: "" %>
         <%= for idea <- lane.ideas do %>
           <div
-            class="card-mindwendel m-3 shadow-sm p-2 rounded IndexComponent__IdeaCard"
+            class={"card-mindwendel m-3 shadow-sm p-2 rounded IndexComponent__IdeaCard #{width_class}"}
             role={if has_move_permission(@brainstorming, @current_user), do: "button", else: ""}
             data-testid={idea.id}
             data-id={idea.id}

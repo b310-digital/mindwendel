@@ -102,18 +102,25 @@ a .bi {
   border: 1px dashed $gray-400;
   border-radius: 5px;
   margin-right: 5px;
+  margin-left: 5px;
   padding-top: 16px;
 
   &--column-width {
-    width: 322px;
+    width: 312px;
     flex-shrink: 0;
   }
 
   &--full-width {
     width: 100%;
+    padding-right: 6px;
+    padding-left: 6px;
   }
 
   &--half-width {
-    width: 100%;
+    width: 50%;
+  }
+
+  &--third-width {
+    width: 33%;
   }
 }
