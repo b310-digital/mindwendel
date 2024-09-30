@@ -157,7 +157,7 @@ defmodule Mindwendel.Ideas do
 
     # depending on moving a card bottom up or up to bottom, we need to correct the ordering
     order =
-      if new_position < old_position,
+      if new_position <= old_position,
         do: [asc: :position_order, desc: :updated_at],
         else: [asc: :position_order, asc: :updated_at]
 
