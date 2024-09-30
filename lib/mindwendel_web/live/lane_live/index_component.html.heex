@@ -4,7 +4,7 @@
   style="display: flex; flex-wrap: nowrap; height: 100%;"
 >
   <%= for lane <- @lanes do %>
-    <.lane_col lane_count={length(@lanes)}>
+    <.lane_col lane_count={length(@lanes)} class="mb-2">
       <div class="lane">
         <div class="lane-header">
           <span class="fw-bold"><%= lane.name || gettext("Default lane") %></span>
@@ -80,7 +80,7 @@
         <div
           id={"ideas-col-" <> lane.id}
           phx-hook="Sortable"
-          class="mb-5 d-flex flex-wrap justify-content-start sortable lane-ideas-area"
+          class="d-flex flex-wrap justify-content-start sortable lane-ideas-area"
           data-sortable-enabled={to_string(has_move_permission(@brainstorming, @current_user))}
           data-lane-id={lane.id}
         >
