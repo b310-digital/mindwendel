@@ -145,15 +145,4 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     socket
     |> assign(:page_title, socket.assigns.brainstorming.name)
   end
-
-  @impl true
-  def handle_event("handle_hotkey_i", _, socket) do
-    if socket.assigns.live_action == :show do
-      {:noreply,
-       push_patch(
-         socket,
-         ~p"/brainstormings/#{socket.assigns.brainstorming.id}"
-       )}
-    end
-  end
 end
