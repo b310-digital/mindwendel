@@ -36,7 +36,7 @@ msgstr "%{name} - Editieren"
 msgid "%{name} - New Idea"
 msgstr "%{name} - Neue Idee"
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:116
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:112
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this idea?"
 msgstr "Möchtest du die Idee löschen?"
@@ -110,7 +110,7 @@ msgstr "Neues Brainstorming"
 msgid "New idea"
 msgstr "Neue Idee"
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:242
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:238
 #, elixir-autogen, elixir-format
 msgid "No ideas brainstormed"
 msgstr "Bisher keine Ideen vorhanden"
@@ -137,14 +137,14 @@ msgstr "Speichere diesen Link, um das Brainstorming zukünftig zu bearbeiten ode
 msgid "Saving..."
 msgstr "Speichere..."
 
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:49
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:53
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:57
 #, elixir-autogen, elixir-format
 msgid "Sort by label"
 msgstr "Sortiere nach Label"
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:44
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:47
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:40
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:43
 #, elixir-autogen, elixir-format
 msgid "Sort by likes"
 msgstr "Sortiere nach Likes"
@@ -195,7 +195,7 @@ msgid "Username"
 msgstr "Nutzername"
 
 #: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:3
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:164
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:160
 #, elixir-autogen, elixir-format
 msgid "By"
 msgstr "Von"
@@ -419,7 +419,7 @@ msgstr "Name"
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:26
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:28
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:105
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:263
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:259
 #, elixir-autogen, elixir-format
 msgid "New lane"
 msgstr "Neue Spalte"
@@ -429,19 +429,19 @@ msgstr "Neue Spalte"
 msgid "Update lane"
 msgstr "Spalte bearbeiten"
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:72
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:68
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Are you sure you want to delete this lane?"
 msgstr "Möchtest du die Idee löschen?"
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:71
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:74
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:67
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:70
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Delete lane"
 msgstr "Löschen"
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:62
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:64
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:58
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:60
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Edit lane"
 msgstr "Spalte bearbeiten"
@@ -451,28 +451,28 @@ msgstr "Spalte bearbeiten"
 msgid "Lane updated"
 msgstr "Spalte aktualisiert"
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:16
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:247
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:12
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:243
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Add idea"
 msgstr "Neue Idee"
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:10
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:6
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Default lane"
 msgstr "Erste Spalte"
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:258
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:254
 #, elixir-autogen, elixir-format
 msgid "No lanes available"
 msgstr "Keine Spalten vorhanden"
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:123
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:119
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Edit idea"
 msgstr "Idee bearbeiten"
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:115
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:111
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Delete idea"
 msgstr "Löschen"
