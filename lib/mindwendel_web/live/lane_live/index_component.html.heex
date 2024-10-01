@@ -1,8 +1,4 @@
-<div
-  id="lanes"
-  class="overflow-x-scroll overflow-y-visible mt-2"
-  style="display: flex; flex-wrap: nowrap; height: 100%;"
->
+<div id="lanes" class="d-flex flex-nowrap overflow-x-scroll overflow-y-visible mt-2 h-100">
   <%= for lane <- @lanes do %>
     <.lane_col lane_count={length(@lanes)} class="mb-2">
       <div class="lane">
