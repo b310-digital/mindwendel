@@ -99,7 +99,7 @@ msgstr ""
 msgid "Idea created successfully"
 msgstr ""
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:50
+#: lib/mindwendel_web/components/../templates/layout/root.html.heex:53
 #, elixir-autogen, elixir-format
 msgid "New brainstorming"
 msgstr ""
@@ -148,7 +148,7 @@ msgstr ""
 msgid "Sort by likes"
 msgstr ""
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:63
+#: lib/mindwendel_web/components/../templates/layout/root.html.heex:66
 #, elixir-autogen, elixir-format
 msgid "Your brainstormings"
 msgstr ""
@@ -324,7 +324,7 @@ msgstr ""
 msgid "Allow users to change the order of ideas"
 msgstr ""
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:26
+#: lib/mindwendel_web/components/../templates/layout/root.html.heex:29
 #, elixir-autogen, elixir-format
 msgid "Back"
 msgstr ""
