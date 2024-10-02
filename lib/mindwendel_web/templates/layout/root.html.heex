@@ -17,12 +17,15 @@
   </head>
 
   <body class="bg-light">
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white border-bottom mb-2">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-2">
       <div class="container">
         <%= if admin_route(@conn) do %>
           <span class="nav-mindwendel-caption">
-            <a href={~p"/brainstormings/#{assigns[:brainstorming].id}"}>
-              <i class="bi bi-arrow-left"></i>
+            <a
+              href={~p"/brainstormings/#{assigns[:brainstorming].id}"}
+              class="d-inline-flex align-items-center"
+            >
+              <i class="bi bi-arrow-left me-1"></i>
               <%= gettext("Back") %>
             </a>
           </span>

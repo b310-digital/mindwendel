@@ -59,7 +59,7 @@
     <.simple_form for={@form} phx-submit="save" phx-change="save" id="form-edit-brainstorming">
       <.input field={@form[:name]} type="text" label="Name" />
 
-      <div class="form-check mb-3 position-relative">
+      <div class="mb-3 mt-3">
         <.input
           field={@form[:option_show_link_to_settings]}
           type="checkbox"
@@ -73,7 +73,7 @@
           ) %>
         </small>
       </div>
-      <div class="form-check mb-3 position-relative">
+      <div>
         <.input
           field={@form[:option_allow_manual_ordering]}
           type="checkbox"

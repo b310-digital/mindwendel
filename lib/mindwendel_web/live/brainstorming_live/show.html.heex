@@ -22,10 +22,10 @@
       <%= if has_moderating_permission(@brainstorming, @current_user) do %>
         <.link
           patch={~p"/brainstormings/#{@brainstorming.id}/show/new_lane"}
-          class="btn btn-primary m-1"
+          class="btn btn-primary m-1 d-inline-flex align-items-center"
           title={gettext("New lane")}
         >
-          <i class="bi bi-file-plus"></i> <%= gettext("New lane") %>
+          <i class="bi bi-file-plus me-1"></i> <%= gettext("New lane") %>
         </.link>
       <% end %>
 
@@ -160,7 +160,7 @@
         action={:share}
         brainstorming={@brainstorming}
         current_user={@current_user}
-        uri={~p"/brainstormings/#{@brainstorming.id}"}
+        uri={url(~p"/brainstormings/#{@brainstorming.id}")}
       />
     </.modal>
   </div>
