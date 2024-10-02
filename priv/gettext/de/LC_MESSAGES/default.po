@@ -289,11 +289,6 @@ msgstr "Download als SVG"
 msgid "Brainstorming delete are you sure"
 msgstr "Bist du sicher, dass das Brainstorming gelöscht werden soll?"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:40
-#, elixir-autogen, elixir-format
-msgid "Idea created updated"
-msgstr ""
-
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:122
 #, elixir-autogen, elixir-format
 msgid "Update idea"
@@ -328,7 +323,7 @@ msgstr "Achtung: Brainstormings werden %{available_until} nach dem letzten Zugri
 #: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:81
 #, elixir-autogen, elixir-format
 msgid "Allow users to change the order of ideas"
-msgstr "Nutzern das Verschieben von Ideen erlauben"
+msgstr "Nutzern das Verschieben und Sortieren von Ideen erlauben"
 
 #: lib/mindwendel_web/components/../templates/layout/root.html.heex:26
 #, elixir-autogen, elixir-format
@@ -476,3 +471,8 @@ msgstr "Idee bearbeiten"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Delete idea"
 msgstr "Löschen"
+
+#: lib/mindwendel_web/live/idea_live/form_component.ex:40
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Idea updated"
+msgstr "Idee aktualisiert"

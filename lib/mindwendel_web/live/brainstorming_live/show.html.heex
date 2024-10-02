@@ -160,7 +160,7 @@
         action={:share}
         brainstorming={@brainstorming}
         current_user={@current_user}
-        uri={~p"/brainstormings/#{@brainstorming.id}"}
+        uri={url(~p"/brainstormings/#{@brainstorming.id}")}
       />
     </.modal>
   </div>
