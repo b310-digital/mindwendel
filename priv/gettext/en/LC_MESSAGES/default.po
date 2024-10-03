@@ -401,7 +401,7 @@ msgstr ""
 msgid "%{name} - New Lane"
 msgstr ""
 
-#: lib/mindwendel_web/live/lane_live/form_component.ex:58
+#: lib/mindwendel_web/live/lane_live/form_component.ex:59
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Lane created successfully"
 msgstr ""
