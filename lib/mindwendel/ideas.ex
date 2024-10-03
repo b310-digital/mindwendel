@@ -256,11 +256,13 @@ defmodule Mindwendel.Ideas do
 
   """
   def update_idea(%Idea{} = idea, attrs) do
-    idea
-    |> Idea.changeset(attrs)
-    |> Repo.update()
+    result =
+      idea
+      |> Idea.changeset(attrs)
+      |> Repo.update()
 
     Lanes.broadcast_lanes_update(idea.brainstorming_id)
+    result
   end
 
   @doc """
