@@ -3,10 +3,13 @@ defmodule Mindwendel.IdeasFixtures do
   Generate an idea.
   """
   def idea_fixture(attrs \\ %{}) do
-    attrs
-    |> Enum.into(%{
-      body: "Mindwendel!"
-    })
-    |> Mindwendel.Ideas.create_idea()
+    {:ok, idea} =
+      attrs
+      |> Enum.into(%{
+        body: "Mindwendel!"
+      })
+      |> Mindwendel.Ideas.create_idea()
+
+    idea
   end
 end
