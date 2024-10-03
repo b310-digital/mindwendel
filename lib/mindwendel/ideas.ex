@@ -7,7 +7,6 @@ defmodule Mindwendel.Ideas do
   alias Mindwendel.Repo
 
   alias Mindwendel.Lanes
-  alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Idea
 
@@ -97,7 +96,7 @@ defmodule Mindwendel.Ideas do
     )
     |> Repo.update_all([])
 
-    broadcast_lanes_update(brainstorming_id)
+    Lanes.broadcast_lanes_update(brainstorming_id)
   end
 
   @doc """
@@ -132,7 +131,7 @@ defmodule Mindwendel.Ideas do
     )
     |> Repo.update_all([])
 
-    broadcast_lanes_update(brainstorming_id)
+    Lanes.broadcast_lanes_update(brainstorming_id)
   end
 
   @doc """
@@ -177,7 +176,7 @@ defmodule Mindwendel.Ideas do
     )
     |> Repo.update_all([])
 
-    broadcast_lanes_update(brainstorming_id)
+    Lanes.broadcast_lanes_update(brainstorming_id)
   end
 
   @doc """
@@ -218,7 +217,7 @@ defmodule Mindwendel.Ideas do
         {_, result} -> {:error, result}
       end
 
-    broadcast_lanes_update(idea.brainstorming_id)
+    Lanes.broadcast_lanes_update(idea.brainstorming_id)
     {:ok, idea}
   end
 
@@ -237,7 +236,7 @@ defmodule Mindwendel.Ideas do
       |> Idea.build_link()
       |> Repo.update()
 
-      broadcast_lanes_update(idea.brainstorming_id)
+      Lanes.broadcast_lanes_update(idea.brainstorming_id)
     end)
 
     {:ok, idea}
@@ -260,7 +259,7 @@ defmodule Mindwendel.Ideas do
     |> Idea.changeset(attrs)
     |> Repo.update()
 
-    broadcast_lanes_update(idea.brainstorming_id)
+    Lanes.broadcast_lanes_update(idea.brainstorming_id)
   end
 
   @doc """
@@ -277,7 +276,7 @@ defmodule Mindwendel.Ideas do
   """
   def delete_idea(%Idea{} = idea) do
     Repo.delete(idea)
-    broadcast_lanes_update(idea.brainstorming_id)
+    Lanes.broadcast_lanes_update(idea.brainstorming_id)
   end
 
   @doc """
@@ -291,10 +290,5 @@ defmodule Mindwendel.Ideas do
   """
   def change_idea(%Idea{} = idea, attrs \\ %{}) do
     Repo.preload(idea, [:link, :idea_labels]) |> Idea.changeset(attrs)
-  end
-
-  defp broadcast_lanes_update(brainstorming_id) do
-    lanes = Lanes.get_lanes_for_brainstorming(brainstorming_id)
-    Brainstormings.broadcast({:ok, brainstorming_id, lanes}, :lanes_updated)
   end
 end

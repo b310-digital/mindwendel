@@ -159,4 +159,9 @@ defmodule Mindwendel.Lanes do
   def change_lane(%Lane{} = lane, attrs \\ %{}) do
     Lane.changeset(lane, attrs)
   end
+
+  def broadcast_lanes_update(brainstorming_id) do
+    lanes = get_lanes_for_brainstorming(brainstorming_id)
+    Brainstormings.broadcast({:ok, brainstorming_id, lanes}, :lanes_updated)
+  end
 end
