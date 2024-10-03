@@ -208,7 +208,7 @@ defmodule Mindwendel.Ideas do
 
   """
   def create_idea(attrs \\ %{}) do
-    {:ok, idea} =
+    insert_result =
       %Idea{}
       |> Idea.changeset(attrs)
       |> Repo.insert()
@@ -217,8 +217,11 @@ defmodule Mindwendel.Ideas do
         {_, result} -> {:error, result}
       end
 
-    Lanes.broadcast_lanes_update(idea.brainstorming_id)
-    {:ok, idea}
+    insert_result
+    |> case do
+      {:ok, idea} -> Lanes.broadcast_lanes_update(idea.brainstorming_id)
+      {_, result} -> {:error, result}
+    end
   end
 
   @doc """

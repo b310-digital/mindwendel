@@ -91,7 +91,7 @@ Hooks.Modal = {
 
     const hideModal = () => modal && modal.hide()
 
-    this.el.addEventListener('submit', hideModal)
+    //this.el.addEventListener('submit', hideModal)
 
     const formCancelElement = this.el.querySelector(".form-cancel")
     formCancelElement && formCancelElement.addEventListener('click', hideModal)
