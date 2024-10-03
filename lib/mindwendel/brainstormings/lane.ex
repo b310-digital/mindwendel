@@ -29,12 +29,13 @@ defmodule Mindwendel.Brainstormings.Lane do
 
   defp add_position_order_if_missing(
          %Ecto.Changeset{
-           data: %Mindwendel.Brainstormings.Lane{
-             position_order: nil,
+           changes: %{
+             name: _,
              brainstorming_id: brainstorming_id
            }
          } = changeset
        ) do
+
     changeset
     |> put_change(:position_order, generate_position_order(brainstorming_id))
   end
