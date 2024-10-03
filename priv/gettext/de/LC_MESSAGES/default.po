@@ -455,7 +455,7 @@ msgstr "Neue Idee"
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:6
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Default lane"
-msgstr "Erste Spalte"
+msgstr "Eine Spalte"
 
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:254
 #, elixir-autogen, elixir-format
