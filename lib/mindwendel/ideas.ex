@@ -208,19 +208,17 @@ defmodule Mindwendel.Ideas do
 
   """
   def create_idea(attrs \\ %{}) do
-    insert_result =
-      %Idea{}
-      |> Idea.changeset(attrs)
-      |> Repo.insert()
-      |> case do
-        {:ok, result} -> scan_for_link_in_idea(result)
-        {_, result} -> {:error, result}
-      end
-
-    insert_result
+    %Idea{}
+    |> Idea.changeset(attrs)
+    |> Repo.insert()
     |> case do
-      {:ok, idea} -> Lanes.broadcast_lanes_update(idea.brainstorming_id)
-      {_, result} -> {:error, result}
+      {:ok, idea} ->
+        scan_for_link_in_idea(idea)
+        Lanes.broadcast_lanes_update(idea.brainstorming_id)
+        {:ok, idea}
+
+      {_, result} ->
+        {:error, result}
     end
   end
 
