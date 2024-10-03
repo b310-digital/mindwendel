@@ -6,7 +6,6 @@ defmodule Mindwendel.Ideas do
   import Ecto.Query, warn: false
   alias Mindwendel.Repo
 
-  alias Mindwendel.Brainstormings
   alias Mindwendel.Lanes
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Idea
@@ -97,8 +96,7 @@ defmodule Mindwendel.Ideas do
     )
     |> Repo.update_all([])
 
-    lane = Lanes.get_lane!(lane_id)
-    Brainstormings.broadcast({:ok, lane}, :lane_updated)
+    Lanes.broadcast_lanes_update(brainstorming_id)
   end
 
   @doc """
@@ -133,8 +131,7 @@ defmodule Mindwendel.Ideas do
     )
     |> Repo.update_all([])
 
-    lane = Lanes.get_lane!(lane_id)
-    Brainstormings.broadcast({:ok, lane}, :lane_updated)
+    Lanes.broadcast_lanes_update(brainstorming_id)
   end
 
   @doc """
@@ -179,8 +176,7 @@ defmodule Mindwendel.Ideas do
     )
     |> Repo.update_all([])
 
-    lane = Lanes.get_lane!(lane_id)
-    Brainstormings.broadcast({:ok, lane}, :lane_updated)
+    Lanes.broadcast_lanes_update(brainstorming_id)
   end
 
   @doc """
@@ -212,14 +208,17 @@ defmodule Mindwendel.Ideas do
 
   """
   def create_idea(attrs \\ %{}) do
-    %Idea{}
-    |> Idea.changeset(attrs)
-    |> Repo.insert()
-    |> case do
-      {:ok, result} -> scan_for_link_in_idea(result)
-      {_, result} -> {:error, result}
-    end
-    |> Brainstormings.broadcast(:idea_added)
+    {:ok, idea} =
+      %Idea{}
+      |> Idea.changeset(attrs)
+      |> Repo.insert()
+      |> case do
+        {:ok, result} -> scan_for_link_in_idea(result)
+        {_, result} -> {:error, result}
+      end
+
+    Lanes.broadcast_lanes_update(idea.brainstorming_id)
+    {:ok, idea}
   end
 
   @doc """
@@ -236,7 +235,8 @@ defmodule Mindwendel.Ideas do
       Repo.preload(idea, :link)
       |> Idea.build_link()
       |> Repo.update()
-      |> Brainstormings.broadcast(:idea_updated)
+
+      Lanes.broadcast_lanes_update(idea.brainstorming_id)
     end)
 
     {:ok, idea}
@@ -258,7 +258,8 @@ defmodule Mindwendel.Ideas do
     idea
     |> Idea.changeset(attrs)
     |> Repo.update()
-    |> Brainstormings.broadcast(:idea_updated)
+
+    Lanes.broadcast_lanes_update(idea.brainstorming_id)
   end
 
   @doc """
@@ -275,7 +276,7 @@ defmodule Mindwendel.Ideas do
   """
   def delete_idea(%Idea{} = idea) do
     Repo.delete(idea)
-    Brainstormings.broadcast({:ok, idea}, :idea_removed)
+    Lanes.broadcast_lanes_update(idea.brainstorming_id)
   end
 
   @doc """

@@ -10,7 +10,8 @@ defmodule Mindwendel.IdeaLabelsTest do
   setup do
     brainstorming = Factory.insert!(:brainstorming, %{labels: [Factory.build(:idea_label)]})
     idea_label = brainstorming.labels |> Enum.at(0)
-    idea = Factory.insert!(:idea, %{brainstorming: brainstorming})
+    lane = Enum.at(brainstorming.lanes, 0)
+    idea = Factory.insert!(:idea, %{brainstorming: brainstorming, lane: lane})
 
     %{idea_label: idea_label, brainstorming: brainstorming, idea: idea}
   end

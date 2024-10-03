@@ -297,5 +297,18 @@ defmodule Mindwendel.Brainstormings do
     {:ok, lane}
   end
 
+  def broadcast({:ok, brainstorming_id, lanes}, :lanes_updated) do
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> brainstorming_id,
+      {
+        :lanes_updated,
+        lanes
+      }
+    )
+
+    {:ok, brainstorming_id}
+  end
+
   def broadcast({:error, _reason} = error, _event), do: error
 end

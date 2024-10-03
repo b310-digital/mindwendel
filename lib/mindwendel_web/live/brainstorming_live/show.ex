@@ -52,47 +52,29 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   end
 
   @impl true
-  def handle_info({:idea_added, idea}, socket) do
-    lanes = Lanes.get_lanes_for_brainstorming(idea.brainstorming_id)
-    {:noreply, assign(socket, :lanes, lanes)}
-  end
-
-  def handle_info({:idea_removed, idea}, socket) do
-    lanes = Lanes.get_lanes_for_brainstorming(idea.brainstorming_id)
-    {:noreply, assign(socket, :lanes, lanes)}
-  end
-
-  def handle_info({:lane_added, lane}, socket) do
-    lanes = Lanes.get_lanes_for_brainstorming(lane.brainstorming_id)
+  def handle_info({:lane_created, lane}, socket) do
+    lanes = socket.assigns.lanes ++ [lane]
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
   def handle_info({:lane_removed, lane}, socket) do
-    lanes = Lanes.get_lanes_for_brainstorming(lane.brainstorming_id)
+    lanes = Enum.filter(socket.assigns.lanes, fn existing_lane -> existing_lane.id != lane.id end)
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
-  def handle_info({:lane_updated, lane}, socket) do
-    lanes = Lanes.get_lanes_for_brainstorming(lane.brainstorming_id)
+  def handle_info({:lanes_updated, lanes}, socket) do
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
   def handle_info({:brainstorming_updated, brainstorming}, socket) do
-    lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
+    brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
 
     {
       :noreply,
       socket
-      |> assign(:brainstorming, Brainstormings.get_brainstorming!(brainstorming.id))
-      |> assign(:lanes, lanes)
+      |> assign(:brainstorming, brainstorming)
+      |> assign(:lanes, brainstorming.lanes)
     }
-  end
-
-  def handle_info({:idea_updated, idea}, socket) do
-    # another option is to reload the ideas from the db - but this would trigger a new sorting which might confuse the user
-    lanes = Lanes.get_lanes_for_brainstorming(idea.brainstorming_id)
-
-    {:noreply, assign(socket, :lanes, lanes)}
   end
 
   defp apply_action(
