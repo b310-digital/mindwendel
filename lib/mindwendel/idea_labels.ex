@@ -31,12 +31,14 @@ defmodule Mindwendel.IdeaLabels do
       (idea.idea_labels ++ [idea_label])
       |> Enum.map(&Ecto.Changeset.change/1)
 
-    idea
-    |> Ecto.Changeset.change()
-    |> Ecto.Changeset.put_assoc(:idea_labels, idea_labels)
-    |> Repo.update()
+    result =
+      idea
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.put_assoc(:idea_labels, idea_labels)
+      |> Repo.update()
 
     broadcast_lanes_update(idea.brainstorming_id)
+    result
   end
 
   def remove_idea_label_from_idea(%Idea{} = idea, %IdeaLabel{} = idea_label) do

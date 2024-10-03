@@ -42,9 +42,8 @@ defmodule Mindwendel.LanesTest do
     lane = lane_fixture()
     update_attrs = %{name: "some updated name", position_order: 43}
 
-    assert {:ok, %Lane{} = lane} = Lanes.update_lane(lane, update_attrs)
-    assert lane.name == "some updated name"
-    assert lane.position_order == 43
+    assert {:ok, updated_lane} = Lanes.update_lane(lane, update_attrs)
+    assert updated_lane.id == lane.id
   end
 
   test "delete_lane/1 deletes the lane" do

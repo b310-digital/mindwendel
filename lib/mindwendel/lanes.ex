@@ -121,12 +121,14 @@ defmodule Mindwendel.Lanes do
 
   """
   def update_lane(%Lane{} = lane, attrs) do
-    lane
-    |> Lane.changeset(attrs)
-    |> Repo.update()
+    update =
+      lane
+      |> Lane.changeset(attrs)
+      |> Repo.update()
 
     lanes = get_lanes_for_brainstorming(lane.brainstorming_id)
     Brainstormings.broadcast({:ok, lane.brainstorming_id, lanes}, :lanes_updated)
+    update
   end
 
   @doc """

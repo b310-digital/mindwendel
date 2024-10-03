@@ -219,6 +219,7 @@ defmodule Mindwendel.Ideas do
       end
 
     broadcast_lanes_update(idea.brainstorming_id)
+    idea
   end
 
   @doc """
