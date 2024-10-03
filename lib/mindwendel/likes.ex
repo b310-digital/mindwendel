@@ -8,6 +8,7 @@ defmodule Mindwendel.Likes do
 
   alias Mindwendel.Brainstormings
   alias Mindwendel.Ideas
+  alias Mindwendel.Lanes
   alias Mindwendel.Brainstormings.Like
 
   require Logger
@@ -41,7 +42,7 @@ defmodule Mindwendel.Likes do
       |> Repo.insert()
 
     case status do
-      :ok -> {:ok, Ideas.get_idea!(idea_id)} |> Brainstormings.broadcast(:idea_updated)
+      :ok -> {:ok, broadcast_lanes_update(Ideas.get_idea!(idea_id).brainstorming_id)}
       :error -> {:error, result}
     end
   end
@@ -61,7 +62,7 @@ defmodule Mindwendel.Likes do
       from like in Like, where: like.user_id == ^user_id and like.idea_id == ^idea_id
     )
 
-    {:ok, Ideas.get_idea!(idea_id)} |> Brainstormings.broadcast(:idea_updated)
+    broadcast_lanes_update(Ideas.get_idea!(idea_id).brainstorming_id)
   end
 
   @doc """
@@ -74,4 +75,9 @@ defmodule Mindwendel.Likes do
 
   """
   def count_likes_for_idea(idea), do: idea |> Ecto.assoc(:likes) |> Repo.aggregate(:count, :id)
+
+  defp broadcast_lanes_update(brainstorming_id) do
+    lanes = Lanes.get_lanes_for_brainstorming(brainstorming_id)
+    Brainstormings.broadcast({:ok, brainstorming_id, lanes}, :lanes_updated)
+  end
 end

@@ -8,7 +8,7 @@ defmodule Mindwendel.IdeaLabels do
 
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings
-  alias Mindwendel.Ideas
+  alias Mindwendel.Lanes
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
 
@@ -35,7 +35,8 @@ defmodule Mindwendel.IdeaLabels do
     |> Ecto.Changeset.change()
     |> Ecto.Changeset.put_assoc(:idea_labels, idea_labels)
     |> Repo.update()
-    |> Brainstormings.broadcast(:idea_updated)
+
+    broadcast_lanes_update(idea.brainstorming_id)
   end
 
   def remove_idea_label_from_idea(%Idea{} = idea, %IdeaLabel{} = idea_label) do
@@ -46,6 +47,11 @@ defmodule Mindwendel.IdeaLabels do
     )
     |> Repo.delete_all()
 
-    {:ok, Ideas.get_idea!(idea.id)} |> Brainstormings.broadcast(:idea_updated)
+    broadcast_lanes_update(idea.brainstorming_id)
+  end
+
+  defp broadcast_lanes_update(brainstorming_id) do
+    lanes = Lanes.get_lanes_for_brainstorming(brainstorming_id)
+    Brainstormings.broadcast({:ok, brainstorming_id, lanes}, :lanes_updated)
   end
 end

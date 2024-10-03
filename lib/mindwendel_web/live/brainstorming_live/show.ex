@@ -77,13 +77,6 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     }
   end
 
-  def handle_info({:idea_updated, idea}, socket) do
-    # another option is to reload the ideas from the db - but this would trigger a new sorting which might confuse the user
-    lanes = Lanes.get_lanes_for_brainstorming(idea.brainstorming_id)
-
-    {:noreply, assign(socket, :lanes, lanes)}
-  end
-
   defp apply_action(
          socket,
          :edit_idea,

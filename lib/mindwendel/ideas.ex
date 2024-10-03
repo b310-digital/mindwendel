@@ -235,7 +235,8 @@ defmodule Mindwendel.Ideas do
       Repo.preload(idea, :link)
       |> Idea.build_link()
       |> Repo.update()
-      |> Brainstormings.broadcast(:idea_updated)
+
+      broadcast_lanes_update(idea.brainstorming_id)
     end)
 
     {:ok, idea}
