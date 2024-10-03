@@ -7,7 +7,6 @@ defmodule Mindwendel.Ideas do
   alias Mindwendel.Repo
 
   alias Mindwendel.Brainstormings
-  alias Mindwendel.Lanes
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Idea
 
@@ -97,8 +96,7 @@ defmodule Mindwendel.Ideas do
     )
     |> Repo.update_all([])
 
-    lane = Lanes.get_lane!(lane_id)
-    Brainstormings.broadcast({:ok, lane}, :lane_updated)
+    Brainstormings.broadcast({:ok, lane_id, brainstorming_id}, :lane_updated)
   end
 
   @doc """
@@ -133,8 +131,7 @@ defmodule Mindwendel.Ideas do
     )
     |> Repo.update_all([])
 
-    lane = Lanes.get_lane!(lane_id)
-    Brainstormings.broadcast({:ok, lane}, :lane_updated)
+    Brainstormings.broadcast({:ok, lane_id, brainstorming_id}, :lane_updated)
   end
 
   @doc """
@@ -179,8 +176,7 @@ defmodule Mindwendel.Ideas do
     )
     |> Repo.update_all([])
 
-    lane = Lanes.get_lane!(lane_id)
-    Brainstormings.broadcast({:ok, lane}, :lane_updated)
+    Brainstormings.broadcast({:ok, lane_id, brainstorming_id}, :lane_updated)
   end
 
   @doc """

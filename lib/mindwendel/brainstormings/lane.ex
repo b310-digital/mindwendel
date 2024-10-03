@@ -35,7 +35,6 @@ defmodule Mindwendel.Brainstormings.Lane do
            }
          } = changeset
        ) do
-
     changeset
     |> put_change(:position_order, generate_position_order(brainstorming_id))
   end

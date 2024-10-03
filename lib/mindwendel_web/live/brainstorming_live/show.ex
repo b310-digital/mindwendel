@@ -62,29 +62,30 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
-  def handle_info({:lane_added, lane}, socket) do
+  def handle_info({:lane_created, lane}, socket) do
     lanes = Lanes.get_lanes_for_brainstorming(lane.brainstorming_id)
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
-  def handle_info({:lane_removed, lane}, socket) do
-    lanes = Lanes.get_lanes_for_brainstorming(lane.brainstorming_id)
+  def handle_info({:lane_removed, _lane}, socket) do
+    lanes = Lanes.get_lanes_for_brainstorming(socket.assigns.brainstorming.id)
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
-  def handle_info({:lane_updated, lane}, socket) do
-    lanes = Lanes.get_lanes_for_brainstorming(lane.brainstorming_id)
+  def handle_info({:lane_updated, _lane_id}, socket) do
+    # When a lane is updated, we fetch all lanes as ideas might have been dragged from lane to lane
+    lanes = Lanes.get_lanes_for_brainstorming(socket.assigns.brainstorming.id)
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
   def handle_info({:brainstorming_updated, brainstorming}, socket) do
-    lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
+    brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
 
     {
       :noreply,
       socket
-      |> assign(:brainstorming, Brainstormings.get_brainstorming!(brainstorming.id))
-      |> assign(:lanes, lanes)
+      |> assign(:brainstorming, brainstorming)
+      |> assign(:lanes, brainstorming.lanes)
     }
   end
 

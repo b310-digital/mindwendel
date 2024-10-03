@@ -72,11 +72,6 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
         old_position
       )
 
-      Brainstormings.broadcast(
-        {:ok, brainstorming},
-        :brainstorming_updated
-      )
-
       {:noreply, socket}
     else
       # reset local move change
