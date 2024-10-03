@@ -95,7 +95,7 @@ msgstr "Export als HTML"
 msgid "Got stuck? Try inspirational teasers!"
 msgstr "Keine Ideen? Hier gibts Gedankenanstöße!"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:58
+#: lib/mindwendel_web/live/idea_live/form_component.ex:60
 #, elixir-autogen, elixir-format
 msgid "Idea created successfully"
 msgstr "Idee erstellt"
@@ -330,43 +330,43 @@ msgstr "Nutzern das Verschieben und Sortieren von Ideen erlauben"
 msgid "Back"
 msgstr "Zurück"
 
-#: lib/mindwendel_web/components/core_components.ex:516
+#: lib/mindwendel_web/components/core_components.ex:515
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:158
+#: lib/mindwendel_web/components/core_components.ex:157
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:149
+#: lib/mindwendel_web/components/core_components.ex:148
 #, elixir-autogen, elixir-format
 msgid "Error!"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:170
+#: lib/mindwendel_web/components/core_components.ex:169
 #, elixir-autogen, elixir-format
 msgid "Hang in there while we get back on track"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:165
+#: lib/mindwendel_web/components/core_components.ex:164
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:148
+#: lib/mindwendel_web/components/core_components.ex:147
 #, elixir-autogen, elixir-format
 msgid "Success!"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:153
+#: lib/mindwendel_web/components/core_components.ex:152
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:77
-#: lib/mindwendel_web/components/core_components.ex:128
+#: lib/mindwendel_web/components/core_components.ex:76
+#: lib/mindwendel_web/components/core_components.ex:127
 #, elixir-autogen, elixir-format, fuzzy
 msgid "close"
 msgstr "Schließen"
@@ -401,7 +401,7 @@ msgstr "Gebe dem Label einen Namen"
 msgid "%{name} - New Lane"
 msgstr "%{name} - Neue Idee"
 
-#: lib/mindwendel_web/live/lane_live/form_component.ex:58
+#: lib/mindwendel_web/live/lane_live/form_component.ex:59
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Lane created successfully"
 msgstr "Spalte erfolgreich erstellt"
@@ -455,7 +455,7 @@ msgstr "Neue Idee"
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:6
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Default lane"
-msgstr "Erste Spalte"
+msgstr "Eine Spalte"
 
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:254
 #, elixir-autogen, elixir-format
@@ -472,7 +472,7 @@ msgstr "Idee bearbeiten"
 msgid "Delete idea"
 msgstr "Löschen"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:40
+#: lib/mindwendel_web/live/idea_live/form_component.ex:41
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Idea updated"
 msgstr "Idee aktualisiert"

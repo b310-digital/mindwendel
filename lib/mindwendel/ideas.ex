@@ -208,17 +208,18 @@ defmodule Mindwendel.Ideas do
 
   """
   def create_idea(attrs \\ %{}) do
-    {:ok, idea} =
-      %Idea{}
-      |> Idea.changeset(attrs)
-      |> Repo.insert()
-      |> case do
-        {:ok, result} -> scan_for_link_in_idea(result)
-        {_, result} -> {:error, result}
-      end
+    %Idea{}
+    |> Idea.changeset(attrs)
+    |> Repo.insert()
+    |> case do
+      {:ok, idea} ->
+        scan_for_link_in_idea(idea)
+        Lanes.broadcast_lanes_update(idea.brainstorming_id)
+        {:ok, idea}
 
-    Lanes.broadcast_lanes_update(idea.brainstorming_id)
-    {:ok, idea}
+      {_, result} ->
+        {:error, result}
+    end
   end
 
   @doc """
@@ -255,11 +256,13 @@ defmodule Mindwendel.Ideas do
 
   """
   def update_idea(%Idea{} = idea, attrs) do
-    idea
-    |> Idea.changeset(attrs)
-    |> Repo.update()
+    result =
+      idea
+      |> Idea.changeset(attrs)
+      |> Repo.update()
 
     Lanes.broadcast_lanes_update(idea.brainstorming_id)
+    result
   end
 
   @doc """

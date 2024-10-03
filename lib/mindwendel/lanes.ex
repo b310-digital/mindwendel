@@ -102,10 +102,13 @@ defmodule Mindwendel.Lanes do
 
   """
   def create_lane(attrs \\ %{}) do
-    %Lane{}
-    |> Lane.changeset(attrs)
-    |> Repo.insert()
-    |> Brainstormings.broadcast(:lane_created)
+    result =
+      %Lane{}
+      |> Lane.changeset(attrs)
+      |> Repo.insert()
+      |> Brainstormings.broadcast(:lane_created)
+
+    result
   end
 
   @doc """

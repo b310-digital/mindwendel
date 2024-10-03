@@ -37,6 +37,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
         {:ok, _idea} ->
           {:noreply,
            socket
+           |> push_event("submit-success", %{to: "#idea-modal"})
            |> put_flash(:info, gettext("Idea updated"))
            |> push_patch(to: ~p"/brainstormings/#{brainstorming.id}")}
 
@@ -55,6 +56,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
       {:ok, _idea} ->
         {:noreply,
          socket
+         |> push_event("submit-success", %{to: "#idea-modal"})
          |> put_flash(:info, gettext("Idea created successfully"))
          |> push_patch(to: ~p"/brainstormings/#{idea_params["brainstorming_id"]}")}
 
