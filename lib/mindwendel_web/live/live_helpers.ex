@@ -1,5 +1,5 @@
 defmodule MindwendelWeb.LiveHelpers do
-  import MindwendelWeb.Gettext
+  use Gettext, backend: MindwendelWeb.Gettext
 
   alias Mindwendel.Brainstormings.Brainstorming
 
