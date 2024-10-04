@@ -129,8 +129,7 @@ defmodule Mindwendel.Lanes do
       |> Lane.changeset(attrs)
       |> Repo.update()
 
-    lanes = get_lanes_for_brainstorming(lane.brainstorming_id)
-    Brainstormings.broadcast({:ok, lane.brainstorming_id, lanes}, :lanes_updated)
+    broadcast_lanes_update(lane.brainstorming_id)
     update
   end
 
