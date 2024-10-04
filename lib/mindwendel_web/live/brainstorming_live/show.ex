@@ -67,7 +67,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   end
 
   def handle_info({:brainstorming_updated, brainstorming}, socket) do
-    # we do a full reload here as the backdrop of the bootstrap model otherwise gets stuck on the page
+    # we do a full reload here as the backdrop of the bootstrap modal otherwise gets stuck on the page
     # as it seems to be outside of the view component
     {:noreply, redirect(socket, to: "/brainstormings/#{brainstorming.id}")}
   end
