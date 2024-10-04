@@ -5,9 +5,13 @@ defmodule MindwendelWeb.StaticPageControllerTest do
 
   describe "home without current_user_id in session" do
     test "contains text", %{conn: conn} do
-      conn = get(conn, ~p"/")
-      assert html_response(conn, 200) =~ "mindwendel"
-      assert html_response(conn, 200) =~ "Brainstorm"
+      html =
+        conn
+        |> get(~p"/")
+        |> html_response(200)
+
+      assert html =~ "mindwendel"
+      assert html =~ "Brainstorm"
     end
 
     test "sets current_user_id in session", %{conn: conn} do
@@ -50,10 +54,13 @@ defmodule MindwendelWeb.StaticPageControllerTest do
           Mindwendel.Services.SessionService.session_key_current_user_id() => user.id
         })
 
-      conn = get(conn, ~p"/")
+      html =
+        conn
+        |> get(~p"/")
+        |> html_response(200)
 
-      assert html_response(conn, 200) =~ "Your latest brainstormings"
-      assert html_response(conn, 200) =~ brainstorming.name
+      assert html =~ "Your latest brainstormings"
+      assert html =~ brainstorming.name
     end
 
     test "does not show brainstorming when current user does not have any brainstomrings associated",
@@ -65,10 +72,13 @@ defmodule MindwendelWeb.StaticPageControllerTest do
           Mindwendel.Services.SessionService.session_key_current_user_id() => user.id
         })
 
-      conn = get(conn, ~p"/")
+      html =
+        conn
+        |> get(~p"/")
+        |> html_response(200)
 
-      refute html_response(conn, 200) =~ "Your latest brainstormings"
-      refute html_response(conn, 200) =~ brainstorming.name
+      refute html =~ "Your latest brainstormings"
+      refute html =~ brainstorming.name
     end
 
     test "shows a form to create a new brainstorming", %{conn: conn} do
