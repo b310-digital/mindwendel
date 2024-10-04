@@ -26,12 +26,12 @@ msgstr "Wie können wir ..."
 msgid "Ready?"
 msgstr "Fertig?"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:123
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:127
 #, elixir-autogen, elixir-format
 msgid "%{name} - Edit"
 msgstr "%{name} - Editieren"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:100
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:104
 #, elixir-autogen, elixir-format
 msgid "%{name} - New Idea"
 msgstr "%{name} - Neue Idee"
@@ -95,7 +95,7 @@ msgstr "Export als HTML"
 msgid "Got stuck? Try inspirational teasers!"
 msgstr "Keine Ideen? Hier gibts Gedankenanstöße!"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:60
+#: lib/mindwendel_web/live/idea_live/form_component.ex:63
 #, elixir-autogen, elixir-format
 msgid "Idea created successfully"
 msgstr "Idee erstellt"
@@ -396,7 +396,7 @@ msgstr "Löschen"
 msgid "Type the label name"
 msgstr "Gebe dem Label einen Namen"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:110
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:114
 #, elixir-autogen, elixir-format, fuzzy
 msgid "%{name} - New Lane"
 msgstr "%{name} - Neue Idee"
