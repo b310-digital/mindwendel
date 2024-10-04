@@ -1,5 +1,5 @@
 defmodule MindwendelServices.UrlPreviewTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   alias Mindwendel.UrlPreview
 
   setup do

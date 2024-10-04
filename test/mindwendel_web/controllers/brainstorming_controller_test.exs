@@ -1,5 +1,5 @@
 defmodule MindwendelWeb.BrainstormingControllerTest do
-  use MindwendelWeb.ConnCase
+  use MindwendelWeb.ConnCase, async: true
 
   import Ecto.Query
 
