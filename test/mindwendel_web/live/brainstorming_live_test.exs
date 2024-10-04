@@ -301,6 +301,24 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
       assert html =~ "Anonymous"
     end
+
+    test "updates the username after submitting an idea", %{
+      conn: conn,
+      brainstorming: brainstorming,
+      lane: lane
+    } do
+      {:ok, show_live_view, _html} =
+        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/lanes/#{lane.id}/new_idea")
+
+      assert show_live_view
+             |> form("#idea-form", idea: %{username: "I am new", body: "test"})
+             |> render_submit()
+
+      {:ok, _show_live_view, html} =
+        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/lanes/#{lane.id}/new_idea")
+
+      assert html =~ "I am new"
+    end
   end
 
   defp html_selector_idea_card(idea) do

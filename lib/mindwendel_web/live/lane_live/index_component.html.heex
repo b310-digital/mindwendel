@@ -7,6 +7,7 @@
 
           <.link
             class="btn btn-primary btn-sm d-inline-flex align-items-center"
+            title={gettext("Add idea")}
             patch={~p"/brainstormings/#{@brainstorming.id}/show/lanes/#{lane.id}/new_idea"}
           >
             <i class="bi bi-plus-lg me-1"></i> <%= gettext("Add idea") %>
