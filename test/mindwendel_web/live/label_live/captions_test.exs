@@ -1,7 +1,7 @@
 defmodule MindwendelWeb.LabelLive.CaptionsTest do
-  alias MindwendelWeb.LabelLive.CaptionsComponent
   alias Mindwendel.Brainstormings
-  use MindwendelWeb.ConnCase
+  alias MindwendelWeb.LabelLive.CaptionsComponent
+  use MindwendelWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
 
   alias Mindwendel.Factory
