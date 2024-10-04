@@ -19,6 +19,18 @@ defmodule MindwendelWeb.StaticPageControllerTest do
       conn = get(conn, ~p"/")
       refute html_response(conn, 200) =~ "Your latest brainstorming"
     end
+
+    test "shows a form to create a new brainstorming", %{conn: conn} do
+      html =
+        conn
+        |> get(~p"/")
+        |> html_response(200)
+
+      assert html =~ ~r/form.*action="\/brainstormings"/i
+      assert html =~ ~r/<input/i
+      assert html =~ ~r/How might we/i
+      assert html =~ ~r/type="submit"/i
+    end
   end
 
   describe "home with current_user in session and without brainstormings" do
@@ -57,6 +69,18 @@ defmodule MindwendelWeb.StaticPageControllerTest do
 
       refute html_response(conn, 200) =~ "Your latest brainstormings"
       refute html_response(conn, 200) =~ brainstorming.name
+    end
+
+    test "shows a form to create a new brainstorming", %{conn: conn} do
+      html =
+        conn
+        |> get(~p"/")
+        |> html_response(200)
+
+      assert html =~ ~r/form.*action="\/brainstormings"/i
+      assert html =~ ~r/<input/i
+      assert html =~ ~r/How might we/i
+      assert html =~ ~r/type="submit"/i
     end
   end
 end
