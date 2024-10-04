@@ -13,19 +13,20 @@
 
     <div class="row">
       <div class="col-md-12 col-lg-5 mt-2">
-        <%= form_for @changeset, ~p"/brainstormings", fn f -> %>
+        <.simple_form for={@form} action={~p"/brainstormings"} method="post">
           <div class="input-group">
-            <%= text_input(f, :name,
-              class: "form-control",
-              placeholder: gettext("How might we ..."),
-              autofocus: true
-            ) %>
-            <%= if message = f.errors[:name] do %>
-              <span><%= translate_error(message) %></span>
-            <% end %>
-            <%= submit(gettext("Create!"), class: "btn btn-primary fw-bold") %>
+            <.input
+              field={@form[:name]}
+              placeholder={gettext("How might we ...")}
+              form_group_wrapper={false}
+              autofocus
+              required
+            />
+            <.button type="submit" class="btn btn-primary fw-bold">
+              <%= gettext("Create!") %>
+            </.button>
           </div>
-        <% end %>
+        </.simple_form>
         <small class="text-muted">
           <%= gettext("Brainstormings will be deleted after %{days} days.",
             days:
