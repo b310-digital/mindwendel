@@ -11,10 +11,14 @@ defmodule MindwendelWeb.StaticPageController do
       |> Mindwendel.Services.SessionService.get_current_user_id()
       |> Mindwendel.Accounts.get_user()
 
+    form =
+      %Brainstorming{}
+      |> Brainstormings.change_brainstorming(%{})
+      |> Phoenix.Component.to_form()
+
     render(conn, "home.html",
       current_user: current_user,
-      brainstorming: %Brainstorming{},
-      changeset: Brainstormings.change_brainstorming(%Brainstorming{}, %{})
+      form: form
     )
   end
 end

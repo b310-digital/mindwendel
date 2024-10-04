@@ -54,7 +54,7 @@ defmodule Mindwendel.MixProject do
     [
       {:phoenix, "1.7.14"},
       {:phoenix_ecto, "4.6.2"},
-      {:phoenix_html, "3.3.4"},
+      {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "1.5.3", only: :dev},
       {:phoenix_live_view, "~> 1.0.0-rc.6"},
       {:esbuild, "0.8.1", runtime: Mix.env() == :dev},
@@ -63,7 +63,7 @@ defmodule Mindwendel.MixProject do
       {:csv, "3.2.1"},
       {:ecto_sql, "3.12.0"},
       {:floki, "0.36.2"},
-      {:gettext, "0.24.0"},
+      {:gettext, "0.26.1"},
       {:httpoison, "2.2.1"},
       {:jason, "1.4.4"},
       {:oban, "2.18.3"},
@@ -76,7 +76,7 @@ defmodule Mindwendel.MixProject do
       {:telemetry_metrics, "1.0.0"},
       {:telemetry_poller, "1.1.0"},
       {:timex, "3.7.11"},
-      {:logger_json, "6.2.0"},
+      {:logger_json, "6.2.1"},
       {:libcluster, "3.3.3"},
       {:tzdata, "1.1.2"}
     ]

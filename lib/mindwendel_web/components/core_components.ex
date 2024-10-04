@@ -17,7 +17,7 @@ defmodule MindwendelWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
-  import MindwendelWeb.Gettext
+  use Gettext, backend: MindwendelWeb.Gettext
 
   @doc """
   Renders a modal.
