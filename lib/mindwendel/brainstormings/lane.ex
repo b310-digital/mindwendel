@@ -10,7 +10,7 @@ defmodule Mindwendel.Brainstormings.Lane do
     field :name, :string
     field :position_order, :integer
     belongs_to :brainstorming, Brainstorming, type: :binary_id
-    has_many :ideas, Idea, preload_order: [asc: :position_order]
+    has_many :ideas, Idea, preload_order: [asc: :position_order, asc: :inserted_at]
 
     timestamps()
   end
