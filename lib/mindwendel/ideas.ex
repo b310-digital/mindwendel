@@ -47,7 +47,7 @@ defmodule Mindwendel.Ideas do
         where: idea.brainstorming_id == ^id,
         order_by: [
           asc_nulls_last: idea.position_order,
-          desc: idea.updated_at
+          asc: idea.inserted_at
         ]
 
     Repo.all(idea_query)

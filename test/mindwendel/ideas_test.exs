@@ -28,6 +28,36 @@ defmodule Mindwendel.IdeasTest do
   end
 
   describe "list_ideas_for_brainstorming" do
+    test "sorts ideas based on time of insertion if no position is given", %{
+      brainstorming: brainstorming,
+      lane: lane,
+      idea: idea
+    } do
+      second_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          lane: lane,
+          updated_at: ~N[2021-01-03 15:04:30],
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      third_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          lane: lane,
+          updated_at: ~N[2021-01-02 15:04:30],
+          inserted_at: ~N[2021-01-02 15:04:30]
+        )
+
+      ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id)
+
+      assert Enum.map(ideas_sorted_by_position, & &1.id) == [
+               idea.id,
+               second_idea.id,
+               third_idea.id
+             ]
+    end
+
     test "sorts ideas based on position", %{
       brainstorming: brainstorming,
       lane: lane,
