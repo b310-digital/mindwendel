@@ -53,10 +53,10 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
         username: idea_params["username"]
       })
 
+    send(self(), {:user_updated, user})
+
     case Ideas.create_idea(Map.put(idea_params, "user_id", socket.assigns.current_user.id)) do
       {:ok, _idea} ->
-        send(self(), {:user_updated, user})
-
         {:noreply,
          socket
          |> push_event("submit-success", %{to: "#idea-modal"})
