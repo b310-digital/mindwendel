@@ -77,6 +77,10 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     }
   end
 
+  def handle_info({:user_updated, user}, socket) do
+    {:noreply, assign(socket, :current_user, user)}
+  end
+
   defp apply_action(
          socket,
          :edit_idea,
