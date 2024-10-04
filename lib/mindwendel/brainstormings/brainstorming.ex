@@ -2,7 +2,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   use Mindwendel.Schema
 
   import Ecto.Changeset
-  import MindwendelWeb.Gettext
+  use Gettext, backend: MindwendelWeb.Gettext
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Lane

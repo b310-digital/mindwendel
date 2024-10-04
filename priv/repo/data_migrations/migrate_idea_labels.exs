@@ -1,7 +1,7 @@
 defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabels do
   import Ecto.Query
   import Ecto.Changeset
-  import MindwendelWeb.Gettext
+  use Gettext, backend: MindwendelWeb.Gettext
 
   alias Mindwendel.Repo
 
@@ -23,7 +23,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateIdealLabels do
 
   defmodule Brainstorming do
     use Mindwendel.Schema
-    import MindwendelWeb.Gettext
+    use Gettext, backend: MindwendelWeb.Gettext
 
     alias Mindwendel.Repo.DataMigrations.MigrateIdealLabels.IdeaLabel
 
