@@ -48,9 +48,10 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   end
 
   defp save_idea(socket, :new, idea_params) do
-    {:ok, user} = Mindwendel.Accounts.update_user(socket.assigns.current_user, %{
-      username: idea_params["username"]
-    })
+    {:ok, user} =
+      Mindwendel.Accounts.update_user(socket.assigns.current_user, %{
+        username: idea_params["username"]
+      })
 
     case Ideas.create_idea(Map.put(idea_params, "user_id", socket.assigns.current_user.id)) do
       {:ok, _idea} ->
