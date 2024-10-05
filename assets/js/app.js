@@ -81,36 +81,13 @@ Hooks.Sortable = {
 
 Hooks.Modal = {
   mounted() {
-    // The live component gets removed by using push_redirect on the server (see form_component.ex).
-    // However, this confuses the modal js from bootstrap, because it does not know yet it got closed which results in UX bugs.
-    // Therefore, we try to close the modal during a callback to essentially sync bootstrap modal state with the live view.
-    // An alternative would be, to close the modal in JS and use pushEvent from here to continue execution on the server.
-    // See https://fullstackphoenix.com/tutorials/create-a-reusable-modal-with-liveview-component
-    const modal = new Modal(this.el, { backdrop: 'static', keyboard: false })
-    modal.show()
+    const modal = new Modal(this.el, { backdrop: 'static', keyboard: false });
+    modal.show();
 
-    const hideModal = () => modal && modal.hide()
-
-    this.handleEvent('submit-success', hideModal)
-
-    const formCancelElement = this.el.querySelector(".form-cancel")
-    formCancelElement && formCancelElement.addEventListener('click', hideModal)
-
-    const phxModalCloseElement = this.el.querySelector(".phx-modal-close")
-    phxModalCloseElement && phxModalCloseElement.addEventListener('click', hideModal)
-
-    this.el.addEventListener('keyup', (keyEvent) => {
-      if (keyEvent.key === 'Escape') {
-        hideModal()
-      }
-    })
-
-    window.addEventListener('popstate', () => {
-      hideModal()
-      // To avoid multiple registers
-      window.removeEventListener('popstate', hideModal)
-    })
-  }
+    window.addEventListener('mindwendel:hide-modal', (_e) => {
+      modal && modal.hide();
+    });
+  },
 }
 
 Hooks.QrCodeCanvas = {
@@ -159,7 +136,8 @@ Hooks.SetIdeaLabelBackgroundColor = {
 };
 
 let liveSocket = new LiveSocket("/live", Socket, { 
-  hooks: Hooks, params: { _csrf_token: csrfToken }
+  hooks: Hooks, params: { _csrf_token: csrfToken },
+  longPollFallbackMs: 2500,
 })
 
 // Show progress bar on live navigation and form submits
