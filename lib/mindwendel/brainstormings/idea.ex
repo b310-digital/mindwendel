@@ -14,14 +14,12 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.UrlPreview
   alias Mindwendel.Accounts.User
 
-  @label_values [:label_1, :label_2, :label_3, :label_4, :label_5]
   @max_file_attachments 2
 
   schema "ideas" do
     field :body, :string
     field :position_order, :integer
     field :username, :string, default: "Anonymous"
-    field :deprecated_label, Ecto.Enum, source: :label, values: @label_values
     has_one :link, Link
     belongs_to :user, User
     has_many :likes, Like
@@ -42,7 +40,6 @@ defmodule Mindwendel.Brainstormings.Idea do
       :body,
       :brainstorming_id,
       :lane_id,
-      :deprecated_label,
       :label_id,
       :user_id,
       :position_order
@@ -50,7 +47,6 @@ defmodule Mindwendel.Brainstormings.Idea do
     |> validate_required([:username, :body, :brainstorming_id])
     |> maybe_put_idea_labels(attrs)
     |> validate_length(:body, min: 1, max: 1023)
-    |> validate_inclusion(:deprecated_label, @label_values)
     |> add_position_order_if_missing()
     |> validate_attachment_count(attrs)
     |> maybe_put_attachments(idea, attrs)
