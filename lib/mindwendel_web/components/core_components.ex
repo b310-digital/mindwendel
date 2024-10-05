@@ -42,13 +42,12 @@ defmodule MindwendelWeb.CoreComponents do
   attr :on_cancel, JS, default: %JS{}
   slot :inner_block, required: true
 
-  # phx-hook="Modal"
   def modal(assigns) do
     ~H"""
     <div
       id={@id}
+      phx-hook="Modal"
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
-      phx-mounted={@show && show_modal(@id)}
       phx-remove={hide_modal(@id)}
       class="modal fade show"
       tabindex="-1"
@@ -88,15 +87,9 @@ defmodule MindwendelWeb.CoreComponents do
     """
   end
 
-  def show_modal(js \\ %JS{}, id) when is_binary(id) do
-    js
-    #|> JS.dispatch("mindwendel:show-modal", to: "##{id}")
-    |> JS.show(to: "##{id}", transition: "fade")
-  end
-
   def hide_modal(js \\ %JS{}, id) do
     js
-    #|> JS.dispatch("mindwendel:hide-modal", to: "##{id}")
+    |> JS.dispatch("mindwendel:hide-modal", to: "##{id}")
     |> JS.hide(to: "##{id}")
   end
 

@@ -79,23 +79,16 @@ Hooks.Sortable = {
   }
 }
 
-// Hooks.Modal = {
-//   mounted() {
-//     console.log("mounted")
-//     const modal = new Modal(this.el, { backdrop: 'static', keyboard: false });
+Hooks.Modal = {
+  mounted() {
+    const modal = new Modal(this.el, { backdrop: 'static', keyboard: false });
+    modal.show();
 
-//     window.addEventListener('mindwendel:show-modal', (_e) => {
-//       modal && modal.show();
-//     });
-//     window.addEventListener('mindwendel:hide-modal', (_e) => {
-//       modal && modal.hide();
-//     });
-//   },
-
-//   destroyed() {
-//     console.log("destroyed")
-//   }
-// }
+    window.addEventListener('mindwendel:hide-modal', (_e) => {
+      modal && modal.hide();
+    });
+  },
+}
 
 Hooks.QrCodeCanvas = {
   mounted() {
