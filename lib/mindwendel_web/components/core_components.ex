@@ -93,7 +93,6 @@ defmodule MindwendelWeb.CoreComponents do
     |> JS.hide(to: "##{id}")
   end
 
-
   @doc """
   Renders flash notices.
 
