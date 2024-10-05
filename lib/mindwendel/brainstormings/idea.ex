@@ -21,9 +21,9 @@ defmodule Mindwendel.Brainstormings.Idea do
     has_one :link, Link
     belongs_to :user, User
     has_many :likes, Like
-    belongs_to :brainstorming, Brainstorming, foreign_key: :brainstorming_id, type: :binary_id
-    belongs_to :label, IdeaLabel, foreign_key: :label_id, type: :binary_id, on_replace: :nilify
-    belongs_to :lane, Lane, foreign_key: :lane_id, type: :binary_id
+    belongs_to :brainstorming, Brainstorming
+    belongs_to :label, IdeaLabel, on_replace: :nilify
+    belongs_to :lane, Lane
     many_to_many :idea_labels, IdeaLabel, join_through: IdeaIdeaLabel, on_replace: :delete
 
     timestamps()
