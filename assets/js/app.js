@@ -80,15 +80,20 @@ Hooks.Sortable = {
   }
 }
 
+let closeModal = () => {};
 Hooks.Modal = {
   mounted() {
     const modal = new Modal(this.el, { backdrop: 'static', keyboard: false });
+    closeModal = () => modal && modal.hide();
+
     modal.show();
 
-    window.addEventListener('mindwendel:hide-modal', (_e) => {
-      modal && modal.hide();
-    });
-  },
+    window.addEventListener('mindwendel:hide-modal', closeModal);
+  }
+  // Usually, the event handler should be removed. However, this leads to the backdrop being stuck in the add lane case.
+  // destroyed() {
+  //   window.removeEventListener('mindwendel:hide-modal', closeModal);
+  // }
 }
 
 Hooks.QrCodeCanvas = {
