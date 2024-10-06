@@ -17,6 +17,7 @@ msgid "Brainstorm"
 msgstr ""
 
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:20
+#: lib/mindwendel_web/controllers/static_page_html/kits_home.html.heex:120
 #, elixir-autogen, elixir-format
 msgid "How might we ..."
 msgstr ""
@@ -66,6 +67,7 @@ msgid "Create a challenge."
 msgstr ""
 
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:26
+#: lib/mindwendel_web/controllers/static_page_html/kits_home.html.heex:126
 #, elixir-autogen, elixir-format
 msgid "Create!"
 msgstr ""
@@ -180,6 +182,7 @@ msgid "Export"
 msgstr ""
 
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:44
+#: lib/mindwendel_web/controllers/static_page_html/kits_home.html.heex:138
 #, elixir-autogen
 msgid "Your latest brainstormings"
 msgstr ""
@@ -330,43 +333,43 @@ msgstr "Allow users to change the order of ideas"
 msgid "Back"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:514
+#: lib/mindwendel_web/components/core_components.ex:513
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:156
+#: lib/mindwendel_web/components/core_components.ex:155
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:147
+#: lib/mindwendel_web/components/core_components.ex:146
 #, elixir-autogen, elixir-format
 msgid "Error!"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:168
+#: lib/mindwendel_web/components/core_components.ex:167
 #, elixir-autogen, elixir-format
 msgid "Hang in there while we get back on track"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:163
+#: lib/mindwendel_web/components/core_components.ex:162
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:146
+#: lib/mindwendel_web/components/core_components.ex:145
 #, elixir-autogen, elixir-format
 msgid "Success!"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:151
+#: lib/mindwendel_web/components/core_components.ex:150
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:71
-#: lib/mindwendel_web/components/core_components.ex:126
+#: lib/mindwendel_web/components/core_components.ex:70
+#: lib/mindwendel_web/components/core_components.ex:125
 #, elixir-autogen, elixir-format, fuzzy
 msgid "close"
 msgstr ""
