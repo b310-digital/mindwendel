@@ -80,15 +80,19 @@ Hooks.Sortable = {
   }
 }
 
+let closeModal = () => {};
 Hooks.Modal = {
   mounted() {
     const modal = new Modal(this.el, { backdrop: 'static', keyboard: false });
+    closeModal = () => modal && modal.hide();
+
     modal.show();
 
-    window.addEventListener('mindwendel:hide-modal', (_e) => {
-      modal && modal.hide();
-    });
+    window.addEventListener('mindwendel:hide-modal', closeModal);
   },
+  destroyed() {
+    window.removeEventListener('mindwendel:hide-modal', closeModal);
+  }
 }
 
 Hooks.QrCodeCanvas = {

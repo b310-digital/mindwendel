@@ -49,18 +49,12 @@ defmodule MindwendelWeb.CoreComponents do
       phx-hook="Modal"
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
       phx-remove={hide_modal(@id)}
-      class="modal fade show"
+      class="modal"
       tabindex="-1"
-      role="dialog"
+      aria-hidden="true"
+      aria-labelledby="{@id}-title"
     >
-      <div
-        class="modal-dialog modal-lg"
-        role="document"
-        aria-labelledby={"#{@id}-title"}
-        aria-describedby={"#{@id}-description"}
-        aria-modal="true"
-        tabindex="0"
-      >
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <.focus_wrap
             id={"#{@id}-container"}
@@ -73,7 +67,6 @@ defmodule MindwendelWeb.CoreComponents do
                 phx-click={JS.exec("data-cancel", to: "##{@id}")}
                 type="button"
                 class="phx-modal-close btn-close"
-                )
                 aria-label={gettext("close")}
               />
             </div>
@@ -88,9 +81,7 @@ defmodule MindwendelWeb.CoreComponents do
   end
 
   def hide_modal(js \\ %JS{}, id) do
-    js
-    |> JS.dispatch("mindwendel:hide-modal", to: "##{id}")
-    |> JS.hide(to: "##{id}")
+    js |> JS.dispatch("mindwendel:hide-modal", to: "##{id}")
   end
 
   @doc """
