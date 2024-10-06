@@ -49,7 +49,7 @@ defmodule MindwendelWeb.CoreComponents do
       phx-hook="Modal"
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
       phx-remove={hide_modal(@id)}
-      class="modal fade show"
+      class="modal"
       tabindex="-1"
       role="dialog"
     >
@@ -88,9 +88,7 @@ defmodule MindwendelWeb.CoreComponents do
   end
 
   def hide_modal(js \\ %JS{}, id) do
-    js
-    |> JS.dispatch("mindwendel:hide-modal", to: "##{id}")
-    |> JS.hide(to: "##{id}")
+    js |> JS.dispatch("mindwendel:hide-modal", to: "##{id}")
   end
 
   @doc """
