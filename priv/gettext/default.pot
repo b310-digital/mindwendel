@@ -329,43 +329,43 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:516
+#: lib/mindwendel_web/components/core_components.ex:514
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:158
+#: lib/mindwendel_web/components/core_components.ex:156
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:149
+#: lib/mindwendel_web/components/core_components.ex:147
 #, elixir-autogen, elixir-format
 msgid "Error!"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:170
+#: lib/mindwendel_web/components/core_components.ex:168
 #, elixir-autogen, elixir-format
 msgid "Hang in there while we get back on track"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:165
+#: lib/mindwendel_web/components/core_components.ex:163
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:148
+#: lib/mindwendel_web/components/core_components.ex:146
 #, elixir-autogen, elixir-format
 msgid "Success!"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:153
+#: lib/mindwendel_web/components/core_components.ex:151
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:73
-#: lib/mindwendel_web/components/core_components.ex:128
+#: lib/mindwendel_web/components/core_components.ex:71
+#: lib/mindwendel_web/components/core_components.ex:126
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr ""
