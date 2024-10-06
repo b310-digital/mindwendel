@@ -52,11 +52,9 @@ defmodule MindwendelWeb.CoreComponents do
       class="modal"
       tabindex="-1"
       aria-hidden="true"
-      aria-labelledby={"{@id}-title"}
+      aria-labelledby="{@id}-title"
     >
-      <div
-        class="modal-dialog modal-lg"
-      >
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <.focus_wrap
             id={"#{@id}-container"}
