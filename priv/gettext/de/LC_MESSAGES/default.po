@@ -20,7 +20,7 @@ msgstr "Los geht's!"
 #: lib/mindwendel_web/controllers/static_page_html/kits_home.html.heex:120
 #, elixir-autogen, elixir-format
 msgid "How might we ..."
-msgstr "Wie können wir ..."
+msgstr "Gib deine Frage ein!"
 
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:10
 #, elixir-autogen, elixir-format
@@ -185,7 +185,7 @@ msgstr "Export"
 #: lib/mindwendel_web/controllers/static_page_html/kits_home.html.heex:138
 #, elixir-autogen
 msgid "Your latest brainstormings"
-msgstr "Deine letzten Brainstormings"
+msgstr "Letzte Brainstormings"
 
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:10
 #, elixir-autogen, elixir-format
