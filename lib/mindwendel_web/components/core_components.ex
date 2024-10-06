@@ -51,15 +51,11 @@ defmodule MindwendelWeb.CoreComponents do
       phx-remove={hide_modal(@id)}
       class="modal"
       tabindex="-1"
-      role="dialog"
+      aria-hidden="true"
+      aria-labelledby={"{@id}-title"}
     >
       <div
         class="modal-dialog modal-lg"
-        role="document"
-        aria-labelledby={"#{@id}-title"}
-        aria-describedby={"#{@id}-description"}
-        aria-modal="true"
-        tabindex="0"
       >
         <div class="modal-content">
           <.focus_wrap
