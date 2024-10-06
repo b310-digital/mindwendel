@@ -44,8 +44,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
 
   test "contains button for editing ideas as owner", %{
     conn: conn,
-    brainstorming: brainstorming,
-    user: user
+    brainstorming: brainstorming
   } do
     {:ok, show_live_view, _html} = live(conn, ~p"/brainstormings/#{brainstorming.id}")
 
