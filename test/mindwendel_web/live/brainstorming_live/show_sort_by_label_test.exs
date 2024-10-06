@@ -20,7 +20,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
     {:ok, show_live_view, _html} =
       conn
       |> init_test_session(%{current_user_id: moderating_user.id})
-      |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+      |> live(~p"/brainstormings/#{brainstorming.id}")
 
     assert show_live_view
            |> has_element?(html_selector_button_sort_by_labels(brainstorming))
@@ -35,21 +35,27 @@ defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
     idea_with_first_label =
       Factory.insert!(:idea, %{
         brainstorming: brainstorming,
-        label: Enum.at(brainstorming.labels, 0)
+        label: Enum.at(brainstorming.labels, 0),
+        lane: Enum.at(brainstorming.lanes, 0)
       })
 
     idea_with_second_label =
       Factory.insert!(:idea, %{
         brainstorming: brainstorming,
-        label: Enum.at(brainstorming.labels, 1)
+        label: Enum.at(brainstorming.labels, 1),
+        lane: Enum.at(brainstorming.lanes, 0)
       })
 
-    idea_without_label = Factory.insert!(:idea, %{brainstorming: brainstorming})
+    idea_without_label =
+      Factory.insert!(:idea, %{
+        brainstorming: brainstorming,
+        lane: Enum.at(brainstorming.lanes, 0)
+      })
 
     {:ok, show_live_view, _html} =
       conn
       |> init_test_session(%{current_user_id: moderating_user.id})
-      |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+      |> live(~p"/brainstormings/#{brainstorming.id}")
 
     rendered =
       show_live_view

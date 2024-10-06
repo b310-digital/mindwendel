@@ -14,7 +14,7 @@ defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
       conn: conn,
       brainstorming: brainstorming
     } do
-      conn_response = get(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+      conn_response = get(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       assert conn_response
              |> get_resp_header("content-security-policy")
@@ -27,7 +27,7 @@ defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
       conn: conn,
       brainstorming: brainstorming
     } do
-      conn_response = get(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+      conn_response = get(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       assert conn_response
              |> get_resp_header("content-security-policy")
@@ -39,7 +39,7 @@ defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
            conn: conn,
            brainstorming: brainstorming
          } do
-      conn_response = get(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+      conn_response = get(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       assert conn_response
              |> get_resp_header("content-security-policy")
@@ -53,7 +53,7 @@ defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
            conn: conn,
            brainstorming: brainstorming
          } do
-      conn_response = get(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+      conn_response = get(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       assert conn_response
              |> get_resp_header("content-security-policy")
@@ -67,7 +67,7 @@ defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
            conn: conn,
            brainstorming: brainstorming
          } do
-      conn_response = get(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+      conn_response = get(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       assert conn_response
              |> get_resp_header("content-security-policy")
@@ -81,7 +81,7 @@ defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
            conn: conn,
            brainstorming: brainstorming
          } do
-      conn_response = get(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+      conn_response = get(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       assert conn_response
              |> get_resp_header("content-security-policy")

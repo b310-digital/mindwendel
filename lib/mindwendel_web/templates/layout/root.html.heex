@@ -5,44 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
     />
-    <%= csrf_meta_tag() %>
+    <meta name="csrf-token" content={get_csrf_token()} />
     <.live_title>
       <%= assigns[:page_title] || "Mindwendel" %>
     </.live_title>
-    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")} />
-    <script
-      defer
-      phx-track-static
-      type="text/javascript"
-      src={Routes.static_path(@conn, "/assets/app.js")}
-    >
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
 
   <body class="bg-light">
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white border-bottom mb-2">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-2">
       <div class="container">
         <%= if admin_route(@conn) do %>
           <span class="nav-mindwendel-caption">
-            <%= link to: Routes.brainstorming_show_path(@conn, :show, assigns[:brainstorming]) do %>
-              <img
-                src={Routes.static_path(@conn, "/images/back.svg")}
-                class="nav-mindwendel-back"
-              />
+            <a
+              href={~p"/brainstormings/#{assigns[:brainstorming].id}"}
+              class="d-inline-flex align-items-center"
+            >
+              <i class="bi bi-arrow-left me-1"></i>
               <%= gettext("Back") %>
-            <% end %>
+            </a>
           </span>
         <% else %>
-          <%= link to: "/", class: "navbar-brand mb-0 h1" do %>
-            <img
-              src={Routes.static_path(@conn, "/images/kits-mindwendel-logo-blue.svg")}
-              class="nav-mindwendel-logo"
-            />
-          <% end %>
+          <a href={~p"/"} class="navbar-brand mb-0 h1">
+            <img src={~p"/images/kits-mindwendel-logo-blue.svg"} class="nav-mindwendel-logo" />
+          </a>
         <% end %>
-
         <button
           class="navbar-toggler"
           type="button"
@@ -78,7 +69,7 @@
                   <%= for brainstorming <- list_brainstormings_for(@current_user, 10) do %>
                     <a
                       class={"dropdown-item #{ if assigns[:brainstorming].id == brainstorming.id, do: "active", else: "" }"}
-                      href={Routes.brainstorming_show_path(@conn, :show, brainstorming)}
+                      href={~p"/brainstormings/#{brainstorming.id}"}
                     >
                       <%= brainstorming.name %>
                     </a>
@@ -91,7 +82,7 @@
                 <li class="nav-item d-lg-none">
                   <a
                     class={"nav-link #{if assigns[:brainstorming].id == brainstorming.id, do: "active", else: "" }"}
-                    href={Routes.brainstorming_show_path(@conn, :show, brainstorming)}
+                    href={~p"/brainstormings/#{brainstorming.id}"}
                   >
                     <%= brainstorming.name %>
                   </a>

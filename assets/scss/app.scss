@@ -38,6 +38,27 @@ $bootstrap-icons-font-dir: "/fonts/bootstrap-icons/";
   font-size: 22px;
 }
 
+.nav-mindwendel-back {
+  height: 14px;
+  width: 21px;
+  margin-right: 5px;
+}
+
+.nav-mindwendel-caption {
+  margin-right: var(--bs-navbar-brand-margin-end);
+}
+
+.nav-mindwendel-caption a {
+  text-decoration: none;
+  color: var(--bs-navbar-color);
+}
+
+.idea-add-button {
+  width: 50px;
+  height: 50px;
+  font-size: 22px;
+}
+
 // Taken from the examples shown:
 // https://icons.getbootstrap.com/icons/arrow-up-circle/
 button .bi,
@@ -52,10 +73,6 @@ a .bi {
 }
 
 /* LiveView specific classes for your customizations */
-.phx-no-feedback.invalid-feedback,
-.phx-no-feedback .invalid-feedback {
-  display: none;
-}
 
 .phx-click-loading {
   opacity: 0.5;
@@ -87,6 +104,28 @@ a .bi {
 /* Alerts and form errors */
 .alert:empty {
   display: none;
+}
+
+.form-control-color {
+  max-width: 50px;
+}
+
+.heading-error {
+  font-size: 8rem;
+}
+
+.lane-header {
+  display: inline-block;
+  margin-left: 16px;
+}
+
+.lane {
+  border: 1px dashed $gray-400;
+  border-radius: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+  padding-top: 16px;
+  height: 100%;
 }
 
 .form-control-color {

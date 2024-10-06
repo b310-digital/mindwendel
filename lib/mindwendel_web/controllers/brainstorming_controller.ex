@@ -17,15 +17,15 @@ defmodule MindwendelWeb.BrainstormingController do
             "Your brainstorming was created successfully! Share the link with other people and start brainstorming."
           )
         )
-        |> redirect(to: Routes.brainstorming_show_path(conn, :show, brainstorming))
+        |> redirect(to: ~p"/brainstormings/#{brainstorming.id}")
 
-      {:error, changeset} ->
+      {:error, _} ->
         conn
         |> put_flash(
           :error,
           gettext("Something went wrong when creating a brainstorming. Please try again.")
         )
-        |> redirect(to: Routes.static_page_path(conn, :home))
+        |> redirect(to: ~p"/")
     end
   end
 end

@@ -7,17 +7,13 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Repo
 
-  @create_attrs %{name: "a name"}
-
-  defp fixture(:brainstorming) do
-    user = Factory.insert!(:user)
-    {:ok, brainstorming} = Brainstormings.create_brainstorming(user, @create_attrs)
-    brainstorming
-  end
+  import Mindwendel.BrainstormingsFixtures
+  import Mindwendel.IdeasFixtures
 
   defp create_brainstorming(_) do
-    brainstorming = fixture(:brainstorming)
-    %{brainstorming: brainstorming}
+    brainstorming = brainstorming_fixture()
+    lane = Enum.at(brainstorming.lanes, 0)
+    %{brainstorming: brainstorming, lane: lane}
   end
 
   describe "Show" do
@@ -25,19 +21,24 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
     test "displays brainstorming", %{conn: conn, brainstorming: brainstorming} do
       {:ok, _show_live, html} =
-        live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+        live(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       assert html =~ brainstorming.name
     end
 
     test "shows ideas belonging to brainstorming", %{conn: conn} do
-      brainstorming = Factory.insert!(:brainstorming)
+      brainstorming = brainstorming_fixture()
 
       brainstorming_ideas =
-        Enum.map(0..2, fn _ -> Factory.insert!(:idea, %{brainstorming: brainstorming}) end)
+        Enum.map(0..2, fn _ ->
+          idea_fixture(%{
+            brainstorming_id: brainstorming.id,
+            lane_id: List.first(brainstorming.lanes).id
+          })
+        end)
 
       {:ok, show_live_view, _html} =
-        live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+        live(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       Enum.each(brainstorming_ideas, fn brainstorming_idea ->
         assert show_live_view
@@ -46,30 +47,40 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
     end
 
     test "shows all labels associated to the brainstorming", %{conn: conn} do
-      brainstorming = Factory.insert!(:brainstorming)
-      Factory.insert!(:idea, %{brainstorming: brainstorming})
+      brainstorming = brainstorming_fixture()
+
+      idea_fixture(%{
+        brainstorming_id: brainstorming.id,
+        lane_id: List.first(brainstorming.lanes).id
+      })
 
       {:ok, show_live_view, _html} =
-        live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+        live(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       Enum.each(brainstorming.labels, fn brainstorming_idea_label ->
-        assert show_live_view
-               |> has_element?(html_selector_idea_label(brainstorming_idea_label))
+        assert has_element?(show_live_view, html_selector_idea_label(brainstorming_idea_label))
+
+        assert has_element?(
+                 show_live_view,
+                 html_selector_idea_label_link(brainstorming_idea_label)
+               )
       end)
     end
 
     test "show active idea label ", %{conn: conn} do
-      brainstorming = Factory.insert!(:brainstorming)
+      brainstorming = brainstorming_fixture()
       selected_ideal_label = Enum.at(brainstorming.labels, 0)
+      lane = Enum.at(brainstorming.lanes, 0)
 
       _idea =
         Factory.insert!(:idea, %{
           idea_labels: [selected_ideal_label],
-          brainstorming: brainstorming
+          brainstorming: brainstorming,
+          lane: lane
         })
 
       {:ok, show_live_view, _html} =
-        live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+        live(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       assert show_live_view
              |> has_element?(html_selector_idea_label_badge(selected_ideal_label))
@@ -79,12 +90,13 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
     end
 
     test "applys labels to idea", %{conn: conn} do
-      brainstorming = Factory.insert!(:brainstorming)
+      brainstorming = brainstorming_fixture()
       selected_ideal_label = Enum.at(brainstorming.labels, 0)
-      idea = Factory.insert!(:idea, %{brainstorming: brainstorming})
+      lane = Enum.at(brainstorming.lanes, 0)
+      idea = Factory.insert!(:idea, %{brainstorming: brainstorming, lane: lane})
 
       {:ok, show_live_view, _html} =
-        live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+        live(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       element_selector =
         "#{html_selector_idea_card(idea)} #{html_selector_add_idea_label_to_idea_link(selected_ideal_label)}"
@@ -100,17 +112,19 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
     end
 
     test "removes labels from idea", %{conn: conn} do
-      brainstorming = Factory.insert!(:brainstorming)
+      brainstorming = brainstorming_fixture()
       selected_ideal_label = Enum.at(brainstorming.labels, 0)
+      lane = Enum.at(brainstorming.lanes, 0)
 
       idea =
         Factory.insert!(:idea, %{
           idea_labels: [selected_ideal_label],
-          brainstorming: brainstorming
+          brainstorming: brainstorming,
+          lane: lane
         })
 
       {:ok, show_live_view, _html} =
-        live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+        live(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       element_selector =
         "#{html_selector_idea_card(idea)} #{html_selector_remove_idea_label_from_idea_link(selected_ideal_label)}"
@@ -127,46 +141,52 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
     test "updates last_accessed_at date", %{conn: conn, brainstorming: brainstorming} do
       {:ok, _show_live, _html} =
-        live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+        live(conn, ~p"/brainstormings/#{brainstorming.id}")
 
       brainstorming_refreshed = Repo.get(Brainstorming, brainstorming.id)
       assert brainstorming_refreshed.last_accessed_at > brainstorming.last_accessed_at
     end
 
-    test "enables dragging for admin", %{conn: conn, brainstorming: brainstorming} do
+    test "enables dragging for admin", %{conn: conn, brainstorming: brainstorming, lane: lane} do
       moderating_user = List.first(brainstorming.users)
       Brainstormings.add_moderating_user(brainstorming, moderating_user)
 
       {:ok, view, _html} =
         conn
         |> init_test_session(%{current_user_id: moderating_user.id})
-        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+        |> live(~p"/brainstormings/#{brainstorming.id}")
 
-      assert view |> has_element?("#ideas[data-sortable-enabled|='true']")
+      selector = "#ideas-col-#{lane.id}[data-sortable-enabled|='true']"
+
+      assert view |> has_element?(selector)
     end
 
-    test "disables dragging for user", %{conn: conn, brainstorming: brainstorming} do
+    test "disables dragging for user", %{conn: conn, brainstorming: brainstorming, lane: lane} do
       {:ok, view, _html} =
         conn
-        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+        |> live(~p"/brainstormings/#{brainstorming.id}")
 
-      assert view |> has_element?("#ideas[data-sortable-enabled|='false']")
+      selector = "#ideas-col-#{lane.id}[data-sortable-enabled|='false']"
+      assert view |> has_element?(selector)
     end
 
     test "enables dragging for user when option is activated", %{
       conn: conn,
-      brainstorming: brainstorming
+      brainstorming: brainstorming,
+      lane: lane
     } do
       Brainstormings.update_brainstorming(brainstorming, %{option_allow_manual_ordering: true})
 
       {:ok, view, _html} =
         conn
-        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+        |> live(~p"/brainstormings/#{brainstorming.id}")
 
-      assert view |> has_element?("#ideas[data-sortable-enabled|='true']")
+      selector = "#ideas-col-#{lane.id}[data-sortable-enabled|='true']"
+
+      assert view |> has_element?(selector)
     end
 
-    test "contains sort button by likes for admin", %{
+    test "contains sort link by likes for admin", %{
       conn: conn,
       brainstorming: brainstorming
     } do
@@ -176,9 +196,9 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       {:ok, view, _html} =
         conn
         |> init_test_session(%{current_user_id: moderating_user.id})
-        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+        |> live(~p"/brainstormings/#{brainstorming.id}")
 
-      assert view |> has_element?(".btn[title|='Sort by likes']")
+      assert view |> has_element?("a[title|='Sort by likes']")
     end
 
     test "does not contain sort button by default for user", %{
@@ -187,9 +207,9 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
     } do
       {:ok, view, _html} =
         conn
-        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+        |> live(~p"/brainstormings/#{brainstorming.id}")
 
-      refute view |> has_element?(".btn[title|='Sort by likes']")
+      assert view |> has_element?("a[title|='Sort by likes'][class~= 'disabled']")
     end
 
     test "contains sort button for user when option is activated", %{
@@ -200,20 +220,104 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
       {:ok, view, _html} =
         conn
-        |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
+        |> live(~p"/brainstormings/#{brainstorming.id}")
 
-      assert view |> has_element?(".btn[title|='Sort by likes']")
+      assert view |> has_element?("a[title|='Sort by likes']")
+    end
+
+    test "does not contain delete lane button for user", %{
+      conn: conn,
+      brainstorming: brainstorming
+    } do
+      {:ok, view, _html} =
+        conn
+        |> live(~p"/brainstormings/#{brainstorming.id}")
+
+      assert view |> has_element?("a[title|='Delete lane'][class~= 'disabled']")
+    end
+
+    test "does contain delete lane button for moderating user", %{
+      conn: conn,
+      brainstorming: brainstorming
+    } do
+      moderating_user = List.first(brainstorming.users)
+      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+
+      {:ok, view, _html} =
+        conn
+        |> init_test_session(%{current_user_id: moderating_user.id})
+        |> live(~p"/brainstormings/#{brainstorming.id}")
+
+      assert view |> has_element?("a[title|='Delete lane']:not(.disabled)")
+    end
+
+    test "deletes the lane as moderating user", %{
+      conn: conn,
+      brainstorming: brainstorming,
+      lane: lane
+    } do
+      moderating_user = List.first(brainstorming.users)
+      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+
+      {:ok, view, _html} =
+        conn
+        |> init_test_session(%{current_user_id: moderating_user.id})
+        |> live(~p"/brainstormings/#{brainstorming.id}")
+
+      view
+      |> element("a[title|='Delete lane']")
+      |> render_click(%{id: lane.id})
+
+      refute view |> has_element?("div[class~= 'lane']")
+    end
+
+    test "ignores user clicks on delete lane", %{
+      conn: conn,
+      brainstorming: brainstorming,
+      lane: lane
+    } do
+      {:ok, view, _html} =
+        conn
+        |> live(~p"/brainstormings/#{brainstorming.id}")
+
+      view
+      |> element("a[title|='Delete lane']")
+      |> render_click(%{id: lane.id})
+
+      assert view |> has_element?("div[class~= 'lane']")
     end
   end
 
   describe "new" do
     setup [:create_brainstorming]
 
-    test "shows username in the idea creation modal", %{conn: conn, brainstorming: brainstorming} do
+    test "shows username in the idea creation modal", %{
+      conn: conn,
+      brainstorming: brainstorming,
+      lane: lane
+    } do
       {:ok, _show_live, html} =
-        live(conn, Routes.brainstorming_show_path(conn, :new_idea, brainstorming))
+        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/lanes/#{lane.id}/new_idea")
 
       assert html =~ "Anonymous"
+    end
+
+    test "updates the username after submitting an idea", %{
+      conn: conn,
+      brainstorming: brainstorming,
+      lane: lane
+    } do
+      {:ok, show_live_view, _html} =
+        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/lanes/#{lane.id}/new_idea")
+
+      assert show_live_view
+             |> form("#idea-form", idea: %{username: "I am new", body: "test"})
+             |> render_submit()
+
+      {:ok, _show_live_view, html} =
+        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/lanes/#{lane.id}/new_idea")
+
+      assert html =~ "I am new"
     end
   end
 
@@ -239,5 +343,9 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
   defp html_selector_idea_label_active(idea_label) do
     ".IndexComponent__IdeaLabel--active[data-testid=\"#{idea_label.id}\"]"
+  end
+
+  defp html_selector_idea_label_link(idea_label) do
+    "a[data-testid=\"#{idea_label.id}\"][title=\"Label #{idea_label.name}\"]"
   end
 end

@@ -4,6 +4,23 @@
 
 Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm and upvote ideas and thoughts within your team. Built from scratch with [Phoenix](https://www.phoenixframework.org).
 
+- [mindwendel](#mindwendel)
+  - [Features](#features)
+  - [Use-cases](#use-cases)
+  - [Getting Started](#getting-started)
+  - [Contributing](#contributing)
+    - [Workflow](#workflow)
+    - [Development](#development)
+    - [Testing](#testing)
+    - [Production](#production)
+      - [Note](#note)
+    - [Build release and production docker image](#build-release-and-production-docker-image)
+    - [Formatting](#formatting)
+  - [Environment Variables](#environment-variables)
+    - [Localization](#localization)
+  - [Testimonials](#testimonials)
+  - [Acknowledgements](#acknowledgements)
+
 ## Features
 
 - 5 minute setup (It is not a joke)
@@ -30,6 +47,7 @@ Brainstorm ...
 ## Getting Started
 
 mindwendel can be run just about anywhere. So checkout our [Installation Guides](./docs/installing_mindwendel.md) for detailed instructions for various deployments.
+If you want to contribute, jump ahead to [Development](#development)!
 
 Here's the TLDR:
 
@@ -62,24 +80,32 @@ mindwendel is built on top of:
 - [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_view)
 - [PostgreSQL](https://www.postgresql.org)
 
+### Workflow
+
+1. Fork it (<https://github.com/mindwendel/mindwendel/fork>)
+2. Create your feature branch (`git checkout -b fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin fooBar`)
+5. Create a new Pull Request
+
 ### Development
 
-- Startup docker-compose setup
+- Startup docker compose setup
 
   ```bash
-  docker-compose up --build -d
+  docker compose up --build -d
   ```
 
 - Setup the database
 
   ```bash
-  docker-compose exec app mix ecto.setup
+  docker compose exec app mix ecto.setup
   ```
 
 - Start the server
 
 ```bash
-  docker-compose exec app mix phx.server
+  docker compose exec app mix phx.server
 ```
 
 - Go to http://localhost:4000/
@@ -89,29 +115,23 @@ mindwendel is built on top of:
 - Open a shell in the docker container to execute tests, etc.
 
   ```bash
-  docker-compose exec app sh
+  docker compose exec app bash
   ```
 
 - Go to http://localhost:4000/
 
 ### Testing
 
-- Startup docker-compose setup
+- Startup docker compose setup
 
   ```bash
-  docker-compose up --build -d
-  ```
-
-- Ensure your database is running and reset your database
-
-  ```bash
-  docker-compose exec app mix ecto.test.prepare
+  docker compose up --build -d
   ```
 
 - Run the test
 
   ```bash
-  docker-compose exec app mix test
+  docker compose exec app mix test
   ```
 
 ### Production
@@ -138,7 +158,7 @@ mindwendel is built on top of:
 - Start everything at once (including a forced build):
 
   ```bash
-  docker-compose --file docker-compose-prod.yml --env-file .env.prod up -d --build --force-recreate
+  docker compose --file docker-compose-prod.yml --env-file .env.prod up -d --build --force-recreate
   ```
 
 - Open the browser and go to `http://${URL_HOST}`
@@ -180,14 +200,6 @@ You can extract new strings to translate by running:
 ```bash
 mix gettext.extract --merge
 ```
-
-## Contributing
-
-1. Fork it (<https://github.com/mindwendel/mindwendel/fork>)
-2. Create your feature branch (`git checkout -b fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin fooBar`)
-5. Create a new Pull Request
 
 ## Testimonials
 

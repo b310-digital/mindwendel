@@ -17,9 +17,7 @@ defmodule MindwendelWeb.BrainstormingChannelTest do
 
       Brainstormings.subscribe(brainstorming.id)
       Ideas.update_idea(idea, %{body: "lalala"})
-      assert_received {:idea_updated, idea_updated}
-      # It should not be a %Ecto.Association.NotLoaded<association :idea_labels is not loaded>
-      assert idea_updated.idea_labels == []
+      assert_received {:lanes_updated, _}
     end
 
     test "does not receive messages from other brainstormings", %{brainstorming: brainstorming} do

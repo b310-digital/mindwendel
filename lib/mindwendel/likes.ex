@@ -5,9 +5,8 @@ defmodule Mindwendel.Likes do
 
   import Ecto.Query, warn: false
   alias Mindwendel.Repo
-
-  alias Mindwendel.Brainstormings
   alias Mindwendel.Ideas
+  alias Mindwendel.Lanes
   alias Mindwendel.Brainstormings.Like
 
   require Logger
@@ -41,8 +40,11 @@ defmodule Mindwendel.Likes do
       |> Repo.insert()
 
     case status do
-      :ok -> {:ok, Ideas.get_idea!(idea_id)} |> Brainstormings.broadcast(:idea_updated)
-      :error -> {:error, result}
+      :ok ->
+        {:ok, Lanes.broadcast_lanes_update(Ideas.get_idea!(idea_id).brainstorming_id)}
+
+      :error ->
+        {:error, result}
     end
   end
 
@@ -61,7 +63,7 @@ defmodule Mindwendel.Likes do
       from like in Like, where: like.user_id == ^user_id and like.idea_id == ^idea_id
     )
 
-    {:ok, Ideas.get_idea!(idea_id)} |> Brainstormings.broadcast(:idea_updated)
+    Lanes.broadcast_lanes_update(Ideas.get_idea!(idea_id).brainstorming_id)
   end
 
   @doc """

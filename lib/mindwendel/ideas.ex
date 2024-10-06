@@ -6,7 +6,7 @@ defmodule Mindwendel.Ideas do
   import Ecto.Query, warn: false
   alias Mindwendel.Repo
 
-  alias Mindwendel.Brainstormings
+  alias Mindwendel.Lanes
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Idea
 
@@ -26,11 +26,11 @@ defmodule Mindwendel.Ideas do
   end
 
   @doc """
-  Returns the list of ideas depending on the brainstorming id, ordered by position.
+  Returns the list of ideas depending on the brainstorming id and lane id, ordered by position.
 
   ## Examples
 
-      iex> list_ideas(3)
+      iex> list_ideas(3, 1)
       [%Idea{}, ...]
 
   """
@@ -47,7 +47,7 @@ defmodule Mindwendel.Ideas do
         where: idea.brainstorming_id == ^id,
         order_by: [
           asc_nulls_last: idea.position_order,
-          desc: idea.updated_at
+          asc: idea.inserted_at
         ]
 
     Repo.all(idea_query)
@@ -68,7 +68,7 @@ defmodule Mindwendel.Ideas do
       %{1, nil}
 
   """
-  def update_ideas_for_brainstorming_by_likes(id) do
+  def update_ideas_for_brainstorming_by_likes(brainstorming_id, lane_id) do
     idea_count_query =
       from like in Like,
         group_by: like.idea_id,
@@ -79,7 +79,7 @@ defmodule Mindwendel.Ideas do
       from(idea in Idea,
         left_join: idea_counts in subquery(idea_count_query),
         on: idea_counts.idea_id == idea.id,
-        where: idea.brainstorming_id == ^id,
+        where: idea.brainstorming_id == ^brainstorming_id and idea.lane_id == ^lane_id,
         select: %{
           idea_id: idea.id,
           like_count: idea_counts.like_count,
@@ -91,10 +91,12 @@ defmodule Mindwendel.Ideas do
     from(idea in Idea,
       join: idea_ranks in subquery(idea_rank_query),
       on: idea_ranks.idea_id == idea.id,
-      where: idea.brainstorming_id == ^id,
+      where: idea.brainstorming_id == ^brainstorming_id and idea.lane_id == ^lane_id,
       update: [set: [position_order: idea_ranks.idea_rank]]
     )
     |> Repo.update_all([])
+
+    Lanes.broadcast_lanes_update(brainstorming_id)
   end
 
   @doc """
@@ -106,11 +108,11 @@ defmodule Mindwendel.Ideas do
       %{1, nil}
 
   """
-  def update_ideas_for_brainstorming_by_labels(id) do
+  def update_ideas_for_brainstorming_by_labels(brainstorming_id, lane_id) do
     idea_rank_query =
       from(idea in Idea,
         left_join: l in assoc(idea, :idea_labels),
-        where: idea.brainstorming_id == ^id,
+        where: idea.brainstorming_id == ^brainstorming_id and idea.lane_id == ^lane_id,
         select: %{
           idea_id: idea.id,
           idea_rank:
@@ -124,10 +126,12 @@ defmodule Mindwendel.Ideas do
     from(idea in Idea,
       join: idea_ranks in subquery(idea_rank_query),
       on: idea_ranks.idea_id == idea.id,
-      where: idea.brainstorming_id == ^id,
+      where: idea.brainstorming_id == ^brainstorming_id and idea.lane_id == ^lane_id,
       update: [set: [position_order: idea_ranks.idea_rank]]
     )
     |> Repo.update_all([])
+
+    Lanes.broadcast_lanes_update(brainstorming_id)
   end
 
   @doc """
@@ -141,21 +145,22 @@ defmodule Mindwendel.Ideas do
   """
   def update_ideas_for_brainstorming_by_user_move(
         brainstorming_id,
+        lane_id,
         idea_id,
         new_position,
         old_position
       ) do
-    get_idea!(idea_id) |> update_idea(%{position_order: new_position})
+    get_idea!(idea_id) |> update_idea(%{position_order: new_position, lane_id: lane_id})
 
     # depending on moving a card bottom up or up to bottom, we need to correct the ordering
     order =
-      if new_position < old_position,
+      if new_position <= old_position,
         do: [asc: :position_order, desc: :updated_at],
         else: [asc: :position_order, asc: :updated_at]
 
     idea_rank_query =
       from(idea in Idea,
-        where: idea.brainstorming_id == ^brainstorming_id,
+        where: idea.brainstorming_id == ^brainstorming_id and idea.lane_id == ^lane_id,
         windows: [o: [order_by: ^order]],
         select: %{
           idea_id: idea.id,
@@ -170,6 +175,8 @@ defmodule Mindwendel.Ideas do
       update: [set: [position_order: idea_ranks.idea_rank]]
     )
     |> Repo.update_all([])
+
+    Lanes.broadcast_lanes_update(brainstorming_id)
   end
 
   @doc """
@@ -205,10 +212,14 @@ defmodule Mindwendel.Ideas do
     |> Idea.changeset(attrs)
     |> Repo.insert()
     |> case do
-      {:ok, result} -> scan_for_link_in_idea(result)
-      {_, result} -> {:error, result}
+      {:ok, idea} ->
+        scan_for_link_in_idea(idea)
+        Lanes.broadcast_lanes_update(idea.brainstorming_id)
+        {:ok, idea}
+
+      {_, result} ->
+        {:error, result}
     end
-    |> Brainstormings.broadcast(:idea_added)
   end
 
   @doc """
@@ -225,7 +236,8 @@ defmodule Mindwendel.Ideas do
       Repo.preload(idea, :link)
       |> Idea.build_link()
       |> Repo.update()
-      |> Brainstormings.broadcast(:idea_updated)
+
+      Lanes.broadcast_lanes_update(idea.brainstorming_id)
     end)
 
     {:ok, idea}
@@ -244,10 +256,13 @@ defmodule Mindwendel.Ideas do
 
   """
   def update_idea(%Idea{} = idea, attrs) do
-    idea
-    |> Idea.changeset(attrs)
-    |> Repo.update()
-    |> Brainstormings.broadcast(:idea_updated)
+    result =
+      idea
+      |> Idea.changeset(attrs)
+      |> Repo.update()
+
+    Lanes.broadcast_lanes_update(idea.brainstorming_id)
+    result
   end
 
   @doc """
@@ -264,7 +279,7 @@ defmodule Mindwendel.Ideas do
   """
   def delete_idea(%Idea{} = idea) do
     Repo.delete(idea)
-    Brainstormings.broadcast({:ok, idea}, :idea_removed)
+    Lanes.broadcast_lanes_update(idea.brainstorming_id)
   end
 
   @doc """

@@ -5,7 +5,7 @@ defmodule MindwendelWeb.Router do
     plug(:accepts, ["html", "csv"])
     plug(:fetch_session)
     plug(:fetch_live_flash)
-    plug(:put_root_layout, {MindwendelWeb.LayoutView, :root})
+    plug(:put_root_layout, {MindwendelWeb.Layouts, :root})
     plug(:protect_from_forgery)
 
     # Ususally, you can directly include the csp header in this borwser pipeline like this
@@ -51,32 +51,22 @@ defmodule MindwendelWeb.Router do
 
     live "/brainstormings/:id", BrainstormingLive.Show, :show
     live "/brainstormings/:id/show/edit", BrainstormingLive.Show, :edit
-    live "/brainstormings/:id/show/new_idea", BrainstormingLive.Show, :new_idea
+    # Maybe rather "/brainstormings/:id/ideas/new" ?
+    live "/brainstormings/:id/show/lanes/:lane_id/new_idea", BrainstormingLive.Show, :new_idea
+    live "/brainstormings/:id/show/new_lane", BrainstormingLive.Show, :new_lane
     live "/brainstormings/:id/show/share", BrainstormingLive.Show, :share
 
     live "/brainstormings/:brainstorming_id/ideas/:idea_id/edit",
          BrainstormingLive.Show,
          :edit_idea
+
+    live "/brainstormings/:brainstorming_id/lanes/:lane_id/edit",
+         BrainstormingLive.Show,
+         :edit_lane
   end
 
   # Other scopes may use custom stacks.
   # scope "/api", MindwendelWeb do
   #   pipe_through :api
   # end
-
-  # Enables LiveDashboard only for development
-  #
-  # If you want to use the LiveDashboard in production, you should put
-  # it behind authentication and allow only admins to access it.
-  # If your application does not have an admins-only section yet,
-  # you can use Plug.BasicAuth to set up some basic authentication
-  # as long as you are also using SSL (which you should anyway).
-  if Mix.env() in [:dev, :test] do
-    import Phoenix.LiveDashboard.Router
-
-    scope "/" do
-      pipe_through(:browser)
-      live_dashboard("/dashboard", metrics: MindwendelWeb.Telemetry)
-    end
-  end
 end

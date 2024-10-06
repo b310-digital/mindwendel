@@ -21,8 +21,21 @@ defmodule Mindwendel.BrainstormingsTest do
       idea:
         Factory.insert!(:idea, brainstorming: brainstorming, inserted_at: ~N[2021-01-01 15:04:30]),
       user: user,
-      like: Factory.insert!(:like, :with_idea_and_user)
+      like: Factory.insert!(:like, :with_idea_and_user),
+      lane: Enum.at(brainstorming.lanes, 0)
     }
+  end
+
+  describe "create_brainstorming" do
+    test "creates a lane", %{user: user} do
+      {:ok, brainstorming} = Brainstormings.create_brainstorming(user, %{name: "test"})
+      assert length(brainstorming.lanes) == 1
+    end
+
+    test "creates labels", %{user: user} do
+      {:ok, brainstorming} = Brainstormings.create_brainstorming(user, %{name: "test"})
+      assert length(brainstorming.labels) == 5
+    end
   end
 
   describe "list_brainstormings_for" do
@@ -222,14 +235,18 @@ defmodule Mindwendel.BrainstormingsTest do
       # reload brainstorming:
       brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
       brainstorming = brainstorming |> Repo.preload([:ideas])
-      assert Enum.empty?(brainstorming.ideas)
+      assert Enum.empty?(brainstorming.lanes)
     end
 
-    test "empty/1 also clears likes and labels from ideas", %{brainstorming: brainstorming} do
+    test "empty/1 also clears likes and labels from ideas", %{
+      brainstorming: brainstorming,
+      lane: lane
+    } do
       idea =
         Factory.insert!(:idea,
           brainstorming: brainstorming,
-          inserted_at: ~N[2021-01-01 15:04:30]
+          inserted_at: ~N[2021-01-01 15:04:30],
+          lane: lane
         )
 
       like = Factory.insert!(:like, idea: idea)
@@ -243,7 +260,7 @@ defmodule Mindwendel.BrainstormingsTest do
       # reload brainstorming:
       brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
 
-      assert Enum.empty?(brainstorming.ideas)
+      assert Enum.empty?(brainstorming.lanes)
       assert Repo.get_by(Idea, id: idea.id) == nil
       assert Repo.get_by(IdeaIdeaLabel, idea_id: idea.id) == nil
       assert Repo.get_by(Like, id: like.id) == nil
@@ -253,9 +270,11 @@ defmodule Mindwendel.BrainstormingsTest do
       brainstorming: brainstorming
     } do
       other_brainstorming = Factory.insert!(:brainstorming)
+      other_lane = Enum.at(brainstorming.lanes, 0)
 
       Factory.insert!(:idea,
-        brainstorming: other_brainstorming
+        brainstorming: other_brainstorming,
+        lane: other_lane
       )
 
       other_brainstorming = other_brainstorming |> Repo.preload([:ideas])
@@ -266,8 +285,8 @@ defmodule Mindwendel.BrainstormingsTest do
       brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
       brainstorming = brainstorming |> Repo.preload([:ideas])
       other_brainstorming = other_brainstorming |> Repo.preload([:ideas])
-      assert Enum.empty?(brainstorming.ideas)
-      assert Enum.count(other_brainstorming.ideas) == 1
+      assert Enum.empty?(brainstorming.lanes)
+      assert Enum.count(other_brainstorming.lanes) == 1
     end
   end
 end

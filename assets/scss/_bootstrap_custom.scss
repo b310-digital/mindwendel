@@ -19,7 +19,19 @@
 
 .card-mindwendel {
   @extend .card;
-  width: 394px;
+  width: calc(25% - 32px);
+
+  @media (max-width: 768px) {
+    width: 100% !important;
+  }
+
+  &--half-width {
+    width: calc(50% - 32px);
+  }
+
+  &--full-width {
+    width: 100% !important;
+  }
 }
 
 // Required

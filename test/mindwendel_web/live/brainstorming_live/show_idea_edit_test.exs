@@ -8,12 +8,14 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
 
   setup %{conn: conn} do
     brainstorming = Factory.insert!(:brainstorming)
+    lane = Enum.at(brainstorming.lanes, 0)
     current_user_id = Ecto.UUID.generate()
     user = Factory.insert!(:user, id: current_user_id)
 
     idea =
       Factory.insert!(:idea, %{
         brainstorming: brainstorming,
+        lane: lane,
         user_id: current_user_id
       })
 
@@ -22,18 +24,47 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
       current_user_id: current_user_id,
       conn: conn |> init_test_session(%{current_user_id: current_user_id}),
       idea: idea,
-      user: user
+      user: user,
+      lane: lane
     }
   end
 
   test "contains button for editing ideas", %{
     conn: conn,
-    brainstorming: brainstorming
+    brainstorming: brainstorming,
+    user: user
   } do
-    {:ok, show_live_view, _html} =
-      live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+    Brainstormings.add_moderating_user(brainstorming, user)
+    {:ok, show_live_view, _html} = live(conn, ~p"/brainstormings/#{brainstorming.id}")
 
     assert show_live_view
+           |> element(html_selector_button_idea_edit_link())
+           |> has_element?
+  end
+
+  test "contains button for editing ideas as owner", %{
+    conn: conn,
+    brainstorming: brainstorming
+  } do
+    {:ok, show_live_view, _html} = live(conn, ~p"/brainstormings/#{brainstorming.id}")
+
+    assert show_live_view
+           |> element(html_selector_button_idea_edit_link())
+           |> has_element?
+  end
+
+  test "does not contain button for editing ideas as different user", %{
+    conn: conn,
+    brainstorming: brainstorming
+  } do
+    new_user = Factory.insert!(:user)
+
+    {:ok, show_live_view, _html} =
+      conn
+      |> init_test_session(%{current_user_id: new_user.id})
+      |> live(~p"/brainstormings/#{brainstorming.id}")
+
+    refute show_live_view
            |> element(html_selector_button_idea_edit_link())
            |> has_element?
   end
@@ -41,48 +72,46 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
   test "moves to after click", %{
     conn: conn,
     brainstorming: brainstorming,
-    idea: idea
+    idea: idea,
+    user: user
   } do
+    Brainstormings.add_moderating_user(brainstorming, user)
+
     {:ok, show_live_view, _html} =
-      live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+      live(conn, ~p"/brainstormings/#{brainstorming.id}")
 
     assert show_live_view
            |> element(html_selector_button_idea_edit_link())
            |> render_click()
 
     assert show_live_view
-           |> assert_patched(
-             Routes.brainstorming_show_path(conn, :edit_idea, brainstorming, idea)
-           )
+           |> assert_patched(~p"/brainstormings/#{brainstorming.id}/ideas/#{idea.id}/edit")
   end
 
   test "edit and update text", %{
     conn: conn,
-    brainstorming: brainstorming
+    brainstorming: brainstorming,
+    idea: idea
   } do
     {:ok, show_live_view, _html} =
-      live(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
-
-    assert show_live_view
-           |> element(html_selector_button_idea_edit_link())
-           |> render_click()
+      live(conn, ~p"/brainstormings/#{brainstorming.id}/ideas/#{idea.id}/edit")
 
     new_idea_body = "New idea body"
 
-    {:ok, show_live_view, _html} =
-      show_live_view
-      |> form("#idea-form", idea: %{body: new_idea_body})
-      |> render_submit()
-      |> follow_redirect(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
-
     assert show_live_view
-           |> element(".card-body-mindwendel-idea", new_idea_body)
-           |> has_element?
+           |> form("#idea-form", idea: %{body: new_idea_body})
+           |> render_submit()
+
+    assert_patch(show_live_view, ~p"/brainstormings/#{brainstorming.id}")
+
+    html = render(show_live_view)
+    assert html =~ new_idea_body
   end
 
   test "edit and update text as moderatoring user", %{
     conn: conn,
-    brainstorming: brainstorming
+    brainstorming: brainstorming,
+    idea: idea
   } do
     moderatoring_user = Factory.insert!(:user)
     Brainstormings.add_moderating_user(brainstorming, moderatoring_user)
@@ -90,19 +119,15 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
     {:ok, show_live_view, _html} =
       conn
       |> init_test_session(%{current_user_id: moderatoring_user.id})
-      |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
-
-    assert show_live_view
-           |> element(html_selector_button_idea_edit_link())
-           |> render_click()
+      |> live(~p"/brainstormings/#{brainstorming.id}/ideas/#{idea.id}/edit")
 
     new_idea_body = "New idea body by moderator"
 
-    {:ok, show_live_view, _html} =
-      show_live_view
-      |> form("#idea-form", idea: %{body: new_idea_body})
-      |> render_submit()
-      |> follow_redirect(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+    assert show_live_view
+           |> form("#idea-form", idea: %{body: new_idea_body})
+           |> render_submit()
+
+    assert_patch(show_live_view, ~p"/brainstormings/#{brainstorming.id}")
 
     assert show_live_view
            |> element(".card-body-mindwendel-idea", new_idea_body)
@@ -121,19 +146,15 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
     {:ok, show_live_view, _html} =
       conn
       |> init_test_session(%{current_user_id: moderator_user.id})
-      |> live(Routes.brainstorming_show_path(conn, :show, brainstorming))
-
-    assert show_live_view
-           |> element(html_selector_button_idea_edit_link())
-           |> render_click()
+      |> live(~p"/brainstormings/#{brainstorming.id}/ideas/#{idea.id}/edit")
 
     new_idea_body = "New idea body by moderator"
 
-    {:ok, show_live_view, _html} =
-      show_live_view
-      |> form("#idea-form", idea: %{body: new_idea_body})
-      |> render_submit()
-      |> follow_redirect(conn, Routes.brainstorming_show_path(conn, :show, brainstorming))
+    assert show_live_view
+           |> form("#idea-form", idea: %{body: new_idea_body})
+           |> render_submit()
+
+    assert_patch(show_live_view, ~p"/brainstormings/#{brainstorming.id}")
 
     assert show_live_view
            |> element(".card-body-mindwendel-idea", new_idea_body)
@@ -144,7 +165,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
     assert ^user_id = Mindwendel.Ideas.get_idea!(idea.id).user_id
   end
 
-  defp html_selector_button_idea_edit_link do
-    "a[@title='Edit Idea']"
+  defp html_selector_button_idea_edit_link() do
+    ".card-body-mindwendel-idea > a:nth-child(2)"
   end
 end
