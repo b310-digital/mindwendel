@@ -8,7 +8,7 @@ defmodule Mindwendel.Attachments.Link do
     field :title, :string
     field :description, :string
     field :img_preview_url, :string
-    belongs_to :idea, Idea, type: :binary_id
+    belongs_to :idea, Idea
 
     timestamps()
   end

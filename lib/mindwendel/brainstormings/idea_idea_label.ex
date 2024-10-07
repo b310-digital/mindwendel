@@ -1,4 +1,5 @@
 defmodule Mindwendel.Brainstormings.IdeaIdeaLabel do
+  # doesn't use `Mindwendel.Schema` as the default `@derive` there intereferes here
   use Ecto.Schema
 
   import Ecto.Changeset

@@ -13,7 +13,7 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
     # See https://hexdocs.pm/ecto/Ecto.Changeset.html#module-the-on_replace-option
     field :delete, :boolean, virtual: true
 
-    belongs_to :brainstorming, Brainstorming, foreign_key: :brainstorming_id, type: :binary_id
+    belongs_to :brainstorming, Brainstorming
 
     many_to_many :ideas, Idea, join_through: "idea_idea_labels", on_replace: :delete
     has_many :idea_idea_labels, IdeaIdeaLabel, on_replace: :delete
