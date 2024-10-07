@@ -1,5 +1,5 @@
 defmodule Mindwendel.LanesTest do
-  use Mindwendel.DataCase
+  use Mindwendel.DataCase, async: true
   alias Mindwendel.Lanes
   alias Mindwendel.Brainstormings.Lane
   import Mindwendel.BrainstormingsFixtures

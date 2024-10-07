@@ -1,5 +1,5 @@
 defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
-  use MindwendelWeb.ConnCase
+  use MindwendelWeb.ConnCase, async: true
 
   alias Mindwendel.Factory
 

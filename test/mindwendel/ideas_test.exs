@@ -1,5 +1,5 @@
 defmodule Mindwendel.IdeasTest do
-  use Mindwendel.DataCase
+  use Mindwendel.DataCase, async: true
   alias Mindwendel.Factory
 
   alias Mindwendel.Ideas

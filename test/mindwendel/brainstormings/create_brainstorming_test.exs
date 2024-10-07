@@ -1,5 +1,5 @@
 defmodule Mindwendel.Brainstormings.CreateBrainstormingTest do
-  use Mindwendel.DataCase
+  use Mindwendel.DataCase, async: true
   alias Mindwendel.Brainstormings.BrainstormingModeratingUser
   alias Mindwendel.Accounts.BrainstormingUser
   alias Mindwendel.Factory

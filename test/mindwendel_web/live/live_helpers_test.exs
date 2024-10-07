@@ -1,5 +1,5 @@
 defmodule MindwendelWeb.LiveHelpersTest do
-  use MindwendelWeb.ConnCase
+  use MindwendelWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
 
   alias Mindwendel.Factory
