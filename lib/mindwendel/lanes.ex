@@ -7,6 +7,7 @@ defmodule Mindwendel.Lanes do
   alias Mindwendel.Repo
 
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings
 
   require Logger
@@ -69,7 +70,7 @@ defmodule Mindwendel.Lanes do
       [%Lane{}, ...]
 
   """
-  def get_lanes_for_brainstorming(id) do
+  def get_lanes_for_brainstorming(id, filters \\ %{}) do
     lane_query =
       from lane in Lane,
         where: lane.brainstorming_id == ^id,
@@ -78,15 +79,27 @@ defmodule Mindwendel.Lanes do
           asc: lane.inserted_at
         ]
 
-    Repo.all(lane_query)
-    |> Repo.preload(
-      ideas: [
+    ideas_query = from idea in Idea
+    ideas_advanced_query = build_lane_ideas_query(ideas_query, filters[:idea_labels])
+
+    Repo.all(lane_query) |> Repo.preload(
+      [ideas: ideas_advanced_query]
+    )
+  end
+
+  defp build_lane_ideas_query(query, nil) do
+    from idea in query, preload: [:link, :likes, :idea_labels]
+  end
+
+  defp build_lane_ideas_query(query, _) do
+    from idea in Idea,
+    left_join: l in assoc(idea, :idea_labels),
+    where: l.name == "Rot",
+    preload: [
         :link,
         :likes,
-        :label,
         :idea_labels
       ]
-    )
   end
 
   @doc """
@@ -163,7 +176,7 @@ defmodule Mindwendel.Lanes do
   end
 
   def broadcast_lanes_update(brainstorming_id) do
-    lanes = get_lanes_for_brainstorming(brainstorming_id)
+    lanes = get_lanes_for_brainstorming(brainstorming_id, %{idea_labels: []})
     Brainstormings.broadcast({:ok, brainstorming_id, lanes}, :lanes_updated)
   end
 end
