@@ -42,6 +42,33 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
            |> has_element?
   end
 
+  test "contains button for editing ideas as owner", %{
+    conn: conn,
+    brainstorming: brainstorming
+  } do
+    {:ok, show_live_view, _html} = live(conn, ~p"/brainstormings/#{brainstorming.id}")
+
+    assert show_live_view
+           |> element(html_selector_button_idea_edit_link())
+           |> has_element?
+  end
+
+  test "does not contain button for editing ideas as different user", %{
+    conn: conn,
+    brainstorming: brainstorming
+  } do
+    new_user = Factory.insert!(:user)
+
+    {:ok, show_live_view, _html} =
+      conn
+      |> init_test_session(%{current_user_id: new_user.id})
+      |> live(~p"/brainstormings/#{brainstorming.id}")
+
+    refute show_live_view
+           |> element(html_selector_button_idea_edit_link())
+           |> has_element?
+  end
+
   test "moves to after click", %{
     conn: conn,
     brainstorming: brainstorming,

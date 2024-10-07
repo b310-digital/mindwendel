@@ -82,14 +82,13 @@ Hooks.Sortable = {
 Hooks.Modal = {
   mounted() {
     const modal = new Modal(this.el, { backdrop: 'static', keyboard: false });
+    const closeModal = () => modal && modal.hide();
+
     modal.show();
 
-    window.addEventListener('mindwendel:hide-modal', (_e) => {
-      modal && modal.hide();
-    });
-  },
+    window.addEventListener('mindwendel:hide-modal', closeModal);
+  }
 }
-
 Hooks.QrCodeCanvas = {
   mounted() {
     const qrCodeCanvasElement = this.el
@@ -136,8 +135,7 @@ Hooks.SetIdeaLabelBackgroundColor = {
 };
 
 let liveSocket = new LiveSocket("/live", Socket, { 
-  hooks: Hooks, params: { _csrf_token: csrfToken },
-  longPollFallbackMs: 2500,
+  hooks: Hooks, params: { _csrf_token: csrfToken }
 })
 
 // Show progress bar on live navigation and form submits

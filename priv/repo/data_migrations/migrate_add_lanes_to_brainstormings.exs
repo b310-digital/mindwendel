@@ -21,9 +21,9 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateAddLanesToBrainstormings do
 
   defp migration_add_lanes_sql do
     """
-    INSERT INTO lanes (id, brainstorming_id, inserted_at, updated_at)
+    INSERT INTO lanes (id, position_order, brainstorming_id, inserted_at, updated_at)
     (
-      SELECT gen_random_uuid(), id, NOW(), NOW()
+      SELECT gen_random_uuid(), 1, id, NOW(), NOW()
       FROM brainstormings
     );
     """
