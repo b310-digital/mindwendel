@@ -79,7 +79,7 @@ defmodule Mindwendel.Lanes do
           asc: lane.inserted_at
         ]
 
-    ideas_query = from(idea in Idea)
+    ideas_query = Idea
     ideas_advanced_query = build_lane_ideas_query(ideas_query, filters[:idea_labels])
 
     lane_query
@@ -100,7 +100,7 @@ defmodule Mindwendel.Lanes do
   end
 
   defp build_lane_ideas_query(query, _) do
-    from idea in Idea,
+    from idea in query,
       left_join: l in assoc(idea, :idea_labels),
       where: l.name == "Rot"
   end
