@@ -79,27 +79,29 @@ defmodule Mindwendel.Lanes do
           asc: lane.inserted_at
         ]
 
-    ideas_query = from idea in Idea
+    ideas_query = from(idea in Idea)
     ideas_advanced_query = build_lane_ideas_query(ideas_query, filters[:idea_labels])
 
-    Repo.all(lane_query) |> Repo.preload(
-      [ideas: ideas_advanced_query]
+    Repo.all(lane_query)
+    |> Repo.preload(
+      ideas:
+        ideas_advanced_query
+        |> preload([
+          :link,
+          :likes,
+          :idea_labels
+        ])
     )
   end
 
   defp build_lane_ideas_query(query, nil) do
-    from idea in query, preload: [:link, :likes, :idea_labels]
+    query
   end
 
   defp build_lane_ideas_query(query, _) do
     from idea in Idea,
-    left_join: l in assoc(idea, :idea_labels),
-    where: l.name == "Rot",
-    preload: [
-        :link,
-        :likes,
-        :idea_labels
-      ]
+      left_join: l in assoc(idea, :idea_labels),
+      where: l.name == "Rot"
   end
 
   @doc """
