@@ -76,15 +76,7 @@ defmodule Mindwendel.Brainstormings do
     |> Repo.preload([
       :users,
       :moderating_users,
-      labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
-      lanes: [
-        ideas: [
-          :link,
-          :likes,
-          :label,
-          :idea_labels
-        ]
-      ]
+      labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
     ])
     |> update_last_accessed_at
   end
