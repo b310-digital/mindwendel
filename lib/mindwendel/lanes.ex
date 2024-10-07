@@ -179,7 +179,7 @@ defmodule Mindwendel.Lanes do
   end
 
   def broadcast_lanes_update(brainstorming_id) do
-    lanes = get_lanes_for_brainstorming(brainstorming_id, %{idea_labels: []})
+    lanes = get_lanes_for_brainstorming(brainstorming_id)
     Brainstormings.broadcast({:ok, brainstorming_id, lanes}, :lanes_updated)
   end
 end

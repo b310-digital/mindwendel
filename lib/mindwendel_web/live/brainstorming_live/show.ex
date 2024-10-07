@@ -18,7 +18,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
       Brainstormings.get_brainstorming!(id)
       |> Accounts.merge_brainstorming_user(current_user_id)
 
-    lanes = Lanes.get_lanes_for_brainstorming(id, %{idea_labels: []})
+    lanes = Lanes.get_lanes_for_brainstorming(id)
     current_user = Mindwendel.Accounts.get_user(current_user_id)
 
     {

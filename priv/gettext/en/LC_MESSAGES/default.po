@@ -26,12 +26,12 @@ msgstr ""
 msgid "Ready?"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:125
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:126
 #, elixir-autogen, elixir-format
 msgid "%{name} - Edit"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:102
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:103
 #, elixir-autogen, elixir-format
 msgid "%{name} - New Idea"
 msgstr ""
@@ -396,7 +396,7 @@ msgstr ""
 msgid "Type the label name"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:112
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:113
 #, elixir-autogen, elixir-format, fuzzy
 msgid "%{name} - New Lane"
 msgstr ""
