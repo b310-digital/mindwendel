@@ -60,7 +60,7 @@ defmodule Mindwendel.Lanes do
   end
 
   @doc """
-  Gets lanes for a brainstorming
+  Gets lanes for a brainstorming with an optional filter
 
   Raises `Ecto.NoResultsError` if the Lane does not exist.
 
@@ -80,7 +80,7 @@ defmodule Mindwendel.Lanes do
         ]
 
     ideas_query = Idea
-    ideas_advanced_query = build_lane_ideas_query(ideas_query, filters[:idea_labels])
+    ideas_advanced_query = build_ideas_query_with_filter(ideas_query, filters[:idea_labels])
 
     lane_query
     |> Repo.all()
@@ -95,13 +95,14 @@ defmodule Mindwendel.Lanes do
     )
   end
 
-  defp build_lane_ideas_query(query, nil) do
+  defp build_ideas_query_with_filter(query, nil) do
     query
   end
 
-  defp build_lane_ideas_query(query, _) do
+  defp build_ideas_query_with_filter(query, _) do
     from idea in query,
       left_join: l in assoc(idea, :idea_labels),
+      # TODO we need to use either ids or a filter attr here
       where: l.name == "Rot"
   end
 
