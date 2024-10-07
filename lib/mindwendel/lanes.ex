@@ -82,7 +82,8 @@ defmodule Mindwendel.Lanes do
     ideas_query = from(idea in Idea)
     ideas_advanced_query = build_lane_ideas_query(ideas_query, filters[:idea_labels])
 
-    Repo.all(lane_query)
+    lane_query
+    |> Repo.all()
     |> Repo.preload(
       ideas:
         ideas_advanced_query
