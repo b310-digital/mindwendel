@@ -242,7 +242,13 @@ defmodule Mindwendel.Brainstormings do
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
       "brainstormings:" <> brainstorming.id,
-      {event, brainstorming}
+      {event,
+       brainstorming
+       |> Repo.preload([
+         :users,
+         :moderating_users,
+         labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
+       ])}
     )
 
     {:ok, brainstorming}

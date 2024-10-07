@@ -57,7 +57,7 @@
   </div>
   <div class="card-body">
     <.simple_form for={@form} phx-submit="save" phx-change="save" id="form-edit-brainstorming">
-      <.input field={@form[:name]} type="text" label="Name" />
+      <.input field={@form[:name]} type="text" label="Name" phx-debounce={300} />
 
       <div class="mb-3 mt-3">
         <.input
