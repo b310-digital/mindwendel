@@ -166,7 +166,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
 
       # reload brainstorming to check for changes:
       lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
-      assert Enum.count(lanes) == 1
+      assert length(lanes) == 1
 
       edit_live_view
       |> element("button", "Empty")
@@ -174,7 +174,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
 
       # reload brainstorming to check for changes:
       lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
-      assert Enum.empty?(lanes)
+      assert lanes == []
     end
   end
 

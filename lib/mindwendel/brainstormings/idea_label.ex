@@ -12,7 +12,6 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
     field :position_order, :integer
     # See https://hexdocs.pm/ecto/Ecto.Changeset.html#module-the-on_replace-option
     field :delete, :boolean, virtual: true
-    # field :filter_active, :boolean
 
     belongs_to :brainstorming, Brainstorming
 
@@ -31,7 +30,7 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
 
   def changeset(idea_label, params) do
     idea_label
-    |> cast(params, [:name, :color, :filter_active])
+    |> cast(params, [:name, :color])
     |> validate_required([:name])
     |> validate_format(:color, ~r/^#[0-9a-f]{6}$/)
   end
