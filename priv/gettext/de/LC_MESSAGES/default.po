@@ -220,27 +220,27 @@ msgstr "Achtung: Bitte speichere den Admin-Link oben ab, bevor du den Link zur A
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr "Brainstormings werden nach %{days} Tagen gelöscht."
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:69
+#: lib/mindwendel/brainstormings/brainstorming.ex:75
 #, elixir-autogen, elixir-format
 msgid "cyan"
 msgstr "Cyan"
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:70
+#: lib/mindwendel/brainstormings/brainstorming.ex:76
 #, elixir-autogen, elixir-format
 msgid "gray dark"
 msgstr "Dunkelgrau"
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:71
+#: lib/mindwendel/brainstormings/brainstorming.ex:77
 #, elixir-autogen, elixir-format
 msgid "green"
 msgstr "Grün"
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:72
+#: lib/mindwendel/brainstormings/brainstorming.ex:78
 #, elixir-autogen, elixir-format
 msgid "red"
 msgstr "Rot"
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:73
+#: lib/mindwendel/brainstormings/brainstorming.ex:79
 #, elixir-autogen, elixir-format
 msgid "yellow"
 msgstr "Gelb"

@@ -219,27 +219,27 @@ msgstr ""
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:69
+#: lib/mindwendel/brainstormings/brainstorming.ex:75
 #, elixir-autogen, elixir-format
 msgid "cyan"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:70
+#: lib/mindwendel/brainstormings/brainstorming.ex:76
 #, elixir-autogen, elixir-format
 msgid "gray dark"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:71
+#: lib/mindwendel/brainstormings/brainstorming.ex:77
 #, elixir-autogen, elixir-format
 msgid "green"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:72
+#: lib/mindwendel/brainstormings/brainstorming.ex:78
 #, elixir-autogen, elixir-format
 msgid "red"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:73
+#: lib/mindwendel/brainstormings/brainstorming.ex:79
 #, elixir-autogen, elixir-format
 msgid "yellow"
 msgstr ""

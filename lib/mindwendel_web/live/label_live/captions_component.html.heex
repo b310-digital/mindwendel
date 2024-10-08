@@ -6,6 +6,9 @@
         id={"idea-caption-#{uuid()}"}
         data-color={brainstorming_idea_label.color}
         phx-hook="SetIdeaLabelBackgroundColor"
+        phx-click="set_filter_idea_label"
+        phx-value-id={brainstorming_idea_label.id}
+        phx-target={@myself}
       >
         <%= brainstorming_idea_label.name %>
       </.link>

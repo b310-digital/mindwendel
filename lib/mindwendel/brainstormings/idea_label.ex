@@ -12,7 +12,7 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
     field :position_order, :integer
     # See https://hexdocs.pm/ecto/Ecto.Changeset.html#module-the-on_replace-option
     field :delete, :boolean, virtual: true
-    field :filter_active, :boolean
+    # field :filter_active, :boolean
 
     belongs_to :brainstorming, Brainstorming
 
