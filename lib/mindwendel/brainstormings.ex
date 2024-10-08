@@ -10,6 +10,7 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Lanes
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.BrainstormingModeratingUser
 
@@ -231,16 +232,26 @@ defmodule Mindwendel.Brainstormings do
   end
 
   def broadcast({:ok, %Brainstorming{} = brainstorming}, event) do
+    brainstorming_with_preload =
+      brainstorming
+      |> Repo.preload([
+        :users,
+        :moderating_users,
+        labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
+      ])
+
+    filter_label =
+      if length(brainstorming.filter_labels_ids) > 0,
+        do: %{filter_labels_ids: brainstorming.filter_labels_ids},
+        else: %{}
+
+    lanes =
+      Lanes.get_lanes_for_brainstorming(brainstorming.id, filter_label)
+
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
       "brainstormings:" <> brainstorming.id,
-      {event,
-       brainstorming
-       |> Repo.preload([
-         :users,
-         :moderating_users,
-         labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
-       ])}
+      {event, brainstorming_with_preload, lanes}
     )
 
     {:ok, brainstorming}
