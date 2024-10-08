@@ -196,14 +196,7 @@ defmodule Mindwendel.Lanes do
   end
 
   def broadcast_lanes_update(brainstorming_id) do
-    brainstorming = Brainstormings.get_brainstorming!(brainstorming_id)
-
-    filter_label =
-      if length(brainstorming.filter_labels_ids) > 0,
-        do: %{filter_labels_ids: brainstorming.filter_labels_ids},
-        else: %{}
-
-    lanes = get_lanes_for_brainstorming(brainstorming_id, filter_label)
+    lanes = get_lanes_for_brainstorming_with_labels_filtered(brainstorming_id)
     Brainstormings.broadcast({:ok, brainstorming_id, lanes}, :lanes_updated)
   end
 end
