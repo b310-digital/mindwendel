@@ -79,8 +79,7 @@ defmodule Mindwendel.Lanes do
           asc: lane.inserted_at
         ]
 
-    ideas_query = Idea
-    ideas_advanced_query = build_ideas_query_with_filter(ideas_query, filters)
+    ideas_advanced_query = build_ideas_query_with_filter(filters)
 
     lane_query
     |> Repo.all()
@@ -95,14 +94,14 @@ defmodule Mindwendel.Lanes do
     )
   end
 
-  defp build_ideas_query_with_filter(query, %{filter_labels_ids: filter_labels_ids}) do
-    from idea in query,
+  defp build_ideas_query_with_filter(%{filter_labels_ids: filter_labels_ids}) do
+    from idea in Idea,
       left_join: labels in assoc(idea, :idea_labels),
       where: labels.id in ^filter_labels_ids
   end
 
-  defp build_ideas_query_with_filter(query, %{} = filters) do
-    query
+  defp build_ideas_query_with_filter(%{} = _filters) do
+    Idea
   end
 
   @doc """
