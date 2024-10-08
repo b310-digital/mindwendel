@@ -128,6 +128,16 @@ defmodule Mindwendel.Brainstormings do
       {:error, %Ecto.Changeset{}}
 
   """
+  def update_brainstorming(
+        %Brainstorming{} = brainstorming,
+        %{filter_labels_ids: _filter_labels_ids} = attrs
+      ) do
+    brainstorming
+    |> Brainstorming.changeset(attrs)
+    |> Repo.update()
+    |> broadcast(:brainstorming_filter_updated)
+  end
+
   def update_brainstorming(%Brainstorming{} = brainstorming, attrs) do
     brainstorming
     |> Brainstorming.changeset(attrs)
@@ -231,27 +241,36 @@ defmodule Mindwendel.Brainstormings do
     )
   end
 
-  def broadcast({:ok, %Brainstorming{} = brainstorming}, event) do
-    brainstorming_with_preload =
-      brainstorming
-      |> Repo.preload([
-        :users,
-        :moderating_users,
-        labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
-      ])
-
-    filter_label =
-      if length(brainstorming.filter_labels_ids) > 0,
-        do: %{filter_labels_ids: brainstorming.filter_labels_ids},
-        else: %{}
-
+  def broadcast({:ok, %Brainstorming{} = brainstorming}, :brainstorming_filter_updated = event) do
     lanes =
-      Lanes.get_lanes_for_brainstorming(brainstorming.id, filter_label)
+      Lanes.get_lanes_for_brainstorming_with_labels_filtered(brainstorming.id)
 
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
       "brainstormings:" <> brainstorming.id,
-      {event, brainstorming_with_preload, lanes}
+      {event,
+       brainstorming
+       |> Repo.preload([
+         :users,
+         :moderating_users,
+         labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
+       ]), lanes}
+    )
+
+    {:ok, brainstorming}
+  end
+
+  def broadcast({:ok, %Brainstorming{} = brainstorming}, event) do
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> brainstorming.id,
+      {event,
+       brainstorming
+       |> Repo.preload([
+         :users,
+         :moderating_users,
+         labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
+       ])}
     )
 
     {:ok, brainstorming}

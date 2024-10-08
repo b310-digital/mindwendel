@@ -18,12 +18,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
       Brainstormings.get_brainstorming!(id)
       |> Accounts.merge_brainstorming_user(current_user_id)
 
-    filter_label =
-      if length(brainstorming.filter_labels_ids) > 0,
-        do: %{filter_labels_ids: brainstorming.filter_labels_ids},
-        else: %{}
-
-    lanes = Lanes.get_lanes_for_brainstorming(id, filter_label)
+    lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
     current_user = Mindwendel.Accounts.get_user(current_user_id)
 
     {
@@ -72,15 +67,24 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
-  def handle_info({:brainstorming_updated, brainstorming, lanes}, socket) do
+  def handle_info({:brainstorming_filter_updated, brainstorming, lanes}, socket) do
+    {:noreply,
+     push_patch(
+       socket
+       |> assign(:brainstorming, brainstorming)
+       |> assign(:lanes, lanes),
+       to: "/brainstormings/#{brainstorming.id}"
+     )}
+  end
+
+  def handle_info({:brainstorming_updated, brainstorming}, socket) do
     # the backdrop of the bootstrap modal gets sometimes stuck on the pages as its out of reach for the component
     # therefore we patch the url to reload it
 
     {:noreply,
      push_patch(
        socket
-       |> assign(:brainstorming, brainstorming)
-       |> assign(:lanes, lanes),
+       |> assign(:brainstorming, brainstorming),
        to: "/brainstormings/#{brainstorming.id}"
      )}
   end

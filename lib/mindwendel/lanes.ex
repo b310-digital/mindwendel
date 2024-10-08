@@ -60,13 +60,31 @@ defmodule Mindwendel.Lanes do
   end
 
   @doc """
-  Gets lanes for a brainstorming with an optional filter, currently only filter_labels_ids is supported.
-
-  Raises `Ecto.NoResultsError` if the Lane does not exist.
+  Gets lanes for a brainstorming based on the selected label filter.
 
   ## Examples
 
       iex> get_lanes_for_brainstorming(123)
+      [%Lane{}, ...]
+
+  """
+  def get_lanes_for_brainstorming_with_labels_filtered(id) do
+    brainstorming = Brainstormings.get_brainstorming!(id)
+
+    filter_label =
+      if length(brainstorming.filter_labels_ids) > 0,
+        do: %{filter_labels_ids: brainstorming.filter_labels_ids},
+        else: %{}
+
+    get_lanes_for_brainstorming(id, filter_label)
+  end
+
+  @doc """
+  Gets lanes for a brainstorming with an optional filter. Currently only filter_labels_ids is supported.
+
+  ## Examples
+
+      iex> get_lanes_for_brainstorming(123, %{filter_labels_ids: [...]})
       [%Lane{}, ...]
 
   """
