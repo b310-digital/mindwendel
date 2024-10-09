@@ -9,17 +9,19 @@ defmodule MindwendelWeb.LabelLive.CaptionsComponent do
 
     if has_moderating_permission(brainstorming, current_user) do
       # If the filter is already present, remove it as its toggled. If not, add it.
-      toggled_filters =
-        if Enum.member?(brainstorming.filter_labels_ids, idea_label_id),
-          do:
-            Enum.filter(brainstorming.filter_labels_ids, fn filter_id ->
-              filter_id != idea_label_id
-            end),
-          else: [idea_label_id | brainstorming.filter_labels_ids]
-
+      toggled_filters = update_filter_labels(brainstorming, idea_label_id)
       Brainstormings.update_brainstorming(brainstorming, %{filter_labels_ids: toggled_filters})
     end
 
     {:noreply, socket}
+  end
+
+  defp update_filter_labels(brainstorming, idea_label_id) do
+    if Enum.member?(brainstorming.filter_labels_ids, idea_label_id),
+      do:
+        Enum.filter(brainstorming.filter_labels_ids, fn filter_id ->
+          filter_id != idea_label_id
+        end),
+      else: [idea_label_id | brainstorming.filter_labels_ids]
   end
 end
