@@ -699,4 +699,40 @@ defmodule MindwendelWeb.CoreComponents do
     </div>
     """
   end
+
+  @doc """
+  Renders a label filter
+  """
+
+  attr :color, :string
+  attr :label_id, :string
+  attr :id, :string, required: true
+  attr :filter_active, :boolean, default: false
+
+  attr :rest, :global,
+    include: ~w(autocomplete name rel action enctype method novalidate target multipart)
+
+  slot :inner_block, required: true
+
+  def filter_button(assigns) do
+    ~H"""
+    <div class="m-1">
+      <button
+        type="button"
+        class={[
+          "btn btn-sm text-light rounded-pill",
+          @filter_active && "border border-2 border-primary"
+        ]}
+        id={@id}
+        data-color={@color}
+        phx-hook="SetIdeaLabelBackgroundColor"
+        phx-click="set_filter_idea_label"
+        phx-value-id={@label_id}
+        {@rest}
+      >
+        <%= render_slot(@inner_block) %>
+      </button>
+    </div>
+    """
+  end
 end
