@@ -11,6 +11,7 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.Lanes
+  alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.BrainstormingModeratingUser
 
@@ -132,10 +133,21 @@ defmodule Mindwendel.Brainstormings do
         %Brainstorming{} = brainstorming,
         %{filter_labels_ids: _filter_labels_ids} = attrs
       ) do
-    brainstorming
-    |> Brainstorming.changeset(attrs)
-    |> Repo.update()
-    |> broadcast(:brainstorming_filter_updated)
+    # Make sure we sort the old ids first and append the new ids (added through a new filter) last
+    labels_ids_available = Enum.map(brainstorming.labels, fn label -> label.id end)
+    remaining_filter_ids = labels_ids_available -- brainstorming.filter_labels_ids
+
+    Ideas.update_idea_positions_for_brainstorming_by_labels(
+      brainstorming.id,
+      brainstorming.filter_labels_ids ++ remaining_filter_ids
+    )
+
+    updated_brainstorming =
+      brainstorming
+      |> Brainstorming.changeset(attrs)
+      |> Repo.update()
+
+    broadcast(updated_brainstorming, :brainstorming_filter_updated)
   end
 
   def update_brainstorming(%Brainstorming{} = brainstorming, attrs) do

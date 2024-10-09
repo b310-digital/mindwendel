@@ -135,6 +135,53 @@ defmodule Mindwendel.Ideas do
   end
 
   @doc """
+  Updates the sorting of ideas based on the order of labels occuring in filter_ids_order
+
+  ## Examples
+
+      iex> update_idea_positions_for_brainstorming_by_labels(3, [1,2,3])
+      %{1, nil}
+
+  """
+  def update_idea_positions_for_brainstorming_by_labels(brainstorming_id, filter_ids_order) do
+    # This cast of string ids (already uuids) to postgres uuid seems to be needed, as ecto does not do this in this case automatically.
+    binary_ids =
+      Enum.map(filter_ids_order, fn id ->
+        {:ok, bin_id} = Ecto.UUID.dump(id)
+        bin_id
+      end)
+
+    # Sort the ids, based on the order of label ids. For this, the postgres UNNEST function is being used within a fragment.
+    idea_rank_query =
+      from(idea in Idea,
+        inner_join: l in assoc(idea, :idea_labels),
+        inner_join:
+          ordinality in fragment(
+            "SELECT * FROM UNNEST(?::uuid[]) WITH ORDINALITY as ordinality (id, num)",
+            ^binary_ids
+          ),
+        on: l.id == ordinality.id,
+        where: idea.brainstorming_id == ^brainstorming_id,
+        select: %{
+          idea_id: idea.id,
+          idea_rank:
+            over(row_number(),
+              order_by: [asc_nulls_last: ordinality.num, asc: idea.position_order]
+            )
+        }
+      )
+
+    # update all ideas with their rank
+    from(idea in Idea,
+      join: idea_ranks in subquery(idea_rank_query),
+      on: idea_ranks.idea_id == idea.id,
+      where: idea.brainstorming_id == ^brainstorming_id,
+      update: [set: [position_order: idea_ranks.idea_rank]]
+    )
+    |> Repo.update_all([])
+  end
+
+  @doc """
   Returns the update result of changing the order of ideas by a user inside a brainstorming.
 
   ## Examples
