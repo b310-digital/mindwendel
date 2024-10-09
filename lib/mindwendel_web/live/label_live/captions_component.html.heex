@@ -7,6 +7,7 @@
       color={brainstorming_idea_label.color}
       label_id={brainstorming_idea_label.id}
       phx-target={@myself}
+      disabled={!has_moderating_permission(@brainstorming, @current_user)}
     >
       <%= brainstorming_idea_label.name %>
     </.filter_button>

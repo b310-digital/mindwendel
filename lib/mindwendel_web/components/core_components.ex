@@ -709,7 +709,7 @@ defmodule MindwendelWeb.CoreComponents do
   attr :id, :string, required: true
   attr :filter_active, :boolean, default: false
 
-  attr :rest, :global, include: ~w(target)
+  attr :rest, :global, include: ~w(target disabled)
 
   slot :inner_block, required: true
 
@@ -723,6 +723,7 @@ defmodule MindwendelWeb.CoreComponents do
           @filter_active && "border border-2 border-primary"
         ]}
         id={@id}
+        data-testid={@label_id}
         data-color={@color}
         phx-hook="SetIdeaLabelBackgroundColor"
         phx-click="set_filter_idea_label"

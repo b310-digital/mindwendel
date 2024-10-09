@@ -7,16 +7,21 @@ defmodule MindwendelWeb.LabelLive.CaptionsTest do
   alias Mindwendel.Factory
 
   setup do
-    %{brainstorming: Factory.insert!(:brainstorming)}
+    %{brainstorming: Factory.insert!(:brainstorming), user: Factory.insert!(:user)}
   end
 
   test "captions contain all labels", %{
-    brainstorming: brainstorming
+    brainstorming: brainstorming,
+    user: user
   } do
     preloaded_braisntorming = Brainstormings.get_brainstorming!(brainstorming.id)
 
     captions_component =
-      render_component(CaptionsComponent, id: "captions", brainstorming: preloaded_braisntorming)
+      render_component(CaptionsComponent,
+        id: "captions",
+        brainstorming: preloaded_braisntorming,
+        current_user: user
+      )
 
     # make sure that there is at least one label in the list:
 
