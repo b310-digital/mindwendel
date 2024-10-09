@@ -14,7 +14,8 @@ defmodule Mindwendel.IdeaLabels do
   require Logger
 
   def get_idea_labels(ids) do
-    Repo.all(from label in IdeaLabel, where: label.id in ^ids)
+    filtered_ids = Enum.filter(ids, fn id -> !is_nil(id) end)
+    Repo.all(from label in IdeaLabel, where: label.id in ^filtered_ids)
   end
 
   def get_idea_label(id) when not is_nil(id) do

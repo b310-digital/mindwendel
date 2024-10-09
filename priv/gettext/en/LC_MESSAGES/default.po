@@ -95,7 +95,7 @@ msgstr ""
 msgid "Got stuck? Try inspirational teasers!"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:61
+#: lib/mindwendel_web/live/idea_live/form_component.ex:66
 #, elixir-autogen, elixir-format
 msgid "Idea created successfully"
 msgstr ""
@@ -473,7 +473,7 @@ msgstr ""
 msgid "Delete idea"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:40
+#: lib/mindwendel_web/live/idea_live/form_component.ex:41
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Idea updated"
 msgstr ""
