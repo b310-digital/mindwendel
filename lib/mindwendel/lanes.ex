@@ -99,20 +99,17 @@ defmodule Mindwendel.Lanes do
 
     ideas_advanced_query = build_ideas_query_with_filter(filters)
 
-    result =
-      lane_query
-      |> Repo.all()
-      |> Repo.preload(
-        ideas:
-          ideas_advanced_query
-          |> preload([
-            :link,
-            :likes,
-            :idea_labels
-          ])
-      )
-
-    result
+    lane_query
+    |> Repo.all()
+    |> Repo.preload(
+      ideas:
+        ideas_advanced_query
+        |> preload([
+          :link,
+          :likes,
+          :idea_labels
+        ])
+    )
   end
 
   defp build_ideas_query_with_filter(%{filter_labels_ids: filter_labels_ids}) do
