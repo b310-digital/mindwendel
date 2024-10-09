@@ -154,19 +154,20 @@ defmodule Mindwendel.Ideas do
     # Sort the ids, based on the order of label ids. For this, the postgres UNNEST function is being used within a fragment.
     idea_rank_query =
       from(idea in Idea,
-        inner_join: l in assoc(idea, :idea_labels),
-        inner_join:
+        join: l in assoc(idea, :idea_labels),
+        join:
           ordinality in fragment(
             "SELECT * FROM UNNEST(?::uuid[]) WITH ORDINALITY as ordinality (id, num)",
             ^binary_ids
           ),
         on: l.id == ordinality.id,
         where: idea.brainstorming_id == ^brainstorming_id,
+        group_by: idea.id,
         select: %{
           idea_id: idea.id,
           idea_rank:
             over(row_number(),
-              order_by: [asc_nulls_last: ordinality.num, asc: idea.position_order]
+              order_by: [asc_nulls_last: min(ordinality.num), asc: min(idea.position_order)]
             )
         }
       )
