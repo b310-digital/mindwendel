@@ -709,8 +709,7 @@ defmodule MindwendelWeb.CoreComponents do
   attr :id, :string, required: true
   attr :filter_active, :boolean, default: false
 
-  attr :rest, :global,
-    include: ~w(autocomplete name rel action enctype method novalidate target multipart)
+  attr :rest, :global, include: ~w(target)
 
   slot :inner_block, required: true
 
