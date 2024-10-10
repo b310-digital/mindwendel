@@ -144,7 +144,7 @@ defmodule Mindwendel.Ideas do
 
   """
   def update_idea_positions_for_brainstorming_by_labels(brainstorming_id, filter_ids_order) do
-    # This cast of string ids (already uuids) to postgres uuid seems to be needed, as ecto does not do this in this case automatically.
+    # This cast of string ids to uuid is needed, as in this case ecto does not do the conversion itself
     binary_ids =
       Enum.map(filter_ids_order, fn id ->
         {:ok, bin_id} = Ecto.UUID.dump(id)
