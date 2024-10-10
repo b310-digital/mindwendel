@@ -10,6 +10,8 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Lanes
+  alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.BrainstormingModeratingUser
 
@@ -76,15 +78,7 @@ defmodule Mindwendel.Brainstormings do
     |> Repo.preload([
       :users,
       :moderating_users,
-      labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
-      lanes: [
-        ideas: [
-          :link,
-          :likes,
-          :label,
-          :idea_labels
-        ]
-      ]
+      labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
     ])
     |> update_last_accessed_at
   end
@@ -135,6 +129,27 @@ defmodule Mindwendel.Brainstormings do
       {:error, %Ecto.Changeset{}}
 
   """
+  def update_brainstorming(
+        %Brainstorming{} = brainstorming,
+        %{filter_labels_ids: _filter_labels_ids} = attrs
+      ) do
+    # Make sure we sort the old ids first and append the new ids (added through a new filter) last
+    labels_ids_available = Enum.map(brainstorming.labels, fn label -> label.id end)
+    remaining_filter_ids = labels_ids_available -- brainstorming.filter_labels_ids
+
+    Ideas.update_idea_positions_for_brainstorming_by_labels(
+      brainstorming.id,
+      brainstorming.filter_labels_ids ++ remaining_filter_ids
+    )
+
+    updated_brainstorming =
+      brainstorming
+      |> Brainstorming.changeset(attrs)
+      |> Repo.update()
+
+    broadcast(updated_brainstorming, :brainstorming_filter_updated)
+  end
+
   def update_brainstorming(%Brainstorming{} = brainstorming, attrs) do
     brainstorming
     |> Brainstorming.changeset(attrs)
@@ -236,6 +251,25 @@ defmodule Mindwendel.Brainstormings do
       Mindwendel.PubSub,
       "brainstormings:" <> brainstorming_id
     )
+  end
+
+  def broadcast({:ok, %Brainstorming{} = brainstorming}, :brainstorming_filter_updated = event) do
+    lanes =
+      Lanes.get_lanes_for_brainstorming_with_labels_filtered(brainstorming.id)
+
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> brainstorming.id,
+      {event,
+       brainstorming
+       |> Repo.preload([
+         :users,
+         :moderating_users,
+         labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
+       ]), lanes}
+    )
+
+    {:ok, brainstorming}
   end
 
   def broadcast({:ok, %Brainstorming{} = brainstorming}, event) do
