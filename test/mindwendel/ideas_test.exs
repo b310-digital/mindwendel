@@ -9,6 +9,7 @@ defmodule Mindwendel.IdeasTest do
     user = Factory.insert!(:user)
     brainstorming = Factory.insert!(:brainstorming, users: [user])
     lane = Enum.at(brainstorming.lanes, 0)
+    label_first = Enum.at(brainstorming.labels, 0)
 
     %{
       brainstorming: brainstorming,
@@ -23,8 +24,35 @@ defmodule Mindwendel.IdeasTest do
         ),
       user: user,
       like: Factory.insert!(:like, :with_idea_and_user),
-      lane: lane
+      lane: lane,
+      label: label_first
     }
+  end
+
+  describe "update_idea_positions_for_brainstorming_by_labels" do
+    test "sorts ideas with label first including ideas without named label", %{
+      brainstorming: brainstorming,
+      idea: idea,
+      label: label,
+      lane: lane
+    } do
+      second_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          lane: lane,
+          idea_labels: [label],
+          updated_at: ~N[2021-01-03 15:04:30],
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      Ideas.update_idea_positions_for_brainstorming_by_labels(brainstorming.id, [label.id])
+      lanes_with_ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id)
+
+      assert Enum.map(lanes_with_ideas_sorted_by_position, & &1.id) == [
+               second_idea.id,
+               idea.id
+             ]
+    end
   end
 
   describe "list_ideas_for_brainstorming" do
