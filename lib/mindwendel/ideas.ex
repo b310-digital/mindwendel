@@ -151,7 +151,9 @@ defmodule Mindwendel.Ideas do
         bin_id
       end)
 
-    # Sort the ids, based on the order of label ids. For this, the postgres UNNEST function is being used within a fragment.
+    # Sort the ideas, based on the order of the given label ids. For this, the postgres UNNEST function is being used within a fragment.
+    # As a second order, the od position order is used to keep relative positioning between ideas.
+    # Use left join to include ideas without label, use a group to make sure to not include duplicates.
     idea_rank_query =
       from(idea in Idea,
         left_join: l in assoc(idea, :idea_labels),

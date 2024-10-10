@@ -119,6 +119,7 @@ defmodule Mindwendel.Lanes do
         where: labels.id in ^filter_labels_ids,
         distinct: idea.id
 
+    # subquery is needed as distinct uses an order by itself which would conflict with the wanted order
     from(i in subquery(distinct_ideas),
       order_by: [asc: i.position_order]
     )

@@ -30,12 +30,13 @@ defmodule Mindwendel.IdeasTest do
   end
 
   describe "update_idea_positions_for_brainstorming_by_labels" do
-    test "sorts ideas with label first including ideas without named label", %{
-      brainstorming: brainstorming,
-      idea: idea,
-      label: label,
-      lane: lane
-    } do
+    test "sorts ideas with given labels first but including ideas without named label at the end",
+         %{
+           brainstorming: brainstorming,
+           idea: idea,
+           label: label,
+           lane: lane
+         } do
       second_idea =
         Factory.insert!(:idea,
           brainstorming: brainstorming,
@@ -50,6 +51,80 @@ defmodule Mindwendel.IdeasTest do
 
       assert Enum.map(lanes_with_ideas_sorted_by_position, & &1.id) == [
                second_idea.id,
+               idea.id
+             ]
+    end
+
+    test "updates positions but keeping relative positioning", %{
+      brainstorming: brainstorming,
+      idea: idea,
+      label: label,
+      lane: lane
+    } do
+      second_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          position_order: 1,
+          lane: lane,
+          idea_labels: [label],
+          updated_at: ~N[2021-01-03 15:04:30],
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      third_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          position_order: 2,
+          lane: lane,
+          idea_labels: [label],
+          updated_at: ~N[2021-01-03 15:04:30],
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      Ideas.update_idea_positions_for_brainstorming_by_labels(brainstorming.id, [label.id])
+      lanes_with_ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id)
+
+      assert Enum.map(lanes_with_ideas_sorted_by_position, & &1.id) == [
+               second_idea.id,
+               third_idea.id,
+               idea.id
+             ]
+    end
+
+    test "updates positions preferring given label ids", %{
+      brainstorming: brainstorming,
+      idea: idea,
+      label: label,
+      lane: lane
+    } do
+      Ideas.update_idea(idea, %{idea_label: Enum.at(brainstorming.labels, 1)})
+
+      second_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          position_order: 1,
+          lane: lane,
+          idea_labels: [label],
+          updated_at: ~N[2021-01-03 15:04:30],
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      third_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          position_order: 2,
+          lane: lane,
+          idea_labels: [label],
+          updated_at: ~N[2021-01-03 15:04:30],
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      Ideas.update_idea_positions_for_brainstorming_by_labels(brainstorming.id, [label.id])
+      lanes_with_ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id)
+
+      assert Enum.map(lanes_with_ideas_sorted_by_position, & &1.id) == [
+               second_idea.id,
+               third_idea.id,
                idea.id
              ]
     end
