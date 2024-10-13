@@ -12,6 +12,15 @@ defmodule Mindwendel.Ideas do
 
   require Logger
 
+  def get_max_position_order(brainstorming_id, labels_ids) do
+    idea_query =
+      from idea in Idea,
+        left_join: l in assoc(idea, :idea_labels),
+        where: idea.brainstorming_id == ^brainstorming_id and l.id in ^labels_ids
+
+    Repo.aggregate(idea_query, :max, :position_order)
+  end
+
   @doc """
   Returns the list of ideas.
 
@@ -135,7 +144,8 @@ defmodule Mindwendel.Ideas do
   end
 
   @doc """
-  Updates the sorting of ideas based on the order of labels occuring in filter_ids_order
+  Updates the position order of the remaining ideas for labels
+  This is triggered shortly before a label filter is activated. It takes care of ordering the non visible ideas after the currently sorted ideas.
 
   ## Examples
 
@@ -143,33 +153,24 @@ defmodule Mindwendel.Ideas do
       %{1, nil}
 
   """
-  def update_idea_positions_for_brainstorming_by_labels(brainstorming_id, filter_ids_order) do
-    # This cast of string ids to uuid is needed, as in this case ecto does not do the conversion itself
-    binary_ids =
-      Enum.map(filter_ids_order, fn id ->
-        {:ok, bin_id} = Ecto.UUID.dump(id)
-        bin_id
-      end)
+  def update_idea_positions_for_brainstorming_by_labels(
+        brainstorming_id,
+        current_labels_ids
+      ) do
+    max_position_order = get_max_position_order(brainstorming_id, current_labels_ids)
 
-    # Sort the ideas, based on the order of the given label ids. For this, the postgres UNNEST function is being used within a fragment.
-    # As a second order, the od position order is used to keep relative positioning between ideas.
-    # Use left join to include ideas without label, use a group to make sure to not include duplicates.
     idea_rank_query =
       from(idea in Idea,
         left_join: l in assoc(idea, :idea_labels),
-        left_join:
-          ordinality in fragment(
-            "SELECT * FROM UNNEST(?::uuid[]) WITH ORDINALITY as ordinality (id, num)",
-            ^binary_ids
-          ),
-        on: l.id == ordinality.id,
-        where: idea.brainstorming_id == ^brainstorming_id,
+        where:
+          idea.brainstorming_id == ^brainstorming_id and
+            (l.id not in ^current_labels_ids or is_nil(l.id)),
         group_by: idea.id,
         select: %{
           idea_id: idea.id,
           idea_rank:
             over(row_number(),
-              order_by: [asc_nulls_last: min(ordinality.num), asc: min(idea.position_order)]
+              order_by: [asc_nulls_last: min(idea.position_order)]
             )
         }
       )
@@ -179,7 +180,7 @@ defmodule Mindwendel.Ideas do
       join: idea_ranks in subquery(idea_rank_query),
       on: idea_ranks.idea_id == idea.id,
       where: idea.brainstorming_id == ^brainstorming_id,
-      update: [set: [position_order: idea_ranks.idea_rank]]
+      update: [set: [position_order: idea_ranks.idea_rank + ^max_position_order]]
     )
     |> Repo.update_all([])
   end

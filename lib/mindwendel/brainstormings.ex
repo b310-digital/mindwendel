@@ -131,15 +131,11 @@ defmodule Mindwendel.Brainstormings do
   """
   def update_brainstorming(
         %Brainstorming{} = brainstorming,
-        %{filter_labels_ids: _filter_labels_ids} = attrs
+        %{filter_labels_ids: filter_labels_ids} = attrs
       ) do
-    # Make sure we sort the old ids first and append the new ids (added through a new filter) last
-    labels_ids_available = Enum.map(brainstorming.labels, fn label -> label.id end)
-    remaining_filter_ids = labels_ids_available -- brainstorming.filter_labels_ids
-
     Ideas.update_idea_positions_for_brainstorming_by_labels(
       brainstorming.id,
-      brainstorming.filter_labels_ids ++ remaining_filter_ids
+      brainstorming.filter_labels_ids ++ filter_labels_ids
     )
 
     updated_brainstorming =
