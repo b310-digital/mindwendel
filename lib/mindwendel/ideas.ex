@@ -12,6 +12,15 @@ defmodule Mindwendel.Ideas do
 
   require Logger
 
+  @doc """
+  Returns the max position order for ideas and given labels
+
+  ## Examples
+
+      iex> get_max_position_order(123, [467])
+      3
+
+  """
   def get_max_position_order(brainstorming_id, labels_ids) do
     idea_query =
       from idea in Idea,
@@ -144,8 +153,8 @@ defmodule Mindwendel.Ideas do
   end
 
   @doc """
-  Updates the position order of the remaining ideas for labels
-  This is triggered shortly before a label filter is activated. It takes care of ordering the non visible ideas after the currently sorted ideas.
+  Updates the position order of the disjoint ideas for given labels
+  This is triggered shortly before a label filter is activated. It takes care of sorting the hidden ideas to place them after the currently visible ones.
 
   ## Examples
 
@@ -155,16 +164,16 @@ defmodule Mindwendel.Ideas do
   """
   def update_idea_positions_for_brainstorming_by_labels(
         brainstorming_id,
-        current_labels_ids
+        labels_ids
       ) do
-    max_position_order = get_max_position_order(brainstorming_id, current_labels_ids)
+    max_position_order = get_max_position_order(brainstorming_id, labels_ids)
 
     idea_rank_query =
       from(idea in Idea,
         left_join: l in assoc(idea, :idea_labels),
         where:
           idea.brainstorming_id == ^brainstorming_id and
-            (l.id not in ^current_labels_ids or is_nil(l.id)),
+            (l.id not in ^labels_ids or is_nil(l.id)),
         group_by: idea.id,
         select: %{
           idea_id: idea.id,
