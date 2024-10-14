@@ -133,7 +133,7 @@ defmodule Mindwendel.Brainstormings do
         %Brainstorming{} = brainstorming,
         %{filter_labels_ids: filter_labels_ids} = attrs
       ) do
-    Ideas.update_idea_positions_for_brainstorming_by_labels(
+    Ideas.update_disjoint_idea_positions_for_brainstorming_by_labels(
       brainstorming.id,
       brainstorming.filter_labels_ids ++ filter_labels_ids
     )

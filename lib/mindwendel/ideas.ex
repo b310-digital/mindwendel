@@ -159,11 +159,11 @@ defmodule Mindwendel.Ideas do
 
   ## Examples
 
-      iex> update_idea_positions_for_brainstorming_by_labels(3, [1,2,3])
+      iex> update_disjoint_idea_positions_for_brainstorming_by_labels(3, [1,2,3])
       %{1, nil}
 
   """
-  def update_idea_positions_for_brainstorming_by_labels(
+  def update_disjoint_idea_positions_for_brainstorming_by_labels(
         brainstorming_id,
         labels_ids
       ) do
