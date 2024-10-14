@@ -168,18 +168,26 @@ defmodule Mindwendel.Ideas do
       ) do
     max_position_order = get_max_position_order(brainstorming_id, labels_ids)
 
-    idea_rank_query =
+    # Get all idea ids that are matching the given labels.
+    ideas_with_labels =
       from(idea in Idea,
         left_join: l in assoc(idea, :idea_labels),
+        where: l.id in ^labels_ids,
+        distinct: idea.id,
+        select: %{id: idea.id}
+      )
+
+    # Use the disjoint ideas and order them starting with the max position order of the matched ideas with labels.
+    idea_rank_query =
+      from(idea in Idea,
         where:
           idea.brainstorming_id == ^brainstorming_id and
-            (l.id not in ^labels_ids or is_nil(l.id)),
-        group_by: idea.id,
+            idea.id not in subquery(ideas_with_labels),
         select: %{
           idea_id: idea.id,
           idea_rank:
             over(row_number(),
-              order_by: [asc_nulls_last: min(idea.position_order)]
+              order_by: [asc_nulls_last: idea.position_order]
             )
         }
       )
