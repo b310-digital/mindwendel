@@ -154,7 +154,8 @@ defmodule Mindwendel.Ideas do
 
   @doc """
   Updates the position order of the disjoint ideas for given labels
-  This is triggered shortly before a label filter is activated. It takes care of sorting the hidden ideas to place them after the currently visible ones.
+  This is triggered shortly before a label filter is activated. It takes care of sorting the currently hidden ideas to place them after the currently visible ones.
+  Example: Filter activated for blue ideas (b1,b2,b3), but also available (hidden) are currently red ideas (r4,r5,r6). Therefore, update the red positions, to follow after the blue ones => positions 4,5,6.
 
   ## Examples
 
@@ -172,7 +173,7 @@ defmodule Mindwendel.Ideas do
     ideas_with_labels =
       from(idea in Idea,
         left_join: l in assoc(idea, :idea_labels),
-        where: l.id in ^labels_ids,
+        where: idea.brainstorming_id == ^brainstorming_id and l.id in ^labels_ids,
         distinct: idea.id,
         select: %{id: idea.id}
       )
