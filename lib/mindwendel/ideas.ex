@@ -13,12 +13,16 @@ defmodule Mindwendel.Ideas do
   require Logger
 
   @doc """
-  Returns the max position order for ideas and given labels
+  Returns the max position order for either ideas and given labels or a lane
 
   ## Examples
 
-      iex> get_max_position_order(123, [467])
+      iex> get_max_position_order(123, %{labels_ids: [467]})
       3
+
+      iex> get_max_position_order(123, %{lane_id: 1})
+      2
+
 
   """
   def get_max_position_order(brainstorming_id, %{labels_ids: labels_ids}) do
