@@ -173,7 +173,7 @@ defmodule Mindwendel.Ideas do
         brainstorming_id,
         labels_ids
       ) do
-    max_position_order = get_max_position_order(brainstorming_id, labels_ids)
+    max_position_order = get_max_position_order(brainstorming_id, labels_ids) || 0
 
     # Get all idea ids that are matching the given labels.
     ideas_with_labels =
