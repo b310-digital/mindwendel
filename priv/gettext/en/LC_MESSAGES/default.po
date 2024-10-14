@@ -27,12 +27,12 @@ msgstr ""
 msgid "Ready?"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:125
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:139
 #, elixir-autogen, elixir-format
 msgid "%{name} - Edit"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:102
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:116
 #, elixir-autogen, elixir-format
 msgid "%{name} - New Idea"
 msgstr ""
@@ -97,7 +97,7 @@ msgstr ""
 msgid "Got stuck? Try inspirational teasers!"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:61
+#: lib/mindwendel_web/live/idea_live/form_component.ex:66
 #, elixir-autogen, elixir-format
 msgid "Idea created successfully"
 msgstr ""
@@ -107,7 +107,7 @@ msgstr ""
 msgid "New brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:94
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:95
 #, elixir-autogen, elixir-format
 msgid "New idea"
 msgstr ""
@@ -223,27 +223,27 @@ msgstr ""
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:69
+#: lib/mindwendel/brainstormings/brainstorming.ex:75
 #, elixir-autogen, elixir-format
 msgid "cyan"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:70
+#: lib/mindwendel/brainstormings/brainstorming.ex:76
 #, elixir-autogen, elixir-format
 msgid "gray dark"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:71
+#: lib/mindwendel/brainstormings/brainstorming.ex:77
 #, elixir-autogen, elixir-format
 msgid "green"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:72
+#: lib/mindwendel/brainstormings/brainstorming.ex:78
 #, elixir-autogen, elixir-format
 msgid "red"
 msgstr ""
 
-#: lib/mindwendel/brainstormings/brainstorming.ex:73
+#: lib/mindwendel/brainstormings/brainstorming.ex:79
 #, elixir-autogen, elixir-format
 msgid "yellow"
 msgstr ""
@@ -272,7 +272,7 @@ msgstr "Mindwendel Brainstorming"
 msgid "Share"
 msgstr "Share"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:161
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:162
 #, elixir-autogen, elixir-format
 msgid "Share brainstorming"
 msgstr "Share brainstorming"
@@ -292,7 +292,7 @@ msgstr "Download as svg"
 msgid "Brainstorming delete are you sure"
 msgstr "Are you sure that you want to delete this brainstorming?"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:128
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:129
 #, elixir-autogen, elixir-format
 msgid "Update idea"
 msgstr ""
@@ -399,7 +399,7 @@ msgstr ""
 msgid "Type the label name"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:112
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:126
 #, elixir-autogen, elixir-format, fuzzy
 msgid "%{name} - New Lane"
 msgstr ""
@@ -416,13 +416,13 @@ msgstr ""
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:26
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:28
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:111
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:112
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:260
 #, elixir-autogen, elixir-format
 msgid "New lane"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:145
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:146
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Update lane"
 msgstr ""
@@ -476,7 +476,12 @@ msgstr ""
 msgid "Delete idea"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:40
+#: lib/mindwendel_web/live/idea_live/form_component.ex:41
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Idea updated"
+msgstr ""
+
+#: lib/mindwendel_web/live/label_live/captions_component.html.heex:22
+#, elixir-autogen, elixir-format
+msgid "Reset filter"
 msgstr ""

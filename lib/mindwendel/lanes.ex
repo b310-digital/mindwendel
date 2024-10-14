@@ -7,6 +7,7 @@ defmodule Mindwendel.Lanes do
   alias Mindwendel.Repo
 
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings
 
   require Logger
@@ -59,9 +60,7 @@ defmodule Mindwendel.Lanes do
   end
 
   @doc """
-  Gets lanes for a brainstorming
-
-  Raises `Ecto.NoResultsError` if the Lane does not exist.
+  Gets lanes for a brainstorming based on the selected label filter.
 
   ## Examples
 
@@ -69,7 +68,27 @@ defmodule Mindwendel.Lanes do
       [%Lane{}, ...]
 
   """
-  def get_lanes_for_brainstorming(id) do
+  def get_lanes_for_brainstorming_with_labels_filtered(id) do
+    brainstorming = Brainstormings.get_brainstorming!(id)
+
+    filter_label =
+      if length(brainstorming.filter_labels_ids) > 0,
+        do: %{filter_labels_ids: brainstorming.filter_labels_ids},
+        else: %{}
+
+    get_lanes_for_brainstorming(id, filter_label)
+  end
+
+  @doc """
+  Gets lanes for a brainstorming with an optional filter. Currently only filter_labels_ids is supported.
+
+  ## Examples
+
+      iex> get_lanes_for_brainstorming(123, %{filter_labels_ids: [...]})
+      [%Lane{}, ...]
+
+  """
+  def get_lanes_for_brainstorming(id, filters \\ %{}) do
     lane_query =
       from lane in Lane,
         where: lane.brainstorming_id == ^id,
@@ -78,15 +97,36 @@ defmodule Mindwendel.Lanes do
           asc: lane.inserted_at
         ]
 
-    Repo.all(lane_query)
+    ideas_advanced_query = build_ideas_query_with_filter(filters)
+
+    lane_query
+    |> Repo.all()
     |> Repo.preload(
-      ideas: [
-        :link,
-        :likes,
-        :label,
-        :idea_labels
-      ]
+      ideas:
+        ideas_advanced_query
+        |> preload([
+          :link,
+          :likes,
+          :idea_labels
+        ])
     )
+  end
+
+  defp build_ideas_query_with_filter(%{filter_labels_ids: filter_labels_ids}) do
+    distinct_ideas =
+      from idea in Idea,
+        join: labels in assoc(idea, :idea_labels),
+        where: labels.id in ^filter_labels_ids,
+        distinct: idea.id
+
+    # subquery is needed as distinct uses an order by itself which would conflict with the wanted order
+    from(i in subquery(distinct_ideas),
+      order_by: [asc: i.position_order]
+    )
+  end
+
+  defp build_ideas_query_with_filter(%{} = _filters) do
+    Idea
   end
 
   @doc """
@@ -163,7 +203,7 @@ defmodule Mindwendel.Lanes do
   end
 
   def broadcast_lanes_update(brainstorming_id) do
-    lanes = get_lanes_for_brainstorming(brainstorming_id)
+    lanes = get_lanes_for_brainstorming_with_labels_filtered(brainstorming_id)
     Brainstormings.broadcast({:ok, brainstorming_id, lanes}, :lanes_updated)
   end
 end

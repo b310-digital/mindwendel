@@ -5,6 +5,7 @@ defmodule Mindwendel.BrainstormingsTest do
   alias Mindwendel.Factory
 
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Lanes
   alias Mindwendel.IdeaLabels
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
@@ -234,7 +235,7 @@ defmodule Mindwendel.BrainstormingsTest do
       Brainstormings.empty(brainstorming)
       # reload brainstorming:
       brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
-      brainstorming = brainstorming |> Repo.preload([:ideas])
+      brainstorming = brainstorming |> Repo.preload([:ideas, :lanes])
       assert Enum.empty?(brainstorming.lanes)
     end
 
@@ -258,9 +259,9 @@ defmodule Mindwendel.BrainstormingsTest do
 
       Brainstormings.empty(brainstorming)
       # reload brainstorming:
-      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
+      lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
 
-      assert Enum.empty?(brainstorming.lanes)
+      assert Enum.empty?(lanes)
       assert Repo.get_by(Idea, id: idea.id) == nil
       assert Repo.get_by(IdeaIdeaLabel, idea_id: idea.id) == nil
       assert Repo.get_by(Like, id: like.id) == nil
@@ -282,7 +283,7 @@ defmodule Mindwendel.BrainstormingsTest do
       assert Enum.count(other_brainstorming.ideas) == 1
       Brainstormings.empty(brainstorming)
       # reload brainstorming:
-      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
+      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id) |> Repo.preload(:lanes)
       brainstorming = brainstorming |> Repo.preload([:ideas])
       other_brainstorming = other_brainstorming |> Repo.preload([:ideas])
       assert Enum.empty?(brainstorming.lanes)

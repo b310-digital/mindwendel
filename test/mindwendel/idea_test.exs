@@ -8,13 +8,15 @@ defmodule Mindwendel.IdeaTest do
   describe("Factory.build(:idea)") do
     setup do
       brainstorming = Factory.insert!(:brainstorming)
+      lane = Enum.at(brainstorming.lanes, 0)
 
       idea =
-        Factory.build(:idea, brainstorming_id: brainstorming.id, brainstorming: brainstorming)
+        Factory.build(:idea, brainstorming_id: brainstorming.id, lane_id: lane.id)
 
       %{
         brainstorming: brainstorming,
-        idea: idea
+        idea: idea,
+        lane: lane
       }
     end
 
@@ -25,6 +27,17 @@ defmodule Mindwendel.IdeaTest do
     test "builds valid object", %{idea: idea} do
       idea_changeset = Idea.changeset(idea)
       assert idea_changeset.valid?
+    end
+
+    test "adds a default position order", %{brainstorming: brainstorming, lane: lane} do
+      changeset =
+        Idea.changeset(%Idea{}, %{
+          brainstorming_id: brainstorming.id,
+          lane_id: lane.id,
+          body: "test"
+        })
+
+      assert changeset.changes.position_order == 1
     end
   end
 
@@ -45,13 +58,19 @@ defmodule Mindwendel.IdeaTest do
   describe "#valid?" do
     setup do
       brainstorming = Factory.insert!(:brainstorming)
+      lane = Enum.at(brainstorming.lanes, 0)
 
       idea =
-        Factory.build(:idea, brainstorming_id: brainstorming.id, brainstorming: brainstorming)
+        Factory.build(:idea,
+          brainstorming_id: brainstorming.id,
+          brainstorming: brainstorming,
+          lane: lane
+        )
 
       %{
         brainstorming: brainstorming,
-        idea: idea
+        idea: idea,
+        lane: lane
       }
     end
 

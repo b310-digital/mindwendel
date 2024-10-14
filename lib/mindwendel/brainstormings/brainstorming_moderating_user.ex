@@ -1,4 +1,5 @@
 defmodule Mindwendel.Brainstormings.BrainstormingModeratingUser do
+  # Not using Mindwendel.Schema as the `@derive` in there clashes here
   use Ecto.Schema
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Accounts.User

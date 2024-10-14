@@ -286,6 +286,40 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
       assert view |> has_element?("div[class~= 'lane']")
     end
+
+    test "sets a label filter as admin", %{conn: conn, brainstorming: brainstorming} do
+      moderating_user = List.first(brainstorming.users)
+      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+      selected_ideal_label = Enum.at(brainstorming.labels, 0)
+
+      {:ok, view, _html} =
+        conn
+        |> init_test_session(%{current_user_id: moderating_user.id})
+        |> live(~p"/brainstormings/#{brainstorming.id}")
+
+      view
+      |> element(".btn[data-testid=\"#{selected_ideal_label.id}\"]")
+      |> render_click()
+
+      assert(
+        Brainstormings.get_brainstorming!(brainstorming.id).filter_labels_ids == [
+          selected_ideal_label.id
+        ]
+      )
+    end
+
+    test "disables label filter as user", %{conn: conn, brainstorming: brainstorming} do
+      selected_ideal_label = Enum.at(brainstorming.labels, 0)
+
+      {:ok, view, _html} =
+        conn
+        |> live(~p"/brainstormings/#{brainstorming.id}")
+
+      assert view
+             |> has_element?(
+               ".btn[data-testid=\"#{selected_ideal_label.id}\"][disabled='disabled']"
+             )
+    end
   end
 
   describe "new" do
