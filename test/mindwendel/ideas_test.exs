@@ -30,14 +30,14 @@ defmodule Mindwendel.IdeasTest do
   end
 
   describe "get_max_position_order" do
-    test "returns nil if no position is available",
+    test "returns 0 if no position is available",
          %{
            brainstorming: brainstorming,
            label: label
          } do
       assert Ideas.get_max_position_order(brainstorming.id, [
                label.id
-             ]) == nil
+             ]) == 0
     end
 
     test "returns 1 if one idea is present with pos order of 1",
