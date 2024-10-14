@@ -35,9 +35,11 @@ defmodule Mindwendel.IdeasTest do
            brainstorming: brainstorming,
            label: label
          } do
-      assert Ideas.get_max_position_order(brainstorming.id, [
-               label.id
-             ]) == 0
+      assert Ideas.get_max_position_order(brainstorming.id, %{
+               labels_ids: [
+                 label.id
+               ]
+             }) == 0
     end
 
     test "returns 1 if one idea is present with pos order of 1",
@@ -55,9 +57,11 @@ defmodule Mindwendel.IdeasTest do
         inserted_at: ~N[2021-01-01 15:04:30]
       )
 
-      assert Ideas.get_max_position_order(brainstorming.id, [
-               label.id
-             ]) == 1
+      assert Ideas.get_max_position_order(brainstorming.id, %{
+               labels_ids: [
+                 label.id
+               ]
+             }) == 1
     end
 
     test "returns the pos number of the matching idea if only one idea is matching the label",
@@ -86,9 +90,11 @@ defmodule Mindwendel.IdeasTest do
         inserted_at: ~N[2021-01-01 15:04:30]
       )
 
-      assert Ideas.get_max_position_order(brainstorming.id, [
-               filter_label.id
-             ]) == 1
+      assert Ideas.get_max_position_order(brainstorming.id, %{
+               labels_ids: [
+                 filter_label.id
+               ]
+             }) == 1
     end
   end
 

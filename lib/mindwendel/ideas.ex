@@ -21,11 +21,21 @@ defmodule Mindwendel.Ideas do
       3
 
   """
-  def get_max_position_order(brainstorming_id, labels_ids) do
+  def get_max_position_order(brainstorming_id, %{labels_ids: labels_ids}) do
     idea_query =
       from idea in Idea,
         left_join: l in assoc(idea, :idea_labels),
         where: idea.brainstorming_id == ^brainstorming_id and l.id in ^labels_ids
+
+    Repo.aggregate(idea_query, :max, :position_order) || 0
+  end
+
+  def get_max_position_order(brainstorming_id, %{lane_id: lane_id}) do
+    idea_query =
+      from idea in Idea,
+        where:
+          idea.brainstorming_id == ^brainstorming_id and idea.lane_id == ^lane_id and
+            not is_nil(idea.position_order)
 
     Repo.aggregate(idea_query, :max, :position_order) || 0
   end
@@ -173,7 +183,7 @@ defmodule Mindwendel.Ideas do
         brainstorming_id,
         labels_ids
       ) do
-    max_position_order = get_max_position_order(brainstorming_id, labels_ids)
+    max_position_order = get_max_position_order(brainstorming_id, %{labels_ids: labels_ids})
 
     # Get all idea ids that are matching the given labels.
     ideas_with_labels =
