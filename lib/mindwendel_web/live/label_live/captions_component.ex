@@ -16,6 +16,10 @@ defmodule MindwendelWeb.LabelLive.CaptionsComponent do
     {:noreply, socket}
   end
 
+  defp build_filter_labels(_brainstorming, "filter-label-reset" = _idea_label_id) do
+    []
+  end
+
   defp build_filter_labels(brainstorming, idea_label_id) do
     if Enum.member?(brainstorming.filter_labels_ids, idea_label_id),
       do:

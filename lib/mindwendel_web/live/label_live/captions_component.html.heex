@@ -12,4 +12,14 @@
       <%= brainstorming_idea_label.name %>
     </.filter_button>
   <% end %>
+  <%= if has_moderating_permission(@brainstorming, @current_user) do %>
+    <.filter_button
+      label_id="filter-label-reset"
+      color="grey"
+      id={"idea-caption-#{uuid()}"}
+      phx-target={@myself}
+    >
+      <%= gettext("Reset filter") %>
+    </.filter_button>
+  <% end %>
 </div>
