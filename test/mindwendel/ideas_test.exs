@@ -29,6 +29,69 @@ defmodule Mindwendel.IdeasTest do
     }
   end
 
+  describe "get_max_position_order" do
+    test "returns nil if no position is available",
+         %{
+           brainstorming: brainstorming,
+           label: label
+         } do
+      assert Ideas.get_max_position_order(brainstorming.id, [
+               label.id
+             ]) == nil
+    end
+
+    test "returns 1 if one idea is present with pos order of 1",
+         %{
+           brainstorming: brainstorming,
+           label: label,
+           lane: lane
+         } do
+      Factory.insert!(:idea,
+        brainstorming: brainstorming,
+        position_order: 1,
+        lane: lane,
+        idea_labels: [label],
+        updated_at: ~N[2021-01-03 15:04:30],
+        inserted_at: ~N[2021-01-01 15:04:30]
+      )
+
+      assert Ideas.get_max_position_order(brainstorming.id, [
+               label.id
+             ]) == 1
+    end
+
+    test "returns the pos number of the matching idea if only one idea is matching the label",
+         %{
+           brainstorming: brainstorming,
+           label: label,
+           lane: lane
+         } do
+      filter_label = Enum.at(brainstorming.labels, 1)
+
+      Factory.insert!(:idea,
+        brainstorming: brainstorming,
+        position_order: 1,
+        lane: lane,
+        idea_labels: [filter_label],
+        updated_at: ~N[2021-01-03 15:04:30],
+        inserted_at: ~N[2021-01-01 15:04:30]
+      )
+
+      Factory.insert!(:idea,
+        brainstorming: brainstorming,
+        position_order: 2,
+        lane: lane,
+        idea_labels: [label],
+        updated_at: ~N[2021-01-03 15:04:30],
+        inserted_at: ~N[2021-01-01 15:04:30]
+      )
+
+      assert Ideas.get_max_position_order(brainstorming.id, [
+               filter_label.id
+             ]) == 1
+    end
+  end
+
   describe "update_disjoint_idea_positions_for_brainstorming_by_labels" do
     test "sorts ideas with given labels first but including ideas without named label at the end",
          %{
