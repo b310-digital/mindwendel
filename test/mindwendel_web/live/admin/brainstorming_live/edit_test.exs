@@ -5,6 +5,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
   alias Mindwendel.Factory
 
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Lanes
 
   setup do
     brainstorming = Factory.insert!(:brainstorming)
@@ -164,16 +165,16 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
         live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
       # reload brainstorming to check for changes:
-      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
-      assert Enum.count(brainstorming.lanes) == 1
+      lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
+      assert length(lanes) == 1
 
       edit_live_view
       |> element("button", "Empty")
       |> render_click()
 
       # reload brainstorming to check for changes:
-      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
-      assert Enum.empty?(brainstorming.lanes)
+      lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
+      assert lanes == []
     end
   end
 

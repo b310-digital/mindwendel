@@ -2,6 +2,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   use MindwendelWeb, :live_component
 
   alias Mindwendel.Ideas
+  alias Mindwendel.IdeaLabels
 
   @impl true
   def update(%{idea: idea} = assigns, socket) do
@@ -47,22 +48,32 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   end
 
   defp save_idea(socket, :new, idea_params) do
-    case Ideas.create_idea(Map.put(idea_params, "user_id", socket.assigns.current_user.id)) do
-      {:ok, _idea} ->
-        {:ok, user} =
-          Mindwendel.Accounts.update_user(socket.assigns.current_user, %{
-            username: idea_params["username"]
-          })
+    idea_params_merged =
+      idea_params
+      |> Map.put("user_id", socket.assigns.current_user.id)
+      |> Map.put(
+        "idea_labels",
+        IdeaLabels.get_idea_labels(socket.assigns.brainstorming.filter_labels_ids)
+      )
 
+    case Ideas.create_idea(idea_params_merged) do
+      {:ok, _idea} ->
+        {:ok, user} = update_username(socket.assigns.current_user, idea_params_merged["username"])
         send(self(), {:user_updated, user})
 
         {:noreply,
          socket
          |> put_flash(:info, gettext("Idea created successfully"))
-         |> push_patch(to: ~p"/brainstormings/#{idea_params["brainstorming_id"]}")}
+         |> push_patch(to: ~p"/brainstormings/#{idea_params_merged["brainstorming_id"]}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}
     end
+  end
+
+  defp update_username(current_user, username) do
+    Mindwendel.Accounts.update_user(current_user, %{
+      username: username
+    })
   end
 end

@@ -13,6 +13,24 @@ defmodule Mindwendel.Ideas do
   require Logger
 
   @doc """
+  Returns the max position order for ideas and given labels
+
+  ## Examples
+
+      iex> get_max_position_order(123, [467])
+      3
+
+  """
+  def get_max_position_order(brainstorming_id, labels_ids) do
+    idea_query =
+      from idea in Idea,
+        left_join: l in assoc(idea, :idea_labels),
+        where: idea.brainstorming_id == ^brainstorming_id and l.id in ^labels_ids
+
+    Repo.aggregate(idea_query, :max, :position_order) || 0
+  end
+
+  @doc """
   Returns the list of ideas.
 
   ## Examples
@@ -132,6 +150,63 @@ defmodule Mindwendel.Ideas do
     |> Repo.update_all([])
 
     Lanes.broadcast_lanes_update(brainstorming_id)
+  end
+
+  @doc """
+  Reorders the positions of disjoint (hidden) ideas based on the current label filter.
+  This is triggered before a label filter is applied, ensuring hidden ideas are placed
+  after visible ones. Without this adjustment, deactivating the filter would result
+  in mixed or shuffled positions due to outdated order information.
+
+  Example: If a filter for "blue" ideas (b1, b2, b3) is applied, and "red" ideas
+  (r4, r5, r6) are hidden, this function updates the red ideas' positions to follow
+  the blue ones (positions 4, 5, 6). When the filter is removed, the correct
+  sequence is maintained.
+
+  ## Examples
+
+      iex> update_disjoint_idea_positions_for_brainstorming_by_labels(3, [1,2,3])
+      %{1, nil}
+
+  """
+  def update_disjoint_idea_positions_for_brainstorming_by_labels(
+        brainstorming_id,
+        labels_ids
+      ) do
+    max_position_order = get_max_position_order(brainstorming_id, labels_ids)
+
+    # Get all idea ids that are matching the given labels.
+    ideas_with_labels =
+      from(idea in Idea,
+        join: l in assoc(idea, :idea_labels),
+        where: idea.brainstorming_id == ^brainstorming_id and l.id in ^labels_ids,
+        distinct: idea.id,
+        select: %{id: idea.id}
+      )
+
+    # Use the disjoint ideas and order them starting with the max position order of the matched ideas with labels.
+    idea_rank_query =
+      from(idea in Idea,
+        where:
+          idea.brainstorming_id == ^brainstorming_id and
+            idea.id not in subquery(ideas_with_labels),
+        select: %{
+          idea_id: idea.id,
+          idea_rank:
+            over(row_number(),
+              order_by: [asc_nulls_last: idea.position_order]
+            )
+        }
+      )
+
+    # update all ideas with their rank
+    from(idea in Idea,
+      join: idea_ranks in subquery(idea_rank_query),
+      on: idea_ranks.idea_id == idea.id,
+      where: idea.brainstorming_id == ^brainstorming_id,
+      update: [set: [position_order: idea_ranks.idea_rank + ^max_position_order]]
+    )
+    |> Repo.update_all([])
   end
 
   @doc """

@@ -19,6 +19,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     # This will automatically generate a UUID for the admin_url_id which would make the method `gen_admin_url_id/2` obsolete.
     field :admin_url_id, :binary_id
     field :last_accessed_at, :utc_datetime
+    field :filter_labels_ids, {:array, :binary_id}
     belongs_to :creating_user, User
     has_many :ideas, Idea
     has_many :lanes, Lane, preload_order: [asc: :position_order]
@@ -32,7 +33,12 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   @doc false
   def changeset(brainstorming, attrs) do
     brainstorming
-    |> cast(attrs, [:name, :option_show_link_to_settings, :option_allow_manual_ordering])
+    |> cast(attrs, [
+      :name,
+      :option_show_link_to_settings,
+      :option_allow_manual_ordering,
+      :filter_labels_ids
+    ])
     |> validate_required([:name])
     |> cast_assoc(:labels)
     |> shorten_name

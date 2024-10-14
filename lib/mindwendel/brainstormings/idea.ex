@@ -43,16 +43,17 @@ defmodule Mindwendel.Brainstormings.Idea do
       :position_order
     ])
     |> validate_required([:username, :body, :brainstorming_id])
+    |> maybe_put_idea_labels(attrs)
     |> validate_length(:body, min: 1, max: 1023)
     |> validate_inclusion(:deprecated_label, @label_values)
   end
 
-  def changeset_update_label(idea, label) do
-    change(idea) |> put_assoc(:label, label)
-  end
-
-  def changeset_update_labels(idea, idea_labels) do
-    change(idea) |> put_assoc(:idea_labels, idea_labels)
+  defp maybe_put_idea_labels(changeset, attrs) do
+    if attrs["idea_labels"] do
+      put_assoc(changeset, :idea_labels, attrs["idea_labels"])
+    else
+      changeset
+    end
   end
 
   def build_link(idea) do
