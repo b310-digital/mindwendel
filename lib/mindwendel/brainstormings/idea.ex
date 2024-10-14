@@ -7,6 +7,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Ideas
   alias Mindwendel.Attachments.Link
   alias Mindwendel.UrlPreview
   alias Mindwendel.Accounts.User
@@ -46,6 +47,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     |> maybe_put_idea_labels(attrs)
     |> validate_length(:body, min: 1, max: 1023)
     |> validate_inclusion(:deprecated_label, @label_values)
+    |> add_position_order_if_missing()
   end
 
   defp maybe_put_idea_labels(changeset, attrs) do
@@ -56,8 +58,31 @@ defmodule Mindwendel.Brainstormings.Idea do
     end
   end
 
+  defp add_position_order_if_missing(
+         %Ecto.Changeset{
+           changes:
+             %{
+               lane_id: lane_id,
+               brainstorming_id: brainstorming_id
+             } = changes
+         } = changeset
+       )
+       when not is_map_key(changes, :position_order) do
+    changeset
+    |> put_change(:position_order, generate_position_order(brainstorming_id, lane_id))
+  end
+
+  defp add_position_order_if_missing(changeset) do
+    changeset
+  end
+
   def build_link(idea) do
     idea |> check_for_link_in_body
+  end
+
+  defp generate_position_order(brainstorming_id, lane_id) do
+    max = Ideas.get_max_position_order(brainstorming_id, %{lane_id: lane_id})
+    if max, do: max + 1, else: 1
   end
 
   defp check_for_link_in_body(idea) do
