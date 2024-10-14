@@ -172,7 +172,7 @@ defmodule Mindwendel.Ideas do
     # Get all idea ids that are matching the given labels.
     ideas_with_labels =
       from(idea in Idea,
-        left_join: l in assoc(idea, :idea_labels),
+        join: l in assoc(idea, :idea_labels),
         where: idea.brainstorming_id == ^brainstorming_id and l.id in ^labels_ids,
         distinct: idea.id,
         select: %{id: idea.id}
