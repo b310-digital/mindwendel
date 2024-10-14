@@ -153,9 +153,15 @@ defmodule Mindwendel.Ideas do
   end
 
   @doc """
-  Updates the position order of the disjoint ideas for given labels
-  This is triggered shortly before a label filter is activated. It takes care of sorting the currently hidden ideas to place them after the currently visible ones.
-  Example: Filter activated for blue ideas (b1,b2,b3), but also available (hidden) are currently red ideas (r4,r5,r6). Therefore, update the red positions, to follow after the blue ones => positions 4,5,6.
+  Reorders the positions of disjoint (hidden) ideas based on the current label filter.
+  This is triggered before a label filter is applied, ensuring hidden ideas are placed
+  after visible ones. Without this adjustment, deactivating the filter would result
+  in mixed or shuffled positions due to outdated order information.
+
+  Example: If a filter for "blue" ideas (b1, b2, b3) is applied, and "red" ideas
+  (r4, r5, r6) are hidden, this function updates the red ideas' positions to follow
+  the blue ones (positions 4, 5, 6). When the filter is removed, the correct
+  sequence is maintained.
 
   ## Examples
 
