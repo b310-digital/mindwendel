@@ -708,6 +708,7 @@ defmodule MindwendelWeb.CoreComponents do
   attr :label_id, :string
   attr :id, :string, required: true
   attr :filter_active, :boolean, default: false
+  attr :class, :string, default: nil
 
   attr :rest, :global, include: ~w(target disabled)
 
@@ -720,7 +721,8 @@ defmodule MindwendelWeb.CoreComponents do
         type="button"
         class={[
           "btn btn-sm text-light rounded-pill",
-          @filter_active && "border border-2 border-primary"
+          @filter_active && "border border-2 border-primary",
+          @class
         ]}
         id={@id}
         data-testid={@label_id}

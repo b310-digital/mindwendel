@@ -477,8 +477,3 @@ msgstr "Löschen"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Idea updated"
 msgstr "Idee aktualisiert"
-
-#: lib/mindwendel_web/live/label_live/captions_component.html.heex:22
-#, elixir-autogen, elixir-format
-msgid "Reset filter"
-msgstr "Filter entfernen"
