@@ -14,12 +14,13 @@
   <% end %>
   <%= if has_moderating_permission(@brainstorming, @current_user) do %>
     <.filter_button
+      class="d-flex"
       label_id="filter-label-reset"
       color="grey"
       id={"idea-caption-#{uuid()}"}
       phx-target={@myself}
     >
-      <%= gettext("Reset filter") %>
+      <i class="bi bi-backspace"></i>
     </.filter_button>
   <% end %>
 </div>
