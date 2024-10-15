@@ -479,8 +479,3 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Idea updated"
 msgstr ""
-
-#: lib/mindwendel_web/live/label_live/captions_component.html.heex:22
-#, elixir-autogen, elixir-format
-msgid "Reset filter"
-msgstr ""
