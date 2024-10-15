@@ -6,6 +6,17 @@ defmodule Mindwendel.LanesTest do
   import Mindwendel.LanesFixtures
   alias Mindwendel.Factory
 
+  setup do
+    label = Factory.insert!(:idea_label)
+
+    brainstorming =
+      Factory.insert!(:brainstorming, labels: [label], filter_labels_ids: [label.id])
+
+    lane = Enum.at(brainstorming.lanes, 0)
+
+    %{brainstorming: brainstorming, lane: lane, label: label}
+  end
+
   test "get_lane!/1 returns the lane with given id" do
     lane =
       lane_fixture()
@@ -21,19 +32,78 @@ defmodule Mindwendel.LanesTest do
     assert Lanes.get_lane!(lane.id) == lane
   end
 
-  test "get_lanes_for_brainstorming/1 returns the lanes for the brainstorming id" do
-    brainstorming = Factory.insert!(:brainstorming)
-    lane = Enum.at(brainstorming.lanes, 0)
-
-    idea =
+  test "get_lanes_for_brainstorming_with_labels_filtered/1 returns the lanes with filtered ideas",
+       %{
+         brainstorming: brainstorming,
+         label: label,
+         lane: lane
+       } do
+    idea_with_label =
       Factory.insert!(:idea,
         brainstorming: brainstorming,
         lane: lane,
+        idea_labels: [label],
         inserted_at: ~N[2021-01-01 15:04:30],
         position_order: nil
       )
 
-    second_idea =
+    Factory.insert!(:idea,
+      brainstorming: brainstorming,
+      lane: lane,
+      inserted_at: ~N[2021-01-01 15:04:32],
+      position_order: nil
+    )
+
+    lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(brainstorming.id)
+
+    assert Enum.map(List.first(lanes).ideas, & &1.id) == [
+             idea_with_label.id
+           ]
+  end
+
+  describe "get_lanes_for_brainstorming" do
+    test "returns the lanes for the brainstorming id without a filter given", %{
+      brainstorming: brainstorming,
+      lane: lane
+    } do
+      idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          lane: lane,
+          inserted_at: ~N[2021-01-01 15:04:30],
+          position_order: nil
+        )
+
+      second_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          lane: lane,
+          inserted_at: ~N[2021-01-01 15:04:32],
+          position_order: nil
+        )
+
+      lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
+
+      assert Enum.map(List.first(lanes).ideas, & &1.id) == [
+               idea.id,
+               second_idea.id
+             ]
+    end
+
+    test "returns the lanes with filtered ideas", %{
+      brainstorming: brainstorming,
+      label: label,
+      lane: lane
+    } do
+      idea_with_label =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          lane: lane,
+          idea_labels: [label],
+          inserted_at: ~N[2021-01-01 15:04:30],
+          position_order: nil
+        )
+
       Factory.insert!(:idea,
         brainstorming: brainstorming,
         lane: lane,
@@ -41,12 +111,13 @@ defmodule Mindwendel.LanesTest do
         position_order: nil
       )
 
-    lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
+      lanes =
+        Lanes.get_lanes_for_brainstorming(brainstorming.id, %{filter_labels_ids: [label.id]})
 
-    assert Enum.map(List.first(lanes).ideas, & &1.id) == [
-             idea.id,
-             second_idea.id
-           ]
+      assert Enum.map(List.first(lanes).ideas, & &1.id) == [
+               idea_with_label.id
+             ]
+    end
   end
 
   test "get_max_position_order/1 with valid data" do

@@ -9,6 +9,7 @@ defmodule Mindwendel.IdeasTest do
     user = Factory.insert!(:user)
     brainstorming = Factory.insert!(:brainstorming, users: [user])
     lane = Enum.at(brainstorming.lanes, 0)
+    label_first = Enum.at(brainstorming.labels, 0)
 
     %{
       brainstorming: brainstorming,
@@ -23,8 +24,189 @@ defmodule Mindwendel.IdeasTest do
         ),
       user: user,
       like: Factory.insert!(:like, :with_idea_and_user),
-      lane: lane
+      lane: lane,
+      label: label_first
     }
+  end
+
+  describe "get_max_position_order" do
+    test "returns 0 if no position is available",
+         %{
+           brainstorming: brainstorming,
+           label: label
+         } do
+      assert Ideas.get_max_position_order(brainstorming.id, %{
+               labels_ids: [
+                 label.id
+               ]
+             }) == 0
+    end
+
+    test "returns 1 if one idea is present with pos order of 1",
+         %{
+           brainstorming: brainstorming,
+           label: label,
+           lane: lane
+         } do
+      Factory.insert!(:idea,
+        brainstorming: brainstorming,
+        position_order: 1,
+        lane: lane,
+        idea_labels: [label],
+        updated_at: ~N[2021-01-03 15:04:30],
+        inserted_at: ~N[2021-01-01 15:04:30]
+      )
+
+      assert Ideas.get_max_position_order(brainstorming.id, %{
+               labels_ids: [
+                 label.id
+               ]
+             }) == 1
+    end
+
+    test "returns the pos number of the matching idea if only one idea is matching the label",
+         %{
+           brainstorming: brainstorming,
+           label: label,
+           lane: lane
+         } do
+      filter_label = Enum.at(brainstorming.labels, 1)
+
+      Factory.insert!(:idea,
+        brainstorming: brainstorming,
+        position_order: 1,
+        lane: lane,
+        idea_labels: [filter_label],
+        updated_at: ~N[2021-01-03 15:04:30],
+        inserted_at: ~N[2021-01-01 15:04:30]
+      )
+
+      Factory.insert!(:idea,
+        brainstorming: brainstorming,
+        position_order: 2,
+        lane: lane,
+        idea_labels: [label],
+        updated_at: ~N[2021-01-03 15:04:30],
+        inserted_at: ~N[2021-01-01 15:04:30]
+      )
+
+      assert Ideas.get_max_position_order(brainstorming.id, %{
+               labels_ids: [
+                 filter_label.id
+               ]
+             }) == 1
+    end
+  end
+
+  describe "update_disjoint_idea_positions_for_brainstorming_by_labels" do
+    test "sorts ideas with given labels first but including ideas without named label at the end",
+         %{
+           brainstorming: brainstorming,
+           idea: idea,
+           label: label,
+           lane: lane
+         } do
+      second_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          position_order: 1,
+          lane: lane,
+          idea_labels: [label],
+          updated_at: ~N[2021-01-03 15:04:30],
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      Ideas.update_disjoint_idea_positions_for_brainstorming_by_labels(brainstorming.id, [
+        label.id
+      ])
+
+      lanes_with_ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id)
+
+      assert Enum.map(lanes_with_ideas_sorted_by_position, & &1.id) == [
+               second_idea.id,
+               idea.id
+             ]
+    end
+
+    test "updates positions but keeping relative positioning", %{
+      brainstorming: brainstorming,
+      idea: idea,
+      label: label,
+      lane: lane
+    } do
+      second_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          position_order: 1,
+          lane: lane,
+          idea_labels: [label],
+          updated_at: ~N[2021-01-03 15:04:30],
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      third_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          position_order: 2,
+          lane: lane,
+          idea_labels: [label],
+          updated_at: ~N[2021-01-03 15:04:30],
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      Ideas.update_disjoint_idea_positions_for_brainstorming_by_labels(brainstorming.id, [
+        label.id
+      ])
+
+      lanes_with_ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id)
+
+      assert Enum.map(lanes_with_ideas_sorted_by_position, & &1.id) == [
+               second_idea.id,
+               third_idea.id,
+               idea.id
+             ]
+    end
+
+    test "updates positions preferring given label ids", %{
+      brainstorming: brainstorming,
+      idea: idea,
+      label: label,
+      lane: lane
+    } do
+      Ideas.update_idea(idea, %{idea_label: Enum.at(brainstorming.labels, 1)})
+
+      second_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          position_order: 1,
+          lane: lane,
+          idea_labels: [label],
+          updated_at: ~N[2021-01-03 15:04:30],
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      third_idea =
+        Factory.insert!(:idea,
+          brainstorming: brainstorming,
+          position_order: 2,
+          lane: lane,
+          idea_labels: [label],
+          updated_at: ~N[2021-01-03 15:04:30],
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      Ideas.update_disjoint_idea_positions_for_brainstorming_by_labels(brainstorming.id, [
+        label.id
+      ])
+
+      lanes_with_ideas_sorted_by_position = Ideas.list_ideas_for_brainstorming(brainstorming.id)
+
+      assert Enum.map(lanes_with_ideas_sorted_by_position, & &1.id) == [
+               second_idea.id,
+               third_idea.id,
+               idea.id
+             ]
+    end
   end
 
   describe "list_ideas_for_brainstorming" do

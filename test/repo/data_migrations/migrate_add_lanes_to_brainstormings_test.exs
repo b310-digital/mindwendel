@@ -3,7 +3,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateAddLanesToBrainstormingsTest do
 
   use Mindwendel.DataCase
   alias Mindwendel.Factory
-  alias Mindwendel.Brainstormings
+  alias Mindwendel.Lanes
   alias Mindwendel.Repo.DataMigrations.MigrateAddLanesToBrainstormings
 
   setup do
@@ -16,7 +16,7 @@ defmodule Mindwendel.Repo.DataMigrations.MigrateAddLanesToBrainstormingsTest do
     } do
       MigrateAddLanesToBrainstormings.run()
 
-      assert Brainstormings.get_brainstorming!(existing_brainstorming.id).lanes |> length == 1
+      assert Lanes.get_lanes_for_brainstorming(existing_brainstorming.id) |> length == 1
     end
   end
 end
