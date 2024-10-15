@@ -7,6 +7,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Brainstormings.Attachment
   alias Mindwendel.Ideas
   alias Mindwendel.Attachments.Link
   alias Mindwendel.UrlPreview
@@ -22,6 +23,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     has_one :link, Link
     belongs_to :user, User
     has_many :likes, Like
+    has_many :attachments, Attachment
     belongs_to :brainstorming, Brainstorming
     belongs_to :label, IdeaLabel, on_replace: :nilify
     belongs_to :lane, Lane

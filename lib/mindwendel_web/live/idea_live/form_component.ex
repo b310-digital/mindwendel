@@ -4,6 +4,14 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   alias Mindwendel.Ideas
   alias Mindwendel.IdeaLabels
 
+  def mount(socket) do
+    {:ok,
+     socket
+     |> assign(:uploaded_files, [])
+     # TODO
+     |> allow_upload(:attachment, accept: ~w(.jpg .jpeg), max_entries: 2)}
+  end
+
   @impl true
   def update(%{idea: idea} = assigns, socket) do
     {:ok,
@@ -55,6 +63,9 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
         "idea_labels",
         IdeaLabels.get_idea_labels(socket.assigns.brainstorming.filter_labels_ids)
       )
+      |> Map.put("attachments", prepare_attachments(socket))
+
+    IO.inspect(idea_params_merged)
 
     case Ideas.create_idea(idea_params_merged) do
       {:ok, _idea} ->
@@ -75,5 +86,16 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     Mindwendel.Accounts.update_user(current_user, %{
       username: username
     })
+  end
+
+  defp prepare_attachments(socket) do
+    # returns file paths
+    consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
+      # Add the file extension to the temp file
+      # TODO this only works for images for now, pdf needs to be supported as well
+      path_with_extension = path <> String.replace(entry.client_type, "image/", ".")
+      File.cp!(path, path_with_extension)
+      {:ok, path_with_extension}
+    end)
   end
 end

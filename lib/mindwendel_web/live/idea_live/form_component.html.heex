@@ -8,6 +8,11 @@
   >
     <.input field={@form[:username]} type="text" label={gettext("Username")} phx-debounce={300} />
     <.input field={@form[:body]} type="textarea" label={gettext("Your idea")} phx-debounce={300} />
+    <.live_file_input upload={@uploads.attachment} />
+    <%= for entry <- @uploads.attachment.entries do %>
+      <div :for={err <- upload_errors(@uploads.attachment, entry)} class="alert alert-danger">
+      </div>
+    <% end %>
     <.input field={@form[:id]} type="hidden" />
     <.input field={@form[:brainstorming_id]} type="hidden" />
     <.input field={@form[:lane_id]} type="hidden" />
