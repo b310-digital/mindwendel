@@ -7,7 +7,8 @@ defmodule Mindwendel.Brainstormings.Attachment do
     field :name, :string
     field :path, :string
 
-    belongs_to :idea, Idea
+    # Uploaded files are not deleted automatically, therefore if an idea is deleted and an attachment still present, the attachment db entry should still be available for reference. It has to be deleted first.
+    belongs_to :idea, Idea, on_replace: :raise
 
     timestamps()
   end
@@ -20,8 +21,9 @@ defmodule Mindwendel.Brainstormings.Attachment do
   end
 
   defp maybe_store_from_path_tmp(changeset, attrs) do
-    if attrs["path_tmp"] do
-      changeset |> put_change(:path, attrs["path_tmp"])
+    if attrs["path"] do
+      {:ok, final_path} = Mindwendel.Attachment.store(attrs["path"])
+      changeset |> put_change(:path, final_path)
     else
       changeset
     end

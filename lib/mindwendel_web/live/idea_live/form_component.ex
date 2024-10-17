@@ -10,7 +10,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
      socket
      |> assign(:uploaded_files, [])
      # TODO
-     |> allow_upload(:attachment, accept: ~w(.jpg .jpeg), max_entries: 2)}
+     |> allow_upload(:attachment, accept: ~w(.jpg .jpeg), max_entries: 1)}
   end
 
   @impl true
@@ -40,6 +40,8 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
     if current_user.id in [idea.user_id | brainstorming.moderating_users |> Enum.map(& &1.id)] do
+      # Updating attachments in form updates for ideas is not included here, as they are handled separately.
+      # Attachments can be removed by deleting them one by one.
       case Ideas.update_idea(
              idea,
              Map.put(idea_params, "user_id", idea.user_id || current_user.id)
@@ -77,7 +79,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
          |> push_patch(to: ~p"/brainstormings/#{idea_params_merged["brainstorming_id"]}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        IO.inspect changeset
+        IO.inspect(changeset)
         {:noreply, assign(socket, form: to_form(changeset))}
     end
   end
@@ -90,14 +92,15 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
 
   defp prepare_attachments(socket) do
     # returns file paths
-    paths = consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
-      # Add the file extension to the temp file
-      # TODO this only works for images for now, pdf needs to be supported as well
-      path_with_extension = path <> String.replace(entry.client_type, "image/", ".")
-      File.cp!(path, path_with_extension)
-      {:ok, path_with_extension}
-    end)
-    IO.inspect paths
+    paths =
+      consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
+        # Add the file extension to the temp file
+        # TODO this only works for images for now, pdf needs to be supported as well
+        path_with_extension = path <> String.replace(entry.client_type, "image/", ".")
+        File.cp!(path, path_with_extension)
+        {:ok, path_with_extension}
+      end)
+
     Enum.map(paths, fn path -> %{"path" => path} end)
   end
 

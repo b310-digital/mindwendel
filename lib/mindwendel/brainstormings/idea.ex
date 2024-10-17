@@ -55,7 +55,6 @@ defmodule Mindwendel.Brainstormings.Idea do
   end
 
   defp maybe_put_idea_labels(changeset, attrs) do
-    IO.inspect attrs["idea_labels"]
     if attrs["idea_labels"] do
       put_assoc(changeset, :idea_labels, attrs["idea_labels"])
     else
@@ -63,11 +62,10 @@ defmodule Mindwendel.Brainstormings.Idea do
     end
   end
 
+  # Only called on first create, the parameter 'attachments' is not used for updates and handled seperately.
   defp maybe_put_attachments(changeset, idea, attrs) do
     if attrs["attachments"] do
-      new = cast_assoc(changeset, :attachments, with: &Attachment.changeset/2) #++ idea.attachments
-      IO.inspect new
-      new
+      cast_assoc(changeset, :attachments, with: &Attachment.changeset/2)
     else
       changeset
     end

@@ -7,6 +7,7 @@ defmodule Mindwendel.Ideas do
   alias Mindwendel.Repo
 
   alias Mindwendel.Lanes
+  alias Mindwendel.Attachments
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Idea
 
@@ -367,8 +368,15 @@ defmodule Mindwendel.Ideas do
 
   """
   def delete_idea(%Idea{} = idea) do
+    {:ok, _} = delete_attachments(idea)
     Repo.delete(idea)
     Lanes.broadcast_lanes_update(idea.brainstorming_id)
+  end
+
+  defp delete_attachments(%Idea{} = idea) do
+    attachments = Repo.preload(idea, :attachments).attachments
+    result = Enum.map(attachments, fn attachment -> Attachments.delete_attachment(attachment) end)
+    {:ok, result}
   end
 
   @doc """
