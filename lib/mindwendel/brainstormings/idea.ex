@@ -7,7 +7,9 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Brainstormings.Attachment
   alias Mindwendel.Ideas
+  alias Mindwendel.Attachments
   alias Mindwendel.Attachments.Link
   alias Mindwendel.UrlPreview
   alias Mindwendel.Accounts.User
@@ -22,6 +24,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     has_one :link, Link
     belongs_to :user, User
     has_many :likes, Like
+    has_many :attachments, Attachment
     belongs_to :brainstorming, Brainstorming
     belongs_to :label, IdeaLabel, on_replace: :nilify
     belongs_to :lane, Lane
@@ -45,6 +48,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     ])
     |> validate_required([:username, :body, :brainstorming_id])
     |> maybe_put_idea_labels(attrs)
+    |> maybe_put_attachments(idea, attrs)
     |> validate_length(:body, min: 1, max: 1023)
     |> validate_inclusion(:deprecated_label, @label_values)
     |> add_position_order_if_missing()
@@ -53,6 +57,15 @@ defmodule Mindwendel.Brainstormings.Idea do
   defp maybe_put_idea_labels(changeset, attrs) do
     if attrs["idea_labels"] do
       put_assoc(changeset, :idea_labels, attrs["idea_labels"])
+    else
+      changeset
+    end
+  end
+
+  # Only called on first create, the parameter 'attachments' is not used for updates and handled seperately.
+  defp maybe_put_attachments(changeset, idea, attrs) do
+    if attrs["attachments"] do
+      cast_assoc(changeset, :attachments, with: &Attachment.changeset/2)
     else
       changeset
     end

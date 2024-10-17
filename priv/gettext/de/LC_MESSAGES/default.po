@@ -46,8 +46,8 @@ msgstr "Möchtest du die Idee löschen?"
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr "Achtung: Hiermit löschst du das Brainstorming und alle dazugehörigen Ideen. Diese Aktion kann nicht rückgängig gemacht werden."
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:18
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:20
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:27
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:29
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:16
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:18
 #, elixir-autogen, elixir-format
@@ -95,7 +95,7 @@ msgstr "Export als HTML"
 msgid "Got stuck? Try inspirational teasers!"
 msgstr "Keine Ideen? Hier gibts Gedankenanstöße!"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:66
+#: lib/mindwendel_web/live/idea_live/form_component.ex:78
 #, elixir-autogen, elixir-format
 msgid "Idea created successfully"
 msgstr "Idee erstellt"
@@ -120,7 +120,7 @@ msgstr "Bisher keine Ideen vorhanden"
 msgid "Proceed to your brainstorming"
 msgstr "Weiter zu deinem Brainstorming"
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:23
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:32
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:21
 #, elixir-autogen, elixir-format
 msgid "Save"
@@ -131,7 +131,7 @@ msgstr "Speichern"
 msgid "Save this link to update / delete your brainstorming later on:"
 msgstr "Speichere diesen Link, um das Brainstorming zukünftig zu bearbeiten oder zu löschen"
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:22
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:31
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:20
 #, elixir-autogen, elixir-format
 msgid "Saving..."
@@ -473,7 +473,17 @@ msgstr "Idee bearbeiten"
 msgid "Delete idea"
 msgstr "Löschen"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:41
+#: lib/mindwendel_web/live/idea_live/form_component.ex:52
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Idea updated"
 msgstr "Idee aktualisiert"
+
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:12
+#, elixir-autogen, elixir-format
+msgid "Attachment"
+msgstr "Anhang"
+
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:14
+#, elixir-autogen, elixir-format
+msgid "Allowed files: JPG/PNG/PDF"
+msgstr "Erlaubte Dateiformate: JPG/PNG/PDF"

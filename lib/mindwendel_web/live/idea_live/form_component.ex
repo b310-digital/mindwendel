@@ -5,6 +5,14 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   alias Mindwendel.IdeaLabels
 
   @impl true
+  def mount(socket) do
+    {:ok,
+     socket
+     |> assign(:uploaded_files, [])
+     |> allow_upload(:attachment, accept: ~w(.jpg .jpeg .png .pdf), max_entries: 1)}
+  end
+
+  @impl true
   def update(%{idea: idea} = assigns, socket) do
     {:ok,
      socket
@@ -31,6 +39,8 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
     if current_user.id in [idea.user_id | brainstorming.moderating_users |> Enum.map(& &1.id)] do
+      # Updating attachments in form updates for ideas is not included here, as they are handled separately.
+      # Attachments can be removed by deleting them one by one.
       case Ideas.update_idea(
              idea,
              Map.put(idea_params, "user_id", idea.user_id || current_user.id)
@@ -55,6 +65,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
         "idea_labels",
         IdeaLabels.get_idea_labels(socket.assigns.brainstorming.filter_labels_ids)
       )
+      |> Map.put("attachments", prepare_attachments(socket))
 
     case Ideas.create_idea(idea_params_merged) do
       {:ok, _idea} ->
@@ -67,6 +78,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
          |> push_patch(to: ~p"/brainstormings/#{idea_params_merged["brainstorming_id"]}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        IO.inspect(changeset)
         {:noreply, assign(socket, form: to_form(changeset))}
     end
   end
@@ -76,4 +88,22 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
       username: username
     })
   end
+
+  defp prepare_attachments(socket) do
+    # returns file paths
+    paths =
+      consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
+        # Add the file extension to the temp file
+        # TODO this only works for images for now, pdf needs to be supported as well
+        path_with_extension = path <> String.replace(entry.client_type, "image/", ".")
+        File.cp!(path, path_with_extension)
+        {:ok, path_with_extension}
+      end)
+
+    Enum.map(paths, fn path -> %{"path" => path} end)
+  end
+
+  defp error_to_string(:too_large), do: "Too large"
+  defp error_to_string(:too_many_files), do: "You have selected too many files"
+  defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
 end
