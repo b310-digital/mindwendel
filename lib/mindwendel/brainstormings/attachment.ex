@@ -1,5 +1,5 @@
 defmodule Mindwendel.Brainstormings.Attachment do
-  use Ecto.Schema
+  use Mindwendel.Schema
   import Ecto.Changeset
   alias Mindwendel.Brainstormings.Idea
 
@@ -16,6 +16,14 @@ defmodule Mindwendel.Brainstormings.Attachment do
   def changeset(attachment, attrs) do
     attachment
     |> cast(attrs, [:path, :name])
-    |> validate_required([:path, :name])
+    |> maybe_store_from_path_tmp(attrs)
+  end
+
+  defp maybe_store_from_path_tmp(changeset, attrs) do
+    if attrs["path_tmp"] do
+      changeset |> put_change(:path, attrs["path_tmp"])
+    else
+      changeset
+    end
   end
 end

@@ -9,6 +9,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.Brainstormings.Attachment
   alias Mindwendel.Ideas
+  alias Mindwendel.Attachments
   alias Mindwendel.Attachments.Link
   alias Mindwendel.UrlPreview
   alias Mindwendel.Accounts.User
@@ -47,14 +48,26 @@ defmodule Mindwendel.Brainstormings.Idea do
     ])
     |> validate_required([:username, :body, :brainstorming_id])
     |> maybe_put_idea_labels(attrs)
+    |> maybe_put_attachments(idea, attrs)
     |> validate_length(:body, min: 1, max: 1023)
     |> validate_inclusion(:deprecated_label, @label_values)
     |> add_position_order_if_missing()
   end
 
   defp maybe_put_idea_labels(changeset, attrs) do
+    IO.inspect attrs["idea_labels"]
     if attrs["idea_labels"] do
       put_assoc(changeset, :idea_labels, attrs["idea_labels"])
+    else
+      changeset
+    end
+  end
+
+  defp maybe_put_attachments(changeset, idea, attrs) do
+    if attrs["attachments"] do
+      new = cast_assoc(changeset, :attachments, with: &Attachment.changeset/2) #++ idea.attachments
+      IO.inspect new
+      new
     else
       changeset
     end

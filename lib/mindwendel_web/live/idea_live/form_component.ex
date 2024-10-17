@@ -4,6 +4,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   alias Mindwendel.Ideas
   alias Mindwendel.IdeaLabels
 
+  @impl true
   def mount(socket) do
     {:ok,
      socket
@@ -65,8 +66,6 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
       )
       |> Map.put("attachments", prepare_attachments(socket))
 
-    IO.inspect(idea_params_merged)
-
     case Ideas.create_idea(idea_params_merged) do
       {:ok, _idea} ->
         {:ok, user} = update_username(socket.assigns.current_user, idea_params_merged["username"])
@@ -78,6 +77,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
          |> push_patch(to: ~p"/brainstormings/#{idea_params_merged["brainstorming_id"]}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        IO.inspect changeset
         {:noreply, assign(socket, form: to_form(changeset))}
     end
   end
@@ -90,12 +90,18 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
 
   defp prepare_attachments(socket) do
     # returns file paths
-    consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
+    paths = consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
       # Add the file extension to the temp file
       # TODO this only works for images for now, pdf needs to be supported as well
       path_with_extension = path <> String.replace(entry.client_type, "image/", ".")
       File.cp!(path, path_with_extension)
       {:ok, path_with_extension}
     end)
+    IO.inspect paths
+    Enum.map(paths, fn path -> %{"path" => path} end)
   end
+
+  defp error_to_string(:too_large), do: "Too large"
+  defp error_to_string(:too_many_files), do: "You have selected too many files"
+  defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
 end
