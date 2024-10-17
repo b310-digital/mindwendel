@@ -9,8 +9,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     {:ok,
      socket
      |> assign(:uploaded_files, [])
-     # TODO
-     |> allow_upload(:attachment, accept: ~w(.jpg .jpeg), max_entries: 1)}
+     |> allow_upload(:attachment, accept: ~w(.jpg .jpeg .png .pdf), max_entries: 1)}
   end
 
   @impl true
