@@ -65,6 +65,8 @@ defmodule Mindwendel.Brainstormings.Idea do
   # Only called on first create, the parameter 'attachments' is not used for updates and handled seperately.
   defp maybe_put_attachments(changeset, idea, attrs) do
     if attrs["attachments"] do
+      IO.inspect(idea)
+      put_assoc(changeset, :attachments, idea.attachments)
       cast_assoc(changeset, :attachments, with: &Attachment.changeset/2)
     else
       changeset

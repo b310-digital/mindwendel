@@ -9,7 +9,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     {:ok,
      socket
      |> assign(:uploaded_files, [])
-     |> allow_upload(:attachment, accept: ~w(.jpg .jpeg .png .pdf), max_entries: 1)}
+     |> allow_upload(:attachment, accept: ~w(.jpg .jpeg .png .pdf), max_entries: 2)}
   end
 
   @impl true
@@ -36,22 +36,27 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   defp save_idea(socket, :update, idea_params) do
     idea = Ideas.get_idea!(idea_params["id"])
 
+    IO.inspect(socket)
+
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
     if current_user.id in [idea.user_id | brainstorming.moderating_users |> Enum.map(& &1.id)] do
-      # Updating attachments in form updates for ideas is not included here, as they are handled separately.
-      # Attachments can be removed by deleting them one by one.
+      idea_params_merged = idea_params
+        |> Map.put("user_id", idea.user_id || current_user.id)
+        |> Map.put("attachments", prepare_attachments(socket))
       case Ideas.update_idea(
              idea,
-             Map.put(idea_params, "user_id", idea.user_id || current_user.id)
+             idea_params_merged
            ) do
         {:ok, _idea} ->
+          IO.puts "success"
           {:noreply,
            socket
            |> put_flash(:info, gettext("Idea updated"))
            |> push_patch(to: ~p"/brainstormings/#{brainstorming.id}")}
 
         {:error, %Ecto.Changeset{} = changeset} ->
+          IO.inspect(changeset.errors)
           {:noreply, assign(socket, form: to_form(changeset))}
       end
     end
@@ -78,7 +83,6 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
          |> push_patch(to: ~p"/brainstormings/#{idea_params_merged["brainstorming_id"]}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        IO.inspect(changeset)
         {:noreply, assign(socket, form: to_form(changeset))}
     end
   end
