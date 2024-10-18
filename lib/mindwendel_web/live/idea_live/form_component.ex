@@ -36,27 +36,25 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   defp save_idea(socket, :update, idea_params) do
     idea = Ideas.get_idea!(idea_params["id"])
 
-    IO.inspect(socket)
-
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
     if current_user.id in [idea.user_id | brainstorming.moderating_users |> Enum.map(& &1.id)] do
-      idea_params_merged = idea_params
+      idea_params_merged =
+        idea_params
         |> Map.put("user_id", idea.user_id || current_user.id)
-        |> Map.put("attachments", prepare_attachments(socket))
+        |> Map.put("tmp_attachments", prepare_attachments(socket))
+
       case Ideas.update_idea(
              idea,
              idea_params_merged
            ) do
         {:ok, _idea} ->
-          IO.puts "success"
           {:noreply,
            socket
            |> put_flash(:info, gettext("Idea updated"))
            |> push_patch(to: ~p"/brainstormings/#{brainstorming.id}")}
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          IO.inspect(changeset.errors)
           {:noreply, assign(socket, form: to_form(changeset))}
       end
     end
@@ -70,7 +68,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
         "idea_labels",
         IdeaLabels.get_idea_labels(socket.assigns.brainstorming.filter_labels_ids)
       )
-      |> Map.put("attachments", prepare_attachments(socket))
+      |> Map.put("tmp_attachments", prepare_attachments(socket))
 
     case Ideas.create_idea(idea_params_merged) do
       {:ok, _idea} ->

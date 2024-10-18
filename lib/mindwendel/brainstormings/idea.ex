@@ -62,12 +62,18 @@ defmodule Mindwendel.Brainstormings.Idea do
     end
   end
 
-  # Only called on first create, the parameter 'attachments' is not used for updates and handled seperately.
   defp maybe_put_attachments(changeset, idea, attrs) do
-    if attrs["attachments"] do
-      IO.inspect(idea)
-      put_assoc(changeset, :attachments, idea.attachments)
-      cast_assoc(changeset, :attachments, with: &Attachment.changeset/2)
+    if attrs["tmp_attachments"] do
+      new_attachments =
+        Enum.map(attrs["tmp_attachments"], fn change ->
+          Attachments.change_attachment(%Attachment{}, change)
+        end)
+
+      # Ff the idea is being updated, the old attachments need to be added. Otherwise these will be deleted!
+      merged_attachments =
+        if idea.id, do: new_attachments ++ idea.attachments, else: new_attachments
+
+      put_assoc(changeset, :attachments, merged_attachments)
     else
       changeset
     end

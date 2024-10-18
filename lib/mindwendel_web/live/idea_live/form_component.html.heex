@@ -17,7 +17,7 @@
     </div>
     <%= for entry <- @uploads.attachment.entries do %>
       <div :for={err <- upload_errors(@uploads.attachment, entry)} class="alert alert-danger">
-       <p class="alert alert-danger"><%= error_to_string(err) %></p>
+        <p class="alert alert-danger"><%= error_to_string(err) %></p>
       </div>
     <% end %>
     <.input field={@form[:id]} type="hidden" />
