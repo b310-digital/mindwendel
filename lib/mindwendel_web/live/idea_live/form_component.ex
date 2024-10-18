@@ -2,14 +2,15 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   use MindwendelWeb, :live_component
 
   alias Mindwendel.Ideas
+  alias Mindwendel.Attachments
   alias Mindwendel.IdeaLabels
 
   @impl true
   def mount(socket) do
     {:ok,
      socket
-     |> assign(:uploaded_files, [])
-     |> allow_upload(:attachment, accept: ~w(.jpg .jpeg .png .pdf), max_entries: 2)}
+     # |> assign(:uploaded_files, [])
+     |> allow_upload(:attachment, accept: ~w(.jpg .jpeg .png .pdf), max_entries: 1)}
   end
 
   @impl true
@@ -31,6 +32,17 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
 
   def handle_event("save", %{"idea" => idea_params}, socket) do
     save_idea(socket, socket.assigns.action, idea_params)
+  end
+
+  def handle_event("delete_attachment", %{"id" => id}, socket) do
+    %{current_user: current_user, brainstorming: brainstorming, idea: idea} = socket.assigns
+
+    if has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
+      attachment = Attachments.get_attachment!(id)
+      Attachments.delete_attachment(attachment)
+    end
+
+    {:noreply, assign(socket, form: to_form(Ideas.change_idea(idea)))}
   end
 
   defp save_idea(socket, :update, idea_params) do

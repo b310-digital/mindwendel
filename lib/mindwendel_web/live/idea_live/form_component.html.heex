@@ -9,7 +9,7 @@
     <.input field={@form[:username]} type="text" label={gettext("Username")} phx-debounce={300} />
     <.input field={@form[:body]} type="textarea" label={gettext("Your idea")} phx-debounce={300} />
     <div class="form-group">
-      <.label for={@uploads.attachment.ref}><%= gettext("Attachment") %></.label>
+      <.label for={@uploads.attachment.ref}><%= gettext("Additional Attachment") %></.label>
       <.live_file_input upload={@uploads.attachment} class="w-100" />
       <small id="attachment-help" class="form-text text-muted">
         <%= gettext("Allowed files: JPG/PNG/PDF") %>
@@ -19,6 +19,21 @@
       <div :for={err <- upload_errors(@uploads.attachment, entry)} class="alert alert-danger">
         <p class="alert alert-danger"><%= error_to_string(err) %></p>
       </div>
+    <% end %>
+    <%= for attachment <- @form.data.attachments do %>
+      <p>
+        <.button
+          class="btn-sm"
+          phx-click="delete_attachment"
+          phx-target={@myself}
+          phx-value-id={attachment.id}
+        >
+          <i class="bi-x-circle-fill text-danger"></i>
+        </.button>
+        <.link href={Mindwendel.Attachment.url(attachment.path)}>
+          <%= attachment.path %>
+        </.link>
+      </p>
     <% end %>
     <.input field={@form[:id]} type="hidden" />
     <.input field={@form[:brainstorming_id]} type="hidden" />
