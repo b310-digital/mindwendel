@@ -21,8 +21,8 @@ defmodule Mindwendel.Brainstormings.Attachment do
   end
 
   defp maybe_store_from_path_tmp(changeset, attrs) do
-    if attrs["path"] do
-      {:ok, final_path} = Mindwendel.Attachment.store(attrs["path"])
+    if attrs[:path] do
+      {:ok, final_path} = Mindwendel.Attachment.store(attrs[:path])
       changeset |> put_change(:path, final_path)
     else
       changeset

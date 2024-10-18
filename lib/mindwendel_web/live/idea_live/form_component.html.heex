@@ -20,20 +20,26 @@
         <p class="alert alert-danger"><%= error_to_string(err) %></p>
       </div>
     <% end %>
-    <%= for attachment <- @form.data.attachments do %>
-      <p>
-        <.button
-          class="btn-sm"
-          phx-click="delete_attachment"
-          phx-target={@myself}
-          phx-value-id={attachment.id}
-        >
-          <i class="bi-x-circle-fill text-danger"></i>
-        </.button>
-        <.link href={Mindwendel.Attachment.url(attachment.path)}>
-          <%= attachment.path %>
-        </.link>
-      </p>
+
+    <%= if @action == :update do %>
+      <%= for attachment <- @idea.attachments do %>
+        <p>
+          <.button
+            class="btn-sm"
+            phx-click="delete_attachment"
+            phx-target={@myself}
+            phx-value-id={attachment.id}
+          >
+            <i class="bi-x-circle-fill text-danger"></i>
+          </.button>
+          <.link
+            download={attachment.name || attachment.path}
+            href={Mindwendel.Attachment.url(attachment.path)}
+          >
+            <%= attachment.name || gettext("No filename") %>
+          </.link>
+        </p>
+      <% end %>
     <% end %>
     <.input field={@form[:id]} type="hidden" />
     <.input field={@form[:brainstorming_id]} type="hidden" />

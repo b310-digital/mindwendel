@@ -158,7 +158,14 @@
                 <%= if length(idea.attachments) > 0 do %>
                   <%= for attachment <- idea.attachments do %>
                     <i class="bi bi-file-earmark"></i>
-                    <p class="text-muted"><%= attachment.path %></p>
+                    <p class="text-muted">
+                      <.link
+                        download={attachment.name || attachment.path}
+                        href={Mindwendel.Attachment.url(attachment.path)}
+                      >
+                        <%= attachment.name || gettext("No filename") %>
+                      </.link>
+                    </p>
                   <% end %>
                 <% end %>
               </div>

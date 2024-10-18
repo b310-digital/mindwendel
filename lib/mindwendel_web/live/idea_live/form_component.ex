@@ -50,7 +50,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
 
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
-    if current_user.id in [idea.user_id | brainstorming.moderating_users |> Enum.map(& &1.id)] do
+    if has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
       idea_params_merged =
         idea_params
         |> Map.put("user_id", idea.user_id || current_user.id)
@@ -104,17 +104,15 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   end
 
   defp prepare_attachments(socket) do
-    # returns file paths
-    paths =
+    files =
       consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
-        # Add the file extension to the temp file
-        # TODO this only works for images for now, pdf needs to be supported as well
-        path_with_extension = path <> String.replace(entry.client_type, "image/", ".")
+        data_type = List.first(String.split(entry.client_type, "/")) <> "/"
+        path_with_extension = path <> String.replace(entry.client_type, data_type, ".")
         File.cp!(path, path_with_extension)
-        {:ok, path_with_extension}
+        {:ok, %{path: path_with_extension, name: entry.client_name}}
       end)
 
-    Enum.map(paths, fn path -> %{"path" => path} end)
+    files
   end
 
   defp error_to_string(:too_large), do: "Too large"
