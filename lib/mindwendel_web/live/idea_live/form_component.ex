@@ -106,6 +106,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   defp prepare_attachments(socket) do
     files =
       consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
+        # uploads do not have any file ending, which does not work with waffle. Therefore, we copy the file to have the proper file ending (either image or pdf)
         data_type = List.first(String.split(entry.client_type, "/")) <> "/"
         path_with_extension = path <> String.replace(entry.client_type, data_type, ".")
         File.cp!(path, path_with_extension)
