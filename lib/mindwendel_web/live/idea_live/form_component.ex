@@ -2,7 +2,16 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   use MindwendelWeb, :live_component
 
   alias Mindwendel.Ideas
+  alias Mindwendel.Attachments
   alias Mindwendel.IdeaLabels
+
+  @impl true
+  def mount(socket) do
+    {:ok,
+     socket
+     # |> assign(:uploaded_files, [])
+     |> allow_upload(:attachment, accept: ~w(.jpg .jpeg .png .pdf), max_entries: 1)}
+  end
 
   @impl true
   def update(%{idea: idea} = assigns, socket) do
@@ -25,15 +34,31 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     save_idea(socket, socket.assigns.action, idea_params)
   end
 
+  def handle_event("delete_attachment", %{"id" => id}, socket) do
+    %{current_user: current_user, brainstorming: brainstorming, idea: idea} = socket.assigns
+
+    if has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
+      attachment = Attachments.get_attachment!(id)
+      Attachments.delete_attachment(attachment)
+    end
+
+    {:noreply, assign(socket, form: to_form(Ideas.change_idea(idea)))}
+  end
+
   defp save_idea(socket, :update, idea_params) do
     idea = Ideas.get_idea!(idea_params["id"])
 
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
-    if current_user.id in [idea.user_id | brainstorming.moderating_users |> Enum.map(& &1.id)] do
+    if has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
+      idea_params_merged =
+        idea_params
+        |> Map.put("user_id", idea.user_id || current_user.id)
+        |> Map.put("tmp_attachments", prepare_attachments(socket))
+
       case Ideas.update_idea(
              idea,
-             Map.put(idea_params, "user_id", idea.user_id || current_user.id)
+             idea_params_merged
            ) do
         {:ok, _idea} ->
           {:noreply,
@@ -55,6 +80,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
         "idea_labels",
         IdeaLabels.get_idea_labels(socket.assigns.brainstorming.filter_labels_ids)
       )
+      |> Map.put("tmp_attachments", prepare_attachments(socket))
 
     case Ideas.create_idea(idea_params_merged) do
       {:ok, _idea} ->
@@ -76,4 +102,21 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
       username: username
     })
   end
+
+  defp prepare_attachments(socket) do
+    files =
+      consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
+        # uploads do not have any file ending, which does not work with waffle. Therefore, we copy the file to have the proper file ending (either image or pdf)
+        data_type = List.first(String.split(entry.client_type, "/")) <> "/"
+        path_with_extension = path <> String.replace(entry.client_type, data_type, ".")
+        File.cp!(path, path_with_extension)
+        {:ok, %{path: path_with_extension, name: entry.client_name}}
+      end)
+
+    files
+  end
+
+  defp error_to_string(:too_large), do: "Too large"
+  defp error_to_string(:too_many_files), do: "You have selected too many files"
+  defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
 end

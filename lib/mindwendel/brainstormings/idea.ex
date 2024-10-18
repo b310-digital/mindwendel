@@ -7,7 +7,9 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Brainstormings.Attachment
   alias Mindwendel.Ideas
+  alias Mindwendel.Attachments
   alias Mindwendel.Attachments.Link
   alias Mindwendel.UrlPreview
   alias Mindwendel.Accounts.User
@@ -22,6 +24,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     has_one :link, Link
     belongs_to :user, User
     has_many :likes, Like
+    has_many :attachments, Attachment
     belongs_to :brainstorming, Brainstorming
     belongs_to :label, IdeaLabel, on_replace: :nilify
     belongs_to :lane, Lane
@@ -45,6 +48,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     ])
     |> validate_required([:username, :body, :brainstorming_id])
     |> maybe_put_idea_labels(attrs)
+    |> maybe_put_attachments(idea, attrs)
     |> validate_length(:body, min: 1, max: 1023)
     |> validate_inclusion(:deprecated_label, @label_values)
     |> add_position_order_if_missing()
@@ -53,6 +57,23 @@ defmodule Mindwendel.Brainstormings.Idea do
   defp maybe_put_idea_labels(changeset, attrs) do
     if attrs["idea_labels"] do
       put_assoc(changeset, :idea_labels, attrs["idea_labels"])
+    else
+      changeset
+    end
+  end
+
+  defp maybe_put_attachments(changeset, idea, attrs) do
+    if attrs["tmp_attachments"] do
+      new_attachments =
+        Enum.map(attrs["tmp_attachments"], fn change ->
+          Attachments.change_attachment(%Attachment{}, change)
+        end)
+
+      # Ff the idea is being updated, the old attachments need to be added. Otherwise these will be deleted!
+      merged_attachments =
+        if idea.id, do: new_attachments ++ idea.attachments, else: new_attachments
+
+      put_assoc(changeset, :attachments, merged_attachments)
     else
       changeset
     end
