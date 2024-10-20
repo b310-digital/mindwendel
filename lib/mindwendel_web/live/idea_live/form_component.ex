@@ -9,8 +9,11 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   def mount(socket) do
     {:ok,
      socket
-     # |> assign(:uploaded_files, [])
-     |> allow_upload(:attachment, accept: ~w(.jpg .jpeg .png .pdf), max_entries: 1)}
+     # max file size is 8mb by default
+     |> allow_upload(:attachment,
+       accept: Mindwendel.Attachment.whitelisted_file_extensions(),
+       max_entries: 1
+     )}
   end
 
   @impl true
@@ -116,7 +119,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     files
   end
 
-  defp error_to_string(:too_large), do: "Too large"
-  defp error_to_string(:too_many_files), do: "You have selected too many files"
-  defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
+  defp error_to_string(:too_large), do: gettext("The selected file is too large")
+  defp error_to_string(:too_many_files), do: gettext("Too many files selected")
+  defp error_to_string(:not_accepted), do: gettext("File type is not allowed")
 end

@@ -22,7 +22,7 @@ defmodule Mindwendel.Attachment do
   def validate({file, _}) do
     file_extension = file.file_name |> Path.extname() |> String.downcase()
 
-    case Enum.member?(~w(.jpg .jpeg .gif .png .pdf), file_extension) do
+    case Enum.member?(whitelisted_file_extensions(), file_extension) do
       true -> :ok
       false -> {:error, "invalid file type"}
     end
@@ -56,4 +56,8 @@ defmodule Mindwendel.Attachment do
   # def s3_object_headers(version, {file, scope}) do
   #   [content_type: MIME.from_path(file.file_name)]
   # end
+
+  def whitelisted_file_extensions do
+    ~w(.jpg .jpeg .gif .png .pdf)
+  end
 end
