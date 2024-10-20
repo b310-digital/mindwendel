@@ -1,6 +1,7 @@
 defmodule MindwendelWeb.IdeaLive.FormComponent do
   use MindwendelWeb, :live_component
 
+  alias MIME
   alias Mindwendel.Ideas
   alias Mindwendel.Attachments
   alias Mindwendel.IdeaLabels
@@ -110,13 +111,27 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     files =
       consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
         # uploads do not have any file ending, which does not work with waffle. Therefore, we copy the file to have the proper file ending (either image or pdf)
-        data_type = List.first(String.split(entry.client_type, "/")) <> "/"
-        path_with_extension = path <> String.replace(entry.client_type, data_type, ".")
-        File.cp!(path, path_with_extension)
-        {:ok, %{path: path_with_extension, name: entry.client_name}}
+        # use existing path but exchange the current filename with a uuid and the correct file extension based on the mime type
+        filename = "#{entry.uuid}.#{mime_ext(entry.client_type)}"
+
+        dest =
+          path
+          |> String.split("/")
+          |> Enum.reverse()
+          |> tl()
+          |> Enum.reverse()
+          |> Enum.concat([filename])
+          |> Enum.join("/")
+
+        File.cp!(path, dest)
+        {:ok, %{path: dest, name: entry.client_name}}
       end)
 
     files
+  end
+
+  defp mime_ext(client_type) do
+    List.first(MIME.extensions(client_type))
   end
 
   defp error_to_string(:too_large), do: gettext("The selected file is too large")
