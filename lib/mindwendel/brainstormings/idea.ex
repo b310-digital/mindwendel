@@ -15,6 +15,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Accounts.User
 
   @label_values [:label_1, :label_2, :label_3, :label_4, :label_5]
+  @max_attachments 4
 
   schema "ideas" do
     field :body, :string
@@ -48,6 +49,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     ])
     |> validate_required([:username, :body, :brainstorming_id])
     |> maybe_put_idea_labels(attrs)
+    |> validate_attachment_count(attrs)
     |> maybe_put_attachments(idea, attrs)
     |> validate_length(:body, min: 1, max: 1023)
     |> validate_inclusion(:deprecated_label, @label_values)
@@ -57,6 +59,18 @@ defmodule Mindwendel.Brainstormings.Idea do
   defp maybe_put_idea_labels(changeset, attrs) do
     if attrs["idea_labels"] do
       put_assoc(changeset, :idea_labels, attrs["idea_labels"])
+    else
+      changeset
+    end
+  end
+
+  defp validate_attachment_count(changeset, attrs) do
+    if Ecto.assoc_loaded?(changeset.data.attachments) and
+         length(changeset.data.attachments) > @max_attachments - 1 do
+      case attrs["tmp_attachments"] == nil do
+        true -> changeset
+        false -> add_error(changeset, :attachments, "Too many")
+      end
     else
       changeset
     end

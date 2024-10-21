@@ -97,6 +97,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
          |> push_patch(to: ~p"/brainstormings/#{idea_params_merged["brainstorming_id"]}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        IO.inspect(changeset)
         {:noreply, assign(socket, form: to_form(changeset))}
     end
   end
@@ -124,7 +125,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
           |> Enum.join("/")
 
         File.cp!(path, dest)
-        {:ok, %{path: dest, name: entry.client_name}}
+        {:ok, %{path: dest, name: entry.client_name, file_type: entry.client_type}}
       end)
 
     files
