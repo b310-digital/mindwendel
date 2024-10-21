@@ -112,12 +112,22 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
 
   defp prepare_attachments(socket) do
     files =
-      consume_uploaded_entries(socket, :attachment, fn file, entry ->
-        # The tmp uploaded file will be deleted directly after the ending of this function, therefore the upload is already happening here. A cleanup happens in case of errors later.
+      consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
+        # The tmp uploaded file will be deleted directly after the ending of this function, therefore a copy in the tmp folder is made and then processed in the attachment changeset.
         # See also this discussion https://github.com/elixir-waffle/waffle/issues/71
         filename = "#{entry.uuid}.#{mime_ext(entry.client_type)}"
-        {:ok, final_path} = Mindwendel.Attachment.store(%{path: file.path, filename: filename})
-        {:ok, %{path: final_path, name: entry.client_name, file_type: entry.client_type}}
+
+        dest =
+          path
+          |> String.split("/")
+          |> Enum.reverse()
+          |> tl()
+          |> Enum.reverse()
+          |> Enum.concat([filename])
+          |> Enum.join("/")
+
+        File.cp!(path, dest)
+        {:ok, %{path: dest, name: entry.client_name, file_type: entry.client_type}}
       end)
 
     files
@@ -132,9 +142,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     attachments = Changeset.get_change(changeset, :attachments)
 
     if attachments != nil and length(attachments) > 0 do
-      Enum.each(attachments, fn attachment ->
-        attachment |> Changeset.get_change(:path) |> Mindwendel.Attachment.delete()
-      end)
+      Enum.each(attachments, fn attachment -> File.rm(Changeset.get_change(attachment, :path)) end)
     end
   end
 
