@@ -95,7 +95,7 @@ msgstr "Export als HTML"
 msgid "Got stuck? Try inspirational teasers!"
 msgstr "Keine Ideen? Hier gibts Gedankenanstöße!"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:92
+#: lib/mindwendel_web/live/idea_live/form_component.ex:96
 #, elixir-autogen, elixir-format
 msgid "Idea created successfully"
 msgstr "Idee erstellt"
@@ -473,7 +473,7 @@ msgstr "Idee bearbeiten"
 msgid "Delete idea"
 msgstr "Löschen"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:66
+#: lib/mindwendel_web/live/idea_live/form_component.ex:70
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Idea updated"
 msgstr "Idee aktualisiert"
@@ -494,17 +494,17 @@ msgstr "Zusätzlicher Anhang"
 msgid "No filename"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:121
+#: lib/mindwendel_web/live/idea_live/form_component.ex:139
 #, elixir-autogen, elixir-format
 msgid "File type is not allowed"
 msgstr "Dateityp nicht erlaubt"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:119
+#: lib/mindwendel_web/live/idea_live/form_component.ex:137
 #, elixir-autogen, elixir-format
 msgid "The selected file is too large"
 msgstr "Datei ist zu groß"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:120
+#: lib/mindwendel_web/live/idea_live/form_component.ex:138
 #, elixir-autogen, elixir-format
 msgid "Too many files selected"
 msgstr "Zu viele Dateien ausgewählt"

@@ -23,6 +23,8 @@ defmodule Mindwendel.Brainstormings.Attachment do
   defp maybe_store_from_path_tmp(changeset, attrs) do
     if attrs[:path] do
       {:ok, final_path} = Mindwendel.Attachment.store(attrs[:path])
+      # clear old tmp file
+      File.rm(attrs[:path])
       changeset |> put_change(:path, final_path)
     else
       changeset
