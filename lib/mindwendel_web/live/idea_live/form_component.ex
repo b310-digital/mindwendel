@@ -5,6 +5,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   alias Mindwendel.Ideas
   alias Mindwendel.Attachments
   alias Mindwendel.IdeaLabels
+  alias Ecto.Changeset
 
   @impl true
   def mount(socket) do
@@ -71,6 +72,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
            |> push_patch(to: ~p"/brainstormings/#{brainstorming.id}")}
 
         {:error, %Ecto.Changeset{} = changeset} ->
+          clear_attachments(changeset)
           {:noreply, assign(socket, form: to_form(changeset))}
       end
     end
@@ -97,7 +99,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
          |> push_patch(to: ~p"/brainstormings/#{idea_params_merged["brainstorming_id"]}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        IO.inspect(changeset)
+        clear_attachments(changeset)
         {:noreply, assign(socket, form: to_form(changeset))}
     end
   end
@@ -133,6 +135,15 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
 
   defp mime_ext(client_type) do
     List.first(MIME.extensions(client_type))
+  end
+
+  # cleanup of tmp attachments in case of form errors
+  defp clear_attachments(changeset) do
+    attachments = Changeset.get_change(changeset, :attachments)
+
+    if attachments != nil and length(attachments) > 0 do
+      Enum.each(attachments, fn attachment -> File.rm(Changeset.get_change(attachment, :path)) end)
+    end
   end
 
   defp error_to_string(:too_large), do: gettext("The selected file is too large")
