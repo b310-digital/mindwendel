@@ -56,10 +56,12 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
     if has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
+      tmp_attachments = prepare_attachments(socket)
+
       idea_params_merged =
         idea_params
         |> Map.put("user_id", idea.user_id || current_user.id)
-        |> Map.put("tmp_attachments", prepare_attachments(socket))
+        |> Map.put("tmp_attachments", tmp_attachments)
 
       case Ideas.update_idea(
              idea,
@@ -72,13 +74,15 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
            |> push_patch(to: ~p"/brainstormings/#{brainstorming.id}")}
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          clear_attachments(changeset)
+          remove_tmp_attachments(tmp_attachments)
           {:noreply, assign(socket, form: to_form(changeset))}
       end
     end
   end
 
   defp save_idea(socket, :new, idea_params) do
+    tmp_attachments = prepare_attachments(socket)
+
     idea_params_merged =
       idea_params
       |> Map.put("user_id", socket.assigns.current_user.id)
@@ -86,7 +90,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
         "idea_labels",
         IdeaLabels.get_idea_labels(socket.assigns.brainstorming.filter_labels_ids)
       )
-      |> Map.put("tmp_attachments", prepare_attachments(socket))
+      |> Map.put("tmp_attachments", tmp_attachments)
 
     case Ideas.create_idea(idea_params_merged) do
       {:ok, _idea} ->
@@ -99,7 +103,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
          |> push_patch(to: ~p"/brainstormings/#{idea_params_merged["brainstorming_id"]}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        clear_attachments(changeset)
+        remove_tmp_attachments(tmp_attachments)
         {:noreply, assign(socket, form: to_form(changeset))}
     end
   end
@@ -116,16 +120,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
         # The tmp uploaded file will be deleted directly after the ending of this function, therefore a copy in the tmp folder is made and then processed in the attachment changeset.
         # See also this discussion https://github.com/elixir-waffle/waffle/issues/71
         filename = "#{entry.uuid}.#{mime_ext(entry.client_type)}"
-
-        dest =
-          path
-          |> String.split("/")
-          |> Enum.reverse()
-          |> tl()
-          |> Enum.reverse()
-          |> Enum.concat([filename])
-          |> Enum.join("/")
-
+        dest = "#{Path.dirname(path)}/#{filename}"
         File.cp!(path, dest)
         {:ok, %{path: dest, name: entry.client_name, file_type: entry.client_type}}
       end)
@@ -133,17 +128,12 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     files
   end
 
-  defp mime_ext(client_type) do
-    List.first(MIME.extensions(client_type))
+  defp remove_tmp_attachments(tmp_attachments) do
+    Enum.each(tmp_attachments, fn tmp_attachment -> File.rm(tmp_attachment.path) end)
   end
 
-  # cleanup of tmp attachments in case of form errors
-  defp clear_attachments(changeset) do
-    attachments = Changeset.get_change(changeset, :attachments)
-
-    if attachments != nil and length(attachments) > 0 do
-      Enum.each(attachments, fn attachment -> File.rm(Changeset.get_change(attachment, :path)) end)
-    end
+  defp mime_ext(client_type) do
+    List.first(MIME.extensions(client_type))
   end
 
   defp error_to_string(:too_large), do: gettext("The selected file is too large")
