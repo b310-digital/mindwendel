@@ -67,7 +67,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   defp validate_attachment_count(changeset, attrs) do
     if Ecto.assoc_loaded?(changeset.data.attachments) and
          length(changeset.data.attachments) > @max_attachments - 1 do
-      case attrs["tmp_attachments"] == nil or length(attrs["tmp_attachments"]) == 0 do
+      case attrs["tmp_attachments"] == nil or Enum.empty?(attrs["tmp_attachments"]) do
         true -> changeset
         false -> add_error(changeset, :attachments, "too_many_files")
       end
@@ -77,7 +77,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   end
 
   defp maybe_put_attachments(changeset, idea, attrs) do
-    if attrs["tmp_attachments"] != nil and length(changeset.errors) == 0 do
+    if attrs["tmp_attachments"] != nil and Enum.empty?(changeset.errors) do
       new_attachments =
         Enum.map(attrs["tmp_attachments"], fn change ->
           Attachments.change_attachment(%Attachment{}, change)
