@@ -110,8 +110,9 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   defp prepare_attachments(socket) do
     files =
       consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
-        # uploads do not have any file ending, which does not work with waffle. Therefore, we copy the file to have the proper file ending (either image or pdf)
-        # use existing path but exchange the current filename with a uuid and the correct file extension based on the mime type
+        # The tmp uploaded file will be deleted directly after the ending of this function, therefore a copy in the tmp folder is made and then processed in the attachment changeset.
+        # This could be improved by doing this upload directly in here, but this would mean creating an attachment on the server before having validated the idea input
+        # https://github.com/elixir-waffle/waffle/issues/71
         filename = "#{entry.uuid}.#{mime_ext(entry.client_type)}"
 
         dest =
