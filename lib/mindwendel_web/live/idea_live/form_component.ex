@@ -5,7 +5,6 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   alias Mindwendel.Ideas
   alias Mindwendel.Attachments
   alias Mindwendel.IdeaLabels
-  alias Ecto.Changeset
 
   @impl true
   def mount(socket) do

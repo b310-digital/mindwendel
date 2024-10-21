@@ -168,14 +168,10 @@ defmodule Mindwendel.Brainstormings do
 
   """
   def delete_brainstorming(%Brainstorming{} = brainstorming) do
-    # TODO collect all ideas first and remove all attachments of those ideas
-    # TODO what is the best way of doing this? loading all ideas in memory doesnt seem like a good idea.
-    # TODO loading only the ids and removing attachments with idea ids could be one improvement.
     Repo.transaction(fn ->
-      # ideas = ...
-      # delete_idea also removes attachments
-      # Enum.each(ideas, fn idea -> Ideas.delete_idea(idea) end)
-      Repo.delete_all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
+      ideas = Repo.all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
+      # delete_idea deletes the idea and potentially associated attachments
+      Enum.each(ideas, fn idea -> Ideas.delete_idea(idea) end)
       Repo.delete(brainstorming)
     end)
   end
