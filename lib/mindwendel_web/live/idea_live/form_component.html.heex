@@ -20,6 +20,11 @@
         <%= error_to_string(err) %>
       </div>
     <% end %>
+    <%= if @form.errors[:attachments] != nil do %>
+      <div class="alert alert-danger">
+        <%= @form.errors[:attachments] |> elem(0) |> String.to_atom() |> error_to_string() %>
+      </div>
+    <% end %>
 
     <%= if @action == :update do %>
       <%= for attachment <- @idea.attachments do %>

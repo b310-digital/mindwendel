@@ -69,7 +69,7 @@ defmodule Mindwendel.Brainstormings.Idea do
          length(changeset.data.attachments) > @max_attachments - 1 do
       case attrs["tmp_attachments"] == nil or length(attrs["tmp_attachments"]) == 0 do
         true -> changeset
-        false -> add_error(changeset, :attachments, "Too many")
+        false -> add_error(changeset, :attachments, "too_many_files")
       end
     else
       changeset
