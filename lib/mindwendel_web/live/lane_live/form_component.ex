@@ -28,6 +28,8 @@ defmodule MindwendelWeb.LaneLive.FormComponent do
 
     if has_moderating_permission(brainstorming, current_user) do
       save_lane(socket, socket.assigns.action, lane_params)
+    else
+      {:noreply, socket}
     end
   end
 
