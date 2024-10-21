@@ -49,11 +49,11 @@ defmodule Mindwendel.Brainstormings.Idea do
     ])
     |> validate_required([:username, :body, :brainstorming_id])
     |> maybe_put_idea_labels(attrs)
-    |> validate_attachment_count(attrs)
-    |> maybe_put_attachments(idea, attrs)
     |> validate_length(:body, min: 1, max: 1023)
     |> validate_inclusion(:deprecated_label, @label_values)
     |> add_position_order_if_missing()
+    |> validate_attachment_count(attrs)
+    |> maybe_put_attachments(idea, attrs)
   end
 
   defp maybe_put_idea_labels(changeset, attrs) do
@@ -77,6 +77,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   end
 
   defp maybe_put_attachments(changeset, idea, attrs) do
+    # only add and upload attachment if the idea is valid
     if attrs["tmp_attachments"] do
       new_attachments =
         Enum.map(attrs["tmp_attachments"], fn change ->
