@@ -67,7 +67,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   defp validate_attachment_count(changeset, attrs) do
     if Ecto.assoc_loaded?(changeset.data.attachments) and
          length(changeset.data.attachments) > @max_attachments - 1 do
-      case attrs["tmp_attachments"] == nil do
+      case attrs["tmp_attachments"] == nil or length(attrs["tmp_attachments"]) == 0 do
         true -> changeset
         false -> add_error(changeset, :attachments, "Too many")
       end
