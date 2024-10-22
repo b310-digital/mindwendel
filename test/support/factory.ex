@@ -1,5 +1,6 @@
 defmodule Mindwendel.Factory do
   alias Mindwendel.Repo
+  alias Mindwendel.Brainstormings.Attachment
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Lane
@@ -41,6 +42,10 @@ defmodule Mindwendel.Factory do
 
   def build(:link) do
     %Link{}
+  end
+
+  def build(:attachment) do
+    %Attachment{}
   end
 
   def build(:inspiration) do

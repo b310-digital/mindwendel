@@ -4,6 +4,7 @@ defmodule Mindwendel.BrainstormingsTest do
   alias Mindwendel.Brainstormings.BrainstormingModeratingUser
   alias Mindwendel.Factory
 
+  alias Mindwendel.Brainstormings.Attachment
   alias Mindwendel.Brainstormings
   alias Mindwendel.Lanes
   alias Mindwendel.IdeaLabels
@@ -194,6 +195,29 @@ defmodule Mindwendel.BrainstormingsTest do
       Brainstormings.delete_old_brainstormings()
 
       refute Repo.exists?(from(l in Link, where: l.id == ^old_link.id))
+    end
+
+    test "removes attachments" do
+      old_brainstorming =
+        Factory.insert!(:brainstorming,
+          last_accessed_at: DateTime.from_naive!(~N[2021-01-01 10:00:00], "Etc/UTC")
+        )
+
+      old_idea =
+        Factory.insert!(:idea,
+          brainstorming: old_brainstorming,
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      file_path = Path.join("priv/static/uploads", "test")
+      # create a test file which is used as an attachment
+      File.write(file_path, "test")
+
+      old_attachment = Factory.insert!(:attachment, idea: old_idea, path: file_path)
+      Brainstormings.delete_old_brainstormings()
+
+      refute File.exists?(file_path)
+      refute Repo.exists?(from(a in Attachment, where: a.id == ^old_attachment.id))
     end
 
     test "removes the old brainstormings users connection", %{user: user} do
