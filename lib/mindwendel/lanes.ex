@@ -32,8 +32,8 @@ defmodule Mindwendel.Lanes do
       ideas: [
         :link,
         :likes,
-        :label,
-        :idea_labels
+        :idea_labels,
+        :files
       ]
     )
   end
@@ -107,7 +107,8 @@ defmodule Mindwendel.Lanes do
         |> preload([
           :link,
           :likes,
-          :idea_labels
+          :idea_labels,
+          :files
         ])
     )
   end

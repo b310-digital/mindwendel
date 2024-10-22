@@ -7,6 +7,7 @@ defmodule Mindwendel.Factory do
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Attachments.Link
+  alias Mindwendel.Attachments.File
   alias Mindwendel.Accounts.User
   alias Mindwendel.Help.Inspiration
 
@@ -41,6 +42,10 @@ defmodule Mindwendel.Factory do
 
   def build(:link) do
     %Link{}
+  end
+
+  def build(:file) do
+    %File{}
   end
 
   def build(:inspiration) do
