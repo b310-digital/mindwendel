@@ -24,13 +24,15 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 ## Features
 
 - 5 minute setup (It is not a joke)
-- Anonymously invite people to your brainstormings - no registration needed. Usernames are optional.
-- Easily create and upvote ideas, with live updates from your companions.
-- Cluster your ideas with custom labels
+- Anonymously invite people to your brainstormings - no registration needed. Usernames are optional
+- Easily create and upvote ideas, with live updates from your companions
+- Cluster or filter your ideas with custom labels
 - Preview of links to ease URL sharing
+- Add file attachments
+- Add lanes, use drag & drop to order ideas
 - Export your generated ideas to html or csv (currently comma separated)
 - German & English Translation files
-- By default, brainstormings are deleted after 30 days to ensure GDPR compliancy.
+- By default, brainstormings are deleted after 30 days to ensure GDPR compliancy
 
 ![](docs/screenshot.png)
 ![](docs/screenshot2.png)

@@ -161,7 +161,7 @@
                     <p class="text-muted">
                       <.link
                         download={attachment.name || attachment.path}
-                        href={Mindwendel.Attachment.url(attachment.path)}
+                        href={Mindwendel.Attachment.url(attachment.path, signed: true)}
                       >
                         <%= attachment.name || gettext("No filename") %>
                       </.link>
