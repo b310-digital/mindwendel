@@ -13,7 +13,10 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
      # max file size is 8mb by default
      |> allow_upload(:attachment,
        accept: Mindwendel.Attachment.whitelisted_file_extensions(),
-       max_entries: 1
+       max_entries: 1,
+       # given in bytes
+       max_file_size:
+         String.to_integer(System.get_env("MW_FILE_UPLOAD_MAX_FILE_SIZE") || "8000000")
      )}
   end
 
