@@ -29,7 +29,10 @@ services:
       URL_SCHEME: ${DOCKER_COMPOSE_APP_URL_SCHEME:-http}
       MW_ENDPOINT_HTTP_PORT: ${DOCKER_COMPOSE_APP_MW_ENDPOINT_HTTP_PORT:-4000}
       MW_FEATURE_STORAGE_PROVIDER: ${DOCKER_COMPOSE_APP_MW_FEATURE_STORAGE_PROVIDER:-local}
-      # in case s3 is used as storage provider
+      # In case s3 is used as storage provider
+      # Attention: Please note that you have to add minio in etc/hosts to make the links of signed urls work:
+      # Example: 127.0.0.1 minio
+      #
       # OBJECT_STORAGE_ASSET_HOST: "http://localhost:9000/mindwendel"
       # OBJECT_STORAGE_BUCKET: mindwendel
       # OBJECT_STORAGE_SCHEME: "http://"
