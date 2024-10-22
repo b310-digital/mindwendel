@@ -7,15 +7,15 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Lane
-  alias Mindwendel.Brainstormings.Attachment
   alias Mindwendel.Ideas
   alias Mindwendel.Attachments
   alias Mindwendel.Attachments.Link
+  alias Mindwendel.Attachments.File
   alias Mindwendel.UrlPreview
   alias Mindwendel.Accounts.User
 
   @label_values [:label_1, :label_2, :label_3, :label_4, :label_5]
-  @max_attachments 4
+  @max_file_attachments 4
 
   schema "ideas" do
     field :body, :string
@@ -25,7 +25,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     has_one :link, Link
     belongs_to :user, User
     has_many :likes, Like
-    has_many :attachments, Attachment
+    has_many :files, File
     belongs_to :brainstorming, Brainstorming
     belongs_to :label, IdeaLabel, on_replace: :nilify
     belongs_to :lane, Lane
@@ -65,11 +65,11 @@ defmodule Mindwendel.Brainstormings.Idea do
   end
 
   defp validate_attachment_count(changeset, attrs) do
-    if Ecto.assoc_loaded?(changeset.data.attachments) and
-         length(changeset.data.attachments) > @max_attachments - 1 do
+    if Ecto.assoc_loaded?(changeset.data.files) and
+         length(changeset.data.files) > @max_file_attachments - 1 do
       case attrs["tmp_attachments"] == nil or Enum.empty?(attrs["tmp_attachments"]) do
         true -> changeset
-        false -> add_error(changeset, :attachments, "too_many_files")
+        false -> add_error(changeset, :files, "too_many_files")
       end
     else
       changeset
@@ -78,16 +78,16 @@ defmodule Mindwendel.Brainstormings.Idea do
 
   defp maybe_put_attachments(changeset, idea, attrs) do
     if attrs["tmp_attachments"] != nil and Enum.empty?(changeset.errors) do
-      new_attachments =
+      new_files =
         Enum.map(attrs["tmp_attachments"], fn change ->
-          Attachments.change_attachment(%Attachment{}, change)
+          Attachments.change_attachment(%File{}, change)
         end)
 
       # Ff the idea is being updated, the old attachments need to be added. Otherwise these will be deleted!
-      merged_attachments =
-        if idea.id, do: new_attachments ++ idea.attachments, else: new_attachments
+      merged_files =
+        if idea.id, do: new_files ++ idea.files, else: new_files
 
-      put_assoc(changeset, :attachments, merged_attachments)
+      put_assoc(changeset, :files, merged_files)
     else
       changeset
     end

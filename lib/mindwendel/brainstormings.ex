@@ -170,7 +170,7 @@ defmodule Mindwendel.Brainstormings do
   def delete_brainstorming(%Brainstorming{} = brainstorming) do
     Repo.transaction(fn ->
       ideas = Repo.all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
-      # delete_idea deletes the idea and potentially associated attachments
+      # delete_idea deletes the idea and potentially associated files
       Enum.each(ideas, fn idea -> Ideas.delete_idea(idea) end)
       Repo.delete(brainstorming)
     end)
@@ -308,7 +308,7 @@ defmodule Mindwendel.Brainstormings do
           :link,
           :likes,
           :idea_labels,
-          :attachments
+          :files
         ])
       }
     )
@@ -328,7 +328,7 @@ defmodule Mindwendel.Brainstormings do
             :link,
             :likes,
             :idea_labels,
-            :attachments
+            :files
           ]
         )
       }

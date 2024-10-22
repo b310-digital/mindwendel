@@ -283,7 +283,7 @@ defmodule Mindwendel.Ideas do
       ** (Ecto.NoResultsError)
 
   """
-  def get_idea!(id), do: Repo.get!(Idea, id) |> Repo.preload([:idea_labels, :attachments])
+  def get_idea!(id), do: Repo.get!(Idea, id) |> Repo.preload([:idea_labels, :files])
 
   @doc """
   Creates a idea.
@@ -368,14 +368,14 @@ defmodule Mindwendel.Ideas do
 
   """
   def delete_idea(%Idea{} = idea) do
-    {:ok, _} = delete_attachments(idea)
+    {:ok, _} = delete_files(idea)
     Repo.delete(idea)
     Lanes.broadcast_lanes_update(idea.brainstorming_id)
   end
 
-  defp delete_attachments(%Idea{} = idea) do
-    attachments = Repo.preload(idea, :attachments).attachments
-    result = Enum.map(attachments, fn attachment -> Attachments.delete_attachment(attachment) end)
+  defp delete_files(%Idea{} = idea) do
+    files = Repo.preload(idea, :files).files
+    result = Enum.map(files, fn file -> Attachments.delete_attachment(file) end)
     {:ok, result}
   end
 

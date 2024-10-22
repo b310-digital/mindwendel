@@ -33,7 +33,7 @@ defmodule Mindwendel.Lanes do
         :link,
         :likes,
         :idea_labels,
-        :attachments
+        :files
       ]
     )
   end
@@ -108,7 +108,7 @@ defmodule Mindwendel.Lanes do
           :link,
           :likes,
           :idea_labels,
-          :attachments
+          :files
         ])
     )
   end

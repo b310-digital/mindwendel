@@ -155,8 +155,8 @@
                   </div>
                 <% end %>
 
-                <%= if length(idea.attachments) > 0 do %>
-                  <%= for attachment <- idea.attachments do %>
+                <%= if length(idea.files) > 0 do %>
+                  <%= for attachment <- idea.files do %>
                     <i class="bi bi-file-earmark"></i>
                     <p class="text-muted">
                       <.link

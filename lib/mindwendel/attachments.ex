@@ -1,7 +1,7 @@
 defmodule Mindwendel.Attachments do
   import Ecto.Query, warn: false
   alias Mindwendel.Repo
-  alias Mindwendel.Brainstormings.Attachment
+  alias Mindwendel.Attachments.File
 
   require Logger
 
@@ -23,7 +23,7 @@ defmodule Mindwendel.Attachments do
 
   """
   def get_attachment!(id) do
-    Repo.get!(Attachment, id)
+    Repo.get!(File, id)
   end
 
   @doc """
@@ -32,11 +32,11 @@ defmodule Mindwendel.Attachments do
   ## Examples
 
       iex> change_attachment(attachment)
-      %Ecto.Changeset(data: %Attachment{})
+      %Ecto.Changeset(data: %File{})
 
   """
-  def change_attachment(%Attachment{} = attachment, attrs \\ %{}) do
-    Attachment.changeset(attachment, attrs)
+  def change_attachment(%File{} = attachment, attrs \\ %{}) do
+    File.changeset(attachment, attrs)
   end
 
   @doc """
@@ -45,13 +45,13 @@ defmodule Mindwendel.Attachments do
   ## Examples
 
       iex> delete_attachment(attachment)
-      {:ok, %Attachment{}}
+      {:ok, %File{}}
 
       iex> delete_attachment(attachment)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_attachment(%Attachment{} = attachment) do
+  def delete_attachment(%File{} = attachment) do
     if attachment.path do
       :ok = Mindwendel.Attachment.delete(attachment.path)
     end
