@@ -32,6 +32,7 @@ defmodule MindwendelWeb.Endpoint do
       "favicon.ico",
       "fonts",
       "images",
+      "uploads",
       "js",
       "robots.txt",
       "safari-pinned-tab.svg",

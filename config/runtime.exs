@@ -179,3 +179,34 @@ if config_env() == :prod || config_env() == :dev do
     ],
     queues: [default: 1]
 end
+
+# Waffle config for uploading files
+# By default, the local file system is used. For production environments, an S3 storage provider is recommended.
+storage_provider = String.trim(System.get_env("MW_FEATURE_STORAGE_PROVIDER") || "local")
+
+if storage_provider == "local" do
+  config :waffle,
+    storage: Waffle.Storage.Local,
+    storage_dir_prefix: "priv/static",
+    storage_dir: "uploads"
+end
+
+# Examples for waffle storage configurations for S3, see https://hexdocs.pm/waffle/Waffle.Storage.S3.html
+if storage_provider == "s3" do
+  config :waffle,
+    storage: Waffle.Storage.S3,
+    bucket: System.fetch_env!("OBJECT_STORAGE_BUCKET"),
+    asset_host: System.fetch_env!("OBJECT_STORAGE_ASSET_HOST")
+
+  config(:ex_aws,
+    json_codec: Jason,
+    access_key_id: System.fetch_env!("OBJECT_STORAGE_USER"),
+    secret_access_key: System.fetch_env!("OBJECT_STORAGE_PASSWORD"),
+    s3: [
+      scheme: System.fetch_env!("OBJECT_STORAGE_SCHEME"),
+      host: System.fetch_env!("OBJECT_STORAGE_HOST"),
+      port: System.fetch_env!("OBJECT_STORAGE_PORT"),
+      region: System.fetch_env!("OBJECT_STORAGE_REGION")
+    ]
+  )
+end

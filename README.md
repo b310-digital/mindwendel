@@ -120,6 +120,14 @@ mindwendel is built on top of:
 
 - Go to http://localhost:4000/
 
+#### Localization
+
+You can extract new strings to translate by running:
+
+```bash
+mix gettext.extract --merge
+```
+
 ### Testing
 
 - Startup docker compose setup
@@ -191,15 +199,20 @@ We are using Elixir's built-in formatter.
 
 ## Environment Variables
 
+### File Storage
+Attached files are stored by default on the server in an upload directory. For a production setup, it is recommended to use a s3 compatible object storage.
+
+```
+DOCKER_COMPOSE_APP_MW_FEATURE_STORAGE_PROVIDER=s3
+DOCKER_COMPOSE_APP_OBJECT_STORAGE_USER=...
+DOCKER_COMPOSE_APP_OBJECT_STORAGE_PASSWORD=...
+```
+
+There is an example given inside the `docker-compose.yml` with a docker compose minio setup.
+
 ### Localization
 
 Currently, there are two language files available, german ("de") and english ("en"). To set the default_locale, you can set `MW_DEFAULT_LOCALE`. The default is english.
-
-You can extract new strings to translate by running:
-
-```bash
-mix gettext.extract --merge
-```
 
 ## Testimonials
 

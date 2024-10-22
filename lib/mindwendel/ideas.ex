@@ -7,6 +7,7 @@ defmodule Mindwendel.Ideas do
   alias Mindwendel.Repo
 
   alias Mindwendel.Lanes
+  alias Mindwendel.Attachments
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Idea
 
@@ -282,7 +283,7 @@ defmodule Mindwendel.Ideas do
       ** (Ecto.NoResultsError)
 
   """
-  def get_idea!(id), do: Repo.get!(Idea, id) |> Repo.preload([:label, :idea_labels])
+  def get_idea!(id), do: Repo.get!(Idea, id) |> Repo.preload([:idea_labels, :files])
 
   @doc """
   Creates a idea.
@@ -367,8 +368,15 @@ defmodule Mindwendel.Ideas do
 
   """
   def delete_idea(%Idea{} = idea) do
+    {:ok, _} = delete_files(idea)
     Repo.delete(idea)
     Lanes.broadcast_lanes_update(idea.brainstorming_id)
+  end
+
+  defp delete_files(%Idea{} = idea) do
+    files = Repo.preload(idea, :files).files
+    result = Enum.map(files, fn file -> Attachments.delete_attached_file(file) end)
+    {:ok, result}
   end
 
   @doc """

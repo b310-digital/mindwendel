@@ -22,6 +22,7 @@ services:
       MW_DEFAULT_LOCALE: ${DOCKER_COMPOSE_APP_PROD_MW_DEFAULT_LOCALE:-en}
       MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS: ${DOCKER_COMPOSE_APP_PROD_MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS:-30}
       MW_FEATURE_BRAINSTORMING_TEASER: ${DOCKER_COMPOSE_APP_PROD_MW_FEATURE_BRAINSTORMING_TEASER:-true}
+      MW_FEATURE_STORAGE_PROVIDER: ${DOCKER_COMPOSE_APP_PROD_MW_FEATURE_STORAGE_PROVIDER:-local}
 
       # Add a secret key base for mindwendel for encrypting the use session
       # NOTE: There are multiple commands you can use to generate a secret key base. Pick one command you like.
