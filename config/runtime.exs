@@ -193,14 +193,20 @@ end
 
 # Examples for waffle storage configurations for S3, see https://hexdocs.pm/waffle/Waffle.Storage.S3.html
 if storage_provider == "s3" do
-  config :waffle, bucket: System.fetch_env!("OBJECT_STORAGE_BUCKET")
+  config :waffle,
+    storage: Waffle.Storage.S3,
+    bucket: System.fetch_env!("OBJECT_STORAGE_BUCKET"),
+    asset_host: System.fetch_env!("OBJECT_STORAGE_ASSET_HOST")
 
-  config(:ex_aws, :s3,
-    scheme: System.fetch_env!("OBJECT_STORAGE_SCHEME"),
-    host: System.fetch_env!("OBJECT_STORAGE_HOST"),
-    port: System.fetch_env!("OBJECT_STORAGE_PORT"),
-    region: System.fetch_env!("OBJECT_STORAGE_REGION"),
+  config(:ex_aws,
+    json_codec: Jason,
     access_key_id: System.fetch_env!("OBJECT_STORAGE_USER"),
-    secret_access_key: System.fetch_env!("OBJECT_STORAGE_PASSWORD")
+    secret_access_key: System.fetch_env!("OBJECT_STORAGE_PASSWORD"),
+    s3: [
+      scheme: System.fetch_env!("OBJECT_STORAGE_SCHEME"),
+      host: System.fetch_env!("OBJECT_STORAGE_HOST"),
+      port: System.fetch_env!("OBJECT_STORAGE_PORT"),
+      region: System.fetch_env!("OBJECT_STORAGE_REGION")
+    ]
   )
 end
