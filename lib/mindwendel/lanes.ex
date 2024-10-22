@@ -8,6 +8,7 @@ defmodule Mindwendel.Lanes do
 
   alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings
 
   require Logger
@@ -187,6 +188,9 @@ defmodule Mindwendel.Lanes do
 
   """
   def delete_lane(%Lane{} = lane) do
+    ideas = Repo.all(from idea in Idea, where: idea.lane_id == ^lane.id)
+    # delete_idea deletes the idea and potentially associated files
+    Enum.each(ideas, fn idea -> Ideas.delete_idea(idea) end)
     Repo.delete(lane) |> Brainstormings.broadcast(:lane_removed)
   end
 

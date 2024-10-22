@@ -4,6 +4,7 @@ defmodule Mindwendel.LanesTest do
   alias Mindwendel.Brainstormings.Lane
   import Mindwendel.BrainstormingsFixtures
   import Mindwendel.LanesFixtures
+  alias Mindwendel.Attachments
   alias Mindwendel.Factory
 
   setup do
@@ -152,6 +153,25 @@ defmodule Mindwendel.LanesTest do
     lane = lane_fixture()
     assert {:ok, %Lane{}} = Lanes.delete_lane(lane)
     assert_raise Ecto.NoResultsError, fn -> Lanes.get_lane!(lane.id) end
+  end
+
+  test "delete_lane/1 deletes ideas and attachments" do
+    lane = lane_fixture()
+
+    idea =
+      Factory.insert!(:idea,
+        lane: lane,
+        inserted_at: ~N[2021-01-01 15:04:30]
+      )
+
+    file_path = Path.join("priv/static/uploads", "lane_test")
+    # create a test file which is used as an attachment
+    File.write(file_path, "test")
+
+    attachment = Factory.insert!(:file, idea: idea, path: file_path)
+    Lanes.delete_lane(lane)
+    refute File.exists?(file_path)
+    refute Repo.exists?(from(file in Attachments.File, where: file.id == ^attachment.id))
   end
 
   test "change_lane/1 returns a lane changeset" do
