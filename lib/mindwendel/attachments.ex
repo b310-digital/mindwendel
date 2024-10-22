@@ -6,7 +6,7 @@ defmodule Mindwendel.Attachments do
   require Logger
 
   @doc """
-  Gets a single attached_file for an idea
+  Gets a single attached_file
 
   Raises `Ecto.NoResultsError` if the Brainstorming does not exist.
 
