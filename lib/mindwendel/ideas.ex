@@ -375,7 +375,7 @@ defmodule Mindwendel.Ideas do
 
   defp delete_files(%Idea{} = idea) do
     files = Repo.preload(idea, :files).files
-    result = Enum.map(files, fn file -> Attachments.delete_attachment(file) end)
+    result = Enum.map(files, fn file -> Attachments.delete_attached_file(file) end)
     {:ok, result}
   end
 

@@ -80,10 +80,10 @@ defmodule Mindwendel.Brainstormings.Idea do
     if attrs["tmp_attachments"] != nil and Enum.empty?(changeset.errors) do
       new_files =
         Enum.map(attrs["tmp_attachments"], fn change ->
-          Attachments.change_attachment(%File{}, change)
+          Attachments.change_attached_file(%File{}, change)
         end)
 
-      # Ff the idea is being updated, the old attachments need to be added. Otherwise these will be deleted!
+      # Ff the idea is being updated, the old files need to be added. Otherwise these will be deleted!
       merged_files =
         if idea.id, do: new_files ++ idea.files, else: new_files
 
