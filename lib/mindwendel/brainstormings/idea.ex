@@ -25,6 +25,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     has_one :link, Link
     belongs_to :user, User
     has_many :likes, Like
+    has_many :comments, Comment
     has_many :files, File
     belongs_to :brainstorming, Brainstorming
     belongs_to :label, IdeaLabel, on_replace: :nilify
