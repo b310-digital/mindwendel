@@ -37,10 +37,7 @@
           >
             <i class="bi-x-circle-fill text-danger"></i>
           </.button>
-          <.link
-            download={attachment.name || attachment.path}
-            href={Mindwendel.Attachment.url(attachment.path, signed: true)}
-          >
+          <.link download={attachment.name || attachment.path} href={~p"/files/#{attachment.id}"}>
             <%= attachment.name || gettext("No filename") %>
           </.link>
         </p>

@@ -6,13 +6,15 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   alias Mindwendel.Attachments
   alias Mindwendel.IdeaLabels
 
+  @whitelisted_file_extensions []
+
   @impl true
   def mount(socket) do
     {:ok,
      socket
      # max file size is 8mb by default
      |> allow_upload(:attachment,
-       accept: Mindwendel.Attachment.whitelisted_file_extensions(),
+       accept: @whitelisted_file_extensions,
        max_entries: 1,
        # given in bytes
        max_file_size:
