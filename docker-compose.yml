@@ -29,18 +29,17 @@ services:
       URL_SCHEME: ${DOCKER_COMPOSE_APP_URL_SCHEME:-http}
       MW_ENDPOINT_HTTP_PORT: ${DOCKER_COMPOSE_APP_MW_ENDPOINT_HTTP_PORT:-4000}
       MW_FEATURE_STORAGE_PROVIDER: ${DOCKER_COMPOSE_APP_MW_FEATURE_STORAGE_PROVIDER:-local}
-      # In case s3 is used as storage provider
       # Attention: Please note that you have to add minio in etc/hosts to make the links of signed urls work:
       # Example: 127.0.0.1 minio
-      #
-      # OBJECT_STORAGE_ASSET_HOST: "http://localhost:9000/mindwendel"
-      # OBJECT_STORAGE_BUCKET: mindwendel
-      # OBJECT_STORAGE_SCHEME: "http://"
-      # OBJECT_STORAGE_HOST: minio
-      # OBJECT_STORAGE_PORT: 9000
-      # OBJECT_STORAGE_REGION: local
-      # OBJECT_STORAGE_USER: ${DOCKER_COMPOSE_APP_OBJECT_STORAGE_USER}
-      # OBJECT_STORAGE_PASSWORD: ${DOCKER_COMPOSE_APP_OBJECT_STORAGE_PASSWORD}
+      
+      OBJECT_STORAGE_BUCKET: mindwendel
+      OBJECT_STORAGE_SCHEME: "http://"
+      OBJECT_STORAGE_HOST: minio
+      OBJECT_STORAGE_PORT: 9000
+      OBJECT_STORAGE_REGION: local
+      OBJECT_STORAGE_USER: ${DOCKER_COMPOSE_APP_OBJECT_STORAGE_USER}
+      OBJECT_STORAGE_PASSWORD: ${DOCKER_COMPOSE_APP_OBJECT_STORAGE_PASSWORD}
+      VAULT_ENCRYPTION_KEY_BASE64: ${DOCKER_COMPOSE_APP_VAULT_ENCRYPTION_KEY_BASE64}
     ports:
       - "${DOCKER_COMPOSE_APP_PORT_PUBLISHED:-4000}:${DOCKER_COMPOSE_APP_PORT_TARGET:-4000}"
     depends_on:
@@ -52,18 +51,18 @@ services:
       - /app/deps/
       - /app/assets/node_modules
 
-  # minio:
-  #   image: minio/minio
-  #   container_name: minio
-  #   ports:
-  #     - "9000:9000"
-  #     - "9001:9001"
-  #   environment:
-  #     MINIO_ROOT_USER: ROOTNAME
-  #     MINIO_ROOT_PASSWORD: CHANGEME123
-  #   volumes:
-  #     - ~/minio/data:/data
-  #   command: server /data --console-address ":9001"
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ROOTNAME
+      MINIO_ROOT_PASSWORD: CHANGEME123
+    volumes:
+      - ~/minio/data:/data
+    command: server /data --console-address ":9001"
 
   postgres:
     image: postgres:15

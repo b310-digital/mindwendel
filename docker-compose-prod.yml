@@ -22,7 +22,16 @@ services:
       MW_DEFAULT_LOCALE: ${DOCKER_COMPOSE_APP_PROD_MW_DEFAULT_LOCALE:-en}
       MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS: ${DOCKER_COMPOSE_APP_PROD_MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS:-30}
       MW_FEATURE_BRAINSTORMING_TEASER: ${DOCKER_COMPOSE_APP_PROD_MW_FEATURE_BRAINSTORMING_TEASER:-true}
-      MW_FEATURE_STORAGE_PROVIDER: ${DOCKER_COMPOSE_APP_PROD_MW_FEATURE_STORAGE_PROVIDER:-local}
+
+      # Variables for s3 file storage
+      OBJECT_STORAGE_BUCKET: mindwendel
+      OBJECT_STORAGE_SCHEME: "https://"
+      OBJECT_STORAGE_HOST: minio
+      OBJECT_STORAGE_PORT: 9000
+      OBJECT_STORAGE_REGION: local
+      OBJECT_STORAGE_USER: ${DOCKER_COMPOSE_APP_PROD_OBJECT_STORAGE_USER}
+      OBJECT_STORAGE_PASSWORD: $DOCKER_COMPOSE_APP_PROD_OBJECT_STORAGE_PASSWORD}
+      VAULT_ENCRYPTION_KEY_BASE64: ${DOCKER_COMPOSE_APP_PROD_VAULT_ENCRYPTION_KEY_BASE64}
 
       # Add a secret key base for mindwendel for encrypting the use session
       # NOTE: There are multiple commands you can use to generate a secret key base. Pick one command you like.
@@ -43,6 +52,19 @@ services:
       - "${DOCKER_COMPOSE_APP_PROD_PORT_PUBLISHED:-4000}:${DOCKER_COMPOSE_APP_PROD_PORT_TARGET:-4000}"
     depends_on:
       - postgres_prod
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ROOTNAME
+      MINIO_ROOT_PASSWORD: CHANGEME123
+    volumes:
+      - ~/minio/data:/data
+    command: server /data --console-address ":9001"
 
   # If you do not have another postgres database service in this docker-compose, you can add this postgres service.
   # Note: Please use other credentials when using this in production.

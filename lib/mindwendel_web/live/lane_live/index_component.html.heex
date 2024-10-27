@@ -158,14 +158,7 @@
                 <%= if length(idea.files) > 0 do %>
                   <%= for attachment <- idea.files do %>
                     <i class="bi bi-file-earmark"></i>
-                    <p class="text-muted">
-                      <.link
-                        download={attachment.name || attachment.path}
-                        href={~p"/files/#{attachment.id}"}
-                      >
-                        <%= attachment.name || gettext("No filename") %>
-                      </.link>
-                    </p>
+                    <p class="text-muted"></p>
                   <% end %>
                 <% end %>
               </div>

@@ -6,7 +6,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   alias Mindwendel.Attachments
   alias Mindwendel.IdeaLabels
 
-  @whitelisted_file_extensions []
+  @whitelisted_file_extensions ~w(.jpg .jpeg .gif .png .pdf)
 
   @impl true
   def mount(socket) do
