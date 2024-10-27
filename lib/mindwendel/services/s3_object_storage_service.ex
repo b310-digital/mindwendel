@@ -11,7 +11,7 @@ defmodule Mindwendel.Services.S3ObjectStorageService do
     S3.put_object(bucket_name, bucket_path, file, opts) |> ExAws.request()
   end
 
-  def delete_all_objects(bucket_name, files_to_delete) do
-    S3.delete_all_objects(bucket_name, files_to_delete) |> ExAws.request()
+  def delete_object(bucket_name, file_to_delete) do
+    S3.delete_object(bucket_name, file_to_delete) |> ExAws.request()
   end
 end

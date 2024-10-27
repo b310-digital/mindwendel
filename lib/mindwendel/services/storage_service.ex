@@ -45,28 +45,20 @@ defmodule Mindwendel.Services.StorageService do
     end
   end
 
-  # defp delete_file(id, path) do
-  #   file = bucket_path(id, path)
+  def delete_file(path) do
+    case S3ObjectStorageService.delete_object(bucket_name(), path) do
+      {:ok, _} ->
+        Logger.info("Successfully deleted file #{path}.")
+        {:ok}
 
-  #   # If this request fails, we currently need to manually delete the old files. We could also implement a lifecyle policy, so that this cleanup happens automatically:
-  #   case S3ObjectStorageService.delete_all_objects(bucket_name(), file) do
-  #     {:ok, []} ->
-  #       # this can happen when the files_to_delete is empty. We'll catch this earlier as well to save us a request.
-  #       {:ok}
+      {:error, {error_type, http_status_code, response}} ->
+        Logger.error(
+          "Error type: #{error_type} Response code: #{http_status_code} Response Body: #{response.body}"
+        )
 
-  #     {:ok, [response]} ->
-  #       Logger.info("Success while deleting files.")
-  #       Logger.debug("Deleted files: #{response.body}")
-  #       {:ok}
-
-  #     {:error, {error_type, http_status_code, response}} ->
-  #       Logger.error(
-  #         "Error type: #{error_type} Response code: #{http_status_code} Response Body: #{response.body}"
-  #       )
-
-  #       {:error, "Files not deleted"}
-  #   end
-  # end
+        {:error, "Files not deleted"}
+    end
+  end
 
   defp store_encrypted_file(filename, encrypted_file, content_type) do
     encrypted_file_path = bucket_path(filename)

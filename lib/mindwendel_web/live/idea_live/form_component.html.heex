@@ -28,7 +28,19 @@
 
     <%= if @action == :update do %>
       <%= for attachment <- @idea.files do %>
-        <p></p>
+        <p>
+          <.button
+            class="btn-sm"
+            phx-click="delete_attachment"
+            phx-target={@myself}
+            phx-value-id={attachment.id}
+          >
+            <i class="bi-x-circle-fill text-danger"></i>
+          </.button>
+          <.link href={~p"/files/#{attachment.id}"}>
+            <%= attachment.name || gettext("No filename") %>
+          </.link>
+        </p>
       <% end %>
     <% end %>
     <.input field={@form[:id]} type="hidden" />

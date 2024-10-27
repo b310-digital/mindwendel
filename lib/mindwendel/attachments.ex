@@ -2,7 +2,7 @@ defmodule Mindwendel.Attachments do
   import Ecto.Query, warn: false
   alias Mindwendel.Repo
   alias Mindwendel.Attachments.File
-  alias Qrstorage.Services.StorageService
+  alias Mindwendel.Services.StorageService
 
   require Logger
 
@@ -58,9 +58,10 @@ defmodule Mindwendel.Attachments do
   """
   def delete_attached_file(%File{} = attached_file) do
     if attached_file.path do
-      :ok = StorageService.delete_file(attached_file.path)
+      case StorageService.delete_file(attached_file.path) do
+        {:ok} -> Repo.delete(attached_file)
+        {:error, message} -> {:error, message}
+      end
     end
-
-    Repo.delete(attached_file)
   end
 end
