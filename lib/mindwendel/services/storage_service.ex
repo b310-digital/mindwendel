@@ -15,35 +15,35 @@ defmodule Mindwendel.Services.StorageService do
     end
   end
 
-  # defp get_file(filename, type) do
-  #   case S3ObjectStorageService.get_object(bucket_name(), bucket_path(filename, type)) do
-  #     {:ok, response} ->
-  #       case response.status_code do
-  #         200 ->
-  #           case Vault.decrypt(response.body) do
-  #             {:ok, decrypted_file} ->
-  #               {:ok, decrypted_file}
+  def get_file(file_path) do
+    case S3ObjectStorageService.get_object(bucket_name(), file_path) do
+      {:ok, response} ->
+        case response.status_code do
+          200 ->
+            case Vault.decrypt(response.body) do
+              {:ok, decrypted_file} ->
+                {:ok, decrypted_file}
 
-  #             {:error, error_message} ->
-  #               {:error, "Issue while decrypting file: #{inspect(error_message)}"}
-  #           end
+              {:error, error_message} ->
+                {:error, "Issue while decrypting file: #{inspect(error_message)}"}
+            end
 
-  #         _ ->
-  #           Logger.error(
-  #             "Issue while loading file. Response code: #{response.status_code} Response Body: #{response.body}"
-  #           )
+          _ ->
+            Logger.error(
+              "Issue while loading file. Response code: #{response.status_code} Response Body: #{response.body}"
+            )
 
-  #           {:error, "Issue while loading file."}
-  #       end
+            {:error, "Issue while loading file."}
+        end
 
-  #     {:error, {error_type, http_status_code, response}} ->
-  #       Logger.error(
-  #         "Issue while loading file. Error type: #{error_type} Response code: #{http_status_code} Response Body: #{response.body}"
-  #       )
+      {:error, {error_type, http_status_code, response}} ->
+        Logger.error(
+          "Issue while loading file. Error type: #{error_type} Response code: #{http_status_code} Response Body: #{response.body}"
+        )
 
-  #       {:error, "Issue while loading file."}
-  #   end
-  # end
+        {:error, "Issue while loading file."}
+    end
+  end
 
   # defp delete_file(id, path) do
   #   file = bucket_path(id, path)

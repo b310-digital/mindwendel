@@ -27,6 +27,10 @@ defmodule Mindwendel.Attachments do
     Repo.get!(File, id)
   end
 
+  def get_attached_file(id) do
+    Repo.get(File, id)
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking attached_file changes.
 

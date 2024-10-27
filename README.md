@@ -28,7 +28,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 - Easily create and upvote ideas, with live updates from your companions
 - Cluster or filter your ideas with custom labels
 - Preview of links to ease URL sharing
-- Add file attachments
+- Add file attachments, uploaded to an S3 compatible backend and automatically encrypted
 - Add lanes, use drag & drop to order ideas
 - Export your generated ideas to html or csv (currently comma separated)
 - German & English Translation files
