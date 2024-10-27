@@ -26,7 +26,7 @@ defmodule Mindwendel.Attachments.File do
     if changeset.changes.path do
       object_filename = Path.basename(changeset.changes.path)
 
-      {:ok} =
+      {:ok, encrypted_file_path} =
         StorageService.store_file(
           object_filename,
           changeset.changes.path,
@@ -35,7 +35,7 @@ defmodule Mindwendel.Attachments.File do
 
       # clear old tmp file
       File.rm(changeset.changes.path)
-      changeset |> put_change(:path, object_filename)
+      changeset |> put_change(:path, encrypted_file_path)
     else
       changeset
     end

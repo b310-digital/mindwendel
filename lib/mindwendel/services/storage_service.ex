@@ -69,16 +69,18 @@ defmodule Mindwendel.Services.StorageService do
   # end
 
   defp store_encrypted_file(filename, encrypted_file, content_type) do
+    encrypted_file_path = bucket_path(filename)
+
     case S3ObjectStorageService.put_object(
            bucket_name(),
-           bucket_path(filename),
+           encrypted_file_path,
            encrypted_file,
            %{
              content_type: content_type
            }
          ) do
-      {:ok, headers} ->
-        {:ok}
+      {:ok, _headers} ->
+        {:ok, encrypted_file_path}
 
       {:error, {error_type, http_status_code, response}} ->
         Logger.error(
@@ -94,6 +96,6 @@ defmodule Mindwendel.Services.StorageService do
   end
 
   defp bucket_path(filename) do
-    "uploads/#{filename}"
+    "uploads/encrypted-#{filename}"
   end
 end
