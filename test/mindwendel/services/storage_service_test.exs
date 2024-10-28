@@ -4,8 +4,8 @@ defmodule Mindwendel.Brainstormings.StorageServiceTest do
 
   describe "#store_file" do
     test "successfully stores a file" do
-      StorageService.store_file("mindwendel-test.jpg", "test/fixtures/mindwendel-test.jpg", "jpg")
-      target_path = "priv/static/uploads/encrypted-mindwendel-test.jpg"
+      StorageService.store_file("mindwendel-test.png", "test/fixtures/mindwendel-test.png", "png")
+      target_path = "priv/static/uploads/encrypted-mindwendel-test.png"
       assert File.exists?(target_path)
 
       # cleanup
@@ -16,13 +16,13 @@ defmodule Mindwendel.Brainstormings.StorageServiceTest do
   describe "#delete_file" do
     test "successfully removes a file" do
       StorageService.store_file(
-        "mindwendel-removal-test.jpg",
-        "test/fixtures/mindwendel-test.jpg",
-        "jpg"
+        "mindwendel-removal-test.png",
+        "test/fixtures/mindwendel-test.png",
+        "png"
       )
 
-      target_path = "priv/static/uploads/encrypted-mindwendel-removal-test.jpg"
-      StorageService.delete_file("uploads/encrypted-mindwendel-removal-test.jpg")
+      target_path = "priv/static/uploads/encrypted-mindwendel-removal-test.png"
+      StorageService.delete_file("uploads/encrypted-mindwendel-removal-test.png")
 
       refute File.exists?(target_path)
     end
@@ -31,15 +31,15 @@ defmodule Mindwendel.Brainstormings.StorageServiceTest do
   describe "#get_file" do
     test "successfully stores a file" do
       StorageService.store_file(
-        "mindwendel-get-test.jpg",
-        "test/fixtures/mindwendel-test.jpg",
-        "jpg"
+        "mindwendel-get-test.png",
+        "test/fixtures/mindwendel-test.png",
+        "png"
       )
 
-      target_path = "priv/static/uploads/encrypted-mindwendel-get-test.jpg"
+      target_path = "priv/static/uploads/encrypted-mindwendel-get-test.png"
 
       {status, _file_content} =
-        StorageService.get_file("uploads/encrypted-mindwendel-get-test.jpg")
+        StorageService.get_file("uploads/encrypted-mindwendel-get-test.png")
 
       assert status === :ok
 
