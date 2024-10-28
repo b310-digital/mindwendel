@@ -14,9 +14,6 @@ defmodule Mindwendel.BrainstormingsTest do
   alias Mindwendel.Accounts.User
 
   setup do
-    upload_path = "priv/static/uploads/"
-    File.mkdir_p!(Path.dirname(upload_path))
-
     user = Factory.insert!(:user)
     brainstorming = Factory.insert!(:brainstorming, users: [user])
 

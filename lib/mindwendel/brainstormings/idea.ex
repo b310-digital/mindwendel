@@ -77,7 +77,9 @@ defmodule Mindwendel.Brainstormings.Idea do
   end
 
   defp maybe_put_attachments(changeset, idea, attrs) do
-    if Application.fetch_env!(:mindwendel, :options)[:feature_file_upload] and
+    upload_feature_flag = Application.fetch_env!(:mindwendel, :options)[:feature_file_upload]
+
+    if upload_feature_flag and
          attrs["tmp_attachments"] != nil and Enum.empty?(changeset.errors) do
       new_files =
         Enum.map(attrs["tmp_attachments"], fn change ->

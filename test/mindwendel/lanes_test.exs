@@ -8,9 +8,6 @@ defmodule Mindwendel.LanesTest do
   alias Mindwendel.Factory
 
   setup do
-    upload_path = "priv/static/uploads/"
-    File.mkdir_p!(Path.dirname(upload_path))
-
     label = Factory.insert!(:idea_label)
 
     brainstorming =

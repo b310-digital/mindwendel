@@ -3,11 +3,6 @@ defmodule Mindwendel.AttachmentsTest do
   alias Mindwendel.Factory
   alias Mindwendel.Attachments
 
-  setup do
-    upload_path = "priv/static/uploads/"
-    File.mkdir_p!(Path.dirname(upload_path))
-  end
-
   describe "get_attached_file" do
     test "returns the file" do
       attachment = Factory.insert!(:file)
