@@ -8,13 +8,15 @@
   >
     <.input field={@form[:username]} type="text" label={gettext("Username")} phx-debounce={300} />
     <.input field={@form[:body]} type="textarea" label={gettext("Your idea")} phx-debounce={300} />
-    <div class="form-group">
-      <.label for={@uploads.attachment.ref}><%= gettext("Additional Attachment") %></.label>
-      <.live_file_input upload={@uploads.attachment} class="w-100" />
-      <small id="attachment-help" class="form-text text-muted">
-        <%= gettext("Allowed files: JPG/PNG/PDF") %>
-      </small>
-    </div>
+    <%= if show_idea_file_upload() do %>
+      <div class="form-group">
+        <.label for={@uploads.attachment.ref}><%= gettext("Additional Attachment") %></.label>
+        <.live_file_input upload={@uploads.attachment} class="w-100" />
+        <small id="attachment-help" class="form-text text-muted">
+          <%= gettext("Allowed files: JPG/GIF/PNG/PDF") %>
+        </small>
+      </div>
+    <% end %>
     <%= for entry <- @uploads.attachment.entries do %>
       <div :for={err <- upload_errors(@uploads.attachment, entry)} class="alert alert-danger">
         <%= error_to_string(err) %>

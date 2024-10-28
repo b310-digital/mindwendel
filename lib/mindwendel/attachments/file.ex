@@ -23,7 +23,9 @@ defmodule Mindwendel.Attachments.File do
   end
 
   defp maybe_store_from_path_tmp(changeset) do
-    if get_change(changeset, :path) do
+    upload_feature_flag = Application.fetch_env!(:mindwendel, :options)[:feature_file_upload]
+
+    if upload_feature_flag and get_change(changeset, :path) do
       object_filename = Path.basename(get_change(changeset, :path))
 
       {:ok, encrypted_file_path} =

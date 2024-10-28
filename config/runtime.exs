@@ -163,6 +163,11 @@ config :mindwendel, :options,
       ["", "true"],
       String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
     ),
+  feature_file_upload:
+    Enum.member?(
+      ["", "true"],
+      String.trim(System.get_env("MW_FEATURE_IDEA_FILE_UPLOAD") || "")
+    ),
   feature_brainstorming_removal_after_days: delete_brainstormings_after_days,
   # use a strict csp everywhere except in development. we need to relax the setting a bit for webpack
   csp_relax: config_env() == :dev
