@@ -3,20 +3,20 @@ defmodule Mindwendel.Services.StorageService do
   alias Mindwendel.Services.Vault
   require Logger
 
-  def store_file(filename, file_path, content_type) do
+  def store_file(filename, file_path, content_type, s3_client \\ S3ObjectStorageService) do
     {:ok, file} = File.read(file_path)
 
     case Vault.encrypt(file) do
       {:ok, encrypted_file} ->
-        store_encrypted_file(filename, encrypted_file, content_type)
+        store_encrypted_file(filename, encrypted_file, content_type, s3_client)
 
       {:error, error_message} ->
         {:error, "Issue while encrypting file: #{inspect(error_message)}"}
     end
   end
 
-  def get_file(file_path) do
-    case S3ObjectStorageService.get_object(bucket_name(), file_path) do
+  def get_file(file_path, s3_client \\ S3ObjectStorageService) do
+    case s3_client.get_object(bucket_name(), file_path) do
       {:ok, response} ->
         case response.status_code do
           200 ->
@@ -45,8 +45,8 @@ defmodule Mindwendel.Services.StorageService do
     end
   end
 
-  def delete_file(path) do
-    case S3ObjectStorageService.delete_object(bucket_name(), path) do
+  def delete_file(path, s3_client \\ S3ObjectStorageService) do
+    case s3_client.delete_object(bucket_name(), path) do
       {:ok, _} ->
         Logger.info("Successfully deleted file #{path}.")
         {:ok}
@@ -60,10 +60,10 @@ defmodule Mindwendel.Services.StorageService do
     end
   end
 
-  defp store_encrypted_file(filename, encrypted_file, content_type) do
+  defp store_encrypted_file(filename, encrypted_file, content_type, s3_client) do
     encrypted_file_path = bucket_path(filename)
 
-    case S3ObjectStorageService.put_object(
+    case s3_client.put_object(
            bucket_name(),
            encrypted_file_path,
            encrypted_file,
