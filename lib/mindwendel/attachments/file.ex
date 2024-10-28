@@ -23,18 +23,18 @@ defmodule Mindwendel.Attachments.File do
   end
 
   defp maybe_store_from_path_tmp(changeset) do
-    if changeset.changes.path do
-      object_filename = Path.basename(changeset.changes.path)
+    if get_change(changeset, :path) do
+      object_filename = Path.basename(get_change(changeset, :path))
 
       {:ok, encrypted_file_path} =
         StorageService.store_file(
           object_filename,
-          changeset.changes.path,
-          changeset.changes.file_type
+          get_change(changeset, :path),
+          get_change(changeset, :file_type)
         )
 
       # clear old tmp file
-      File.rm(changeset.changes.path)
+      File.rm(get_change(changeset, :path))
       changeset |> put_change(:path, encrypted_file_path)
     else
       changeset

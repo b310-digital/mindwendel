@@ -1,5 +1,4 @@
 defmodule Mindwendel.Services.StorageService do
-  alias Mindwendel.Services.S3ObjectStorageService
   alias Mindwendel.Services.Vault
   require Logger
 
