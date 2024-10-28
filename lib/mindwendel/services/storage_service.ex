@@ -19,13 +19,7 @@ defmodule Mindwendel.Services.StorageService do
       {:ok, response} ->
         case response.status_code do
           200 ->
-            case Vault.decrypt(response.body) do
-              {:ok, decrypted_file} ->
-                {:ok, decrypted_file}
-
-              {:error, error_message} ->
-                {:error, "Issue while decrypting file: #{inspect(error_message)}"}
-            end
+            decrypt_response_body(response.body)
 
           _ ->
             Logger.error(
@@ -79,6 +73,16 @@ defmodule Mindwendel.Services.StorageService do
         )
 
         {:error, "Issue while storing file."}
+    end
+  end
+
+  defp decrypt_response_body(body) do
+    case Vault.decrypt(body) do
+      {:ok, decrypted_file} ->
+        {:ok, decrypted_file}
+
+      {:error, error_message} ->
+        {:error, "Issue while decrypting file: #{inspect(error_message)}"}
     end
   end
 
