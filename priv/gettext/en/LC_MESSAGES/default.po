@@ -46,8 +46,8 @@ msgstr ""
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:53
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:55
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:57
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:16
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:18
 #, elixir-autogen, elixir-format
@@ -120,7 +120,7 @@ msgstr ""
 msgid "Proceed to your brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:58
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:60
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:21
 #, elixir-autogen, elixir-format
 msgid "Save"
@@ -131,7 +131,7 @@ msgstr ""
 msgid "Save this link to update / delete your brainstorming later on:"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:57
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:59
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:20
 #, elixir-autogen, elixir-format
 msgid "Saving..."
@@ -478,17 +478,12 @@ msgstr ""
 msgid "Idea updated"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:15
-#, elixir-autogen, elixir-format
-msgid "Allowed files: JPG/PNG/PDF"
-msgstr ""
-
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:12
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:13
 #, elixir-autogen, elixir-format
 msgid "Additional Attachment"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:41
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:43
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:163
 #, elixir-autogen, elixir-format
 msgid "No filename"
@@ -507,4 +502,9 @@ msgstr ""
 #: lib/mindwendel_web/live/idea_live/form_component.ex:144
 #, elixir-autogen, elixir-format
 msgid "Too many files selected"
+msgstr ""
+
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:16
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Allowed files: JPG/GIF/PNG/PDF"
 msgstr ""
