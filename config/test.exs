@@ -13,6 +13,8 @@ config :mindwendel, Mindwendel.Repo,
   show_sensitive_data_on_connection_error: true,
   pool: Ecto.Adapters.SQL.Sandbox
 
+config :mindwendel, :s3_storage_provider, Mindwendel.Services.S3ObjectStorageLocalService
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :mindwendel, MindwendelWeb.Endpoint,

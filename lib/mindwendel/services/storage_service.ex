@@ -3,7 +3,7 @@ defmodule Mindwendel.Services.StorageService do
   alias Mindwendel.Services.Vault
   require Logger
 
-  def store_file(filename, file_path, content_type, s3_client \\ S3ObjectStorageService) do
+  def store_file(filename, file_path, content_type, s3_client \\ storage_provider()) do
     {:ok, file} = File.read(file_path)
 
     case Vault.encrypt(file) do
@@ -15,7 +15,7 @@ defmodule Mindwendel.Services.StorageService do
     end
   end
 
-  def get_file(file_path, s3_client \\ S3ObjectStorageService) do
+  def get_file(file_path, s3_client \\ storage_provider()) do
     case s3_client.get_object(bucket_name(), file_path) do
       {:ok, response} ->
         case response.status_code do
@@ -45,7 +45,7 @@ defmodule Mindwendel.Services.StorageService do
     end
   end
 
-  def delete_file(path, s3_client \\ S3ObjectStorageService) do
+  def delete_file(path, s3_client \\ storage_provider()) do
     case s3_client.delete_object(bucket_name(), path) do
       {:ok, _} ->
         Logger.info("Successfully deleted file #{path}.")
@@ -89,5 +89,9 @@ defmodule Mindwendel.Services.StorageService do
 
   defp bucket_path(filename) do
     "uploads/encrypted-#{filename}"
+  end
+
+  defp storage_provider do
+    Application.get_env(:mindwendel, :s3_storage_provider)
   end
 end
