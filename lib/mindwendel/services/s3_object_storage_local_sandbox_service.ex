@@ -1,3 +1,5 @@
+# Sandbox environment with a compatible storage service interface
+# Used primarily in tests, could also be used to store files on the server if no other s3 compatible backend is available
 defmodule Mindwendel.Services.S3ObjectStorageLocalSandboxService do
   def get_object(_bucket_name, bucket_path) do
     dest = Path.join("priv/static/uploads", Path.basename(bucket_path))

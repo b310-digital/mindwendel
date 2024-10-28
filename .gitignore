@@ -35,7 +35,7 @@ npm-debug.log
 /assets/scss/app.css
 
 # Ignore local uploads
-/priv/static/uploads
+/priv/static/uploads/*
 
 # Ignore digested assets cache.
 /priv/static/cache_manifest.json
