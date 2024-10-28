@@ -70,6 +70,7 @@ jobs:
       TEST_DATABASE_USER: postgres
       TEST_DATABASE_USER_PASSWORD: postgres
       MIX_ENV: "test"
+      VAULT_ENCRYPTION_KEY_BASE64: "gI6L07o3RTppqy+cfAxO4C8G8psYHWn2NYPbUymYI1o="
 
     steps:
       # Downloads a copy of the code in your repository before running CI tests
