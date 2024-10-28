@@ -16,7 +16,6 @@ https://hexdocs.pm/cloak/install.html
 ```
 iex
 iex> 32 |> :crypto.strong_rand_bytes() |> Base.encode64()
-"aJ7HcM24BcyiwsAvRsa3EG3jcvaFWooyQJ+91OO7bRU="
 ```
 
 ## Running on Docker-Compose
