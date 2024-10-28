@@ -41,7 +41,7 @@ defmodule Mindwendel.Brainstormings.StorageServiceTest do
       {status, _file_content} =
         StorageService.get_file("uploads/encrypted-mindwendel-get-test.png")
 
-      assert status === :ok
+      assert status == :ok
 
       # cleanup
       File.rm(target_path)
