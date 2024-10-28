@@ -15,7 +15,11 @@ defmodule MindwendelWeb.FileControllerTest do
     end
 
     test "successfully retrieves an existing file", %{conn: conn} do
-      file = Factory.insert!(:file, path: "/uploads/encrypted-file-controller-test.jpg", name: "test.jpg")
+      file =
+        Factory.insert!(:file,
+          path: "/uploads/encrypted-file-controller-test.jpg",
+          name: "test.jpg"
+        )
 
       assert get(conn, ~p"/files/#{file.id}").resp_body == "test"
     end
