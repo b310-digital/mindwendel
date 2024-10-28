@@ -46,8 +46,8 @@ msgstr ""
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:56
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:58
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:55
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:57
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:16
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:18
 #, elixir-autogen, elixir-format
@@ -95,7 +95,7 @@ msgstr ""
 msgid "Got stuck? Try inspirational teasers!"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:104
+#: lib/mindwendel_web/live/idea_live/form_component.ex:106
 #, elixir-autogen, elixir-format
 msgid "Idea created successfully"
 msgstr ""
@@ -110,7 +110,7 @@ msgstr ""
 msgid "New idea"
 msgstr ""
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:253
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:250
 #, elixir-autogen, elixir-format
 msgid "No ideas brainstormed"
 msgstr ""
@@ -120,7 +120,7 @@ msgstr ""
 msgid "Proceed to your brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:61
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:60
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:21
 #, elixir-autogen, elixir-format
 msgid "Save"
@@ -131,7 +131,7 @@ msgstr ""
 msgid "Save this link to update / delete your brainstorming later on:"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:60
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:59
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:20
 #, elixir-autogen, elixir-format
 msgid "Saving..."
@@ -195,7 +195,7 @@ msgid "Username"
 msgstr ""
 
 #: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:3
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:175
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:172
 #, elixir-autogen, elixir-format
 msgid "By"
 msgstr ""
@@ -414,7 +414,7 @@ msgstr ""
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:26
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:28
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:112
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:274
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:271
 #, elixir-autogen, elixir-format
 msgid "New lane"
 msgstr ""
@@ -448,7 +448,7 @@ msgstr ""
 
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:10
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:13
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:258
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:255
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Add idea"
 msgstr ""
@@ -458,7 +458,7 @@ msgstr ""
 msgid "Default lane"
 msgstr ""
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:269
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:266
 #, elixir-autogen, elixir-format
 msgid "No lanes available"
 msgstr ""
@@ -473,38 +473,38 @@ msgstr ""
 msgid "Delete idea"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:75
+#: lib/mindwendel_web/live/idea_live/form_component.ex:77
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Idea updated"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:15
-#, elixir-autogen, elixir-format
-msgid "Allowed files: JPG/PNG/PDF"
-msgstr ""
-
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:12
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:13
 #, elixir-autogen, elixir-format
 msgid "Additional Attachment"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:44
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:166
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:43
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:163
 #, elixir-autogen, elixir-format
 msgid "No filename"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:143
+#: lib/mindwendel_web/live/idea_live/form_component.ex:145
 #, elixir-autogen, elixir-format
 msgid "File type is not allowed"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:141
+#: lib/mindwendel_web/live/idea_live/form_component.ex:143
 #, elixir-autogen, elixir-format
 msgid "The selected file is too large"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:142
+#: lib/mindwendel_web/live/idea_live/form_component.ex:144
 #, elixir-autogen, elixir-format
 msgid "Too many files selected"
+msgstr ""
+
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:16
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Allowed files: JPG/GIF/PNG/PDF"
 msgstr ""

@@ -168,7 +168,7 @@ defmodule Mindwendel.LanesTest do
     # create a test file which is used as an attachment
     File.write(file_path, "test")
 
-    attachment = Factory.insert!(:file, idea: idea, path: file_path)
+    attachment = Factory.insert!(:file, idea: idea, path: "uploads/lane_test")
     Lanes.delete_lane(lane)
     refute File.exists?(file_path)
     refute Repo.exists?(from(file in Attachments.File, where: file.id == ^attachment.id))

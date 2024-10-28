@@ -33,4 +33,8 @@ defmodule MindwendelWeb.LiveHelpers do
   def brainstorming_available_until(brainstorming) do
     Brainstorming.brainstorming_available_until(brainstorming)
   end
+
+  def show_idea_file_upload do
+    Application.fetch_env!(:mindwendel, :options)[:feature_file_upload]
+  end
 end

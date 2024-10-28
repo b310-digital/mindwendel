@@ -15,7 +15,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Accounts.User
 
   @label_values [:label_1, :label_2, :label_3, :label_4, :label_5]
-  @max_file_attachments 4
+  @max_file_attachments 2
 
   schema "ideas" do
     field :body, :string
@@ -77,7 +77,10 @@ defmodule Mindwendel.Brainstormings.Idea do
   end
 
   defp maybe_put_attachments(changeset, idea, attrs) do
-    if attrs["tmp_attachments"] != nil and Enum.empty?(changeset.errors) do
+    upload_feature_flag = Application.fetch_env!(:mindwendel, :options)[:feature_file_upload]
+
+    if upload_feature_flag and
+         attrs["tmp_attachments"] != nil and Enum.empty?(changeset.errors) do
       new_files =
         Enum.map(attrs["tmp_attachments"], fn change ->
           Attachments.change_attached_file(%File{}, change)

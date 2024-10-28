@@ -3,10 +3,10 @@ defmodule Mindwendel.AttachmentsTest do
   alias Mindwendel.Factory
   alias Mindwendel.Attachments
 
-  describe "get_attached_file!" do
+  describe "get_attached_file" do
     test "returns the file" do
       attachment = Factory.insert!(:file)
-      assert Attachments.get_attached_file!(attachment.id) == attachment
+      assert Attachments.get_attached_file(attachment.id) == attachment
     end
   end
 
@@ -17,11 +17,11 @@ defmodule Mindwendel.AttachmentsTest do
           inserted_at: ~N[2021-01-01 15:04:30]
         )
 
-      file_path = Path.join("priv/static/uploads", "attachment_test")
+      file_path = "priv/static/uploads/attachment_test"
       # create a test file which is used as an attachment
       File.write(file_path, "test")
 
-      attachment = Factory.insert!(:file, idea: idea, path: file_path)
+      attachment = Factory.insert!(:file, idea: idea, path: "uploads/attachment_test")
       Attachments.delete_attached_file(attachment)
 
       refute File.exists?(file_path)
