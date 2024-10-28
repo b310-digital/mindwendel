@@ -8,7 +8,9 @@ defmodule Mindwendel.Services.S3ObjectStorageLocalSandboxService do
   end
 
   def put_object(_bucket_name, bucket_path, file, _opts) do
-    dest = Path.join("priv/static/uploads", Path.basename(bucket_path))
+    upload_path = "priv/static/uploads"
+    File.mkdir_p!(Path.dirname(upload_path))
+    dest = Path.join(upload_path, Path.basename(bucket_path))
     File.write(dest, file)
     {:ok, {}}
   end

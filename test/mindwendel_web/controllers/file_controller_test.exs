@@ -7,6 +7,9 @@ defmodule MindwendelWeb.FileControllerTest do
 
   describe "get_file" do
     setup do
+      upload_path = "priv/static/uploads"
+      File.mkdir_p!(Path.dirname(upload_path))
+
       {:ok, encrypted_file} = Vault.encrypt("test")
       File.write(@file_dest, encrypted_file)
 
