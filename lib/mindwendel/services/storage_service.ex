@@ -54,7 +54,7 @@ defmodule Mindwendel.Services.StorageService do
   end
 
   defp store_encrypted_file(filename, encrypted_file, content_type, s3_client) do
-    encrypted_file_path = bucket_path(filename)
+    encrypted_file_path = upload_path(filename)
 
     case s3_client.put_object(
            bucket_name(),
@@ -90,7 +90,7 @@ defmodule Mindwendel.Services.StorageService do
     System.fetch_env!("OBJECT_STORAGE_BUCKET")
   end
 
-  defp bucket_path(filename) do
+  defp upload_path(filename) do
     "uploads/encrypted-#{filename}"
   end
 

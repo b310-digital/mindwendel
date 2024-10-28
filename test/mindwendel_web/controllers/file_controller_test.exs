@@ -3,11 +3,11 @@ defmodule MindwendelWeb.FileControllerTest do
   alias Mindwendel.Services.Vault
   alias Mindwendel.Factory
 
-  @file_dest Path.join("priv/static/uploads", "encrypted-test.jpg")
+  @file_dest "priv/static/uploads/encrypted-test.jpg"
 
   describe "get_file" do
     setup do
-      upload_path = "priv/static/uploads"
+      upload_path = "priv/static/uploads/"
       File.mkdir_p!(Path.dirname(upload_path))
 
       {:ok, encrypted_file} = Vault.encrypt("test")
