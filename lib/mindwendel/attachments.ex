@@ -2,28 +2,21 @@ defmodule Mindwendel.Attachments do
   import Ecto.Query, warn: false
   alias Mindwendel.Repo
   alias Mindwendel.Attachments.File
+  alias Mindwendel.Services.StorageService
 
   require Logger
 
   @doc """
   Gets a single attached_file
 
-  Raises `Ecto.NoResultsError` if the Brainstorming does not exist.
-
   ## Examples
 
-      iex> get_attached_file!("0323906b-b496-4778-ae67-1dd779d3de3c")
-      %Brainstorming{ ... }
-
-      iex> get_attached_file!("0323906b-b496-4778-ae67-1dd779d3de3c")
-      ** (Ecto.NoResultsError)
-
-      iex> get_attached_file!("not_a_valid_uuid_string")
-      ** (Ecto.Query.CastError)
+      iex> get_attached_file("0323906b-b496-4778-ae67-1dd779d3de3c")
+      %File{ ... }
 
   """
-  def get_attached_file!(id) do
-    Repo.get!(File, id)
+  def get_attached_file(id) do
+    Repo.get(File, id)
   end
 
   @doc """
@@ -53,9 +46,10 @@ defmodule Mindwendel.Attachments do
   """
   def delete_attached_file(%File{} = attached_file) do
     if attached_file.path do
-      :ok = Mindwendel.Attachment.delete(attached_file.path)
+      case StorageService.delete_file(attached_file.path) do
+        {:ok} -> Repo.delete(attached_file)
+        {:error, message} -> {:error, message}
+      end
     end
-
-    Repo.delete(attached_file)
   end
 end

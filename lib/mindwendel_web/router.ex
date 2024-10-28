@@ -39,6 +39,7 @@ defmodule MindwendelWeb.Router do
     pipe_through(:browser)
 
     get("/", StaticPageController, :home)
+    get("/files/:id", FileController, :get_file)
 
     scope "/admin", Admin, as: :admin do
       delete("/brainstormings/:id", BrainstormingController, :delete)

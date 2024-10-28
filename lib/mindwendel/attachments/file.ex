@@ -2,6 +2,7 @@ defmodule Mindwendel.Attachments.File do
   use Mindwendel.Schema
   import Ecto.Changeset
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Services.StorageService
 
   schema "idea_files" do
     field :name, :string
@@ -18,15 +19,25 @@ defmodule Mindwendel.Attachments.File do
   def changeset(attachment, attrs) do
     attachment
     |> cast(attrs, [:path, :name, :file_type])
-    |> maybe_store_from_path_tmp(attrs)
+    |> maybe_store_from_path_tmp()
   end
 
-  defp maybe_store_from_path_tmp(changeset, attrs) do
-    if attrs[:path] do
-      {:ok, final_path} = Mindwendel.Attachment.store(attrs[:path])
+  defp maybe_store_from_path_tmp(changeset) do
+    upload_feature_flag = Application.fetch_env!(:mindwendel, :options)[:feature_file_upload]
+
+    if upload_feature_flag and get_change(changeset, :path) do
+      object_filename = Path.basename(get_change(changeset, :path))
+
+      {:ok, encrypted_file_path} =
+        StorageService.store_file(
+          object_filename,
+          get_change(changeset, :path),
+          get_change(changeset, :file_type)
+        )
+
       # clear old tmp file
-      File.rm(attrs[:path])
-      changeset |> put_change(:path, final_path)
+      File.rm(get_change(changeset, :path))
+      changeset |> put_change(:path, encrypted_file_path)
     else
       changeset
     end

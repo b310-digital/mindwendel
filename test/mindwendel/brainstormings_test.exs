@@ -212,7 +212,7 @@ defmodule Mindwendel.BrainstormingsTest do
       # create a test file which is used as an attachment
       File.write(file_path, "test")
 
-      old_attachment = Factory.insert!(:file, idea: old_idea, path: file_path)
+      old_attachment = Factory.insert!(:file, idea: old_idea, path: "uploads/test")
       Brainstormings.delete_old_brainstormings()
 
       refute File.exists?(file_path)

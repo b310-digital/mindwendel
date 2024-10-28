@@ -159,10 +159,7 @@
                   <%= for attachment <- idea.files do %>
                     <i class="bi bi-file-earmark"></i>
                     <p class="text-muted">
-                      <.link
-                        download={attachment.name || attachment.path}
-                        href={Mindwendel.Attachment.url(attachment.path, signed: true)}
-                      >
+                      <.link href={~p"/files/#{attachment.id}"}>
                         <%= attachment.name || gettext("No filename") %>
                       </.link>
                     </p>
