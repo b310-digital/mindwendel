@@ -9,24 +9,12 @@ defmodule Mindwendel.Attachments do
   @doc """
   Gets a single attached_file
 
-  Raises `Ecto.NoResultsError` if the Brainstorming does not exist.
-
   ## Examples
 
-      iex> get_attached_file!("0323906b-b496-4778-ae67-1dd779d3de3c")
-      %Brainstorming{ ... }
-
-      iex> get_attached_file!("0323906b-b496-4778-ae67-1dd779d3de3c")
-      ** (Ecto.NoResultsError)
-
-      iex> get_attached_file!("not_a_valid_uuid_string")
-      ** (Ecto.Query.CastError)
+      iex> get_attached_file("0323906b-b496-4778-ae67-1dd779d3de3c")
+      %File{ ... }
 
   """
-  def get_attached_file!(id) do
-    Repo.get!(File, id)
-  end
-
   def get_attached_file(id) do
     Repo.get(File, id)
   end

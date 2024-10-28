@@ -47,7 +47,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     %{current_user: current_user, brainstorming: brainstorming, idea: idea} = socket.assigns
 
     if has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
-      attachment = Attachments.get_attached_file!(id)
+      attachment = Attachments.get_attached_file(id)
       Attachments.delete_attached_file(attachment)
     end
 

@@ -180,7 +180,7 @@ if config_env() == :prod || config_env() == :dev do
     queues: [default: 1]
 end
 
-config :mindwendel, max_upload_length: System.get_env("MAX_UPLOAD_LENGTH", "2666666")
+config :mindwendel, max_upload_length: System.get_env("MW_FILE_UPLOAD_MAX_FILE_SIZE", "2666666")
 
 # configure cloak:
 config :mindwendel, Mindwendel.Services.Vault,

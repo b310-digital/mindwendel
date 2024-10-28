@@ -3,10 +3,10 @@ defmodule Mindwendel.AttachmentsTest do
   alias Mindwendel.Factory
   alias Mindwendel.Attachments
 
-  describe "get_attached_file!" do
+  describe "get_attached_file" do
     test "returns the file" do
       attachment = Factory.insert!(:file)
-      assert Attachments.get_attached_file!(attachment.id) == attachment
+      assert Attachments.get_attached_file(attachment.id) == attachment
     end
   end
 

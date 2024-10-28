@@ -15,7 +15,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Accounts.User
 
   @label_values [:label_1, :label_2, :label_3, :label_4, :label_5]
-  @max_file_attachments 4
+  @max_file_attachments 2
 
   schema "ideas" do
     field :body, :string
