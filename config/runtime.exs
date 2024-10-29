@@ -190,14 +190,16 @@ end
 config :mindwendel, max_upload_length: System.get_env("MW_FILE_UPLOAD_MAX_FILE_SIZE", "2666666")
 
 # configure cloak:
-config :mindwendel, Mindwendel.Services.Vault,
-  ciphers: [
-    default:
-      {Cloak.Ciphers.AES.GCM,
-       tag: "AES.GCM.V1",
-       key: Base.decode64!(System.fetch_env!("VAULT_ENCRYPTION_KEY_BASE64")),
-       iv_length: 12}
+if feature_file_upload do
+  config :mindwendel, Mindwendel.Services.Vault,
+    ciphers: [
+      default:
+        {Cloak.Ciphers.AES.GCM,
+        tag: "AES.GCM.V1",
+        key: Base.decode64!(System.fetch_env!("VAULT_ENCRYPTION_KEY_BASE64")),
+        iv_length: 12}
   ]
+end
 
 # check all object storage system envs at once:
 if feature_file_upload and (config_env() == :prod || config_env() == :dev) do
