@@ -11,12 +11,12 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign_new(:comment, fn -> %Comment{} end)
      |> assign_new(:form, fn ->
        to_form(Comments.change_comment(%Comment{}))
      end)}
   end
 
-  @impl true
   def update(
         %{idea: idea, brainstorming: brainstorming, current_user: current_user, comment: comment} =
           assigns,
@@ -63,6 +63,8 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
         {:error, %Ecto.Changeset{} = changeset} ->
           {:noreply, assign(socket, form: to_form(changeset))}
       end
+    else
+      {:noreply, socket}
     end
   end
 
