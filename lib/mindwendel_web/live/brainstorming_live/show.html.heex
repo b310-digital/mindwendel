@@ -21,7 +21,7 @@
     <div class="d-flex justify-content-end flex-wrap">
       <%= if has_moderating_permission(@brainstorming, @current_user) do %>
         <.link
-          patch={~p"/brainstormings/#{@brainstorming.id}/show/new_lane"}
+          patch={~p"/brainstormings/#{@brainstorming.id}/new_lane"}
           class="btn btn-primary m-1 d-inline-flex align-items-center"
           title={gettext("New lane")}
         >
@@ -30,7 +30,7 @@
       <% end %>
 
       <.link
-        patch={~p"/brainstormings/#{@brainstorming.id}/show/share"}
+        patch={~p"/brainstormings/#{@brainstorming.id}/share"}
         class="btn btn-secondary m-1"
         title={gettext("Share")}
       >
@@ -98,6 +98,23 @@
         module={MindwendelWeb.IdeaLive.FormComponent}
         id={:new}
         action={:new}
+        brainstorming={@brainstorming}
+        current_user={@current_user}
+        idea={@idea}
+      />
+    </.modal>
+
+    <.modal
+      :if={@live_action in [:show_idea]}
+      id="idea-modal"
+      show
+      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+      title={gettext("Show idea")}
+    >
+      <.live_component
+        module={MindwendelWeb.IdeaLive.ShowComponent}
+        id={:show}
+        action={:show}
         brainstorming={@brainstorming}
         current_user={@current_user}
         idea={@idea}

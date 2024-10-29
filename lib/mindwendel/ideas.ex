@@ -283,7 +283,7 @@ defmodule Mindwendel.Ideas do
       ** (Ecto.NoResultsError)
 
   """
-  def get_idea!(id), do: Repo.get!(Idea, id) |> Repo.preload([:idea_labels, :files])
+  def get_idea!(id), do: Repo.get!(Idea, id) |> Repo.preload([:idea_labels, :files, :link])
 
   @doc """
   Creates a idea.
