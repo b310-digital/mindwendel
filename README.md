@@ -1,6 +1,6 @@
 # mindwendel
 
-![Workflow Status Badge](https://github.com/mindwendel/mindwendel/workflows/ci_cd/badge.svg)
+![Workflow Status Badge](https://github.com/b310-digital/mindwendel/actions/workflows/on_push_branch__execute_ci_cd.yml/badge.svg)
 
 Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm and upvote ideas and thoughts within your team. Built from scratch with [Phoenix](https://www.phoenixframework.org).
 
@@ -25,7 +25,7 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 
 - 5 minute setup (It is not a joke)
 - Anonymously invite people to your brainstormings - no registration needed. Usernames are optional
-- Easily create and upvote ideas, with live updates from your companions
+- Easily create and upvote ideas, with live updates from your mindwendel members
 - Cluster or filter your ideas with custom labels
 - Preview of links to ease URL sharing
 - Add automatically encrypted file attachments which are uploaded to an S3 compatible storage backend
@@ -202,15 +202,29 @@ We are using Elixir's built-in formatter.
 ## Environment Variables
 
 ### File Storage
-Attached files are stored by default on the server in an upload directory. For a production setup, it is recommended to use a s3 compatible object storage.
+File storage is available through an s3 compatible object storage backend. An encryption key needs to be generated before, e.g.:
 
 ```
-DOCKER_COMPOSE_APP_MW_FEATURE_STORAGE_PROVIDER=s3
-DOCKER_COMPOSE_APP_OBJECT_STORAGE_USER=...
-DOCKER_COMPOSE_APP_OBJECT_STORAGE_PASSWORD=...
+iex
+32 |> :crypto.strong_rand_bytes() |> Base.encode64()
+```
+
+Then, object storage and the vault key need to be set:
+
+```
+OBJECT_STORAGE_BUCKET: mindwendel
+OBJECT_STORAGE_SCHEME: "http://"
+OBJECT_STORAGE_HOST: minio
+OBJECT_STORAGE_PORT: 9000
+OBJECT_STORAGE_REGION: local
+OBJECT_STORAGE_USER: ...
+OBJECT_STORAGE_PASSWORD: ...
+VAULT_ENCRYPTION_KEY_BASE64: ...
 ```
 
 There is an example given inside the `docker-compose.yml` with a docker compose minio setup.
+
+To deactivate file storage, use `MW_FEATURE_IDEA_FILE_UPLOAD` (defaults to `true`) and set it to `false`.
 
 ### Localization
 
