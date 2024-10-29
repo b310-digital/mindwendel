@@ -7,6 +7,17 @@ Below, we provide detailed instructions on how to install and run mindwendel in 
 - [Running on Docker-Compose](#running-on-docker-compose) (RECOMMENDED)
 - [Running on Docker](#running-on-docker)
 
+## Setup of .env secrets and variables
+
+Please copy the .env.default file to .env and set the secrets!
+
+https://hexdocs.pm/cloak/install.html
+
+```
+iex
+iex> 32 |> :crypto.strong_rand_bytes() |> Base.encode64()
+```
+
 ## Running on Docker-Compose
 
 When you use [docker compose](https://docs.docker.com/compose/), you will be using one or several `docker-compose.yml` files.

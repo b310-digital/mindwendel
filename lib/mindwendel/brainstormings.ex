@@ -169,7 +169,9 @@ defmodule Mindwendel.Brainstormings do
   """
   def delete_brainstorming(%Brainstorming{} = brainstorming) do
     Repo.transaction(fn ->
-      Repo.delete_all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
+      ideas = Repo.all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
+      # delete_idea deletes the idea and potentially associated files
+      Enum.each(ideas, fn idea -> Ideas.delete_idea(idea) end)
       Repo.delete(brainstorming)
     end)
   end
@@ -305,8 +307,8 @@ defmodule Mindwendel.Brainstormings do
         |> Repo.preload([
           :link,
           :likes,
-          :label,
-          :idea_labels
+          :idea_labels,
+          :files
         ])
       }
     )
@@ -325,8 +327,8 @@ defmodule Mindwendel.Brainstormings do
           ideas: [
             :link,
             :likes,
-            :label,
-            :idea_labels
+            :idea_labels,
+            :files
           ]
         )
       }

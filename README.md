@@ -1,6 +1,6 @@
 # mindwendel
 
-![Workflow Status Badge](https://github.com/mindwendel/mindwendel/workflows/ci_cd/badge.svg)
+![Workflow Status Badge](https://github.com/b310-digital/mindwendel/actions/workflows/on_push_branch__execute_ci_cd.yml/badge.svg)
 
 Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm and upvote ideas and thoughts within your team. Built from scratch with [Phoenix](https://www.phoenixframework.org).
 
@@ -24,13 +24,15 @@ Create a challenge. Ready? Brainstorm. mindwendel helps you to easily brainstorm
 ## Features
 
 - 5 minute setup (It is not a joke)
-- Anonymously invite people to your brainstormings - no registration needed. Usernames are optional.
-- Easily create and upvote ideas, with live updates from your companions.
-- Cluster your ideas with custom labels
+- Anonymously invite people to your brainstormings - no registration needed. Usernames are optional
+- Easily create and upvote ideas, with live updates from your mindwendel members
+- Cluster or filter your ideas with custom labels
 - Preview of links to ease URL sharing
+- Add automatically encrypted file attachments which are uploaded to an S3 compatible storage backend
+- Add lanes, use drag & drop to order ideas
 - Export your generated ideas to html or csv (currently comma separated)
 - German & English Translation files
-- By default, brainstormings are deleted after 30 days to ensure GDPR compliancy.
+- By default, brainstormings are deleted after 30 days to ensure GDPR compliancy
 
 ![](docs/screenshot.png)
 ![](docs/screenshot2.png)
@@ -120,6 +122,14 @@ mindwendel is built on top of:
 
 - Go to http://localhost:4000/
 
+#### Localization
+
+You can extract new strings to translate by running:
+
+```bash
+mix gettext.extract --merge
+```
+
 ### Testing
 
 - Startup docker compose setup
@@ -191,15 +201,34 @@ We are using Elixir's built-in formatter.
 
 ## Environment Variables
 
+### File Storage
+File storage is available through an s3 compatible object storage backend. An encryption key needs to be generated before, e.g.:
+
+```
+iex
+32 |> :crypto.strong_rand_bytes() |> Base.encode64()
+```
+
+Then, object storage and the vault key need to be set:
+
+```
+OBJECT_STORAGE_BUCKET: mindwendel
+OBJECT_STORAGE_SCHEME: "http://"
+OBJECT_STORAGE_HOST: minio
+OBJECT_STORAGE_PORT: 9000
+OBJECT_STORAGE_REGION: local
+OBJECT_STORAGE_USER: ...
+OBJECT_STORAGE_PASSWORD: ...
+VAULT_ENCRYPTION_KEY_BASE64: ...
+```
+
+There is an example given inside the `docker-compose.yml` with a docker compose minio setup.
+
+To deactivate file storage, use `MW_FEATURE_IDEA_FILE_UPLOAD` (defaults to `true`) and set it to `false`.
+
 ### Localization
 
 Currently, there are two language files available, german ("de") and english ("en"). To set the default_locale, you can set `MW_DEFAULT_LOCALE`. The default is english.
-
-You can extract new strings to translate by running:
-
-```bash
-mix gettext.extract --merge
-```
 
 ## Testimonials
 

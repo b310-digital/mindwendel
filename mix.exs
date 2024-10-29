@@ -78,7 +78,11 @@ defmodule Mindwendel.MixProject do
       {:timex, "3.7.11"},
       {:logger_json, "6.2.1"},
       {:libcluster, "3.3.3"},
-      {:tzdata, "1.1.2"}
+      {:tzdata, "1.1.2"},
+      {:waffle, "~> 1.1"},
+      {:ex_aws, "2.5.5"},
+      {:ex_aws_s3, "2.5.4"},
+      {:cloak, "1.1.4"}
     ]
   end
 

@@ -33,6 +33,7 @@ defmodule Mindwendel.Application do
       {Phoenix.PubSub, name: Mindwendel.PubSub},
       # Start the Endpoint (http/https)
       MindwendelWeb.Endpoint,
+      Mindwendel.Services.Vault,
       # Start a worker by calling: Mindwendel.Worker.start_link(arg)
       # {Mindwendel.Worker, arg}
       {Oban, oban_config()}

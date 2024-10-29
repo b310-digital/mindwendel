@@ -156,6 +156,12 @@ delete_brainstormings_after_days =
     30
   end
 
+feature_file_upload =
+  Enum.member?(
+    ["", "true"],
+    String.trim(System.get_env("MW_FEATURE_IDEA_FILE_UPLOAD") || "")
+  )
+
 # enable/disable brainstorming teasers and configure delete brainstormings option:
 config :mindwendel, :options,
   feature_brainstorming_teasers:
@@ -163,6 +169,7 @@ config :mindwendel, :options,
       ["", "true"],
       String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
     ),
+  feature_file_upload: feature_file_upload,
   feature_brainstorming_removal_after_days: delete_brainstormings_after_days,
   # use a strict csp everywhere except in development. we need to relax the setting a bit for webpack
   csp_relax: config_env() == :dev
@@ -178,4 +185,30 @@ if config_env() == :prod || config_env() == :dev do
        ]}
     ],
     queues: [default: 1]
+end
+
+config :mindwendel, max_upload_length: System.get_env("MW_FILE_UPLOAD_MAX_FILE_SIZE", "2666666")
+
+# configure cloak:
+if feature_file_upload do
+  config :mindwendel, Mindwendel.Services.Vault,
+    ciphers: [
+      default:
+        {Cloak.Ciphers.AES.GCM,
+         tag: "AES.GCM.V1",
+         key: Base.decode64!(System.fetch_env!("VAULT_ENCRYPTION_KEY_BASE64")),
+         iv_length: 12}
+    ]
+end
+
+# check all object storage system envs at once:
+if feature_file_upload and (config_env() == :prod || config_env() == :dev) do
+  config(:ex_aws, :s3,
+    scheme: System.fetch_env!("OBJECT_STORAGE_SCHEME"),
+    host: System.fetch_env!("OBJECT_STORAGE_HOST"),
+    port: System.fetch_env!("OBJECT_STORAGE_PORT"),
+    region: System.fetch_env!("OBJECT_STORAGE_REGION"),
+    access_key_id: System.fetch_env!("OBJECT_STORAGE_USER"),
+    secret_access_key: System.fetch_env!("OBJECT_STORAGE_PASSWORD")
+  )
 end
