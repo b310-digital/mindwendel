@@ -156,6 +156,11 @@ delete_brainstormings_after_days =
     30
   end
 
+  feature_file_upload = Enum.member?(
+    ["", "true"],
+    String.trim(System.get_env("MW_FEATURE_IDEA_FILE_UPLOAD") || "")
+  ),
+
 # enable/disable brainstorming teasers and configure delete brainstormings option:
 config :mindwendel, :options,
   feature_brainstorming_teasers:
@@ -163,11 +168,8 @@ config :mindwendel, :options,
       ["", "true"],
       String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
     ),
-  feature_file_upload:
-    Enum.member?(
-      ["", "true"],
-      String.trim(System.get_env("MW_FEATURE_IDEA_FILE_UPLOAD") || "")
-    ),
+  feature_file_upload: feature_file_upload
+
   feature_brainstorming_removal_after_days: delete_brainstormings_after_days,
   # use a strict csp everywhere except in development. we need to relax the setting a bit for webpack
   csp_relax: config_env() == :dev
@@ -198,7 +200,7 @@ config :mindwendel, Mindwendel.Services.Vault,
   ]
 
 # check all object storage system envs at once:
-if config_env() == :prod || config_env() == :dev do
+if feature_file_upload and (config_env() == :prod || config_env() == :dev) do
   config(:ex_aws, :s3,
     scheme: System.fetch_env!("OBJECT_STORAGE_SCHEME"),
     host: System.fetch_env!("OBJECT_STORAGE_HOST"),
