@@ -195,10 +195,10 @@ if feature_file_upload do
     ciphers: [
       default:
         {Cloak.Ciphers.AES.GCM,
-        tag: "AES.GCM.V1",
-        key: Base.decode64!(System.fetch_env!("VAULT_ENCRYPTION_KEY_BASE64")),
-        iv_length: 12}
-  ]
+         tag: "AES.GCM.V1",
+         key: Base.decode64!(System.fetch_env!("VAULT_ENCRYPTION_KEY_BASE64")),
+         iv_length: 12}
+    ]
 end
 
 # check all object storage system envs at once:
