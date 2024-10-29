@@ -1,0 +1,84 @@
+defmodule MindwendelWeb.CommentLive.FormComponent do
+  use MindwendelWeb, :live_component
+  alias Mindwendel.Comments
+  alias Mindwendel.Brainstormings.Comment
+
+  @impl true
+  def update(
+        %{idea: idea, brainstorming: brainstorming, current_user: current_user} = assigns,
+        socket
+      ) do
+    {:ok,
+     socket
+     |> assign(assigns)
+     |> assign_new(:form, fn ->
+       to_form(Comments.change_comment(%Comment{}))
+     end)}
+  end
+
+  @impl true
+  def update(
+        %{idea: idea, brainstorming: brainstorming, current_user: current_user, comment: comment} =
+          assigns,
+        socket
+      ) do
+    {:ok,
+     socket
+     |> assign(assigns)
+     |> assign_new(:form, fn ->
+       to_form(Comments.change_comment(comment))
+     end)}
+  end
+
+  @impl true
+  def handle_event("validate", %{"comment" => comment_params}, socket) do
+    changeset = Comments.change_comment(socket.assigns.comment, comment_params)
+
+    {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
+  end
+
+  def handle_event("save", %{"comment" => comment_params}, socket) do
+    save_comment(socket, socket.assigns.action, comment_params)
+  end
+
+  defp save_comment(socket, :update, comment_params) do
+    comment = Comments.get_comment!(comment_params["id"])
+
+    %{current_user: current_user, idea: idea, brainstorming: brainstorming} = socket.assigns
+
+    if has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
+      comment_params_merged =
+        comment_params
+        |> Map.put("user_id", comment.user_id || current_user.id)
+
+      case Comments.update_comment(
+             comment,
+             comment_params_merged
+           ) do
+        {:ok, _comment} ->
+          {:noreply,
+           socket
+           |> put_flash(:info, gettext("Comment updated"))}
+
+        {:error, %Ecto.Changeset{} = changeset} ->
+          {:noreply, assign(socket, form: to_form(changeset))}
+      end
+    end
+  end
+
+  defp save_comment(socket, :new, comment_params) do
+    comment_params_merged =
+      comment_params
+      |> Map.put("user_id", socket.assigns.current_user.id)
+
+    case Comments.create_comment(comment_params_merged) do
+      {:ok, _comment} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Comment created successfully"))}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, form: to_form(changeset))}
+    end
+  end
+end

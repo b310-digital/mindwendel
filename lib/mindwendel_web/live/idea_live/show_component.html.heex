@@ -29,4 +29,16 @@
       </p>
     <% end %>
   <% end %>
+
+  <.live_component
+    module={MindwendelWeb.CommentLive.FormComponent}
+    id={:new}
+    brainstorming={@brainstorming}
+    current_user={@current_user}
+    idea={@idea}
+  />
+
+  <%= for comment <- @idea.comments do %>
+    <p><%= comment.comment_text %></p>
+  <% end %>
 </div>

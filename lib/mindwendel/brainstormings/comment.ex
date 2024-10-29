@@ -1,4 +1,4 @@
-defmodule Mindwendel.Brainstormings.Like do
+defmodule Mindwendel.Brainstormings.Comment do
   use Mindwendel.Schema
 
   import Ecto.Changeset

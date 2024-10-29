@@ -7,6 +7,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Brainstormings.Comment
   alias Mindwendel.Ideas
   alias Mindwendel.Attachments
   alias Mindwendel.Attachments.Link

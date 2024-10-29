@@ -103,10 +103,10 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   end
 
   defp apply_action(
-    socket,
-    :show_idea,
-    %{"brainstorming_id" => _brainstorming_id, "idea_id" => idea_id}
-  ) do
+         socket,
+         :show_idea,
+         %{"brainstorming_id" => _brainstorming_id, "idea_id" => idea_id}
+       ) do
     socket
     |> assign(:idea, Ideas.get_idea!(idea_id))
   end

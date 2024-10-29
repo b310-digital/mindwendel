@@ -59,6 +59,7 @@ defmodule MindwendelWeb.Router do
     live "/brainstormings/:brainstorming_id/ideas/:idea_id/edit",
          BrainstormingLive.Show,
          :edit_idea
+
     live "/brainstormings/:brainstorming_id/ideas/:idea_id", BrainstormingLive.Show, :show_idea
 
     live "/brainstormings/:brainstorming_id/lanes/:lane_id/edit",
