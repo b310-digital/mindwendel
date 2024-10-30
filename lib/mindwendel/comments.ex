@@ -2,6 +2,8 @@ defmodule Mindwendel.Comments do
   import Ecto.Query, warn: false
   alias Mindwendel.Repo
   alias Mindwendel.Brainstormings.Comment
+  alias Mindwendel.Brainstormings
+  alias Mindwendel.Lanes
 
   require Logger
 
@@ -44,9 +46,35 @@ defmodule Mindwendel.Comments do
 
   """
   def create_comment(attrs \\ %{}) do
-    %Comment{}
-    |> Comment.changeset(attrs)
-    |> Repo.insert()
+    result =
+      %Comment{}
+      |> Comment.changeset(attrs)
+      |> Repo.insert()
+
+    handle_result_for_broadcast(result)
+    result
+  end
+
+  @doc """
+  Updates a comment.
+
+  ## Examples
+
+      iex> update_comment(comment, %{field: new_value})
+      {:ok, %Comment{}}
+
+      iex> update_comment(comment, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_comment(%Comment{} = comment, attrs) do
+    result =
+      comment
+      |> Comment.changeset(attrs)
+      |> Repo.update()
+
+    handle_result_for_broadcast(result)
+    result
   end
 
   @doc """
@@ -55,13 +83,30 @@ defmodule Mindwendel.Comments do
   ## Examples
 
       iex> delete_comment(comment)
-      {:ok, %Idea{}}
+      {:ok, %Comment{}}
 
       iex> delete_comment(comment)
       {:error, %Ecto.Changeset{}}
 
   """
   def delete_comment(%Comment{} = comment) do
-    Repo.delete(comment)
+    result = Repo.delete(comment)
+    handle_result_for_broadcast(result)
+    result
+  end
+
+  defp handle_result_for_broadcast(result) do
+    case result do
+      {:ok, comment} ->
+        preloaded_comment = Repo.preload(comment, [:idea])
+
+        Brainstormings.broadcast(
+          {:ok, Lanes.get_lane!(preloaded_comment.idea.lane_id)},
+          :lane_updated
+        )
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 end

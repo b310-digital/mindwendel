@@ -67,6 +67,15 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
+  def handle_info({:lane_updated, lane}, socket) do
+    new_lanes =
+      Enum.map(socket.assigns.lanes, fn existing_lane ->
+        if lane.id == existing_lane.id, do: lane, else: existing_lane
+      end)
+
+    {:noreply, assign(socket, :lanes, new_lanes)}
+  end
+
   def handle_info({:brainstorming_filter_updated, brainstorming, lanes}, socket) do
     {:noreply,
      push_patch(

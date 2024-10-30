@@ -308,7 +308,8 @@ defmodule Mindwendel.Brainstormings do
           :link,
           :likes,
           :idea_labels,
-          :files
+          :files,
+          :comments
         ])
       }
     )
@@ -328,7 +329,8 @@ defmodule Mindwendel.Brainstormings do
             :link,
             :likes,
             :idea_labels,
-            :files
+            :files,
+            :comments
           ]
         )
       }

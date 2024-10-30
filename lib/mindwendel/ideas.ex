@@ -88,7 +88,8 @@ defmodule Mindwendel.Ideas do
       :link,
       :likes,
       :label,
-      :idea_labels
+      :idea_labels,
+      :comments
     ])
   end
 
@@ -390,6 +391,6 @@ defmodule Mindwendel.Ideas do
 
   """
   def change_idea(%Idea{} = idea, attrs \\ %{}) do
-    Repo.preload(idea, [:link, :idea_labels]) |> Idea.changeset(attrs)
+    Repo.preload(idea, [:link, :idea_labels, :comments, :files]) |> Idea.changeset(attrs)
   end
 end
