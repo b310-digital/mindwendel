@@ -8,12 +8,17 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
         %{idea: idea, brainstorming: brainstorming, current_user: current_user} = assigns,
         socket
       ) do
+    comment = %Comment{
+      idea_id: idea.id,
+      username: current_user.username
+    }
+
     {:ok,
      socket
      |> assign(assigns)
-     |> assign_new(:comment, fn -> %Comment{} end)
+     |> assign_new(:comment, fn -> comment end)
      |> assign_new(:form, fn ->
-       to_form(Comments.change_comment(%Comment{}))
+       to_form(Comments.change_comment(comment))
      end)}
   end
 
@@ -50,6 +55,7 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
       comment_params_merged =
         comment_params
         |> Map.put("user_id", comment.user_id || current_user.id)
+        |> Map.put("idea_id", socket.assigns.idea.id)
 
       case Comments.update_comment(
              comment,
@@ -72,6 +78,7 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
     comment_params_merged =
       comment_params
       |> Map.put("user_id", socket.assigns.current_user.id)
+      |> Map.put("idea_id", socket.assigns.idea.id)
 
     case Comments.create_comment(comment_params_merged) do
       {:ok, _comment} ->
