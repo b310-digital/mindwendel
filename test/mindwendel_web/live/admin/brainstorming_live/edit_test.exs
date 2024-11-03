@@ -101,16 +101,16 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     {:ok, edit_live_view, _html} =
       live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
-    brainstorming_label_first = Enum.at(brainstorming.labels, 0)
+    brainstorming_label_first = List.first(brainstorming.labels)
 
     edit_live_view
-    |> element("button[value=\"#{brainstorming_label_first.id}\"]", "Remove")
+    |> element(html_selector_remove_idea_label_button(brainstorming_label_first), "Remove")
     |> render_click()
 
     assert edit_live_view |> element("input#brainstorming_labels_0_name") |> has_element?
 
     refute edit_live_view
-           |> element("button[value=#{brainstorming_label_first.id}]", "Remove")
+           |> element("input[value=#{brainstorming_label_first.name}]")
            |> has_element?
 
     refute edit_live_view |> element("input#brainstorming_labels_4_name") |> has_element?
@@ -120,7 +120,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     conn: conn,
     brainstorming: brainstorming
   } do
-    brainstorming_label_first = Enum.at(brainstorming.labels, 0)
+    brainstorming_label_first = List.first(brainstorming.labels)
 
     _idea =
       Factory.insert!(:idea,
@@ -179,6 +179,6 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
   end
 
   defp html_selector_remove_idea_label_button(idea_label) do
-    "button[value=\"#{idea_label.id}\"]"
+    "button[value=\"#{idea_label.position_order}\"]"
   end
 end

@@ -23,7 +23,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     belongs_to :creating_user, User
     has_many :ideas, Idea
     has_many :lanes, Lane, preload_order: [asc: :position_order]
-    has_many :labels, IdeaLabel
+    has_many :labels, IdeaLabel, on_replace: :delete
     many_to_many :users, User, join_through: BrainstormingUser
     many_to_many :moderating_users, User, join_through: BrainstormingModeratingUser
 
@@ -40,9 +40,19 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
       :filter_labels_ids
     ])
     |> validate_required([:name])
-    |> cast_assoc(:labels)
+    |> cast_assoc(:labels,
+      with: &child_label_changeset/3,
+      drop_param: :labels_drop,
+      sort_param: :labels_sort
+    )
     |> shorten_name
     |> gen_admin_url_id(brainstorming)
+  end
+
+  defp child_label_changeset(child, changes, position) do
+    child
+    |> change(position_order: position)
+    |> IdeaLabel.changeset(changes)
   end
 
   def changeset_with_upated_last_accessed_at(brainstorming) do
