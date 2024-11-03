@@ -25,7 +25,6 @@ defmodule Mindwendel.Brainstormings.Idea do
     has_many :likes, Like
     has_many :files, File
     belongs_to :brainstorming, Brainstorming
-    belongs_to :label, IdeaLabel, on_replace: :nilify
     belongs_to :lane, Lane
     many_to_many :idea_labels, IdeaLabel, join_through: IdeaIdeaLabel, on_replace: :delete
 
@@ -40,7 +39,6 @@ defmodule Mindwendel.Brainstormings.Idea do
       :body,
       :brainstorming_id,
       :lane_id,
-      :label_id,
       :user_id,
       :position_order
     ])
