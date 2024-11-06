@@ -1,6 +1,7 @@
 defmodule MindwendelWeb.CommentLive.FormComponent do
   use MindwendelWeb, :live_component
   alias Mindwendel.Comments
+  alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Comment
 
   @impl true
@@ -81,7 +82,12 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
       |> Map.put("idea_id", socket.assigns.idea.id)
 
     case Comments.create_comment(comment_params_merged) do
-      {:ok, _comment} ->
+      {:ok, comment} ->
+        send_update(MindwendelWeb.IdeaLive.ShowComponent,
+          id: :show,
+          idea: Ideas.get_idea!(socket.assigns.idea.id)
+        )
+
         {:noreply,
          socket
          |> put_flash(:info, gettext("Comment created successfully"))}

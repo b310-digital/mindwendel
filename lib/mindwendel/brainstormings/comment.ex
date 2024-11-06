@@ -15,8 +15,8 @@ defmodule Mindwendel.Brainstormings.Comment do
   end
 
   @doc false
-  def changeset(like, attrs) do
-    like
+  def changeset(comment, attrs) do
+    comment
     |> cast(attrs, [:idea_id, :user_id, :comment_text, :username])
     |> validate_required([:idea_id, :comment_text, :username])
   end
