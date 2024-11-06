@@ -17,7 +17,7 @@ defmodule MindwendelWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
-  import MindwendelWeb.Gettext
+  use Gettext, backend: MindwendelWeb.Gettext
 
   @doc """
   Renders a modal.
@@ -46,27 +46,20 @@ defmodule MindwendelWeb.CoreComponents do
     ~H"""
     <div
       id={@id}
-      phx-mounted={@show && show_modal(@id)}
-      phx-remove={hide_modal(@id)}
+      phx-hook="Modal"
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
-      class="modal fade show"
+      phx-remove={hide_modal(@id)}
+      class="modal"
       tabindex="-1"
-      role="dialog"
+      aria-hidden="true"
+      aria-labelledby="{@id}-title"
     >
-      <div
-        class="modal-dialog modal-lg"
-        role="document"
-        aria-labelledby={"#{@id}-title"}
-        aria-describedby={"#{@id}-description"}
-        aria-modal="true"
-        tabindex="0"
-      >
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <.focus_wrap
             id={"#{@id}-container"}
             phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
             phx-key="escape"
-            phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
           >
             <div class="modal-header">
               <h5 class="modal-title"><%= @title %></h5>
@@ -86,6 +79,10 @@ defmodule MindwendelWeb.CoreComponents do
       </div>
     </div>
     """
+  end
+
+  def hide_modal(js \\ %JS{}, id) do
+    js |> JS.dispatch("mindwendel:hide-modal", to: "##{id}")
   end
 
   @doc """
@@ -291,9 +288,11 @@ defmodule MindwendelWeb.CoreComponents do
                 multiple pattern placeholder readonly required rows size step)
 
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+    errors = if Phoenix.Component.used_input?(field), do: field.errors, else: []
+
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
-    |> assign(:errors, Enum.map(field.errors, &translate_error(&1)))
+    |> assign(:errors, Enum.map(errors, &translate_error(&1)))
     |> assign_new(:name, fn -> if assigns.multiple, do: field.name <> "[]", else: field.name end)
     |> assign_new(:value, fn -> field.value end)
     |> input()
@@ -306,7 +305,7 @@ defmodule MindwendelWeb.CoreComponents do
       end)
 
     ~H"""
-    <div class="form-check form-check-inline" phx-feedback-for={@name}>
+    <div class="form-check form-check-inline">
       <label class="form-check-label">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
         <input
@@ -327,7 +326,7 @@ defmodule MindwendelWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div class="form-group" phx-feedback-for={@name}>
+    <div class="form-group">
       <.label for={@id}><%= @label %></.label>
       <select id={@id} name={@name} class="form-control" , multiple={@multiple} {@rest}>
         <option :if={@prompt} value=""><%= @prompt %></option>
@@ -366,7 +365,7 @@ defmodule MindwendelWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div class="form-group" phx-feedback-for={@name}>
+    <div class="form-group">
       <.label for={@id}><%= @label %></.label>
       <textarea
         id={@id}
@@ -397,14 +396,13 @@ defmodule MindwendelWeb.CoreComponents do
       ]}
       {@rest}
     />
-    <.error :for={msg <- @errors}><%= msg %></.error>
     """
   end
 
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div class="form-group" phx-feedback-for={@name}>
+    <div class="form-group">
       <.label for={@id}><%= @label %></.label>
       <input
         type={@type}
@@ -593,11 +591,8 @@ defmodule MindwendelWeb.CoreComponents do
   def back(assigns) do
     ~H"""
     <div class="mt-16">
-      <.link
-        navigate={@navigate}
-        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
-      >
-        <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
+      <.link navigate={@navigate}>
+        <i class="bi bi-arrow-left"></i>
         <%= render_slot(@inner_block) %>
       </.link>
     </div>
@@ -655,31 +650,6 @@ defmodule MindwendelWeb.CoreComponents do
     )
   end
 
-  def show_modal(js \\ %JS{}, id) when is_binary(id) do
-    js
-    |> JS.show(to: "##{id}")
-    |> JS.show(
-      to: "##{id}-bg",
-      time: 300,
-      transition: {"transition-all transform ease-out duration-300", "opacity-0", "opacity-100"}
-    )
-    |> show("##{id}-container")
-    |> JS.add_class("overflow-hidden", to: "body")
-    |> JS.focus_first(to: "##{id}-content")
-  end
-
-  def hide_modal(js \\ %JS{}, id) do
-    js
-    |> JS.hide(
-      to: "##{id}-bg",
-      transition: {"transition-all transform ease-in duration-200", "opacity-100", "opacity-0"}
-    )
-    |> hide("##{id}-container")
-    |> JS.hide(to: "##{id}", transition: {"block", "block", "hidden"})
-    |> JS.remove_class("overflow-hidden", to: "body")
-    |> JS.pop_focus()
-  end
-
   @doc """
   Translates an error message using gettext.
   """
@@ -706,5 +676,65 @@ defmodule MindwendelWeb.CoreComponents do
   """
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
+  end
+
+  @doc """
+  Renders a lane for ideas
+  """
+
+  attr :lane_count, :integer, required: true
+  attr :class, :string, default: nil
+  slot :inner_block, required: true
+
+  def lane_col(assigns) do
+    ~H"""
+    <div class={[
+      @lane_count == 1 && "col-12",
+      @lane_count == 2 && "col-12 col-md-6",
+      @lane_count == 3 && "col-12 col-md-4",
+      @lane_count > 3 && "col-12 col-md-3",
+      @class
+    ]}>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  @doc """
+  Renders a label filter
+  """
+
+  attr :color, :string
+  attr :label_id, :string
+  attr :id, :string, required: true
+  attr :filter_active, :boolean, default: false
+  attr :class, :string, default: nil
+
+  attr :rest, :global, include: ~w(target disabled)
+
+  slot :inner_block, required: true
+
+  def filter_button(assigns) do
+    ~H"""
+    <div class="m-1">
+      <button
+        type="button"
+        class={[
+          "btn btn-sm text-light rounded-pill",
+          @filter_active && "border border-2 border-primary",
+          @class
+        ]}
+        id={@id}
+        data-testid={@label_id}
+        data-color={@color}
+        phx-hook="SetIdeaLabelBackgroundColor"
+        phx-click="set_filter_idea_label"
+        phx-value-id={@label_id}
+        {@rest}
+      >
+        <%= render_slot(@inner_block) %>
+      </button>
+    </div>
+    """
   end
 end

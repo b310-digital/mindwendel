@@ -39,6 +39,7 @@ defmodule MindwendelWeb.Router do
     pipe_through(:browser)
 
     get("/", StaticPageController, :home)
+    get("/files/:id", FileController, :get_file)
 
     scope "/admin", Admin, as: :admin do
       delete("/brainstormings/:id", BrainstormingController, :delete)
@@ -52,12 +53,17 @@ defmodule MindwendelWeb.Router do
     live "/brainstormings/:id", BrainstormingLive.Show, :show
     live "/brainstormings/:id/show/edit", BrainstormingLive.Show, :edit
     # Maybe rather "/brainstormings/:id/ideas/new" ?
-    live "/brainstormings/:id/show/new_idea", BrainstormingLive.Show, :new_idea
+    live "/brainstormings/:id/show/lanes/:lane_id/new_idea", BrainstormingLive.Show, :new_idea
+    live "/brainstormings/:id/show/new_lane", BrainstormingLive.Show, :new_lane
     live "/brainstormings/:id/show/share", BrainstormingLive.Show, :share
 
     live "/brainstormings/:brainstorming_id/ideas/:idea_id/edit",
          BrainstormingLive.Show,
          :edit_idea
+
+    live "/brainstormings/:brainstorming_id/lanes/:lane_id/edit",
+         BrainstormingLive.Show,
+         :edit_lane
   end
 
   # Other scopes may use custom stacks.

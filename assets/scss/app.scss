@@ -52,10 +52,6 @@ a .bi {
 }
 
 /* LiveView specific classes for your customizations */
-.phx-no-feedback.invalid-feedback,
-.phx-no-feedback .invalid-feedback {
-  display: none;
-}
 
 .phx-click-loading {
   opacity: 0.5;
@@ -95,4 +91,18 @@ a .bi {
 
 .heading-error {
   font-size: 8rem;
+}
+
+.lane-header {
+  display: inline-block;
+  margin-left: 16px;
+}
+
+.lane {
+  border: 1px dashed $gray-400;
+  border-radius: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+  padding-top: 16px;
+  height: 100%;
 }

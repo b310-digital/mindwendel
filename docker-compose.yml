@@ -14,6 +14,7 @@ services:
       MW_DEFAULT_LOCALE: ${DOCKER_COMPOSE_APP_MW_DEFAULT_LOCALE:-en}
       MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS: ${DOCKER_COMPOSE_APP_MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS:-30}
       MW_FEATURE_BRAINSTORMING_TEASER: ${DOCKER_COMPOSE_APP_MW_FEATURE_BRAINSTORMING_TEASER:-true}
+      MW_FEATURE_IDEA_FILE_UPLOAD: ${DOCKER_COMPOSE_APP_MW_FEATURE_IDEA_FILE_UPLOAD:-true}
       # This is an example secret key base that can be use in development
       # NOTE: There are multiple commands you can use to generate a secret key base. Pick one command you like, e.g.:
       # - `date +%s | sha256sum | base64 | head -c 64 ; echo`
@@ -28,6 +29,17 @@ services:
       URL_PORT: ${DOCKER_COMPOSE_APP_URL_PORT:-4000}
       URL_SCHEME: ${DOCKER_COMPOSE_APP_URL_SCHEME:-http}
       MW_ENDPOINT_HTTP_PORT: ${DOCKER_COMPOSE_APP_MW_ENDPOINT_HTTP_PORT:-4000}
+      # Attention: Please note that you have to add minio in etc/hosts to make the links of signed urls work:
+      # Example: 127.0.0.1 minio
+      
+      OBJECT_STORAGE_BUCKET: mindwendel
+      OBJECT_STORAGE_SCHEME: "http://"
+      OBJECT_STORAGE_HOST: minio
+      OBJECT_STORAGE_PORT: 9000
+      OBJECT_STORAGE_REGION: local
+      OBJECT_STORAGE_USER: ${DOCKER_COMPOSE_APP_OBJECT_STORAGE_USER}
+      OBJECT_STORAGE_PASSWORD: ${DOCKER_COMPOSE_APP_OBJECT_STORAGE_PASSWORD}
+      VAULT_ENCRYPTION_KEY_BASE64: ${DOCKER_COMPOSE_APP_VAULT_ENCRYPTION_KEY_BASE64}
     ports:
       - "${DOCKER_COMPOSE_APP_PORT_PUBLISHED:-4000}:${DOCKER_COMPOSE_APP_PORT_TARGET:-4000}"
     depends_on:
@@ -38,6 +50,19 @@ services:
       - /app/_build/
       - /app/deps/
       - /app/assets/node_modules
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${DOCKER_COMPOSE_MINIO_USER:-ROOTNAME}
+      MINIO_ROOT_PASSWORD: ${DOCKER_COMPOSE_MINIO_PASSWORD:-CHANGEME123}
+    volumes:
+      - ~/minio/data:/data
+    command: server /data --console-address ":9001"
 
   postgres:
     image: postgres:15

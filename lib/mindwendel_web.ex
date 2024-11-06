@@ -43,7 +43,7 @@ defmodule MindwendelWeb do
         layouts: [html: MindwendelWeb.Layouts]
 
       import Plug.Conn
-      import MindwendelWeb.Gettext
+      use Gettext, backend: MindwendelWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -69,7 +69,7 @@ defmodule MindwendelWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import MindwendelWeb.CoreComponents
-      import MindwendelWeb.Gettext
+      use Gettext, backend: MindwendelWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

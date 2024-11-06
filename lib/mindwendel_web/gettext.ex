@@ -5,7 +5,7 @@ defmodule MindwendelWeb.Gettext do
   By using [Gettext](https://hexdocs.pm/gettext),
   your module gains a set of macros for translations, for example:
 
-      import MindwendelWeb.Gettext
+      use Gettext, backend: MindwendelWeb.Gettext
 
       # Simple translation
       gettext("Here is the string to translate")
@@ -20,5 +20,5 @@ defmodule MindwendelWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :mindwendel
+  use Gettext.Backend, otp_app: :mindwendel
 end

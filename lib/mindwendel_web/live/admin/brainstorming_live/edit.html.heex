@@ -57,9 +57,9 @@
   </div>
   <div class="card-body">
     <.simple_form for={@form} phx-submit="save" phx-change="save" id="form-edit-brainstorming">
-      <.input field={@form[:name]} type="text" label="Name" />
+      <.input field={@form[:name]} type="text" label="Name" phx-debounce={300} />
 
-      <div class="form-check mb-3 position-relative">
+      <div class="mb-3 mt-3">
         <.input
           field={@form[:option_show_link_to_settings]}
           type="checkbox"
@@ -73,7 +73,7 @@
           ) %>
         </small>
       </div>
-      <div class="form-check mb-3 position-relative">
+      <div>
         <.input
           field={@form[:option_allow_manual_ordering]}
           type="checkbox"
@@ -90,7 +90,7 @@
     <h4><%= gettext("Edit Brainstorming Labels") %></h4>
   </div>
   <div class="card-body">
-    <.simple_form for={@form} phx-submit="save">
+    <.simple_form id="form-labels" for={@form} phx-change="save" phx-submit="save">
       <div class="row">
         <div class="col">
           <.inputs_for :let={f_label} field={@form[:labels]}>
@@ -116,6 +116,9 @@
               >
                 <%= gettext("Remove idea label") %>
               </.button>
+              <.error :for={msg <- Enum.map(f_label[:name].errors, &translate_error(&1))}>
+                <%= msg %>
+              </.error>
             </div>
           </.inputs_for>
         </div>

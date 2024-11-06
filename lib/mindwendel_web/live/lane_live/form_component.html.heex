@@ -1,0 +1,25 @@
+<div>
+  <.simple_form
+    for={@form}
+    id="label-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+  >
+    <.input type="hidden" field={@form[:id]} />
+    <.input type="hidden" field={@form[:brainstorming_id]} />
+    <.input field={@form[:name]} type="text" label={gettext("Name")} phx-debounce={300} />
+    <:actions>
+      <.link
+        patch={~p"/brainstormings/#{@brainstorming.id}"}
+        class="btn btn-secondary form-cancel me-2"
+        title={gettext("Close")}
+      >
+        <%= gettext("Close") %>
+      </.link>
+      <.button class="btn-primary" phx-disable-with={gettext("Saving...")}>
+        <%= gettext("Save") %>
+      </.button>
+    </:actions>
+  </.simple_form>
+</div>

@@ -7,12 +7,16 @@ defmodule Mindwendel.IdeaLabels do
   alias Mindwendel.Repo
 
   alias Mindwendel.Brainstormings.Idea
-  alias Mindwendel.Brainstormings
-  alias Mindwendel.Ideas
+  alias Mindwendel.Lanes
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
 
   require Logger
+
+  def get_idea_labels(ids) do
+    filtered_ids = Enum.filter(ids, fn id -> !is_nil(id) end)
+    Repo.all(from label in IdeaLabel, where: label.id in ^filtered_ids)
+  end
 
   def get_idea_label(id) when not is_nil(id) do
     Repo.get(IdeaLabel, id)
@@ -31,11 +35,14 @@ defmodule Mindwendel.IdeaLabels do
       (idea.idea_labels ++ [idea_label])
       |> Enum.map(&Ecto.Changeset.change/1)
 
-    idea
-    |> Ecto.Changeset.change()
-    |> Ecto.Changeset.put_assoc(:idea_labels, idea_labels)
-    |> Repo.update()
-    |> Brainstormings.broadcast(:idea_updated)
+    result =
+      idea
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.put_assoc(:idea_labels, idea_labels)
+      |> Repo.update()
+
+    Lanes.broadcast_lanes_update(idea.brainstorming_id)
+    result
   end
 
   def remove_idea_label_from_idea(%Idea{} = idea, %IdeaLabel{} = idea_label) do
@@ -46,6 +53,6 @@ defmodule Mindwendel.IdeaLabels do
     )
     |> Repo.delete_all()
 
-    {:ok, Ideas.get_idea!(idea.id)} |> Brainstormings.broadcast(:idea_updated)
+    Lanes.broadcast_lanes_update(idea.brainstorming_id)
   end
 end

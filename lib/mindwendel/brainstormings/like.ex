@@ -6,8 +6,8 @@ defmodule Mindwendel.Brainstormings.Like do
   alias Mindwendel.Accounts.User
 
   schema "likes" do
-    belongs_to :idea, Idea, type: :binary_id
-    belongs_to :user, User, type: :binary_id
+    belongs_to :idea, Idea
+    belongs_to :user, User
 
     timestamps()
   end
