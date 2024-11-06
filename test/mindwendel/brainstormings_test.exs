@@ -5,11 +5,12 @@ defmodule Mindwendel.BrainstormingsTest do
   alias Mindwendel.Factory
 
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Lanes
   alias Mindwendel.IdeaLabels
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Like
-  alias Mindwendel.Attachments.Link
+  alias Mindwendel.Attachments
   alias Mindwendel.Accounts.User
 
   setup do
@@ -21,8 +22,21 @@ defmodule Mindwendel.BrainstormingsTest do
       idea:
         Factory.insert!(:idea, brainstorming: brainstorming, inserted_at: ~N[2021-01-01 15:04:30]),
       user: user,
-      like: Factory.insert!(:like, :with_idea_and_user)
+      like: Factory.insert!(:like, :with_idea_and_user),
+      lane: Enum.at(brainstorming.lanes, 0)
     }
+  end
+
+  describe "create_brainstorming" do
+    test "creates a lane", %{user: user} do
+      {:ok, brainstorming} = Brainstormings.create_brainstorming(user, %{name: "test"})
+      assert length(brainstorming.lanes) == 1
+    end
+
+    test "creates labels", %{user: user} do
+      {:ok, brainstorming} = Brainstormings.create_brainstorming(user, %{name: "test"})
+      assert length(brainstorming.labels) == 5
+    end
   end
 
   describe "list_brainstormings_for" do
@@ -179,7 +193,30 @@ defmodule Mindwendel.BrainstormingsTest do
       old_link = Factory.insert!(:link, idea: old_idea)
       Brainstormings.delete_old_brainstormings()
 
-      refute Repo.exists?(from(l in Link, where: l.id == ^old_link.id))
+      refute Repo.exists?(from(l in Attachments.Link, where: l.id == ^old_link.id))
+    end
+
+    test "removes file attachments" do
+      old_brainstorming =
+        Factory.insert!(:brainstorming,
+          last_accessed_at: DateTime.from_naive!(~N[2021-01-01 10:00:00], "Etc/UTC")
+        )
+
+      old_idea =
+        Factory.insert!(:idea,
+          brainstorming: old_brainstorming,
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      file_path = Path.join("priv/static/uploads", "test")
+      # create a test file which is used as an attachment
+      File.write(file_path, "test")
+
+      old_attachment = Factory.insert!(:file, idea: old_idea, path: "uploads/test")
+      Brainstormings.delete_old_brainstormings()
+
+      refute File.exists?(file_path)
+      refute Repo.exists?(from(file in Attachments.File, where: file.id == ^old_attachment.id))
     end
 
     test "removes the old brainstormings users connection", %{user: user} do
@@ -221,15 +258,19 @@ defmodule Mindwendel.BrainstormingsTest do
       Brainstormings.empty(brainstorming)
       # reload brainstorming:
       brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
-      brainstorming = brainstorming |> Repo.preload([:ideas])
-      assert Enum.empty?(brainstorming.ideas)
+      brainstorming = brainstorming |> Repo.preload([:ideas, :lanes])
+      assert Enum.empty?(brainstorming.lanes)
     end
 
-    test "empty/1 also clears likes and labels from ideas", %{brainstorming: brainstorming} do
+    test "empty/1 also clears likes and labels from ideas", %{
+      brainstorming: brainstorming,
+      lane: lane
+    } do
       idea =
         Factory.insert!(:idea,
           brainstorming: brainstorming,
-          inserted_at: ~N[2021-01-01 15:04:30]
+          inserted_at: ~N[2021-01-01 15:04:30],
+          lane: lane
         )
 
       like = Factory.insert!(:like, idea: idea)
@@ -241,9 +282,9 @@ defmodule Mindwendel.BrainstormingsTest do
 
       Brainstormings.empty(brainstorming)
       # reload brainstorming:
-      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
+      lanes = Lanes.get_lanes_for_brainstorming(brainstorming.id)
 
-      assert Enum.empty?(brainstorming.ideas)
+      assert Enum.empty?(lanes)
       assert Repo.get_by(Idea, id: idea.id) == nil
       assert Repo.get_by(IdeaIdeaLabel, idea_id: idea.id) == nil
       assert Repo.get_by(Like, id: like.id) == nil
@@ -253,9 +294,11 @@ defmodule Mindwendel.BrainstormingsTest do
       brainstorming: brainstorming
     } do
       other_brainstorming = Factory.insert!(:brainstorming)
+      other_lane = Enum.at(brainstorming.lanes, 0)
 
       Factory.insert!(:idea,
-        brainstorming: other_brainstorming
+        brainstorming: other_brainstorming,
+        lane: other_lane
       )
 
       other_brainstorming = other_brainstorming |> Repo.preload([:ideas])
@@ -263,11 +306,11 @@ defmodule Mindwendel.BrainstormingsTest do
       assert Enum.count(other_brainstorming.ideas) == 1
       Brainstormings.empty(brainstorming)
       # reload brainstorming:
-      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
+      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id) |> Repo.preload(:lanes)
       brainstorming = brainstorming |> Repo.preload([:ideas])
       other_brainstorming = other_brainstorming |> Repo.preload([:ideas])
-      assert Enum.empty?(brainstorming.ideas)
-      assert Enum.count(other_brainstorming.ideas) == 1
+      assert Enum.empty?(brainstorming.lanes)
+      assert Enum.count(other_brainstorming.lanes) == 1
     end
   end
 end

@@ -8,8 +8,46 @@
   >
     <.input field={@form[:username]} type="text" label={gettext("Username")} phx-debounce={300} />
     <.input field={@form[:body]} type="textarea" label={gettext("Your idea")} phx-debounce={300} />
+    <%= if show_idea_file_upload() do %>
+      <div class="form-group">
+        <.label for={@uploads.attachment.ref}><%= gettext("Additional Attachment") %></.label>
+        <.live_file_input upload={@uploads.attachment} class="w-100" />
+        <small id="attachment-help" class="form-text text-muted">
+          <%= gettext("Allowed files: JPG/GIF/PNG/PDF") %>
+        </small>
+      </div>
+    <% end %>
+    <%= for entry <- @uploads.attachment.entries do %>
+      <div :for={err <- upload_errors(@uploads.attachment, entry)} class="alert alert-danger">
+        <%= error_to_string(err) %>
+      </div>
+    <% end %>
+    <%= if @form.errors[:files] != nil do %>
+      <div class="alert alert-danger">
+        <%= @form.errors[:files] |> elem(0) |> String.to_atom() |> error_to_string() %>
+      </div>
+    <% end %>
+
+    <%= if @action == :update do %>
+      <%= for attachment <- @idea.files do %>
+        <p>
+          <.button
+            class="btn-sm"
+            phx-click="delete_attachment"
+            phx-target={@myself}
+            phx-value-id={attachment.id}
+          >
+            <i class="bi-x-circle-fill text-danger"></i>
+          </.button>
+          <.link href={~p"/files/#{attachment.id}"}>
+            <%= attachment.name || gettext("No filename") %>
+          </.link>
+        </p>
+      <% end %>
+    <% end %>
     <.input field={@form[:id]} type="hidden" />
     <.input field={@form[:brainstorming_id]} type="hidden" />
+    <.input field={@form[:lane_id]} type="hidden" />
     <:actions>
       <.link
         patch={~p"/brainstormings/#{@brainstorming.id}"}

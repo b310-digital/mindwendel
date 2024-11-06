@@ -32,6 +32,8 @@ config :mindwendel, MindwendelWeb.Endpoint,
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
   ]
 
+config :mindwendel, :s3_storage_provider, Mindwendel.Services.S3ObjectStorageService
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

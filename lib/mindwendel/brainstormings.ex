@@ -9,6 +9,9 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Lanes
+  alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.BrainstormingModeratingUser
 
@@ -75,13 +78,7 @@ defmodule Mindwendel.Brainstormings do
     |> Repo.preload([
       :users,
       :moderating_users,
-      labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
-      ideas: [
-        :link,
-        :likes,
-        :label,
-        :idea_labels
-      ]
+      labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
     ])
     |> update_last_accessed_at
   end
@@ -112,6 +109,7 @@ defmodule Mindwendel.Brainstormings do
     user
     |> Ecto.build_assoc(:created_brainstormings,
       labels: Brainstorming.idea_label_factory(),
+      lanes: [%Lane{position_order: 1}],
       moderating_users: [user],
       users: [user]
     )
@@ -131,6 +129,25 @@ defmodule Mindwendel.Brainstormings do
       {:error, %Ecto.Changeset{}}
 
   """
+  def update_brainstorming(
+        %Brainstorming{} = brainstorming,
+        %{filter_labels_ids: filter_labels_ids} = attrs
+      ) do
+    if length(filter_labels_ids) != 0 do
+      Ideas.update_disjoint_idea_positions_for_brainstorming_by_labels(
+        brainstorming.id,
+        filter_labels_ids
+      )
+    end
+
+    updated_brainstorming =
+      brainstorming
+      |> Brainstorming.changeset(attrs)
+      |> Repo.update()
+
+    broadcast(updated_brainstorming, :brainstorming_filter_updated)
+  end
+
   def update_brainstorming(%Brainstorming{} = brainstorming, attrs) do
     brainstorming
     |> Brainstorming.changeset(attrs)
@@ -152,14 +169,16 @@ defmodule Mindwendel.Brainstormings do
   """
   def delete_brainstorming(%Brainstorming{} = brainstorming) do
     Repo.transaction(fn ->
-      Repo.delete_all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
+      ideas = Repo.all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
+      # delete_idea deletes the idea and potentially associated files
+      Enum.each(ideas, fn idea -> Ideas.delete_idea(idea) end)
       Repo.delete(brainstorming)
     end)
   end
 
   def empty(%Brainstorming{} = brainstorming) do
     # we only delete ideas - labels and users should be left intact:
-    Repo.delete_all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
+    Repo.delete_all(from lane in Lane, where: lane.brainstorming_id == ^brainstorming.id)
 
     broadcast({:ok, brainstorming}, :brainstorming_updated)
   end
@@ -234,11 +253,36 @@ defmodule Mindwendel.Brainstormings do
     )
   end
 
+  def broadcast({:ok, %Brainstorming{} = brainstorming}, :brainstorming_filter_updated = event) do
+    lanes =
+      Lanes.get_lanes_for_brainstorming_with_labels_filtered(brainstorming.id)
+
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> brainstorming.id,
+      {event,
+       brainstorming
+       |> Repo.preload([
+         :users,
+         :moderating_users,
+         labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
+       ]), lanes}
+    )
+
+    {:ok, brainstorming}
+  end
+
   def broadcast({:ok, %Brainstorming{} = brainstorming}, event) do
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
       "brainstormings:" <> brainstorming.id,
-      {event, brainstorming}
+      {event,
+       brainstorming
+       |> Repo.preload([
+         :users,
+         :moderating_users,
+         labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
+       ])}
     )
 
     {:ok, brainstorming}
@@ -263,13 +307,47 @@ defmodule Mindwendel.Brainstormings do
         |> Repo.preload([
           :link,
           :likes,
-          :label,
-          :idea_labels
+          :idea_labels,
+          :files
         ])
       }
     )
 
     {:ok, idea}
+  end
+
+  def broadcast({:ok, %Lane{} = lane}, event) do
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> lane.brainstorming_id,
+      {
+        event,
+        lane
+        |> Repo.preload(
+          ideas: [
+            :link,
+            :likes,
+            :idea_labels,
+            :files
+          ]
+        )
+      }
+    )
+
+    {:ok, lane}
+  end
+
+  def broadcast({:ok, brainstorming_id, lanes}, :lanes_updated) do
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> brainstorming_id,
+      {
+        :lanes_updated,
+        lanes
+      }
+    )
+
+    {:ok, brainstorming_id}
   end
 
   def broadcast({:error, _reason} = error, _event), do: error
