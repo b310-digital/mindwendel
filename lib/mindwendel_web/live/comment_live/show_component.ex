@@ -2,12 +2,7 @@ defmodule MindwendelWeb.CommentLive.ShowComponent do
   use MindwendelWeb, :live_component
 
   @impl true
-  def update(
-        %{comment: comment, brainstorming: brainstorming, current_user: current_user} = assigns,
-        socket
-      ) do
-    {:ok,
-     socket
-     |> assign(assigns)}
+  def handle_event("edit_comment", _value, socket) do
+    {:noreply, assign(socket, :live_action, :edit)}
   end
 end

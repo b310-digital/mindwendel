@@ -6,6 +6,20 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
 
   @impl true
   def update(
+        %{idea: idea, brainstorming: brainstorming, current_user: current_user, comment: comment} =
+          assigns,
+        socket
+      ) do
+    {:ok,
+     socket
+     |> assign(assigns)
+     |> assign_new(:form, fn ->
+       to_form(Comments.change_comment(comment))
+     end)}
+  end
+
+  @impl true
+  def update(
         %{idea: idea, brainstorming: brainstorming, current_user: current_user} = assigns,
         socket
       ) do
@@ -18,19 +32,6 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
      socket
      |> assign(assigns)
      |> assign_new(:comment, fn -> comment end)
-     |> assign_new(:form, fn ->
-       to_form(Comments.change_comment(comment))
-     end)}
-  end
-
-  def update(
-        %{idea: idea, brainstorming: brainstorming, current_user: current_user, comment: comment} =
-          assigns,
-        socket
-      ) do
-    {:ok,
-     socket
-     |> assign(assigns)
      |> assign_new(:form, fn ->
        to_form(Comments.change_comment(comment))
      end)}

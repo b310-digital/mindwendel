@@ -1,1 +1,23 @@
-<div><%= @comment.comment_text %></div>
+<div>
+  <%= if @live_action == :edit do %>
+    <.live_component
+      module={MindwendelWeb.CommentLive.FormComponent}
+      id={"comment-form-#{@comment.id}"}
+      brainstorming={@brainstorming}
+      current_user={@current_user}
+      comment={@comment}
+      idea={@idea}
+      action={:update}
+    />
+  <% else %>
+    <.link
+      phx-click="edit_comment"
+      phx-target={@myself}
+      class="float-end ms-3 mb-3"
+      title={gettext("Show idea")}
+    >
+      <i class="bi bi-pencil text-secondary"></i>
+    </.link>
+    <%= @comment.comment_text %>
+  <% end %>
+</div>
