@@ -83,11 +83,6 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
 
     case Comments.create_comment(comment_params_merged) do
       {:ok, comment} ->
-        send_update(MindwendelWeb.IdeaLive.ShowComponent,
-          id: :show,
-          idea: Ideas.get_idea!(socket.assigns.idea.id)
-        )
-
         {:noreply,
          socket
          |> put_flash(:info, gettext("Comment created successfully"))}

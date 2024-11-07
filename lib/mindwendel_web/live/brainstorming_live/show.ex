@@ -79,7 +79,9 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   # idea updated - only relevant if the show modal of the idea is opened
   def handle_info({:idea_updated, idea}, socket) do
     if socket.assigns.live_action == :show_idea and socket.assigns.idea.id == idea.id do
-      {:noreply, assign(socket, :idea, idea)}
+      # update the idea modal with new content
+      send_update(MindwendelWeb.IdeaLive.ShowComponent, id: :show, idea: idea)
+      {:noreply, socket}
     else
       {:noreply, socket}
     end

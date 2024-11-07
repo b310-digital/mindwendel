@@ -16,10 +16,15 @@ defmodule MindwendelWeb.IdeaLive.ShowComponent do
         %{idea: idea} = assigns,
         socket
       ) do
-    IO.inspect(idea)
-
     {:ok,
      socket
      |> assign(assigns)}
+  end
+
+  def handle_info({:idea_updated, idea}, socket) do
+    IO.puts("idea updated")
+    # For the time being, we ignore idea updates as this results in modal problems.
+    # Idea updates are mostly triggered due to new comments
+    {:noreply, socket}
   end
 end

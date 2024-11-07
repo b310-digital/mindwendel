@@ -3,7 +3,7 @@ defmodule Mindwendel.Comments do
   alias Mindwendel.Repo
   alias Mindwendel.Brainstormings.Comment
   alias Mindwendel.Brainstormings
-  alias Mindwendel.Lanes
+  alias Mindwendel.Ideas
 
   require Logger
 
@@ -98,11 +98,11 @@ defmodule Mindwendel.Comments do
   defp handle_result_for_broadcast(result) do
     case result do
       {:ok, comment} ->
-        preloaded_comment = Repo.preload(comment, [:idea])
+        idea = Ideas.get_idea!(comment.idea_id)
 
         Brainstormings.broadcast(
-          {:ok, Lanes.get_lane!(preloaded_comment.idea.lane_id)},
-          :lane_updated
+          {:ok, idea},
+          :idea_updated
         )
 
       {:error, changeset} ->
