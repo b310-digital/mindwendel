@@ -22,6 +22,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     field :body, :string
     field :position_order, :integer
     field :username, :string, default: "Anonymous"
+    field :comments_count, :integer
     field :deprecated_label, Ecto.Enum, source: :label, values: @label_values
     has_one :link, Link
     belongs_to :user, User
@@ -47,7 +48,8 @@ defmodule Mindwendel.Brainstormings.Idea do
       :deprecated_label,
       :label_id,
       :user_id,
-      :position_order
+      :position_order,
+      :comments_count
     ])
     |> validate_required([:username, :body, :brainstorming_id])
     |> maybe_put_idea_labels(attrs)

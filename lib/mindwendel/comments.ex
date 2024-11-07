@@ -51,6 +51,10 @@ defmodule Mindwendel.Comments do
       |> Comment.changeset(attrs)
       |> Repo.insert()
 
+    case result do
+      {:ok, comment} -> Ideas.increment_comment_count(comment.idea_id)
+    end
+
     handle_result_for_broadcast(result)
     result
   end
@@ -91,6 +95,11 @@ defmodule Mindwendel.Comments do
   """
   def delete_comment(%Comment{} = comment) do
     result = Repo.delete(comment)
+
+    case result do
+      {:ok, comment} -> Ideas.decrement_comment_count(comment.idea_id)
+    end
+
     handle_result_for_broadcast(result)
     result
   end

@@ -12,5 +12,9 @@ defmodule Mindwendel.Repo.Migrations.AddCommentsForIdeas do
 
       timestamps()
     end
+
+    alter table(:ideas) do
+      add(:comments_count, :integer, default: 0)
+    end
   end
 end

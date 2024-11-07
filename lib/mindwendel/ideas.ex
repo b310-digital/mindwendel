@@ -358,6 +358,42 @@ defmodule Mindwendel.Ideas do
   end
 
   @doc """
+  Increments the comment count of an idea.
+
+  ## Examples
+
+      iex> increment_comment_count(idea_id)
+      {:ok, %Idea{}}
+
+      iex> increment_comment_count(idea_id)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def increment_comment_count(idea_id) do
+    idea = Repo.get!(Idea, idea_id)
+    changeset = Idea.changeset(idea, %{comments_count: idea.comments_count + 1})
+    Repo.update(changeset)
+  end
+
+  @doc """
+  Decrements the comment count of an idea.
+
+  ## Examples
+
+      iex> decrement_comment_count(idea_id)
+      {:ok, %Idea{}}
+
+      iex> decrement_comment_count(idea_id)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def decrement_comment_count(idea_id) do
+    idea = Repo.get!(Idea, idea_id)
+    changeset = Idea.changeset(idea, %{comments_count: idea.comments_count - 1})
+    Repo.update(changeset)
+  end
+
+  @doc """
   Deletes a idea.
 
   ## Examples
