@@ -329,8 +329,7 @@ defmodule Mindwendel.Brainstormings do
             :link,
             :likes,
             :idea_labels,
-            :files,
-            :comments
+            :files
           ]
         )
       }

@@ -82,9 +82,17 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
       |> Map.put("idea_id", socket.assigns.idea.id)
 
     case Comments.create_comment(comment_params_merged) do
-      {:ok, comment} ->
+      {:ok, _comment} ->
+        # reset the form
+        new_comment = %Comment{
+          idea_id: socket.assigns.idea.id,
+          username: socket.assigns.current_user.username
+        }
+
         {:noreply,
          socket
+         |> assign(comment: new_comment)
+         |> assign(form: to_form(Comments.change_comment(new_comment)))
          |> put_flash(:info, gettext("Comment created successfully"))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
