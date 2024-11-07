@@ -1,6 +1,6 @@
 <div class="">
   <%= unless @idea.link do %>
-    <p class="card-body-mindwendel-idea-text"><%= raw(@idea.body) %></p>
+    <p><%= raw(@idea.body) %></p>
   <% end %>
 
   <%= if @idea.link do %>
@@ -30,24 +30,31 @@
     <% end %>
   <% end %>
 
-  <%= for comment <- @idea.comments do %>
+  <div class="mt-5 mb-2">
+    <p class="fw-bold"><%= gettext("Comments") %></p>
+    <%= for comment <- @idea.comments do %>
+      <.live_component
+        module={MindwendelWeb.CommentLive.ShowComponent}
+        id={comment.id}
+        comment={comment}
+        idea={@idea}
+        brainstorming={@brainstorming}
+        current_user={@current_user}
+        live_action={:show}
+      />
+    <% end %>
+  </div>
+
+  <div class="mt-5 mb-2">
+    <p class="fw-bold"><%= gettext("Add a new comment") %></p>
+
     <.live_component
-      module={MindwendelWeb.CommentLive.ShowComponent}
-      id={comment.id}
-      comment={comment}
-      idea={@idea}
+      module={MindwendelWeb.CommentLive.FormComponent}
+      id={:new}
       brainstorming={@brainstorming}
       current_user={@current_user}
-      live_action={:show}
+      idea={@idea}
+      action={:new}
     />
-  <% end %>
-
-  <.live_component
-    module={MindwendelWeb.CommentLive.FormComponent}
-    id={:new}
-    brainstorming={@brainstorming}
-    current_user={@current_user}
-    idea={@idea}
-    action={:new}
-  />
+  </div>
 </div>
