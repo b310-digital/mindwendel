@@ -22,8 +22,6 @@ defmodule MindwendelWeb.IdeaLive.ShowComponent do
   end
 
   def handle_info({:idea_updated, idea}, socket) do
-    # For the time being, we ignore idea updates as this results in modal problems.
-    # Idea updates are mostly triggered due to new comments
     {:noreply, socket}
   end
 end

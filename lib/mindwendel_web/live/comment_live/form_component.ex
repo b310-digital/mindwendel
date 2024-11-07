@@ -18,7 +18,6 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
      end)}
   end
 
-  @impl true
   def update(
         %{idea: idea, brainstorming: brainstorming, current_user: current_user} = assigns,
         socket
@@ -38,6 +37,26 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
   end
 
   @impl true
+  def handle_event("close", _, socket) do
+    # The close button is either pressed inside the comment component, where a comment might be edited, or inside the "new comment" form.
+    # Depending on the location, either patch back to the brainstorming or simply change back to view mode inside the comment.
+    %{idea: idea, brainstorming: brainstorming, comment: comment} = socket.assigns
+
+    case socket.assigns.action do
+      :new ->
+        {:noreply,
+         push_patch(
+           socket
+           |> assign(:brainstorming, brainstorming),
+           to: "/brainstormings/#{brainstorming.id}"
+         )}
+
+      :update ->
+        send_update(MindwendelWeb.CommentLive.ShowComponent, id: comment.id, live_action: :show)
+        {:noreply, socket}
+    end
+  end
+
   def handle_event("validate", %{"comment" => comment_params}, socket) do
     changeset = Comments.change_comment(socket.assigns.comment, comment_params)
 
