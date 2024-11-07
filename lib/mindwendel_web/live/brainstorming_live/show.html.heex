@@ -73,21 +73,6 @@
     />
 
     <.modal
-      :if={@live_action in [:edit]}
-      id="brainstorming-modal"
-      show
-      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
-      title={@page_title}
-    >
-      <.live_component
-        module={MindwendelWeb.BrainstormingLive.FormComponent}
-        id={@brainstorming.id}
-        action={@live_action}
-        brainstorming={@brainstorming}
-      />
-    </.modal>
-
-    <.modal
       :if={@live_action in [:new_idea]}
       id="idea-modal"
       show

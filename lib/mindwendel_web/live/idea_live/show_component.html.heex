@@ -40,6 +40,12 @@
   />
 
   <%= for comment <- @idea.comments do %>
-    <p><%= comment.comment_text %></p>
+    <.live_component
+      module={MindwendelWeb.CommentLive.ShowComponent}
+      id={comment.id}
+      comment={comment}
+      brainstorming={@brainstorming}
+      current_user={@current_user}
+    />
   <% end %>
 </div>
