@@ -43,6 +43,9 @@
         live_action={:show}
       />
     <% end %>
+    <%= if length(@idea.comments) == 0 do %>
+      <%= gettext("No comments available") %>
+    <% end %>
   </div>
 
   <div class="mt-5 mb-2">
