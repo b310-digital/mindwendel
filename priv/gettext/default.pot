@@ -46,8 +46,8 @@ msgstr ""
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr ""
 
-#: lib/mindwendel_web/live/comment_live/form_component.html.heex:23
-#: lib/mindwendel_web/live/comment_live/form_component.html.heex:25
+#: lib/mindwendel_web/live/comment_live/form_component.html.heex:34
+#: lib/mindwendel_web/live/comment_live/form_component.html.heex:36
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:55
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:57
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:16
@@ -122,7 +122,7 @@ msgstr ""
 msgid "Proceed to your brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/comment_live/form_component.html.heex:28
+#: lib/mindwendel_web/live/comment_live/form_component.html.heex:39
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:60
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:21
 #, elixir-autogen, elixir-format
@@ -134,7 +134,7 @@ msgstr ""
 msgid "Save this link to update / delete your brainstorming later on:"
 msgstr ""
 
-#: lib/mindwendel_web/live/comment_live/form_component.html.heex:27
+#: lib/mindwendel_web/live/comment_live/form_component.html.heex:38
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:59
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:20
 #, elixir-autogen, elixir-format
@@ -193,7 +193,7 @@ msgstr ""
 msgid "Your idea"
 msgstr ""
 
-#: lib/mindwendel_web/live/comment_live/form_component.html.heex:9
+#: lib/mindwendel_web/live/comment_live/form_component.html.heex:12
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:9
 #, elixir-autogen, elixir-format
 msgid "Username"
@@ -316,7 +316,7 @@ msgstr ""
 msgid "Empty brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/live_helpers.ex:28
+#: lib/mindwendel_web/live/live_helpers.ex:29
 #, elixir-autogen, elixir-format
 msgid "Brainstorming will be deleted %{days}"
 msgstr ""
@@ -522,12 +522,12 @@ msgstr ""
 msgid "Add a new comment"
 msgstr ""
 
-#: lib/mindwendel_web/live/comment_live/form_component.ex:116
+#: lib/mindwendel_web/live/comment_live/form_component.ex:113
 #, elixir-autogen, elixir-format
 msgid "Comment created successfully"
 msgstr ""
 
-#: lib/mindwendel_web/live/comment_live/form_component.ex:88
+#: lib/mindwendel_web/live/comment_live/form_component.ex:85
 #, elixir-autogen, elixir-format
 msgid "Comment updated"
 msgstr ""
@@ -553,7 +553,7 @@ msgstr ""
 msgid "Show idea"
 msgstr ""
 
-#: lib/mindwendel_web/live/comment_live/form_component.html.heex:13
+#: lib/mindwendel_web/live/comment_live/form_component.html.heex:20
 #, elixir-autogen, elixir-format
 msgid "Your comment"
 msgstr ""
