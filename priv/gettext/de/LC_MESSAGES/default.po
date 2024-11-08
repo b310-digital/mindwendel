@@ -513,10 +513,10 @@ msgstr "Erlaubte Dateiformate: JPG/PNG/PDF"
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:69
 #, elixir-autogen, elixir-format
 msgid "Legal Disclosure"
-msgstr ""
+msgstr "Impressum"
 
 #: lib/mindwendel_web/components/../templates/layout/root.html.heex:82
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:70
 #, elixir-autogen, elixir-format
 msgid "Privacy"
-msgstr ""
+msgstr "Datenschutzerklärung"
