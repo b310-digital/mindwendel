@@ -1,20 +1,31 @@
 <div>
   <.simple_form
     for={@form}
-    id="comment-form"
+    id={"comment-form-#{@comment.id || :new}"}
     phx-target={@myself}
     phx-change="validate"
     phx-submit="save"
   >
-    <.input field={@form[:username]} type="text" label={gettext("Username")} phx-debounce={300} />
+    <.input
+      field={@form[:username]}
+      type="text"
+      label={gettext("Username")}
+      phx-debounce={300}
+      id={"comment-form-username-#{@comment.id || :new}"}
+    />
     <.input
       field={@form[:comment_text]}
       type="textarea"
+      id={"comment-form-comment-text-#{@comment.id || :new}"}
       label={gettext("Your comment")}
       phx-debounce={300}
     />
-    <.input field={@form[:id]} type="hidden" />
-    <.input field={@form[:idea_id]} type="hidden" />
+    <.input field={@form[:id]} type="hidden" id={"comment-form-id-#{@comment.id || :new}"} />
+    <.input
+      field={@form[:idea_id]}
+      type="hidden"
+      id={"comment-form-idea-id-#{@comment.id || :new}"}
+    />
     <:actions>
       <.link
         phx-click={:close}
