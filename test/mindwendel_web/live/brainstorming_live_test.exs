@@ -331,7 +331,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       lane: lane
     } do
       {:ok, _show_live, html} =
-        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/lanes/#{lane.id}/new_idea")
+        live(conn, ~p"/brainstormings/#{brainstorming.id}/lanes/#{lane.id}/new_idea")
 
       assert html =~ "Anonymous"
     end
@@ -342,14 +342,14 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       lane: lane
     } do
       {:ok, show_live_view, _html} =
-        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/lanes/#{lane.id}/new_idea")
+        live(conn, ~p"/brainstormings/#{brainstorming.id}/lanes/#{lane.id}/new_idea")
 
       assert show_live_view
              |> form("#idea-form", idea: %{username: "I am new", body: "test"})
              |> render_submit()
 
       {:ok, _show_live_view, html} =
-        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/lanes/#{lane.id}/new_idea")
+        live(conn, ~p"/brainstormings/#{brainstorming.id}/lanes/#{lane.id}/new_idea")
 
       assert html =~ "I am new"
     end

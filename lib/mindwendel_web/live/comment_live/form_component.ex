@@ -1,12 +1,11 @@
 defmodule MindwendelWeb.CommentLive.FormComponent do
   use MindwendelWeb, :live_component
   alias Mindwendel.Comments
-  alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Comment
 
   @impl true
   def update(
-        %{idea: idea, brainstorming: brainstorming, current_user: current_user, comment: comment} =
+        %{comment: comment} =
           assigns,
         socket
       ) do
@@ -19,7 +18,7 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
   end
 
   def update(
-        %{idea: idea, brainstorming: brainstorming, current_user: current_user} = assigns,
+        %{idea: idea, current_user: current_user} = assigns,
         socket
       ) do
     comment = %Comment{
@@ -40,7 +39,7 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
   def handle_event("close", _, socket) do
     # The close button is either pressed inside the comment component, where a comment might be edited, or inside the "new comment" form.
     # Depending on the location, either patch back to the brainstorming or simply change back to view mode inside the comment.
-    %{idea: idea, brainstorming: brainstorming, comment: comment} = socket.assigns
+    %{brainstorming: brainstorming, comment: comment} = socket.assigns
 
     case socket.assigns.action do
       :new ->
@@ -68,8 +67,6 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
   end
 
   defp save_comment(socket, :update, comment_params) do
-    comment = Comments.get_comment!(comment_params["id"])
-
     %{current_user: current_user, comment: comment, brainstorming: brainstorming} = socket.assigns
 
     if has_moderating_or_ownership_permission(brainstorming, comment, current_user) do
