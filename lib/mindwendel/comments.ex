@@ -53,6 +53,7 @@ defmodule Mindwendel.Comments do
 
     case result do
       {:ok, comment} -> Ideas.increment_comment_count(comment.idea_id)
+      {:error, _} -> nil
     end
 
     handle_result_for_broadcast(result)

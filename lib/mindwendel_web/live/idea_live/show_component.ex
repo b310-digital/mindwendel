@@ -11,7 +11,6 @@ defmodule MindwendelWeb.IdeaLive.ShowComponent do
      |> assign(assigns)}
   end
 
-  @impl true
   def update(
         %{idea: idea} = assigns,
         socket

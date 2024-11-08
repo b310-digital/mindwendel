@@ -496,7 +496,7 @@ msgstr "Zusätzlicher Anhang"
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:170
 #, elixir-autogen, elixir-format
 msgid "No filename"
-msgstr ""
+msgstr "Kein Dateiname"
 
 #: lib/mindwendel_web/live/idea_live/form_component.ex:145
 #, elixir-autogen, elixir-format
@@ -521,7 +521,7 @@ msgstr "Erlaubte Dateiformate: JPG/PNG/PDF"
 #: lib/mindwendel_web/live/idea_live/show_component.html.heex:52
 #, elixir-autogen, elixir-format
 msgid "Add a new comment"
-msgstr ""
+msgstr "Kommentar hinzufügen"
 
 #: lib/mindwendel_web/live/comment_live/form_component.ex:116
 #, elixir-autogen, elixir-format, fuzzy
@@ -531,12 +531,12 @@ msgstr "Spalte erfolgreich erstellt"
 #: lib/mindwendel_web/live/comment_live/form_component.ex:88
 #, elixir-autogen, elixir-format
 msgid "Comment updated"
-msgstr ""
+msgstr "Kommentar aktualisiert"
 
 #: lib/mindwendel_web/live/idea_live/show_component.html.heex:34
 #, elixir-autogen, elixir-format
 msgid "Comments"
-msgstr ""
+msgstr "Kommentare"
 
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:21
 #, elixir-autogen, elixir-format, fuzzy
@@ -552,9 +552,9 @@ msgstr "Keine Spalten vorhanden"
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:128
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Show idea"
-msgstr "Neue Idee"
+msgstr "Zeige Idee"
 
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:13
 #, elixir-autogen, elixir-format
 msgid "Your comment"
-msgstr ""
+msgstr "Kommentar"

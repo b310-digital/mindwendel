@@ -70,9 +70,9 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
   defp save_comment(socket, :update, comment_params) do
     comment = Comments.get_comment!(comment_params["id"])
 
-    %{current_user: current_user, idea: idea, brainstorming: brainstorming} = socket.assigns
+    %{current_user: current_user, comment: comment, brainstorming: brainstorming} = socket.assigns
 
-    if has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
+    if has_moderating_or_ownership_permission(brainstorming, comment, current_user) do
       comment_params_merged =
         comment_params
         |> Map.put("user_id", comment.user_id || current_user.id)
