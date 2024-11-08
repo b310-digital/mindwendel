@@ -250,3 +250,7 @@ Logos and text provided with courtesy of kits.
 - https://github.com/gerardo-navarro
 - https://github.com/nwittstruck
 - Lightbulb stock image by LED Supermarket at Pexels: https://www.pexels.com/de-de/foto/die-gluhbirne-577514/
+
+## Image Licenses
+- Lightbulb, Pexels / CC0: https://www.pexels.com/license/, https://www.pexels.com/terms-of-service/
+- GitHub Logo: https://github.com/logos

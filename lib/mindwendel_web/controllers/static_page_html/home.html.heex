@@ -1,5 +1,11 @@
 <div class="d-flex w-100 h-100 p-3 pb-0 mx-auto flex-column bg-mindwendel text-white">
   <header class="mb-auto bg-none container">
+    <.link
+      href="https://github.com/b310-digital/mindwendel"
+      class="text-reset text-decoration-none"
+    >
+      <img src={~p"/images/GitHub-Mark-Light-64px.png"} height="40" class="float-end" />
+    </.link>
     <img src={~p"/images/mindwendel_logo_white.svg"} height="40" class="float-md-start me-3" />
     <h3 class="mb-0">mindwendel</h3>
   </header>
@@ -62,20 +68,12 @@
       </div>
     <% end %>
   </main>
-  <footer class="mt-auto mb-2">
+  <footer class="mt-auto">
     <span class="me-2">Made with ❤️ in the 🇪🇺</span>
     <%= if Application.fetch_env!(:mindwendel, :options)[:feature_privacy_imprint_enabled] do %>
       <br class="d-md-none" />
       <.link href={~p"/legal"}><%= gettext("Legal Disclosure") %></.link>
       | <.link href={~p"/privacy"}><%= gettext("Privacy") %></.link>
     <% end %>
-    <.link
-      href="https://github.com/b310-digital/mindwendel"
-      class="text-reset text-decoration-none"
-    >
-      <span class="float-end">
-        Mindwendel on GitHub
-      </span>
-    </.link>
   </footer>
 </div>
