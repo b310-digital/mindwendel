@@ -1,6 +1,6 @@
 <div class="d-flex w-100 h-100 p-3 pb-0 mx-auto flex-column bg-mindwendel text-white">
   <header class="mb-auto bg-none container">
-    <img src={~p"/images/mindwendel_logo_white.svg"} height="40px" class="float-md-start me-3" />
+    <img src={~p"/images/mindwendel_logo_white.svg"} height="40" class="float-md-start me-3" />
     <h3 class="mb-0">mindwendel</h3>
   </header>
 
@@ -27,7 +27,7 @@
             </.button>
           </div>
         </.simple_form>
-        <small class="text-muted">
+        <small class="text-light">
           <%= gettext("Brainstormings will be deleted after %{days} days.",
             days:
               Application.fetch_env!(:mindwendel, :options)[
@@ -63,6 +63,11 @@
     <% end %>
   </main>
   <footer class="mt-auto">
-    <p>Made with &hearts; by Gerardo, Jannik and Nicho</p>
+    <span class="me-2">Made with ❤️ in the 🇪🇺</span>
+    <%= if Application.fetch_env!(:mindwendel, :options)[:feature_privacy_imprint_enabled] do %>
+      <br class="d-md-none" />
+      <.link href={~p"/legal"}><%= gettext("Legal Disclosure") %></.link>
+      | <.link href={~p"/privacy"}><%= gettext("Privacy") %></.link>
+    <% end %>
   </footer>
 </div>

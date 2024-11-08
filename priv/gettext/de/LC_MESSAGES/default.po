@@ -508,3 +508,15 @@ msgstr "Zu viele Dateien ausgewählt"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Allowed files: JPG/GIF/PNG/PDF"
 msgstr "Erlaubte Dateiformate: JPG/PNG/PDF"
+
+#: lib/mindwendel_web/components/../templates/layout/root.html.heex:86
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:69
+#, elixir-autogen, elixir-format
+msgid "Legal Disclosure"
+msgstr ""
+
+#: lib/mindwendel_web/components/../templates/layout/root.html.heex:82
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:70
+#, elixir-autogen, elixir-format
+msgid "Privacy"
+msgstr ""
