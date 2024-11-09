@@ -162,6 +162,12 @@ feature_file_upload =
     String.trim(System.get_env("MW_FEATURE_IDEA_FILE_UPLOAD") || "")
   )
 
+feature_privacy_imprint_enabled =
+  Enum.member?(
+    ["true"],
+    String.trim(System.get_env("MW_FEATURE_LEGAL_PRIVACY_LINKS") || "")
+  )
+
 # enable/disable brainstorming teasers and configure delete brainstormings option:
 config :mindwendel, :options,
   feature_brainstorming_teasers:
@@ -171,6 +177,7 @@ config :mindwendel, :options,
     ),
   feature_file_upload: feature_file_upload,
   feature_brainstorming_removal_after_days: delete_brainstormings_after_days,
+  feature_privacy_imprint_enabled: feature_privacy_imprint_enabled,
   # use a strict csp everywhere except in development. we need to relax the setting a bit for webpack
   csp_relax: config_env() == :dev
 

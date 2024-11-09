@@ -41,6 +41,9 @@ defmodule MindwendelWeb.Router do
     get("/", StaticPageController, :home)
     get("/files/:id", FileController, :get_file)
 
+    get("/legal", StaticPageController, :legal)
+    get("/privacy", StaticPageController, :privacy)
+
     scope "/admin", Admin, as: :admin do
       delete("/brainstormings/:id", BrainstormingController, :delete)
       get("/brainstormings/:id/export", BrainstormingController, :export)
