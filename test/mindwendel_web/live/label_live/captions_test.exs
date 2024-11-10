@@ -1,10 +1,12 @@
 defmodule MindwendelWeb.LabelLive.CaptionsTest do
-  alias MindwendelWeb.LabelLive.CaptionsComponent
-  alias Mindwendel.Brainstormings
-  use MindwendelWeb.ConnCase
+  use MindwendelWeb.ConnCase, async: true
+
   import Phoenix.LiveViewTest
 
+  alias Mindwendel.Brainstormings
   alias Mindwendel.Factory
+
+  alias MindwendelWeb.LabelLive.CaptionsComponent
 
   setup do
     %{brainstorming: Factory.insert!(:brainstorming), user: Factory.insert!(:user)}

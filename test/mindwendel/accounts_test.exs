@@ -1,5 +1,5 @@
 defmodule Mindwendel.AccountsTest do
-  use Mindwendel.DataCase
+  use Mindwendel.DataCase, async: true
   alias Mindwendel.Factory
   alias Mindwendel.Accounts
   alias Mindwendel.Accounts.User
@@ -125,13 +125,16 @@ defmodule Mindwendel.AccountsTest do
       )
 
       # we want to make sure that the database is not handling this with a foreign key restraint, but rather that it's handled in the app:
-      {_result, log} =
-        with_log(fn ->
+      log =
+        capture_log(fn ->
           Accounts.delete_inactive_users()
         end)
 
       assert Repo.exists?(from u in User, where: u.id == ^old_user.id)
-      assert log == ""
+      # we don't expect actual logs but due to async running other tests may emit logs at
+      # the same time and so we want to make sure here that no delete logs around the user
+      # are emitted
+      refute log =~ ~r/delet.*#{old_user.id}/i
     end
   end
 end

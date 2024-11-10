@@ -1,5 +1,6 @@
 defmodule Mindwendel.Brainstormings.StorageServiceTest do
-  use Mindwendel.DataCase
+  use Mindwendel.DataCase, async: true
+
   alias Mindwendel.Services.StorageService
 
   describe "#store_file" do
