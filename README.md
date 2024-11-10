@@ -48,28 +48,8 @@ Brainstorm ...
 
 ## Getting Started
 
-mindwendel can be run just about anywhere. So checkout our [Installation Guides](./docs/installing_mindwendel.md) for detailed instructions for various deployments.
+mindwendel can be run just about anywhere. So checkout our [Installation Guides](./docs/installing_mindwendel.md) for detailed instructions for various deployments. The easiest way to deploy and run mindwendel is using our own `docker-compose-prod.yml` file. For instructions, see [Setup for Production](#setup-for-production).
 If you want to contribute, jump ahead to [Development](#development)!
-
-Here's the TLDR:
-
-- Run mindwendel via Docker and reference your postgres database
-
-  ```bash
-  docker run -d --name mindwendel \
-    -p 127.0.0.1:80:4000 \
-    -e DATABASE_HOST="..." \
-    -e DATABASE_PORT="5432" \
-    -e DATABASE_SSL="false" \
-    -e DATABASE_NAME="mindwendel_prod" \
-    -e DATABASE_USER="mindwendel_db_user" \
-    -e DATABASE_USER_PASSWORD="mindwendel_db_user_password" \
-    -e SECRET_KEY_BASE="generate_your_own_secret_key_base_and_save_it" \
-    -e URL_HOST="your_domain_to_mindwendel" \
-    ghcr.io/mindwendel/mindwendel
-  ```
-
-NOTE: mindwendel requires a postgres database. You can use [our docker-compose file](./docs/installing_mindwendel.md#running-on-docker-compose) to also install the postgres.
 
 ## Contributing
 
@@ -144,7 +124,7 @@ mix gettext.extract --merge
   docker compose exec app mix test
   ```
 
-### Production
+### Setup for Production
 
 - Generate self-signed ssl sertificate for the postgres server on the host machine; the generated files are mounted into the docker container
 
@@ -157,7 +137,7 @@ mix gettext.extract --merge
   test $(uname -s) = Linux && chown 70 ./ca/server.key
   ```
 
-- Duplicate and rename `.env.default`
+- Duplicate and rename `.env.prod.default`
 
   ```bash
   cp .env.prod.default .env.prod
@@ -178,6 +158,7 @@ mix gettext.extract --merge
 - The url has to match the env var `URL_HOST`; so http://localhost will not work when your `URL_HOST=0.0.0.0`
 - The mindwendel production configuration is setup to enforce ssl, see Mindwendel.Endpoint configuration in `config/prod.exs`
 - The mindwendel production configuration supports deployment behind a reverse porxy (load balancer) by parsing the proper protocol from the x-forwarded-\* header of incoming requests, see `config/prod.exs`
+- If you are having troubles during setup, please raise an issue.
 
 ### Build release and production docker image
 
@@ -199,14 +180,23 @@ We are using Elixir's built-in formatter.
   mix format
   ```
 
-## Environment Variables
+## Feature flags
+
+### Privacy and automatic data removal
+Mindwendel includes a job runner that deletes old brainstormings after a defined number of days. This can be controlled with the setting `MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS`, which can be set to for instance to `30`.
 
 ### File Storage
-File storage is available through an s3 compatible object storage backend. An encryption key needs to be generated before, e.g.:
+File storage is available through an s3 compatible object storage backend. An encryption key (`VAULT_ENCRYPTION_KEY_BASE64`) needs to be generated before, e.g.:
 
 ```
 iex
 32 |> :crypto.strong_rand_bytes() |> Base.encode64()
+```
+
+or
+
+```
+openssl rand -base64 32
 ```
 
 Then, object storage and the vault key need to be set:
@@ -226,9 +216,12 @@ There is an example given inside the `docker-compose.yml` with a docker compose 
 
 To deactivate file storage, use `MW_FEATURE_IDEA_FILE_UPLOAD` (defaults to `true`) and set it to `false`.
 
+### Brainstorming teasers
+If you want to display some teasers and help for your brainstorming, use `MW_FEATURE_BRAINSTORMING_TEASER` and set it to `true`.
+
 ### Localization
 
-Currently, there are two language files available, german ("de") and english ("en"). To set the default_locale, you can set `MW_DEFAULT_LOCALE`. The default is english.
+Currently, there are two language files available, german (`de`) and english (`en`). To set the default_locale, you can set `MW_DEFAULT_LOCALE`. The default is english.
 
 ## Testimonials
 
@@ -250,3 +243,7 @@ Logos and text provided with courtesy of kits.
 - https://github.com/gerardo-navarro
 - https://github.com/nwittstruck
 - Lightbulb stock image by LED Supermarket at Pexels: https://www.pexels.com/de-de/foto/die-gluhbirne-577514/
+
+## Image Licenses
+- Lightbulb, Pexels / CC0: https://www.pexels.com/license/, https://www.pexels.com/terms-of-service/
+- GitHub Logo: https://github.com/logos

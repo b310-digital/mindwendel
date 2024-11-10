@@ -10,17 +10,17 @@
 msgid ""
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:11
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:17
 #, elixir-autogen, elixir-format
 msgid "Brainstorm"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:20
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:26
 #, elixir-autogen, elixir-format
 msgid "How might we ..."
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:10
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:16
 #, elixir-autogen, elixir-format
 msgid "Ready?"
 msgstr ""
@@ -59,12 +59,12 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:9
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:15
 #, elixir-autogen, elixir-format
 msgid "Create a challenge."
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:26
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:32
 #, elixir-autogen, elixir-format
 msgid "Create!"
 msgstr ""
@@ -178,7 +178,7 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:44
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:50
 #, elixir-autogen
 msgid "Your latest brainstormings"
 msgstr ""
@@ -214,7 +214,7 @@ msgstr ""
 msgid "Warning: Please make sure you save the admin link at the top, before hiding the settings link!"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:31
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:37
 #, elixir-autogen, elixir-format
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr ""
@@ -314,7 +314,7 @@ msgstr ""
 msgid "Brainstorming will be deleted %{days}"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:56
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:62
 #, elixir-autogen, elixir-format
 msgid "Attention: Brainstormings will be deleted %{available_until} after last access!"
 msgstr ""
@@ -506,4 +506,16 @@ msgstr ""
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:16
 #, elixir-autogen, elixir-format
 msgid "Allowed files: JPG/GIF/PNG/PDF"
+msgstr ""
+
+#: lib/mindwendel_web/components/../templates/layout/root.html.heex:86
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:75
+#, elixir-autogen, elixir-format
+msgid "Legal Disclosure"
+msgstr ""
+
+#: lib/mindwendel_web/components/../templates/layout/root.html.heex:82
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:76
+#, elixir-autogen, elixir-format
+msgid "Privacy"
 msgstr ""
