@@ -29,6 +29,27 @@ defmodule Mindwendel.IdeasTest do
     }
   end
 
+  describe "increment_comment_count" do
+    test "increments comment count on an idea",
+         %{
+           idea: idea
+         } do
+      {:ok, idea} = Ideas.increment_comment_count(idea.id)
+      assert idea.comments_count == 1
+    end
+  end
+
+  describe "decrements_comment_count" do
+    test "increments comment count on an idea",
+         %{
+           idea: idea
+         } do
+      Ideas.update_idea(idea, %{comments_count: 1})
+      {:ok, idea} = Ideas.decrement_comment_count(idea.id)
+      assert idea.comments_count == 0
+    end
+  end
+
   describe "get_max_position_order" do
     test "returns 0 if no position is available",
          %{
