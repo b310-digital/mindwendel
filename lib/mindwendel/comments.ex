@@ -8,12 +8,12 @@ defmodule Mindwendel.Comments do
   require Logger
 
   @doc """
-  Gets a single attached_file
+  Gets a single comment
 
   ## Examples
 
       iex> get_comment!("0323906b-b496-4778-ae67-1dd779d3de3c")
-      %File{ ... }
+      %Comment{ ... }
 
   """
   def get_comment!(id) do
