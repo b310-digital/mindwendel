@@ -22,7 +22,6 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("delete_lane", %{"id" => id}, socket) do
     lane = Lanes.get_lane!(id)
 
@@ -36,14 +35,12 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("like", %{"id" => id}, socket) do
     Likes.add_like(id, socket.assigns.current_user.id)
 
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("unlike", %{"id" => id}, socket) do
     Likes.delete_like(id, socket.assigns.current_user.id)
 
@@ -131,7 +128,6 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
     end
   end
 
-  @impl true
   def handle_event("sort_by_likes", %{"id" => id, "lane-id" => lane_id}, socket) do
     brainstorming = Brainstormings.get_brainstorming!(id)
 

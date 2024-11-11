@@ -1,0 +1,63 @@
+<div>
+  <%= unless @idea.link do %>
+    <p><%= raw(@idea.body) %></p>
+  <% end %>
+
+  <%= if @idea.link do %>
+    <.link href={@idea.link.url}>
+      <%= raw(@idea.body) %>
+    </.link>
+    <hr />
+    <div class="row">
+      <div class="col-md-3">
+        <img src={@idea.link.img_preview_url} class="preview-url" />
+      </div>
+      <div class="col-md-9">
+        <p class="fw-bold"><%= @idea.link.title %></p>
+        <p><%= @idea.link.description %></p>
+      </div>
+    </div>
+  <% end %>
+
+  <%= if length(@idea.files) > 0 do %>
+    <%= for attachment <- @idea.files do %>
+      <i class="bi bi-file-earmark"></i>
+      <p class="text-muted">
+        <.link href={~p"/files/#{attachment.id}"} download={attachment.name}>
+          <%= attachment.name || gettext("No filename") %>
+        </.link>
+      </p>
+    <% end %>
+  <% end %>
+
+  <div class="mt-5 mb-2">
+    <p class="fw-bold"><%= gettext("Comments") %></p>
+    <%= for comment <- @idea.comments do %>
+      <.live_component
+        module={MindwendelWeb.CommentLive.ShowComponent}
+        id={comment.id}
+        comment={comment}
+        idea={@idea}
+        brainstorming={@brainstorming}
+        current_user={@current_user}
+        live_action={:show}
+      />
+    <% end %>
+    <%= if length(@idea.comments) == 0 do %>
+      <%= gettext("No comments available") %>
+    <% end %>
+  </div>
+
+  <div class="mt-5 mb-2">
+    <p class="fw-bold"><%= gettext("Add a new comment") %></p>
+
+    <.live_component
+      module={MindwendelWeb.CommentLive.FormComponent}
+      id={:new}
+      brainstorming={@brainstorming}
+      current_user={@current_user}
+      idea={@idea}
+      action={:new}
+    />
+  </div>
+</div>

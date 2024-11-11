@@ -77,6 +77,17 @@
                 </ul>
               </li>
 
+              <%= if Application.fetch_env!(:mindwendel, :options)[:feature_privacy_imprint_enabled] do %>
+                <li aria-current="page" class="nav-item">
+                  <.link href={~p"/privacy"} class="nav-link"><%= gettext("Privacy") %></.link>
+                </li>
+                <li aria-current="page" class="nav-item">
+                  <.link href={~p"/legal"} class="nav-link">
+                    <%= gettext("Legal Disclosure") %>
+                  </.link>
+                </li>
+              <% end %>
+
               <li class="nav-item"><hr class="dropdown-divider" /></li>
               <%= for brainstorming <- list_brainstormings_for(@current_user, 10) do %>
                 <li class="nav-item d-lg-none">
