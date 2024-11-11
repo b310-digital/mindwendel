@@ -8,7 +8,7 @@ defmodule Mindwendel.Brainstormings.Comment do
   schema "idea_comments" do
     belongs_to :idea, Idea
     belongs_to :user, User
-    field :comment_text, :string
+    field :body, :string
     field :username, :string, default: "Anonymous"
 
     timestamps()
@@ -17,7 +17,7 @@ defmodule Mindwendel.Brainstormings.Comment do
   @doc false
   def changeset(comment, attrs) do
     comment
-    |> cast(attrs, [:idea_id, :user_id, :comment_text, :username])
-    |> validate_required([:idea_id, :comment_text, :username])
+    |> cast(attrs, [:idea_id, :user_id, :body, :username])
+    |> validate_required([:idea_id, :body, :username])
   end
 end

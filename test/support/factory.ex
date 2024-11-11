@@ -6,6 +6,7 @@ defmodule Mindwendel.Factory do
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
+  alias Mindwendel.Brainstormings.Comment
   alias Mindwendel.Attachments.Link
   alias Mindwendel.Attachments.File
   alias Mindwendel.Accounts.User
@@ -62,6 +63,10 @@ defmodule Mindwendel.Factory do
 
   def build(:lane) do
     %Lane{}
+  end
+
+  def build(:comment) do
+    %Comment{}
   end
 
   def build(:brainstorming, :with_users) do

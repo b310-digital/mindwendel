@@ -14,9 +14,9 @@
       id={"comment-form-username-#{@comment.id || :new}"}
     />
     <.input
-      field={@form[:comment_text]}
+      field={@form[:body]}
       type="textarea"
-      id={"comment-form-comment-text-#{@comment.id || :new}"}
+      id={"comment-form-body-#{@comment.id || :new}"}
       label={gettext("Your comment")}
       phx-debounce={300}
     />
