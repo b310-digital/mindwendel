@@ -81,6 +81,8 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
           remove_tmp_attachments(tmp_attachments)
           {:noreply, assign(socket, form: to_form(changeset))}
       end
+    else
+      {:noreply, assign(socket, form: to_form(Ideas.change_idea(idea)))}
     end
   end
 
