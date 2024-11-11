@@ -88,7 +88,7 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
           {:noreply, assign(socket, form: to_form(changeset))}
       end
     else
-      {:noreply, socket}
+      {:noreply, assign(socket, form: to_form(Comments.change_comment(comment)))}
     end
   end
 
