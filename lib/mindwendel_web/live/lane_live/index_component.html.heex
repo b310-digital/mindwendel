@@ -8,7 +8,7 @@
           <.link
             class="btn btn-primary btn-sm d-inline-flex align-items-center"
             title={gettext("Add idea")}
-            patch={~p"/brainstormings/#{@brainstorming.id}/show/lanes/#{lane.id}/new_idea"}
+            patch={~p"/brainstormings/#{@brainstorming.id}/lanes/#{lane.id}/new_idea"}
           >
             <i class="bi bi-plus-lg me-1"></i> <%= gettext("Add idea") %>
           </.link>
@@ -122,6 +122,13 @@
                     <i class="bi bi-pencil text-secondary"></i>
                   </.link>
                 <% end %>
+                <.link
+                  patch={~p"/brainstormings/#{@brainstorming.id}/ideas/#{idea.id}"}
+                  class="float-end ms-3 mb-3"
+                  title={gettext("Show idea")}
+                >
+                  <i class="bi bi-eye text-secondary"></i>
+                </.link>
 
                 <%= for idea_label <- Enum.sort_by(idea.idea_labels, &(&1.position_order)) do %>
                   <span
@@ -159,7 +166,7 @@
                   <%= for attachment <- idea.files do %>
                     <i class="bi bi-file-earmark"></i>
                     <p class="text-muted">
-                      <.link href={~p"/files/#{attachment.id}"}>
+                      <.link href={~p"/files/#{attachment.id}"} download={attachment.name}>
                         <%= attachment.name || gettext("No filename") %>
                       </.link>
                     </p>
@@ -167,7 +174,7 @@
                 <% end %>
               </div>
 
-              <div class="card-footer-mindwendel-idea">
+              <div class="card-footer-mindwendel">
                 <small class="text-muted">
                   <%= gettext("By") %> <%= Gettext.gettext(MindwendelWeb.Gettext, idea.username) %> <%= Timex.format!(
                     idea.inserted_at,
@@ -250,7 +257,7 @@
               <p><%= gettext("No ideas brainstormed") %></p>
               <.link
                 class="btn btn-outline-primary d-inline-flex align-items-center"
-                patch={~p"/brainstormings/#{@brainstorming.id}/show/lanes/#{lane.id}/new_idea"}
+                patch={~p"/brainstormings/#{@brainstorming.id}/lanes/#{lane.id}/new_idea"}
               >
                 <i class="bi bi-plus-lg me-1"></i> <%= gettext("Add idea") %>
               </.link>
@@ -266,7 +273,7 @@
       <p><%= gettext("No lanes available") %></p>
       <.link
         class="btn btn-outline-primary d-inline-flex align-items-center"
-        patch={~p"/brainstormings/#{@brainstorming.id}/show/new_lane"}
+        patch={~p"/brainstormings/#{@brainstorming.id}/new_lane"}
       >
         <i class="bi bi-file-plus me-1"></i> <%= gettext("New lane") %>
       </.link>

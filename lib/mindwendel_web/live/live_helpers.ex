@@ -12,12 +12,13 @@ defmodule MindwendelWeb.LiveHelpers do
     Enum.member?(brainstorming.moderating_users |> Enum.map(& &1.id), current_user.id)
   end
 
-  def has_ownership(idea, current_user) do
-    idea.user_id == current_user.id
+  def has_ownership(record, current_user) do
+    %{user_id: user_id} = record
+    user_id == current_user.id
   end
 
-  def has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
-    has_ownership(idea, current_user) or has_moderating_permission(brainstorming, current_user)
+  def has_moderating_or_ownership_permission(brainstorming, record, current_user) do
+    has_ownership(record, current_user) or has_moderating_permission(brainstorming, current_user)
   end
 
   def uuid do

@@ -1,5 +1,6 @@
 defmodule MindwendelWeb.FileControllerTest do
-  use MindwendelWeb.ConnCase
+  use MindwendelWeb.ConnCase, async: true
+
   alias Mindwendel.Services.Vault
   alias Mindwendel.Factory
 
