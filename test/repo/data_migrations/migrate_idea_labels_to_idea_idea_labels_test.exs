@@ -1,7 +1,7 @@
 defmodule Mindwendel.Repo.DataMigrations.MigrateIdeaLabelsToIdeaIdeaLabelsTest do
   Code.require_file("./priv/repo/data_migrations/migrate_idea_labels_to_idea_idea_labels.exs")
 
-  use Mindwendel.DataCase
+  use Mindwendel.DataCase, async: true
 
   alias Mindwendel.Factory
   alias Mindwendel.Repo

@@ -102,16 +102,7 @@ defmodule Mindwendel.Lanes do
 
     lane_query
     |> Repo.all()
-    |> Repo.preload(
-      ideas:
-        ideas_advanced_query
-        |> preload([
-          :link,
-          :likes,
-          :idea_labels,
-          :files
-        ])
-    )
+    |> Repo.preload(ideas: {ideas_advanced_query, [:link, :likes, :idea_labels, :files]})
   end
 
   defp build_ideas_query_with_filter(%{filter_labels_ids: filter_labels_ids}) do
@@ -128,7 +119,7 @@ defmodule Mindwendel.Lanes do
   end
 
   defp build_ideas_query_with_filter(%{} = _filters) do
-    Idea
+    from(idea in Idea)
   end
 
   @doc """

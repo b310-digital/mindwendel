@@ -6,7 +6,6 @@ import Config
 require Logger
 
 if config_env() == :prod do
-  # configure logging:
   config :logger, :default_handler,
     formatter: {
       LoggerJSON.Formatters.Basic,
@@ -49,13 +48,28 @@ if config_env() != :test do
   # disable on prod, because logger_json will take care of this. set to :debug for test and dev
   ecto_log_level = if config_env() == :prod, do: false, else: :debug
 
-  ssl_config =
-    if System.get_env("DATABASE_SSL", "true") == "true",
-      do: [cacerts: :public_key.cacerts_get()],
-      else: nil
+  # default ssl_opts:
+  ssl_opts = [
+    verify: :verify_peer,
+    depth: 3,
+    versions: [:"tlsv1.3"],
+    server_name_indication: String.to_charlist(System.get_env("DATABASE_HOST")),
+    customize_hostname_check: [
+      match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+    ]
+  ]
+
+  # either use system certificates or specify files:
+  ssl_opts =
+    if System.get_env("DATABASE_CERT_FILE") do
+      Logger.info("Loading DATABASE_CERT_FILE")
+      ssl_opts ++ [cacertfile: System.get_env("DATABASE_CERT_FILE")]
+    else
+      Logger.info("Loading System Certificates")
+      ssl_opts ++ [cacerts: :public_key.cacerts_get()]
+    end
 
   config :mindwendel, Mindwendel.Repo,
-    start_apps_before_migration: [:logger_json],
     database: System.get_env("DATABASE_NAME"),
     hostname: System.get_env("DATABASE_HOST"),
     password: System.get_env("DATABASE_USER_PASSWORD"),
@@ -65,7 +79,8 @@ if config_env() != :test do
     url: System.get_env("DATABASE_URL"),
     timeout: String.to_integer(System.get_env("DATABASE_TIMEOUT", "15000")),
     log: ecto_log_level,
-    ssl: ssl_config
+    ssl: System.get_env("DATABASE_SSL", "true") == "true",
+    ssl_opts: ssl_opts
 
   secret_key_base =
     System.get_env("SECRET_KEY_BASE") ||
@@ -156,6 +171,18 @@ delete_brainstormings_after_days =
     30
   end
 
+feature_file_upload =
+  Enum.member?(
+    ["", "true"],
+    String.trim(System.get_env("MW_FEATURE_IDEA_FILE_UPLOAD") || "")
+  )
+
+feature_privacy_imprint_enabled =
+  Enum.member?(
+    ["true"],
+    String.trim(System.get_env("MW_FEATURE_LEGAL_PRIVACY_LINKS") || "")
+  )
+
 # enable/disable brainstorming teasers and configure delete brainstormings option:
 config :mindwendel, :options,
   feature_brainstorming_teasers:
@@ -163,12 +190,9 @@ config :mindwendel, :options,
       ["", "true"],
       String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
     ),
-  feature_file_upload:
-    Enum.member?(
-      ["", "true"],
-      String.trim(System.get_env("MW_FEATURE_IDEA_FILE_UPLOAD") || "")
-    ),
+  feature_file_upload: feature_file_upload,
   feature_brainstorming_removal_after_days: delete_brainstormings_after_days,
+  feature_privacy_imprint_enabled: feature_privacy_imprint_enabled,
   # use a strict csp everywhere except in development. we need to relax the setting a bit for webpack
   csp_relax: config_env() == :dev
 
@@ -188,17 +212,19 @@ end
 config :mindwendel, max_upload_length: System.get_env("MW_FILE_UPLOAD_MAX_FILE_SIZE", "2666666")
 
 # configure cloak:
-config :mindwendel, Mindwendel.Services.Vault,
-  ciphers: [
-    default:
-      {Cloak.Ciphers.AES.GCM,
-       tag: "AES.GCM.V1",
-       key: Base.decode64!(System.fetch_env!("VAULT_ENCRYPTION_KEY_BASE64")),
-       iv_length: 12}
-  ]
+if feature_file_upload do
+  config :mindwendel, Mindwendel.Services.Vault,
+    ciphers: [
+      default:
+        {Cloak.Ciphers.AES.GCM,
+         tag: "AES.GCM.V1",
+         key: Base.decode64!(System.fetch_env!("VAULT_ENCRYPTION_KEY_BASE64")),
+         iv_length: 12}
+    ]
+end
 
 # check all object storage system envs at once:
-if config_env() == :prod || config_env() == :dev do
+if feature_file_upload and (config_env() == :prod || config_env() == :dev) do
   config(:ex_aws, :s3,
     scheme: System.fetch_env!("OBJECT_STORAGE_SCHEME"),
     host: System.fetch_env!("OBJECT_STORAGE_HOST"),

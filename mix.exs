@@ -4,8 +4,8 @@ defmodule Mindwendel.MixProject do
   def project do
     [
       app: :mindwendel,
-      version: "0.2.3",
-      elixir: "~> 1.11",
+      version: "0.2.8",
+      elixir: "~> 1.15.8",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -53,7 +53,7 @@ defmodule Mindwendel.MixProject do
   defp deps do
     [
       {:phoenix, "1.7.14"},
-      {:phoenix_ecto, "4.6.2"},
+      {:phoenix_ecto, "4.6.3"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "1.5.3", only: :dev},
       {:phoenix_live_view, "~> 1.0.0-rc.6"},
@@ -62,16 +62,16 @@ defmodule Mindwendel.MixProject do
       {:bypass, "2.1.0", only: :test},
       {:csv, "3.2.1"},
       {:ecto_sql, "3.12.1"},
-      {:floki, "0.36.2"},
+      {:floki, "0.36.3"},
       {:gettext, "0.26.1"},
       {:httpoison, "2.2.1"},
       {:jason, "1.4.4"},
       {:oban, "2.18.3"},
       {:plug_cowboy, "2.7.2"},
       {:cowboy, "2.12.0"},
-      {:postgrex, "0.19.1"},
+      {:postgrex, "0.19.2"},
       {:sobelow, "0.13.0", only: [:dev, :test], runtime: false},
-      {:credo, "1.7.8", only: [:dev, :test], runtime: false},
+      {:credo, "1.7.9", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18"},
       {:telemetry_metrics, "1.0.0"},
       {:telemetry_poller, "1.1.0"},
@@ -81,7 +81,7 @@ defmodule Mindwendel.MixProject do
       {:tzdata, "1.1.2"},
       {:waffle, "~> 1.1"},
       {:ex_aws, "2.5.5"},
-      {:ex_aws_s3, "2.5.4"},
+      {:ex_aws_s3, "2.5.5"},
       {:cloak, "1.1.4"}
     ]
   end
