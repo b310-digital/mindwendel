@@ -516,7 +516,7 @@ msgstr "Zu viele Dateien ausgewählt"
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:16
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Allowed files: JPG/GIF/PNG/PDF"
-msgstr "Erlaubte Dateiformate: JPG/PNG/PDF"
+msgstr "Erlaubte Dateiformate: JPG/GIF/PNG/PDF"
 
 #: lib/mindwendel_web/live/idea_live/show_component.html.heex:52
 #, elixir-autogen, elixir-format
@@ -526,7 +526,7 @@ msgstr "Kommentar hinzufügen"
 #: lib/mindwendel_web/live/comment_live/form_component.ex:113
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Comment created successfully"
-msgstr "Spalte erfolgreich erstellt"
+msgstr "Kommentar erfolgreich erstellt"
 
 #: lib/mindwendel_web/live/comment_live/form_component.ex:85
 #, elixir-autogen, elixir-format
@@ -546,7 +546,7 @@ msgstr "Löschen"
 #: lib/mindwendel_web/live/idea_live/show_component.html.heex:47
 #, elixir-autogen, elixir-format, fuzzy
 msgid "No comments available"
-msgstr "Keine Spalten vorhanden"
+msgstr "Keine Kommentare vorhanden"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:97
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:128
