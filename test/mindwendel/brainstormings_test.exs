@@ -10,6 +10,7 @@ defmodule Mindwendel.BrainstormingsTest do
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Like
+  alias Mindwendel.Brainstormings.Comment
   alias Mindwendel.Attachments
   alias Mindwendel.Accounts.User
 
@@ -194,6 +195,24 @@ defmodule Mindwendel.BrainstormingsTest do
       Brainstormings.delete_old_brainstormings()
 
       refute Repo.exists?(from(l in Attachments.Link, where: l.id == ^old_link.id))
+    end
+
+    test "removes the old brainstormings ideas comments" do
+      old_brainstorming =
+        Factory.insert!(:brainstorming,
+          last_accessed_at: DateTime.from_naive!(~N[2021-01-01 10:00:00], "Etc/UTC")
+        )
+
+      old_idea =
+        Factory.insert!(:idea,
+          brainstorming: old_brainstorming,
+          inserted_at: ~N[2021-01-01 15:04:30]
+        )
+
+      old_comment = Factory.insert!(:comment, idea: old_idea)
+      Brainstormings.delete_old_brainstormings()
+
+      refute Repo.exists?(from(c in Comment, where: c.id == ^old_comment.id))
     end
 
     test "removes file attachments" do

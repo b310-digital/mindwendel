@@ -67,6 +67,26 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {:noreply, assign(socket, :lanes, lanes)}
   end
 
+  def handle_info({:lane_updated, lane}, socket) do
+    new_lanes =
+      Enum.map(socket.assigns.lanes, fn existing_lane ->
+        if lane.id == existing_lane.id, do: lane, else: existing_lane
+      end)
+
+    {:noreply, assign(socket, :lanes, new_lanes)}
+  end
+
+  # idea updated - only relevant if the show modal of the idea is opened
+  def handle_info({:idea_updated, idea}, socket) do
+    if socket.assigns.live_action == :show_idea and socket.assigns.idea.id == idea.id do
+      # update the idea modal with new content
+      send_update(MindwendelWeb.IdeaLive.ShowComponent, id: :show, idea: idea)
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
+  end
+
   def handle_info({:brainstorming_filter_updated, brainstorming, lanes}, socket) do
     {:noreply,
      push_patch(
@@ -96,6 +116,15 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   defp apply_action(
          socket,
          :edit_idea,
+         %{"brainstorming_id" => _brainstorming_id, "idea_id" => idea_id}
+       ) do
+    socket
+    |> assign(:idea, Ideas.get_idea!(idea_id))
+  end
+
+  defp apply_action(
+         socket,
+         :show_idea,
          %{"brainstorming_id" => _brainstorming_id, "idea_id" => idea_id}
        ) do
     socket
