@@ -391,7 +391,7 @@ defmodule Mindwendel.Ideas do
     idea = Repo.get!(Idea, idea_id)
 
     new_comments_count =
-      if(idea.comments_count - 1 >= 0) do
+      if idea.comments_count - 1 >= 0 do
         idea.comments_count - 1
       else
         0

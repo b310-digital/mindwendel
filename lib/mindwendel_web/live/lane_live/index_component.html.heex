@@ -230,7 +230,7 @@
                 <div class="float-end ms-2">
                   <span>
                     <%= idea.comments_count %>
-                    <i class="bi-person-lines-fill"></i>
+                    <i class="bi-chat"></i>
                   </span>
                   <span class="me-1"><%= length(idea.likes) %></span>
                   <%= unless Mindwendel.Likes.exists_like_for_idea?(idea.id, @current_user.id) do %>
