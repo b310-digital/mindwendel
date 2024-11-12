@@ -389,7 +389,15 @@ defmodule Mindwendel.Ideas do
   """
   def decrement_comment_count(idea_id) do
     idea = Repo.get!(Idea, idea_id)
-    changeset = Idea.changeset(idea, %{comments_count: idea.comments_count - 1})
+
+    new_comments_count =
+      if(idea.comments_count - 1 >= 0) do
+        idea.comments_count - 1
+      else
+        0
+      end
+
+    changeset = Idea.changeset(idea, %{comments_count: new_comments_count})
     Repo.update(changeset)
   end
 

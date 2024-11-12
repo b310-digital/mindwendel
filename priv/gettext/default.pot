@@ -112,7 +112,7 @@ msgstr ""
 msgid "New idea"
 msgstr ""
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:257
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:263
 #, elixir-autogen, elixir-format
 msgid "No ideas brainstormed"
 msgstr ""
@@ -201,7 +201,7 @@ msgstr ""
 
 #: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:3
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:40
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:179
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:180
 #, elixir-autogen, elixir-format
 msgid "By"
 msgstr ""
@@ -420,7 +420,7 @@ msgstr ""
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:26
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:28
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:114
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:278
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:284
 #, elixir-autogen, elixir-format
 msgid "New lane"
 msgstr ""
@@ -454,7 +454,7 @@ msgstr ""
 
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:10
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:13
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:262
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:268
 #, elixir-autogen, elixir-format
 msgid "Add idea"
 msgstr ""
@@ -464,7 +464,7 @@ msgstr ""
 msgid "Default lane"
 msgstr ""
 
-#: lib/mindwendel_web/live/lane_live/index_component.html.heex:273
+#: lib/mindwendel_web/live/lane_live/index_component.html.heex:279
 #, elixir-autogen, elixir-format
 msgid "No lanes available"
 msgstr ""
