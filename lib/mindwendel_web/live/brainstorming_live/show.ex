@@ -76,15 +76,15 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {:noreply, assign(socket, :lanes, new_lanes)}
   end
 
-  # idea updated - only relevant if the show modal of the idea is opened
   def handle_info({:idea_updated, idea}, socket) do
+    # first, update the specific card of the idea
+    send_update(MindwendelWeb.IdeaLive.CardComponent, id: idea.id, idea: idea)
+    # if the idea show modal is opened, also update the idea within the modal
     if socket.assigns.live_action == :show_idea and socket.assigns.idea.id == idea.id do
-      # update the idea modal with new content
       send_update(MindwendelWeb.IdeaLive.ShowComponent, id: :show, idea: idea)
-      {:noreply, socket}
-    else
-      {:noreply, socket}
     end
+
+    {:noreply, socket}
   end
 
   def handle_info({:brainstorming_filter_updated, brainstorming, lanes}, socket) do
