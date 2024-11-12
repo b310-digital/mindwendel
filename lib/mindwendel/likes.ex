@@ -6,28 +6,14 @@ defmodule Mindwendel.Likes do
   import Ecto.Query, warn: false
   alias Mindwendel.Repo
   alias Mindwendel.Ideas
-  alias Mindwendel.Lanes
+  alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Like
 
   require Logger
 
   @doc """
-  Returns a Boolean if a like for the given idea and user exists.
-
-  TODO something is strange here as this was not working for the card component??
-
-  ## Examples
-
-      iex> exists_like_for_idea?(1, 2)
-      true
-
-  """
-  def exists_like_for_idea?(idea_id, user_id) do
-    Repo.exists?(from like in Like, where: like.user_id == ^user_id and like.idea_id == ^idea_id)
-  end
-
-  @doc """
-  Returns a Boolean if a user id like exists in the given likes
+  Returns a boolean if like with a given user id exists in the given likes.
+  This method is primarily used with preloaded data from an idea, therefore it is not needed to reload data from the repo.
 
   ## Examples
 
@@ -36,7 +22,7 @@ defmodule Mindwendel.Likes do
 
   """
   def exists_user_in_likes?(likes, user_id) do
-    Enum.map(likes, fn like -> like.user_id end) |> Enum.member?(user_id)
+    likes |> Enum.map(fn like -> like.user_id end) |> Enum.member?(user_id)
   end
 
   @doc """
@@ -56,7 +42,7 @@ defmodule Mindwendel.Likes do
 
     case status do
       :ok ->
-        {:ok, Lanes.broadcast_lanes_update(Ideas.get_idea!(idea_id).brainstorming_id)}
+        {:ok, Brainstormings.broadcast({:ok, Ideas.get_idea!(idea_id)}, :idea_updated)}
 
       :error ->
         {:error, result}
@@ -78,7 +64,7 @@ defmodule Mindwendel.Likes do
       from like in Like, where: like.user_id == ^user_id and like.idea_id == ^idea_id
     )
 
-    Lanes.broadcast_lanes_update(Ideas.get_idea!(idea_id).brainstorming_id)
+    Brainstormings.broadcast({:ok, Ideas.get_idea!(idea_id)}, :idea_updated)
   end
 
   @doc """
