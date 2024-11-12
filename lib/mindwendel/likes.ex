@@ -14,6 +14,8 @@ defmodule Mindwendel.Likes do
   @doc """
   Returns a Boolean if a like for the given idea and user exists.
 
+  TODO something is strange here as this was not working for the card component??
+
   ## Examples
 
       iex> exists_like_for_idea?(1, 2)
@@ -22,6 +24,19 @@ defmodule Mindwendel.Likes do
   """
   def exists_like_for_idea?(idea_id, user_id) do
     Repo.exists?(from like in Like, where: like.user_id == ^user_id and like.idea_id == ^idea_id)
+  end
+
+  @doc """
+  Returns a Boolean if a user id like exists in the given likes
+
+  ## Examples
+
+      iex> exists_user_in_likes?([...], 2)
+      true
+
+  """
+  def exists_user_in_likes?(likes, user_id) do
+    Enum.map(likes, fn like -> like.user_id end) |> Enum.member?(user_id)
   end
 
   @doc """

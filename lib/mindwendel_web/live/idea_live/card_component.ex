@@ -1,6 +1,7 @@
 defmodule MindwendelWeb.IdeaLive.CardComponent do
   use MindwendelWeb, :live_component
   alias Mindwendel.Ideas
+  alias Mindwendel.IdeaLabels
   alias Mindwendel.Likes
 
   @impl true
@@ -60,12 +61,7 @@ defmodule MindwendelWeb.IdeaLive.CardComponent do
     idea = Ideas.get_idea!(idea_id)
     idea_label = IdeaLabels.get_idea_label(idea_label_id)
 
-    case(IdeaLabels.remove_idea_label_from_idea(idea, idea_label)) do
-      {:ok, _idea} ->
-        {:noreply, socket}
-
-      {:error, _changeset} ->
-        {:noreply, socket}
-    end
+    IdeaLabels.remove_idea_label_from_idea(idea, idea_label)
+    {:noreply, socket}
   end
 end

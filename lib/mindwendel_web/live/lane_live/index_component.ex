@@ -3,8 +3,6 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
   use MindwendelWeb, :live_component
 
   alias Mindwendel.Ideas
-  alias Mindwendel.IdeaLabels
-  alias Mindwendel.Likes
   alias Mindwendel.Lanes
   alias Mindwendel.Brainstormings
 
