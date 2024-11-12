@@ -175,36 +175,16 @@
               </div>
 
               <div class="card-footer-mindwendel">
-                <small class="text-muted">
-                  <%= gettext("By") %> <%= Gettext.gettext(MindwendelWeb.Gettext, idea.username) %> <%= Timex.format!(
-                    idea.inserted_at,
-                    "{relative}",
-                    :relative
-                  ) %>
-                </small>
-                <div class="float-end">
-                  <span class="me-1"><%= length(idea.likes) %></span>
-                  <%= unless Mindwendel.Likes.exists_like_for_idea?(idea.id, @current_user.id) do %>
-                    <.link
-                      phx-click="like"
-                      phx-target={@myself}
-                      phx-value-id={idea.id}
-                      title="Like"
-                    >
-                      <i class="bi-arrow-up-circle"></i>
-                    </.link>
-                  <% else %>
-                    <.link
-                      phx-click="unlike"
-                      phx-target={@myself}
-                      phx-value-id={idea.id}
-                      title="Unlike"
-                    >
-                      <i class="bi-arrow-up-circle-fill"></i>
-                    </.link>
-                  <% end %>
+                <div class="d-block">
+                  <small class="text-muted">
+                    <%= gettext("By") %> <%= Gettext.gettext(MindwendelWeb.Gettext, idea.username) %> <%= Timex.format!(
+                      idea.inserted_at,
+                      "{relative}",
+                      :relative
+                    ) %>
+                  </small>
                 </div>
-                <div class="IndexComponent__IdeaLabelSection">
+                <div class="d-inline IndexComponent__IdeaLabelSection">
                   <%= for brainstorming_idea_label <- @brainstorming.labels do %>
                     <%= unless Enum.find(idea.idea_labels, fn idea_label -> idea_label.id == brainstorming_idea_label.id end) do %>
                       <.link
@@ -245,6 +225,32 @@
                         </i>
                       </.link>
                     <% end %>
+                  <% end %>
+                </div>
+                <div class="float-end ms-2">
+                  <span>
+                    <%= idea.comments_count %>
+                    <i class="bi-chat"></i>
+                  </span>
+                  <span class="me-1"><%= length(idea.likes) %></span>
+                  <%= unless Mindwendel.Likes.exists_like_for_idea?(idea.id, @current_user.id) do %>
+                    <.link
+                      phx-click="like"
+                      phx-target={@myself}
+                      phx-value-id={idea.id}
+                      title="Like"
+                    >
+                      <i class="bi-arrow-up-circle"></i>
+                    </.link>
+                  <% else %>
+                    <.link
+                      phx-click="unlike"
+                      phx-target={@myself}
+                      phx-value-id={idea.id}
+                      title="Unlike"
+                    >
+                      <i class="bi-arrow-up-circle-fill"></i>
+                    </.link>
                   <% end %>
                 </div>
               </div>
