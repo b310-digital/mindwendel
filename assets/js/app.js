@@ -123,6 +123,10 @@ Hooks.SetIdeaLabelColor = {
     const color = this.el.getAttribute("data-color");
     this.el.style.color = color;
   },
+  updated() {
+    const color = this.el.getAttribute("data-color");
+    this.el.style.color = color;
+  }
 };
 
 Hooks.SetIdeaLabelBackgroundColor = {
