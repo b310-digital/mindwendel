@@ -46,13 +46,15 @@ defmodule Mindwendel.IdeaLabels do
   end
 
   def remove_idea_label_from_idea(%Idea{} = idea, %IdeaLabel{} = idea_label) do
-    from(idea_idea_label in IdeaIdeaLabel,
-      where:
-        idea_idea_label.idea_id == ^idea.id and
-          idea_idea_label.idea_label_id == ^idea_label.id
-    )
-    |> Repo.delete_all()
+    result =
+      from(idea_idea_label in IdeaIdeaLabel,
+        where:
+          idea_idea_label.idea_id == ^idea.id and
+            idea_idea_label.idea_label_id == ^idea_label.id
+      )
+      |> Repo.delete_all()
 
     Lanes.broadcast_lanes_update(idea.brainstorming_id)
+    result
   end
 end
