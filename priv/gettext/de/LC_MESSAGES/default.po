@@ -386,7 +386,7 @@ msgstr "Neues Label"
 #: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:101
 #, elixir-autogen, elixir-format
 msgid "Choose the label color"
-msgstr ""
+msgstr "Labelfarbe wählen"
 
 #: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:90
 #, elixir-autogen, elixir-format, fuzzy
@@ -548,7 +548,6 @@ msgstr "Löschen"
 msgid "No comments available"
 msgstr "Keine Kommentare vorhanden"
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:97
 #: lib/mindwendel_web/live/idea_live/card_component.html.heex:33
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Show idea"
@@ -570,3 +569,8 @@ msgstr "Impressum"
 #, elixir-autogen, elixir-format
 msgid "Privacy"
 msgstr "Datenschutzerklärung"
+
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:97
+#, elixir-autogen, elixir-format
+msgid "Idea details"
+msgstr "Detailansicht"
