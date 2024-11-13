@@ -140,11 +140,11 @@
       <span class="me-1"><%= length(@idea.likes) %></span>
       <%= if Mindwendel.Likes.exists_user_in_likes?(@idea.likes, @current_user.id) do %>
         <.link phx-click="unlike" phx-target={@myself} phx-value-id={@idea.id} title="Unlike">
-          <i class="bi-arrow-up-circle-fill"></i>
+          <i class="bi-star-fill"></i>
         </.link>
       <% else %>
         <.link phx-click="like" phx-target={@myself} phx-value-id={@idea.id} title="Like">
-          <i class="bi-arrow-up-circle"></i>
+          <i class="bi-star"></i>
         </.link>
       <% end %>
     </div>
