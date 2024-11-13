@@ -16,7 +16,8 @@ msgstr ""
 msgid "Brainstorm"
 msgstr "Los geht's!"
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:20
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:26
+#: lib/mindwendel_web/controllers/static_page_html/kits_home.html.heex:120
 #, elixir-autogen, elixir-format
 msgid "How might we ..."
 msgstr "Gib deine Frage ein!"
@@ -68,7 +69,8 @@ msgstr "Kopieren"
 msgid "Create a challenge."
 msgstr "Erstelle ein Brainstorming."
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:26
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:32
+#: lib/mindwendel_web/controllers/static_page_html/kits_home.html.heex:126
 #, elixir-autogen, elixir-format
 msgid "Create!"
 msgstr "Erstellen!"
@@ -184,7 +186,8 @@ msgstr "Editiere Brainstorming"
 msgid "Export"
 msgstr "Export"
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:44
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:50
+#: lib/mindwendel_web/controllers/static_page_html/kits_home.html.heex:138
 #, elixir-autogen
 msgid "Your latest brainstormings"
 msgstr "Letzte Brainstormings"

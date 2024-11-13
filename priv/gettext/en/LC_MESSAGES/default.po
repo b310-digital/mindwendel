@@ -16,7 +16,8 @@ msgstr ""
 msgid "Brainstorm"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:20
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:26
+#: lib/mindwendel_web/controllers/static_page_html/kits_home.html.heex:120
 #, elixir-autogen, elixir-format
 msgid "How might we ..."
 msgstr ""
@@ -68,7 +69,8 @@ msgstr ""
 msgid "Create a challenge."
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:26
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:32
+#: lib/mindwendel_web/controllers/static_page_html/kits_home.html.heex:126
 #, elixir-autogen, elixir-format
 msgid "Create!"
 msgstr ""
@@ -184,7 +186,8 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:44
+#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:50
+#: lib/mindwendel_web/controllers/static_page_html/kits_home.html.heex:138
 #, elixir-autogen
 msgid "Your latest brainstormings"
 msgstr ""
