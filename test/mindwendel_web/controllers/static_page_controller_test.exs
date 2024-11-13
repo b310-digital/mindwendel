@@ -1,5 +1,5 @@
 defmodule MindwendelWeb.StaticPageControllerTest do
-  use MindwendelWeb.ConnCase
+  use MindwendelWeb.ConnCase, async: true
   alias Mindwendel.Factory
   alias Mindwendel.Repo
 

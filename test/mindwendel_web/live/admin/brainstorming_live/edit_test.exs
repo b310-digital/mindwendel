@@ -1,5 +1,5 @@
 defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
-  use MindwendelWeb.ConnCase
+  use MindwendelWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
 
   alias Mindwendel.Factory

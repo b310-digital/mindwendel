@@ -1,5 +1,5 @@
 defmodule MindwendelWeb.BrainstormingChannelTest do
-  use MindwendelWeb.ChannelCase
+  use MindwendelWeb.ChannelCase, async: true
 
   alias Mindwendel.Factory
   alias Mindwendel.Brainstormings

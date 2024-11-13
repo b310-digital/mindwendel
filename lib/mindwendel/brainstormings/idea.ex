@@ -7,6 +7,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Brainstormings.Comment
   alias Mindwendel.Ideas
   alias Mindwendel.Attachments
   alias Mindwendel.Attachments.Link
@@ -20,9 +21,11 @@ defmodule Mindwendel.Brainstormings.Idea do
     field :body, :string
     field :position_order, :integer
     field :username, :string, default: "Anonymous"
+    field :comments_count, :integer
     has_one :link, Link
     belongs_to :user, User
     has_many :likes, Like
+    has_many :comments, Comment, preload_order: [desc: :inserted_at]
     has_many :files, File
     belongs_to :brainstorming, Brainstorming
     belongs_to :lane, Lane
@@ -40,7 +43,8 @@ defmodule Mindwendel.Brainstormings.Idea do
       :brainstorming_id,
       :lane_id,
       :user_id,
-      :position_order
+      :position_order,
+      :comments_count
     ])
     |> validate_required([:username, :body, :brainstorming_id])
     |> maybe_put_idea_labels(attrs)
