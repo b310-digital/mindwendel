@@ -89,13 +89,14 @@ defmodule Mindwendel.AccountsTest do
       Factory.insert!(:idea, brainstorming: old_brainstorming, user: old_user)
 
       # we want to make sure that the database is not handling this with a foreign key restraint, but rather that it's handled in the app:
-      {_result, log} =
-        with_log(fn ->
-          Accounts.delete_inactive_users()
-        end)
+      log = capture_log(fn -> Accounts.delete_inactive_users() end)
 
       assert Repo.exists?(from u in User, where: u.id == ^old_user.id)
-      assert log == ""
+
+      # The code only logs normal messages on `info` level which tests don't print (only warning and above)
+      # since we're run async we can't assert an empty log (picks up log messages from other tests as well),
+      # but we can assert we're not hitting the messages we know we'll throw.
+      refute log =~ ~r/error.*delete.*inactive.*user.*#{old_user.id}/i
     end
 
     test "does not delete the user a user is a creating user of a brainstorming", %{
@@ -107,13 +108,10 @@ defmodule Mindwendel.AccountsTest do
       )
 
       # we want to make sure that the database is not handling this with a foreign key restraint, but rather that it's handled in the app:
-      {_result, log} =
-        with_log(fn ->
-          Accounts.delete_inactive_users()
-        end)
+      log = capture_log(fn -> Accounts.delete_inactive_users() end)
 
       assert Repo.exists?(from u in User, where: u.id == ^old_user.id)
-      assert log == ""
+      refute log =~ ~r/error.*delete.*inactive.*user.*#{old_user.id}/i
     end
 
     test "does not delete the user a user is a moderating user of a brainstorming", %{
@@ -125,16 +123,13 @@ defmodule Mindwendel.AccountsTest do
       )
 
       # we want to make sure that the database is not handling this with a foreign key restraint, but rather that it's handled in the app:
-      log =
-        capture_log(fn ->
-          Accounts.delete_inactive_users()
-        end)
+      log = capture_log(fn -> Accounts.delete_inactive_users() end)
 
       assert Repo.exists?(from u in User, where: u.id == ^old_user.id)
       # we don't expect actual logs but due to async running other tests may emit logs at
       # the same time and so we want to make sure here that no delete logs around the user
       # are emitted
-      refute log =~ ~r/delet.*#{old_user.id}/i
+      refute log =~ ~r/error.*delete.*inactive.*user.*#{old_user.id}/i
     end
   end
 end
