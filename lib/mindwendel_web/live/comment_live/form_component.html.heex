@@ -1,0 +1,43 @@
+<div>
+  <.simple_form
+    for={@form}
+    id={"comment-form-#{@comment.id || :new}"}
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+  >
+    <.input
+      field={@form[:username]}
+      type="text"
+      label={gettext("Username")}
+      phx-debounce={300}
+      id={"comment-form-username-#{@comment.id || :new}"}
+    />
+    <.input
+      field={@form[:body]}
+      type="textarea"
+      id={"comment-form-body-#{@comment.id || :new}"}
+      label={gettext("Your comment")}
+      phx-debounce={300}
+    />
+    <.input field={@form[:id]} type="hidden" id={"comment-form-id-#{@comment.id || :new}"} />
+    <.input
+      field={@form[:idea_id]}
+      type="hidden"
+      id={"comment-form-idea-id-#{@comment.id || :new}"}
+    />
+    <:actions>
+      <.link
+        phx-click={:close}
+        phx-target={@myself}
+        class="btn btn-secondary form-cancel me-2"
+        title={gettext("Close")}
+      >
+        <%= gettext("Close") %>
+      </.link>
+      <.button class="btn-primary" phx-disable-with={gettext("Saving...")}>
+        <%= gettext("Save") %>
+      </.button>
+    </:actions>
+  </.simple_form>
+</div>

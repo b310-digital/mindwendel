@@ -6,7 +6,6 @@ import Config
 require Logger
 
 if config_env() == :prod do
-  # configure logging:
   config :logger, :default_handler,
     formatter: {
       LoggerJSON.Formatters.Basic,
@@ -16,7 +15,15 @@ if config_env() == :prod do
            "password",
            "key",
            "token",
-           "ERLANG_COOKIE"
+           "ERLANG_COOKIE",
+           "gcp_credentials",
+           "secret_access_key",
+           "access_key_id",
+           "api_key",
+           "private_key",
+           "private_key_id",
+           "service_account",
+           "authorization"
          ]}
       ],
       metadata: {:all_except, [:conn, :domain, :application]}
@@ -55,7 +62,6 @@ if config_env() != :test do
       else: nil
 
   config :mindwendel, Mindwendel.Repo,
-    start_apps_before_migration: [:logger_json],
     database: System.get_env("DATABASE_NAME"),
     hostname: System.get_env("DATABASE_HOST"),
     password: System.get_env("DATABASE_USER_PASSWORD"),
@@ -162,6 +168,12 @@ feature_file_upload =
     String.trim(System.get_env("MW_FEATURE_IDEA_FILE_UPLOAD") || "")
   )
 
+feature_privacy_imprint_enabled =
+  Enum.member?(
+    ["true"],
+    String.trim(System.get_env("MW_FEATURE_LEGAL_PRIVACY_LINKS") || "")
+  )
+
 # enable/disable brainstorming teasers and configure delete brainstormings option:
 config :mindwendel, :options,
   feature_brainstorming_teasers:
@@ -171,6 +183,7 @@ config :mindwendel, :options,
     ),
   feature_file_upload: feature_file_upload,
   feature_brainstorming_removal_after_days: delete_brainstormings_after_days,
+  feature_privacy_imprint_enabled: feature_privacy_imprint_enabled,
   # use a strict csp everywhere except in development. we need to relax the setting a bit for webpack
   csp_relax: config_env() == :dev
 
