@@ -550,7 +550,6 @@ msgstr ""
 msgid "No comments available"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:97
 #: lib/mindwendel_web/live/idea_live/card_component.html.heex:33
 #, elixir-autogen, elixir-format
 msgid "Show idea"
@@ -571,4 +570,9 @@ msgstr ""
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:76
 #, elixir-autogen, elixir-format
 msgid "Privacy"
+msgstr ""
+
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:97
+#, elixir-autogen, elixir-format
+msgid "Idea details"
 msgstr ""

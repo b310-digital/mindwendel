@@ -1,4 +1,4 @@
-<div class="d-flex flex-row justify-content-end">
+<div class="justify-content-end">
   <%= for brainstorming_idea_label <- @brainstorming.labels do %>
     <% filter_active = Enum.member?(@brainstorming.filter_labels_ids, brainstorming_idea_label.id) %>
     <.filter_button
@@ -14,7 +14,6 @@
   <% end %>
   <%= if has_moderating_permission(@brainstorming, @current_user) do %>
     <.filter_button
-      class="d-flex"
       label_id="filter-label-reset"
       color="grey"
       id={"idea-caption-#{uuid()}"}
