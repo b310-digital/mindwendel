@@ -49,6 +49,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
       })
       |> Repo.preload(labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order))
 
+    # this changeset is too much?!
     changeset = Brainstorming.changeset(brainstorming, brainstorming_params)
 
     case Brainstormings.update_brainstorming(brainstorming, brainstorming_params) do

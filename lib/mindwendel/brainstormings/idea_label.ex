@@ -21,12 +21,15 @@ defmodule Mindwendel.Brainstormings.IdeaLabel do
     timestamps()
   end
 
-  def changeset(idea_label, params \\ %{})
-
   def changeset(idea_label, params) do
     idea_label
     |> cast(params, [:name, :color])
     |> validate_required([:name])
     |> validate_format(:color, ~r/^#[0-9a-f]{6}$/)
+    |> foreign_key_constraint(:ideas,
+      name: "idea_idea_labels_idea_label_id_fkey",
+      message: "idea label associated with idea"
+    )
+    |> no_assoc_constraint(:idea_idea_labels, message: "idea label associated with idea")
   end
 end

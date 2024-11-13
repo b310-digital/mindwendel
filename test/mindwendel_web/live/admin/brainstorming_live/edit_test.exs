@@ -135,8 +135,14 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     {:ok, edit_live_view, _html} =
       live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
+    IO.puts("\n\n\n\n\n\n\n\n\n\n\n")
+    IO.puts("erroring")
+    IO.puts("\n\n\n\n\n\n\n\n\n\n\n")
+
     # check with the changeset that it errors
     drop_label(edit_live_view, 0)
+
+    IO.puts("post erroring")
 
     edit_live_view |> element("form#form-labels") |> render() |> IO.puts()
 
