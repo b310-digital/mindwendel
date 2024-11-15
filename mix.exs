@@ -5,7 +5,7 @@ defmodule Mindwendel.MixProject do
     [
       app: :mindwendel,
       version: "0.2.9",
-      elixir: "~> 1.15.8",
+      elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
