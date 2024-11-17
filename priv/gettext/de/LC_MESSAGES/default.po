@@ -103,7 +103,7 @@ msgstr "Keine Ideen? Hier gibts Gedankenanstöße!"
 msgid "Idea created successfully"
 msgstr "Idee erstellt"
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:53
+#: lib/mindwendel_web/templates/layout/root.html.heex:53
 #, elixir-autogen, elixir-format
 msgid "New brainstorming"
 msgstr "Neues Brainstorming"
@@ -154,7 +154,7 @@ msgstr "Sortiere nach Label"
 msgid "Sort by likes"
 msgstr "Sortiere nach Likes"
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:66
+#: lib/mindwendel_web/templates/layout/root.html.heex:66
 #, elixir-autogen, elixir-format
 msgid "Your brainstormings"
 msgstr "Deine Brainstormings"
@@ -332,7 +332,7 @@ msgstr "Achtung: Brainstormings werden %{available_until} nach dem letzten Zugri
 msgid "Allow users to change the order of ideas"
 msgstr "Nutzern das Verschieben und Sortieren von Ideen erlauben"
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:29
+#: lib/mindwendel_web/templates/layout/root.html.heex:29
 #, elixir-autogen, elixir-format
 msgid "Back"
 msgstr "Zurück"
@@ -558,14 +558,14 @@ msgstr "Zeige Idee"
 msgid "Your comment"
 msgstr "Kommentar"
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:86
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:75
+#: lib/mindwendel_web/templates/layout/root.html.heex:86
 #, elixir-autogen, elixir-format
 msgid "Legal Disclosure"
 msgstr "Impressum"
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:82
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:76
+#: lib/mindwendel_web/templates/layout/root.html.heex:82
 #, elixir-autogen, elixir-format
 msgid "Privacy"
 msgstr "Datenschutzerklärung"
