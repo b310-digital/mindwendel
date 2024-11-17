@@ -102,7 +102,7 @@ msgstr ""
 msgid "Idea created successfully"
 msgstr ""
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:53
+#: lib/mindwendel_web/templates/layout/root.html.heex:53
 #, elixir-autogen, elixir-format
 msgid "New brainstorming"
 msgstr ""
@@ -153,7 +153,7 @@ msgstr ""
 msgid "Sort by likes"
 msgstr ""
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:66
+#: lib/mindwendel_web/templates/layout/root.html.heex:66
 #, elixir-autogen, elixir-format
 msgid "Your brainstormings"
 msgstr ""
@@ -331,7 +331,7 @@ msgstr ""
 msgid "Allow users to change the order of ideas"
 msgstr ""
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:29
+#: lib/mindwendel_web/templates/layout/root.html.heex:29
 #, elixir-autogen, elixir-format
 msgid "Back"
 msgstr ""
@@ -547,7 +547,6 @@ msgstr ""
 msgid "No comments available"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:97
 #: lib/mindwendel_web/live/idea_live/card_component.html.heex:33
 #, elixir-autogen, elixir-format
 msgid "Show idea"
@@ -558,14 +557,19 @@ msgstr ""
 msgid "Your comment"
 msgstr ""
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:86
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:75
+#: lib/mindwendel_web/templates/layout/root.html.heex:86
 #, elixir-autogen, elixir-format
 msgid "Legal Disclosure"
 msgstr ""
 
-#: lib/mindwendel_web/components/../templates/layout/root.html.heex:82
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:76
+#: lib/mindwendel_web/templates/layout/root.html.heex:82
 #, elixir-autogen, elixir-format
 msgid "Privacy"
+msgstr ""
+
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:97
+#, elixir-autogen, elixir-format
+msgid "Idea details"
 msgstr ""

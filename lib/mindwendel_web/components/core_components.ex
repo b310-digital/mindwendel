@@ -716,11 +716,11 @@ defmodule MindwendelWeb.CoreComponents do
 
   def filter_button(assigns) do
     ~H"""
-    <div class="m-1">
+    <div class="d-inline">
       <button
         type="button"
         class={[
-          "btn btn-sm text-light rounded-pill",
+          "btn btn-sm text-light rounded-pill m-1",
           @filter_active && "border border-2 border-primary",
           @class
         ]}
