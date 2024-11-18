@@ -71,7 +71,7 @@ defmodule Mindwendel.AccountsTest do
 
   describe "get_user" do
     test "returns user when it exists", %{user: existing_user} do
-      assert existing_user |> Repo.preload(:brainstormings) ==
+      assert existing_user |> Repo.preload([:brainstormings, :moderated_brainstormings]) ==
                Accounts.get_user(existing_user.id)
     end
 

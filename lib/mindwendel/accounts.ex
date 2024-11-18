@@ -48,7 +48,7 @@ defmodule Mindwendel.Accounts do
   end
 
   def get_user(id) do
-    Repo.get(User, id) |> Repo.preload(:brainstormings)
+    Repo.get(User, id) |> Repo.preload([:brainstormings, :moderated_brainstormings])
   rescue
     Ecto.Query.CastError -> nil
   end

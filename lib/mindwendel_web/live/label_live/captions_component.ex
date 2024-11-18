@@ -4,8 +4,7 @@ defmodule MindwendelWeb.LabelLive.CaptionsComponent do
   alias Mindwendel.Brainstormings
 
   def handle_event("set_filter_idea_label", %{"id" => idea_label_id}, socket) do
-    brainstorming = socket.assigns.brainstorming
-    current_user = socket.assigns.current_user
+    %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
     if has_moderating_permission(brainstorming, current_user) do
       # If the filter is already present, remove it as its toggled. If not, add it.
