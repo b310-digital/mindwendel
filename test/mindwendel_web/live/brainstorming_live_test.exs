@@ -2,6 +2,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
   use MindwendelWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
 
+  alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
   alias Mindwendel.Factory
   alias Mindwendel.Brainstormings.Brainstorming

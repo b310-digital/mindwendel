@@ -230,6 +230,10 @@ defmodule Mindwendel.Brainstormings do
     brainstorming
   end
 
+  def validate_admin_secret(brainstorming, admin_secret_id) do
+    brainstorming.admin_url_id == admin_secret_id
+  end
+
   @doc """
   Returns a subscibe result.
 

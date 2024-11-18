@@ -1,7 +1,7 @@
 defmodule MindwendelWeb.BrainstormingLive.ShowIdeaCommentTest do
   use MindwendelWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
-  alias Mindwendel.Brainstormings
+  alias Mindwendel.Accounts
 
   alias Mindwendel.Factory
 

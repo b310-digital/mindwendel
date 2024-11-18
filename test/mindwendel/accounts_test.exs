@@ -2,6 +2,7 @@ defmodule Mindwendel.AccountsTest do
   use Mindwendel.DataCase, async: true
   alias Mindwendel.Factory
   alias Mindwendel.Accounts
+  alias Mindwendel.Brainstormings
   alias Mindwendel.Accounts.User
   alias Mindwendel.Accounts.BrainstormingUser
   alias Mindwendel.Accounts.BrainstormingModeratingUser
@@ -10,7 +11,13 @@ defmodule Mindwendel.AccountsTest do
   import ExUnit.CaptureLog
 
   setup do
-    %{user: Factory.insert!(:user)}
+    user = Factory.insert!(:user)
+    brainstorming = Factory.insert!(:brainstorming)
+
+    %{
+      brainstorming: brainstorming,
+      user: user
+    }
   end
 
   describe "#add_moderating_user" do
@@ -25,8 +32,8 @@ defmodule Mindwendel.AccountsTest do
       assert brainstorming_moderatoring_user.user_id == user.id
       assert brainstorming_moderatoring_user.brainstorming_id == brainstorming.id
 
-      brainstorming = Repo.preload(brainstorming, :moderating_users)
-      assert [%User{id: ^user_id}] = brainstorming.moderating_users
+      assert [%User{id: ^user_id}] =
+               Brainstormings.get_brainstorming!(brainstorming.id).moderating_users
     end
 
     test "responds with an error when brainstorming already contains the moderating user", %{
@@ -87,11 +94,13 @@ defmodule Mindwendel.AccountsTest do
         |> Repo.preload(:users)
 
       old_user = Factory.insert!(:user, updated_at: ~N[2021-01-01 10:00:00])
-      Accounts.merge_brainstorming_user(old_brainstorming, old_user.id)
+
+      updated_old_brainstorming =
+        Accounts.merge_brainstorming_user(old_brainstorming, old_user.id)
 
       %{
         old_user: old_user,
-        old_brainstorming: old_brainstorming
+        old_brainstorming: updated_old_brainstorming
       }
     end
 
