@@ -139,7 +139,7 @@ Hooks.SetIdeaLabelBackgroundColor = {
 };
 
 let liveSocket = new LiveSocket("/live", Socket, { 
-  hooks: Hooks, params: { _csrf_token: csrfToken }
+  hooks: Hooks, params: { _csrf_token: csrfToken, adminSecret: location.hash.substring(1) }
 })
 
 // Show progress bar on live navigation and form submits

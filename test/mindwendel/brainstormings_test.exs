@@ -1,7 +1,7 @@
 defmodule Mindwendel.BrainstormingsTest do
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   use Mindwendel.DataCase, async: true
-  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
+  alias Mindwendel.Accounts.BrainstormingModeratingUser
   alias Mindwendel.Factory
 
   alias Mindwendel.Brainstormings
@@ -53,38 +53,6 @@ defmodule Mindwendel.BrainstormingsTest do
                older_brainstorming.id,
                oldest_brainstorming.id
              ]
-    end
-  end
-
-  describe "#add_moderating_user" do
-    test "adds a moderating user to the brainstorming", %{
-      brainstorming: brainstorming,
-      user: %User{id: user_id} = user
-    } do
-      Brainstormings.add_moderating_user(brainstorming, user)
-
-      assert 1 = Repo.one(from(bmu in BrainstormingModeratingUser, select: count(bmu.user_id)))
-      assert brainstorming_moderatoring_user = Repo.one(BrainstormingModeratingUser)
-      assert brainstorming_moderatoring_user.user_id == user.id
-      assert brainstorming_moderatoring_user.brainstorming_id == brainstorming.id
-
-      brainstorming = Repo.preload(brainstorming, :moderating_users)
-      assert [%User{id: ^user_id}] = brainstorming.moderating_users
-    end
-
-    test "responds with an error when brainstorming already contains the moderating user", %{
-      brainstorming: brainstorming,
-      user: user
-    } do
-      Brainstormings.add_moderating_user(brainstorming, user)
-
-      assert {:error,
-              %Ecto.Changeset{
-                valid?: false,
-                errors: [
-                  brainstorming_id: {_, [{:constraint, :unique}, _]}
-                ]
-              }} = Brainstormings.add_moderating_user(brainstorming, user)
     end
   end
 

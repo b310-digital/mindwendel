@@ -13,10 +13,13 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     if connected?(socket), do: Brainstormings.subscribe(id)
 
     current_user_id = Mindwendel.Services.SessionService.get_current_user_id(session)
+    brainstorming = Brainstormings.get_brainstorming!(id)
 
-    brainstorming =
-      Brainstormings.get_brainstorming!(id)
-      |> Accounts.merge_brainstorming_user(current_user_id)
+    case get_connect_params(socket)["adminSecret"] == "" do
+      # TODO Check the secret if valid
+      false -> Accounts.add_moderating_user(brainstorming, current_user_id)
+      true -> Accounts.merge_brainstorming_user(brainstorming, current_user_id)
+    end
 
     lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
     current_user = Mindwendel.Accounts.get_user(current_user_id)

@@ -26,7 +26,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaCommentTest do
       })
 
     moderating_user = Factory.insert!(:user)
-    Brainstormings.add_moderating_user(brainstorming, moderating_user)
+    Accounts.add_moderating_user(brainstorming, moderating_user)
 
     new_user = Factory.insert!(:user)
 

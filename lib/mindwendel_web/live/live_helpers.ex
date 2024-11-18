@@ -9,6 +9,7 @@ defmodule MindwendelWeb.LiveHelpers do
   end
 
   def has_moderating_permission(brainstorming, current_user) do
+    IO.inspect Enum.member?(brainstorming.moderating_users |> Enum.map(& &1.id), current_user.id)
     Enum.member?(brainstorming.moderating_users |> Enum.map(& &1.id), current_user.id)
   end
 

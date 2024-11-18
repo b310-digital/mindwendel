@@ -8,7 +8,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
   setup do
     moderating_user = Factory.insert!(:user)
     brainstorming = Factory.insert!(:brainstorming)
-    Brainstormings.add_moderating_user(brainstorming, moderating_user)
+    Accounts.add_moderating_user(brainstorming, moderating_user)
     %{brainstorming: brainstorming, moderating_user: moderating_user}
   end
 

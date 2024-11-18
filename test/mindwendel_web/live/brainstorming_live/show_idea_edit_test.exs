@@ -34,7 +34,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
     brainstorming: brainstorming,
     user: user
   } do
-    Brainstormings.add_moderating_user(brainstorming, user)
+    Accounts.add_moderating_user(brainstorming, user)
     {:ok, show_live_view, _html} = live(conn, ~p"/brainstormings/#{brainstorming.id}")
 
     assert show_live_view
@@ -75,7 +75,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
     idea: idea,
     user: user
   } do
-    Brainstormings.add_moderating_user(brainstorming, user)
+    Accounts.add_moderating_user(brainstorming, user)
 
     {:ok, show_live_view, _html} =
       live(conn, ~p"/brainstormings/#{brainstorming.id}")
@@ -114,7 +114,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
     idea: idea
   } do
     moderatoring_user = Factory.insert!(:user)
-    Brainstormings.add_moderating_user(brainstorming, moderatoring_user)
+    Accounts.add_moderating_user(brainstorming, moderatoring_user)
 
     {:ok, show_live_view, _html} =
       conn
@@ -141,7 +141,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
     user: %User{id: user_id}
   } do
     moderator_user = Factory.insert!(:user)
-    Brainstormings.add_moderating_user(brainstorming, moderator_user)
+    Accounts.add_moderating_user(brainstorming, moderator_user)
 
     {:ok, show_live_view, _html} =
       conn

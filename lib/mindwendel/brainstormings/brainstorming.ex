@@ -6,7 +6,7 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Lane
-  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
+  alias Mindwendel.Accounts.BrainstormingModeratingUser
   alias Mindwendel.Accounts.User
   alias Mindwendel.Accounts.BrainstormingUser
 

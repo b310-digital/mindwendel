@@ -13,7 +13,6 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Lanes
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
 
   require Logger
 
@@ -34,12 +33,6 @@ defmodule Mindwendel.Brainstormings do
         order_by: [desc: brainstorming.inserted_at],
         limit: ^limit
     )
-  end
-
-  def add_moderating_user(%Brainstorming{} = brainstorming, %User{} = user) do
-    %BrainstormingModeratingUser{brainstorming_id: brainstorming.id, user_id: user.id}
-    |> BrainstormingModeratingUser.changeset()
-    |> Repo.insert()
   end
 
   @doc """
