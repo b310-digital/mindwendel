@@ -330,7 +330,7 @@ msgstr "Allow users to change the order of ideas"
 msgid "Back"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:514
+#: lib/mindwendel_web/components/core_components.ex:521
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
