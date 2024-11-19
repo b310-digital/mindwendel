@@ -37,7 +37,7 @@
         <i class="bi-share-fill"></i>
       </.link>
 
-      <%= if @brainstorming.option_show_link_to_settings do %>
+      <%= if has_moderating_permission(@brainstorming, @current_user) do %>
         <.link
           href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}/edit"}
           class="btn btn-secondary m-1"

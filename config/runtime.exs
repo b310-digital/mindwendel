@@ -56,10 +56,19 @@ if config_env() != :test do
   # disable on prod, because logger_json will take care of this. set to :debug for test and dev
   ecto_log_level = if config_env() == :prod, do: false, else: :debug
 
+  # either use system certificates or specify files:
   ssl_config =
-    if System.get_env("DATABASE_SSL", "true") == "true",
-      do: [cacerts: :public_key.cacerts_get()],
-      else: nil
+    if System.get_env("DATABASE_SSL", "true") == "true" do
+      if System.get_env("DATABASE_CERT_FILE") do
+        Logger.info("Loading DATABASE_CERT_FILE")
+        [cacertfile: System.get_env("DATABASE_CERT_FILE")]
+      else
+        Logger.info("Loading System Certificates")
+        [cacerts: :public_key.cacerts_get()]
+      end
+    else
+      nil
+    end
 
   config :mindwendel, Mindwendel.Repo,
     database: System.get_env("DATABASE_NAME"),
