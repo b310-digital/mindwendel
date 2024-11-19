@@ -27,6 +27,16 @@ defmodule Mindwendel.BrainstormingsTest do
     }
   end
 
+  describe "validate_admin_secret" do
+    test "returns false if secret is wrong", %{brainstorming: brainstorming} do
+      refute Brainstormings.validate_admin_secret(brainstorming, "wrong")
+    end
+
+    test "returns true if secret is correct", %{brainstorming: brainstorming} do
+      assert Brainstormings.validate_admin_secret(brainstorming, brainstorming.admin_url_id)
+    end
+  end
+
   describe "create_brainstorming" do
     test "creates a lane", %{user: user} do
       {:ok, brainstorming} = Brainstormings.create_brainstorming(user, %{name: "test"})
