@@ -12,7 +12,6 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
 
   schema "brainstormings" do
     field :name, :string
-    field :option_show_link_to_settings, :boolean
     field :option_allow_manual_ordering, :boolean
     # credo:disable-for-next-line
     # Todo: The following line can be changed `field :admin_url_id, Ecto.UUID, autogenerate: true`
@@ -35,7 +34,6 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
     brainstorming
     |> cast(attrs, [
       :name,
-      :option_show_link_to_settings,
       :option_allow_manual_ordering,
       :filter_labels_ids
     ])

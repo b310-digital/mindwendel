@@ -29,6 +29,8 @@
       >
         <i class="bi-share-fill"></i>
       </button>
+    </div>
+    <div class="input-group mt-3">
       <%= if has_moderating_permission(@brainstorming, @current_user) do %>
         <div class="form-check form-switch">
           <input
@@ -40,7 +42,7 @@
             type="checkbox"
           />
           <label class="form-check-label" for="brainstorming-link-toggle-admin-secret">
-            Default switch checkbox input
+            <%= gettext("Änderungen erlauben") %>
           </label>
         </div>
       <% end %>

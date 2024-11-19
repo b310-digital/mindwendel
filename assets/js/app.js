@@ -22,35 +22,12 @@ import NProgress from "nprogress"
 import { LiveSocket } from "phoenix_live_view"
 import ClipboardJS from "clipboard"
 import { appendQrCode, initQrDownload } from "./qrCodeUtils.js"
+import { initShareButtonClickHandler } from "./shareUtils.js"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
 let Hooks = {}
 const sortables = [];
-
-Hooks.CopyBrainstormingLinkButton = {
-  mounted() {
-    new ClipboardJS(this.el);
-  }
-}
-
-Hooks.NativeSharingButton = {
-  mounted() {
-    const shareData = {
-      title: this.el.getAttribute(`data-native-sharing-button-share-data-title`) || 'Mindwendel Brainstorming',
-      text: this.el.getAttribute(`data-native-sharing-button-share-data-text`) || 'Join my brainstorming',
-      url: document.getElementById("data-native-sharing-button-share-data-url") || document.getElementById("brainstorming-link-input-readonly").value
-    }
-
-    if (navigator.share) {
-      this.el.addEventListener('click', (event) => {
-        navigator.share(shareData)
-          .then() // Do nothing
-          .catch(err => { console.log(`Error: ${err}`) })
-      })
-    }
-  }
-}
 
 // see https://github.com/drag-drop-touch-js/dragdroptouch for mobile support
 Hooks.Sortable = {
@@ -89,6 +66,27 @@ Hooks.Modal = {
   }
 }
 
+Hooks.CopyBrainstormingLinkButton = {
+  mounted() {
+    new ClipboardJS(this.el);
+  }
+}
+
+let refShareClickListenerFunction;
+let refShareButton;
+
+Hooks.NativeSharingButton = {
+  mounted() {
+    refShareButton = this.el;
+    refShareClickListenerFunction = initShareButtonClickHandler(refShareButton);
+  },
+  updated() {
+    refShareButton.removeEventListener("click", refShareClickListenerFunction);
+    refShareButton = this.el;
+    refShareClickListenerFunction = initShareButtonClickHandler(refShareButton);
+  }
+}
+
 Hooks.QrCodeCanvas = {
   mounted() {
     appendQrCode(this.el);
@@ -98,7 +96,6 @@ Hooks.QrCodeCanvas = {
   }
 }
 
-// References are needed to properly handle live view changes and prevent callbacks being fired twice
 let refQrClickListenerFunction;
 let refQrCodeDownloadButton;
 
