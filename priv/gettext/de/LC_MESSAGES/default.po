@@ -567,5 +567,5 @@ msgstr "Detailansicht"
 
 #: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:45
 #, elixir-autogen, elixir-format
-msgid "Änderungen erlauben"
-msgstr ""
+msgid "Give moderating permissions"
+msgstr "Änderungen erlauben"
