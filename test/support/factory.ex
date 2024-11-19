@@ -18,7 +18,8 @@ defmodule Mindwendel.Factory do
       # This can be removed as soon the todo is solved in lib/mindwendel/brainstormings/brainstorming.ex:12
       admin_url_id: Ecto.UUID.generate(),
       labels: Brainstorming.idea_label_factory(),
-      lanes: [build(:lane)]
+      lanes: [build(:lane)],
+      moderating_users: []
     }
   end
 

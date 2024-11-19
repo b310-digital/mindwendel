@@ -280,7 +280,11 @@ defmodule MindwendelWeb.CoreComponents do
   attr :errors, :list, default: []
   attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
-  attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+
+  attr :options, :list,
+    default: [],
+    doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
 
   attr :rest, :global,
@@ -305,7 +309,11 @@ defmodule MindwendelWeb.CoreComponents do
       end)
 
     ~H"""
-    <div class="form-check form-check-inline">
+    <div class={[
+      "form-check",
+      @options == [] && "form-check-inline",
+      @options == ["switch"] && "form-switch"
+    ]}>
       <label class="form-check-label">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
         <input
