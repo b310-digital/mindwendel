@@ -20,9 +20,8 @@ import "phoenix_html"
 import { Socket } from "phoenix"
 import NProgress from "nprogress"
 import { LiveSocket } from "phoenix_live_view"
-import QRCodeStyling from "qr-code-styling";
 import ClipboardJS from "clipboard"
-import { buildQrCodeOptions } from "./qrCodeUtils.js"
+import { appendQrCode, initQrDownload } from "./qrCodeUtils.js"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
@@ -40,7 +39,7 @@ Hooks.NativeSharingButton = {
     const shareData = {
       title: this.el.getAttribute(`data-native-sharing-button-share-data-title`) || 'Mindwendel Brainstorming',
       text: this.el.getAttribute(`data-native-sharing-button-share-data-text`) || 'Join my brainstorming',
-      url: this.el.getAttribute(`data-native-sharing-button-share-data-url`) || document.getElementById("brainstorming-link").value
+      url: document.getElementById("data-native-sharing-button-share-data-url") || document.getElementById("brainstorming-link-input-readonly").value
     }
 
     if (navigator.share) {
@@ -89,32 +88,29 @@ Hooks.Modal = {
     window.addEventListener('mindwendel:hide-modal', closeModal);
   }
 }
+
 Hooks.QrCodeCanvas = {
   mounted() {
-    const qrCodeCanvasElement = this.el
-    const qrCodeUrl = qrCodeCanvasElement.getAttribute("data-qr-code-url")
-
-    const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
-    const qrCode = new QRCodeStyling(qrCodeOptions)
-
-    qrCode.append(qrCodeCanvasElement);
+    appendQrCode(this.el);
+  },
+  updated() {
+    appendQrCode(this.el);
   }
 }
 
+// References are needed to properly handle live view changes and prevent callbacks being fired twice
+let refQrClickListenerFunction;
+let refQrCodeDownloadButton;
+
 Hooks.QrCodeDownloadButton = {
   mounted() {
-    const qrCodeUrl = this.el.getAttribute("data-qr-code-url");
-    const qrCodeFilename = this.el.getAttribute("data-qr-code-filename") || qrCodeUrl || "qrcode";
-    const qrCodeFileExtension = this.el.getAttribute("data-qr-code-file-extension") || "png";
-
-    const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
-    const qrCode = new QRCodeStyling(qrCodeOptions)
-
-    this.el && this.el.addEventListener('click', () => {
-      qrCode.download({ name: qrCodeFilename, extension: qrCodeFileExtension })
-        .then() // Do nothing
-        .catch(err => { console.log(`Error: ${err}`) })
-    })
+    refQrCodeDownloadButton = this.el;
+    refQrClickListenerFunction = initQrDownload(refQrCodeDownloadButton);
+  },
+  updated() {
+    refQrCodeDownloadButton.removeEventListener("click", refQrClickListenerFunction);
+    refQrCodeDownloadButton = this.el;
+    refQrClickListenerFunction = initQrDownload(refQrCodeDownloadButton);
   }
 }
 

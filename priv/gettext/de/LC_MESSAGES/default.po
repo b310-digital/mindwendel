@@ -281,12 +281,12 @@ msgstr "Teilen"
 msgid "Share brainstorming"
 msgstr "Teile Dein Brainstorming"
 
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:65
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:80
 #, elixir-autogen, elixir-format
 msgid "Download as png"
 msgstr "Download als PNG"
 
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:54
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:69
 #, elixir-autogen, elixir-format
 msgid "Download as svg"
 msgstr "Download als SVG"

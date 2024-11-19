@@ -81,9 +81,13 @@ defmodule Mindwendel.Accounts do
 
   """
   def add_moderating_user(%Brainstorming{} = brainstorming, %User{} = user) do
-    %BrainstormingModeratingUser{brainstorming_id: brainstorming.id, user_id: user.id}
-    |> BrainstormingModeratingUser.changeset()
-    |> Repo.insert()
+    unless user.id in Enum.map(brainstorming.moderating_users, fn e -> e.id end) do
+      %BrainstormingModeratingUser{brainstorming_id: brainstorming.id, user_id: user.id}
+      |> BrainstormingModeratingUser.changeset()
+      |> Repo.insert()
+    else
+      {:error}
+    end
   end
 
   def add_moderating_user(%Brainstorming{} = brainstorming, user_id) when is_binary(user_id) do

@@ -29,6 +29,21 @@
       >
         <i class="bi-share-fill"></i>
       </button>
+      <%= if has_moderating_permission(@brainstorming, @current_user) do %>
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            id="brainstorming-link-toggle-admin-secret"
+            phx-click="toggle_url_secret"
+            phx-target={@myself}
+            checked={if @uri |> String.split("#") |> length == 2, do: true, else: false}
+            type="checkbox"
+          />
+          <label class="form-check-label" for="brainstorming-link-toggle-admin-secret">
+            Default switch checkbox input
+          </label>
+        </div>
+      <% end %>
     </div>
   </div>
 

@@ -280,12 +280,12 @@ msgstr ""
 msgid "Share brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:65
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:80
 #, elixir-autogen, elixir-format
 msgid "Download as png"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:54
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:69
 #, elixir-autogen, elixir-format
 msgid "Download as svg"
 msgstr ""
