@@ -5,7 +5,7 @@ defmodule Mindwendel.Accounts.User do
 
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.Idea
-  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
+  alias Mindwendel.Accounts.BrainstormingModeratingUser
   alias Mindwendel.Accounts.BrainstormingUser
 
   schema "users" do

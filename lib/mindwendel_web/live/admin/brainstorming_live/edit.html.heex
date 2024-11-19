@@ -58,22 +58,7 @@
   <div class="card-body">
     <.simple_form for={@form} phx-submit="save" phx-change="save" id="form-edit-brainstorming">
       <.input field={@form[:name]} type="text" label="Name" phx-debounce={300} />
-
-      <div class="mb-3 mt-3">
-        <.input
-          field={@form[:option_show_link_to_settings]}
-          type="checkbox"
-          id="checkbox-option-show-link-to-settings"
-          label={gettext("Show brainstorming settings link for all users")}
-        />
-        <br />
-        <small class="form-text text-muted">
-          <%= gettext(
-            "Warning: Please make sure you save the admin link at the top, before hiding the settings link!"
-          ) %>
-        </small>
-      </div>
-      <div>
+      <div class="mt-2">
         <.input
           field={@form[:option_allow_manual_ordering]}
           type="checkbox"

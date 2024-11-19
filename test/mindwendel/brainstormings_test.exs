@@ -1,7 +1,6 @@
 defmodule Mindwendel.BrainstormingsTest do
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   use Mindwendel.DataCase, async: true
-  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
   alias Mindwendel.Factory
 
   alias Mindwendel.Brainstormings
@@ -26,6 +25,16 @@ defmodule Mindwendel.BrainstormingsTest do
       like: Factory.insert!(:like, :with_idea_and_user),
       lane: Enum.at(brainstorming.lanes, 0)
     }
+  end
+
+  describe "validate_admin_secret" do
+    test "returns false if secret is wrong", %{brainstorming: brainstorming} do
+      refute Brainstormings.validate_admin_secret(brainstorming, "wrong")
+    end
+
+    test "returns true if secret is correct", %{brainstorming: brainstorming} do
+      assert Brainstormings.validate_admin_secret(brainstorming, brainstorming.admin_url_id)
+    end
   end
 
   describe "create_brainstorming" do
@@ -53,38 +62,6 @@ defmodule Mindwendel.BrainstormingsTest do
                older_brainstorming.id,
                oldest_brainstorming.id
              ]
-    end
-  end
-
-  describe "#add_moderating_user" do
-    test "adds a moderating user to the brainstorming", %{
-      brainstorming: brainstorming,
-      user: %User{id: user_id} = user
-    } do
-      Brainstormings.add_moderating_user(brainstorming, user)
-
-      assert 1 = Repo.one(from(bmu in BrainstormingModeratingUser, select: count(bmu.user_id)))
-      assert brainstorming_moderatoring_user = Repo.one(BrainstormingModeratingUser)
-      assert brainstorming_moderatoring_user.user_id == user.id
-      assert brainstorming_moderatoring_user.brainstorming_id == brainstorming.id
-
-      brainstorming = Repo.preload(brainstorming, :moderating_users)
-      assert [%User{id: ^user_id}] = brainstorming.moderating_users
-    end
-
-    test "responds with an error when brainstorming already contains the moderating user", %{
-      brainstorming: brainstorming,
-      user: user
-    } do
-      Brainstormings.add_moderating_user(brainstorming, user)
-
-      assert {:error,
-              %Ecto.Changeset{
-                valid?: false,
-                errors: [
-                  brainstorming_id: {_, [{:constraint, :unique}, _]}
-                ]
-              }} = Brainstormings.add_moderating_user(brainstorming, user)
     end
   end
 

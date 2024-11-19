@@ -13,7 +13,6 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Lanes
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
 
   require Logger
 
@@ -34,12 +33,6 @@ defmodule Mindwendel.Brainstormings do
         order_by: [desc: brainstorming.inserted_at],
         limit: ^limit
     )
-  end
-
-  def add_moderating_user(%Brainstorming{} = brainstorming, %User{} = user) do
-    %BrainstormingModeratingUser{brainstorming_id: brainstorming.id, user_id: user.id}
-    |> BrainstormingModeratingUser.changeset()
-    |> Repo.insert()
   end
 
   @doc """
@@ -235,6 +228,19 @@ defmodule Mindwendel.Brainstormings do
   def update_last_accessed_at(brainstorming) do
     Repo.update(Brainstorming.changeset_with_upated_last_accessed_at(brainstorming))
     brainstorming
+  end
+
+  @doc """
+  Validates the given secret against the brainstorming. Returns true/false.
+
+  ## Examples
+
+      iex> validate_admin_secret(brainstorming, abc)
+      false
+
+  """
+  def validate_admin_secret(brainstorming, admin_secret_id) do
+    brainstorming.admin_url_id == admin_secret_id
   end
 
   @doc """
