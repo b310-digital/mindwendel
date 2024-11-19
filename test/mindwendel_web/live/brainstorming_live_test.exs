@@ -2,6 +2,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
   use MindwendelWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
 
+  alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
   alias Mindwendel.Factory
   alias Mindwendel.Brainstormings.Brainstorming
@@ -149,7 +150,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
     test "enables dragging for admin", %{conn: conn, brainstorming: brainstorming, lane: lane} do
       moderating_user = List.first(brainstorming.users)
-      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+      Accounts.add_moderating_user(brainstorming, moderating_user)
 
       {:ok, view, _html} =
         conn
@@ -191,7 +192,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       brainstorming: brainstorming
     } do
       moderating_user = List.first(brainstorming.users)
-      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+      Accounts.add_moderating_user(brainstorming, moderating_user)
 
       {:ok, view, _html} =
         conn
@@ -241,7 +242,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       brainstorming: brainstorming
     } do
       moderating_user = List.first(brainstorming.users)
-      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+      Accounts.add_moderating_user(brainstorming, moderating_user)
 
       {:ok, view, _html} =
         conn
@@ -257,7 +258,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       lane: lane
     } do
       moderating_user = List.first(brainstorming.users)
-      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+      Accounts.add_moderating_user(brainstorming, moderating_user)
 
       {:ok, view, _html} =
         conn
@@ -289,7 +290,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
     test "sets a label filter as admin", %{conn: conn, brainstorming: brainstorming} do
       moderating_user = List.first(brainstorming.users)
-      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+      Accounts.add_moderating_user(brainstorming, moderating_user)
       selected_ideal_label = Enum.at(brainstorming.labels, 0)
 
       {:ok, view, _html} =

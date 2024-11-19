@@ -1,7 +1,8 @@
 defmodule MindwendelWeb.BrainstormingLive.ShowIdeaDeleteTest do
   use MindwendelWeb.ConnCase, async: true
+
   import Phoenix.LiveViewTest
-  alias Mindwendel.Brainstormings
+  alias Mindwendel.Accounts
 
   alias Mindwendel.Factory
 
@@ -32,7 +33,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaDeleteTest do
     brainstorming: brainstorming
   } do
     moderating_user = Factory.insert!(:user)
-    Brainstormings.add_moderating_user(brainstorming, moderating_user)
+    Accounts.add_moderating_user(brainstorming, moderating_user)
 
     {:ok, show_live_view, _html} =
       conn

@@ -1,14 +1,14 @@
 defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
   use MindwendelWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
-  alias Mindwendel.Brainstormings
+  alias Mindwendel.Accounts
 
   alias Mindwendel.Factory
 
   setup do
     moderating_user = Factory.insert!(:user)
     brainstorming = Factory.insert!(:brainstorming)
-    Brainstormings.add_moderating_user(brainstorming, moderating_user)
+    Accounts.add_moderating_user(brainstorming, moderating_user)
     %{brainstorming: brainstorming, moderating_user: moderating_user}
   end
 
