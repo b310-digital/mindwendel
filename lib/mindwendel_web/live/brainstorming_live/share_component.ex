@@ -12,10 +12,13 @@ defmodule MindwendelWeb.BrainstormingLive.ShareComponent do
     end
   end
 
-  defp create_download_link(brainstorming, uri) do
-    url_fragments = String.split(uri, "#")
+  def secret_in_uri(uri) do
+    uri |> String.split("#") |> length == 2
+  end
 
-    if length(url_fragments) == 2 do
+  defp create_download_link(brainstorming, uri) do
+    if secret_in_uri(uri) do
+      url_fragments = String.split(uri, "#")
       List.first(url_fragments)
     else
       "#{uri}##{brainstorming.admin_url_id}"

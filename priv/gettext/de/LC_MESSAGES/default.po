@@ -271,12 +271,12 @@ msgstr "Teilen"
 msgid "Share brainstorming"
 msgstr "Teile Dein Brainstorming"
 
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:82
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:79
 #, elixir-autogen, elixir-format
 msgid "Download as png"
 msgstr "Download als PNG"
 
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:71
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:68
 #, elixir-autogen, elixir-format
 msgid "Download as svg"
 msgstr "Download als SVG"
@@ -327,7 +327,7 @@ msgstr "Nutzern das Verschieben und Sortieren von Ideen erlauben"
 msgid "Back"
 msgstr "Zurück"
 
-#: lib/mindwendel_web/components/core_components.ex:514
+#: lib/mindwendel_web/components/core_components.ex:522
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -565,7 +565,7 @@ msgstr "Datenschutzerklärung"
 msgid "Idea details"
 msgstr "Detailansicht"
 
-#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:45
+#: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:43
 #, elixir-autogen, elixir-format
 msgid "Give moderating permissions"
 msgstr "Änderungen erlauben"
