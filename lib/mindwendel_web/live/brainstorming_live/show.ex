@@ -18,10 +18,11 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     brainstorming = Brainstormings.get_brainstorming!(id)
     admin_secret = get_connect_params(socket)["adminSecret"]
 
-    case Brainstormings.validate_admin_secret(brainstorming, admin_secret) do
-      true -> Accounts.add_moderating_user(brainstorming, current_user_id)
-      _ -> Accounts.merge_brainstorming_user(brainstorming, current_user_id)
+    if Brainstormings.validate_admin_secret(brainstorming, admin_secret) do
+      Accounts.add_moderating_user(brainstorming, current_user_id)
     end
+
+    Accounts.merge_brainstorming_user(brainstorming, current_user_id)
 
     lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
     # load the user, also for permissions of brainstormings

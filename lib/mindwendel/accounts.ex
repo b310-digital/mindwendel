@@ -92,13 +92,13 @@ defmodule Mindwendel.Accounts do
 
   def add_moderating_user(%Brainstorming{} = brainstorming, user_id) when is_binary(user_id) do
     case Ecto.UUID.dump(user_id) do
-      :error -> brainstorming
+      :error -> {:error}
       {:ok, _} -> add_moderating_user(brainstorming, get_or_create_user(user_id))
     end
   end
 
-  def add_moderating_user(%Brainstorming{} = brainstorming, user_id) when is_nil(user_id) do
-    brainstorming
+  def add_moderating_user(%Brainstorming{} = _brainstorming, user_id) when is_nil(user_id) do
+    {:error}
   end
 
   @doc """

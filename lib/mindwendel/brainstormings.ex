@@ -230,6 +230,15 @@ defmodule Mindwendel.Brainstormings do
     brainstorming
   end
 
+  @doc """
+  Validates the given secret against the brainstorming. Returns true/false.
+
+  ## Examples
+
+      iex> validate_admin_secret(brainstorming, abc)
+      false
+
+  """
   def validate_admin_secret(brainstorming, admin_secret_id) do
     brainstorming.admin_url_id == admin_secret_id
   end
