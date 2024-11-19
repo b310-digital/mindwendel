@@ -131,6 +131,7 @@ Hooks.SetIdeaLabelBackgroundColor = {
   }
 };
 
+// The brainstorming secret from the url ("#123") is added as well to the socket. The secret is not available on the server side by default.
 let liveSocket = new LiveSocket("/live", Socket, { 
   hooks: Hooks, params: { _csrf_token: csrfToken, adminSecret: window.location.hash.substring(1) }
 })

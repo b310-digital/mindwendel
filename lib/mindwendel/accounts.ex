@@ -81,12 +81,12 @@ defmodule Mindwendel.Accounts do
 
   """
   def add_moderating_user(%Brainstorming{} = brainstorming, %User{} = user) do
-    unless user.id in Enum.map(brainstorming.moderating_users, fn e -> e.id end) do
+    if user.id in Enum.map(brainstorming.moderating_users, fn e -> e.id end) do
+      {:error}
+    else
       %BrainstormingModeratingUser{brainstorming_id: brainstorming.id, user_id: user.id}
       |> BrainstormingModeratingUser.changeset()
       |> Repo.insert()
-    else
-      {:error}
     end
   end
 
