@@ -80,7 +80,7 @@ defmodule Mindwendel.MixProject do
       {:libcluster, "3.3.3"},
       {:tzdata, "1.1.2"},
       {:waffle, "~> 1.1"},
-      {:ex_aws, "2.5.5"},
+      {:ex_aws, "2.5.7"},
       {:ex_aws_s3, "2.5.5"},
       {:cloak, "1.1.4"}
     ]
