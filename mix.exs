@@ -63,7 +63,7 @@ defmodule Mindwendel.MixProject do
       {:csv, "3.2.1"},
       {:ecto_sql, "3.12.1"},
       {:floki, "0.36.3"},
-      {:gettext, "0.26.1"},
+      {:gettext, "0.26.2"},
       {:httpoison, "2.2.1"},
       {:jason, "1.4.4"},
       {:oban, "2.18.3"},
