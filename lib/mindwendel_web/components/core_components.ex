@@ -291,12 +291,16 @@ defmodule MindwendelWeb.CoreComponents do
     include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
                 multiple pattern placeholder readonly required rows size step)
 
+  attr :used?, :boolean, doc: "This field was actually used (set by compoenent itself)"
+
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
-    errors = if Phoenix.Component.used_input?(field), do: field.errors, else: []
+    used? = Phoenix.Component.used_input?(field)
+    errors = if used?, do: field.errors, else: []
 
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
     |> assign(:errors, Enum.map(errors, &translate_error(&1)))
+    |> assign(:used?, used?)
     |> assign_new(:name, fn -> if assigns.multiple, do: field.name <> "[]", else: field.name end)
     |> assign_new(:value, fn -> field.value end)
     |> input()
@@ -380,8 +384,8 @@ defmodule MindwendelWeb.CoreComponents do
         name={@name}
         class={[
           "form-control",
-          @errors == [] && "is-valid",
-          @errors != [] && "is-invalid"
+          @used? && @errors == [] && "is-valid",
+          @used? && @errors != [] && "is-invalid"
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
@@ -399,8 +403,8 @@ defmodule MindwendelWeb.CoreComponents do
       value={Phoenix.HTML.Form.normalize_value(@type, @value)}
       class={[
         "form-control",
-        @errors == [] && "is-valid",
-        @errors != [] && "is-invalid"
+        @used? && @errors == [] && "is-valid",
+        @used? && @errors != [] && "is-invalid"
       ]}
       {@rest}
     />
@@ -419,8 +423,8 @@ defmodule MindwendelWeb.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
           "form-control",
-          @errors == [] && "is-valid",
-          @errors != [] && "is-invalid"
+          @used? && @errors == [] && "is-valid",
+          @used? && @errors != [] && "is-invalid"
         ]}
         {@rest}
       />
