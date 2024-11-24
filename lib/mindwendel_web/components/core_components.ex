@@ -384,8 +384,7 @@ defmodule MindwendelWeb.CoreComponents do
         name={@name}
         class={[
           "form-control",
-          @used? && @errors == [] && "is-valid",
-          @used? && @errors != [] && "is-invalid"
+          error_class(@used?, @errors)
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
@@ -403,8 +402,7 @@ defmodule MindwendelWeb.CoreComponents do
       value={Phoenix.HTML.Form.normalize_value(@type, @value)}
       class={[
         "form-control",
-        @used? && @errors == [] && "is-valid",
-        @used? && @errors != [] && "is-invalid"
+        error_class(@used?, @errors)
       ]}
       {@rest}
     />
@@ -423,8 +421,7 @@ defmodule MindwendelWeb.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
           "form-control",
-          @used? && @errors == [] && "is-valid",
-          @used? && @errors != [] && "is-invalid"
+          error_class(@used?, @errors)
         ]}
         {@rest}
       />
@@ -432,6 +429,11 @@ defmodule MindwendelWeb.CoreComponents do
     </div>
     """
   end
+
+  defp error_class(used?, errors)
+  defp error_class(false, _errors), do: nil
+  defp error_class(true, []), do: "is-valid"
+  defp error_class(_true, _non_empty), do: "is-invalid"
 
   @doc """
   Renders a label.
