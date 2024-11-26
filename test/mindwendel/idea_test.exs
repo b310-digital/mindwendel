@@ -87,8 +87,9 @@ defmodule Mindwendel.IdeaTest do
     end
   end
 
-  @tag :skip
   describe "#update_idea" do
+    @describetag :skip
+
     setup do
       %{idea: Factory.insert!(:idea)}
     end

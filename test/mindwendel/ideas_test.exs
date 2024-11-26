@@ -8,8 +8,8 @@ defmodule Mindwendel.IdeasTest do
   setup do
     user = Factory.insert!(:user)
     brainstorming = Factory.insert!(:brainstorming, users: [user])
-    lane = Enum.at(brainstorming.lanes, 0)
-    label_first = Enum.at(brainstorming.labels, 0)
+    lane = List.first(brainstorming.lanes)
+    label_first = List.first(brainstorming.labels)
 
     %{
       brainstorming: brainstorming,
@@ -343,11 +343,13 @@ defmodule Mindwendel.IdeasTest do
       lane: lane,
       idea: idea
     } do
+      [first_label, second_label | _] = brainstorming.labels
+
       second_idea =
         Factory.insert!(:idea,
           brainstorming: brainstorming,
           lane: lane,
-          label: Enum.at(brainstorming.labels, 0),
+          idea_labels: [first_label],
           inserted_at: ~N[2022-01-01 15:06:30]
         )
 
@@ -355,7 +357,7 @@ defmodule Mindwendel.IdeasTest do
         Factory.insert!(:idea,
           brainstorming: brainstorming,
           lane: lane,
-          label: Enum.at(brainstorming.labels, 1),
+          idea_labels: [second_label],
           inserted_at: ~N[2021-01-01 15:06:30]
         )
 

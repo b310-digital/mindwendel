@@ -12,13 +12,20 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   def mount(%{"id" => id}, session, socket) do
     if connected?(socket), do: Brainstormings.subscribe(id)
 
+    # If the admin secret in the URL after the hash (only available inside the client session) is given, add the user as moderating user to the brainstorming.
+    # If not, add the user as normal user.
     current_user_id = Mindwendel.Services.SessionService.get_current_user_id(session)
+    brainstorming = Brainstormings.get_brainstorming!(id)
+    admin_secret = get_connect_params(socket)["adminSecret"]
 
-    brainstorming =
-      Brainstormings.get_brainstorming!(id)
-      |> Accounts.merge_brainstorming_user(current_user_id)
+    if Brainstormings.validate_admin_secret(brainstorming, admin_secret) do
+      Accounts.add_moderating_user(brainstorming, current_user_id)
+    end
+
+    Accounts.merge_brainstorming_user(brainstorming, current_user_id)
 
     lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
+    # load the user, also for permissions of brainstormings
     current_user = Mindwendel.Accounts.get_user(current_user_id)
 
     {
