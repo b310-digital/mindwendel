@@ -134,10 +134,16 @@
     </div>
     <div class="float-end ms-2">
       <span>
-        <%= @idea.comments_count %>
-        <i class="bi-chat"></i>
+        <.link
+          patch={~p"/brainstormings/#{@brainstorming.id}/ideas/#{@idea.id}"}
+          class="text-decoration-none"
+          title={gettext("Show idea")}
+        >
+          <span class="text-dark"><%= @idea.comments_count %></span>
+          <i class="bi-chat"></i>
+        </.link>
       </span>
-      <span class="me-1"><%= length(@idea.likes) %></span>
+      <span class="me-1 text-dark"><%= length(@idea.likes) %></span>
       <%= if Mindwendel.Likes.exists_user_in_likes?(@idea.likes, @current_user.id) do %>
         <.link phx-click="unlike" phx-target={@myself} phx-value-id={@idea.id} title="Unlike">
           <i class="bi-star-fill"></i>

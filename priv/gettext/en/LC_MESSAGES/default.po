@@ -542,6 +542,7 @@ msgid "No comments available"
 msgstr ""
 
 #: lib/mindwendel_web/live/idea_live/card_component.html.heex:33
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:140
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Show idea"
 msgstr ""

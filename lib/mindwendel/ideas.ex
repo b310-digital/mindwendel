@@ -87,7 +87,6 @@ defmodule Mindwendel.Ideas do
     |> Repo.preload([
       :link,
       :likes,
-      :label,
       :idea_labels,
       :comments
     ])
