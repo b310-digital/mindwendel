@@ -20,8 +20,16 @@ defmodule Mindwendel.AttachmentsTest do
       assert Attachments.simplified_attached_file_type("application/pdf") == "pdf"
     end
 
-    test "simplifies the file type for an unknown file" do
+    test "simplifies the file type for an unknown type" do
       assert Attachments.simplified_attached_file_type("application_unknown") == "misc"
+    end
+
+    test "simplifies the file type for an empty type" do
+      assert Attachments.simplified_attached_file_type("") == "misc"
+    end
+
+    test "simplifies the file type for a missing type" do
+      assert Attachments.simplified_attached_file_type(nil) == "misc"
     end
   end
 

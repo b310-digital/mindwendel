@@ -29,7 +29,7 @@ defmodule Mindwendel.Attachments do
 
   """
   def simplified_attached_file_type(file_type) do
-    case String.split(file_type, "/") do
+    case String.split(file_type || "", "/") do
       ["image", _] -> "image"
       [_, "pdf"] -> "pdf"
       [_, _] -> "misc"
