@@ -21,9 +21,9 @@
 
   <%= if length(@idea.files) > 0 do %>
     <%= for attachment <- @idea.files do %>
-      <i class="bi bi-file-earmark"></i>
       <p class="text-muted">
-        <.link href={~p"/files/#{attachment.id}"} download={attachment.name}>
+        <.file_icon type={Attachments.simplified_attached_file_type(attachment.file_type)} />
+        <.link href={~p"/files/#{attachment.id}"}>
           <%= attachment.name || gettext("No filename") %>
         </.link>
       </p>

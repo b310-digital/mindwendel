@@ -11,6 +11,28 @@ defmodule Mindwendel.AttachmentsTest do
     end
   end
 
+  describe "simplified_attached_file_type" do
+    test "simplifies the file type for an image" do
+      assert Attachments.simplified_attached_file_type("image/jpeg") == "image"
+    end
+
+    test "simplifies the file type for a pdf" do
+      assert Attachments.simplified_attached_file_type("application/pdf") == "pdf"
+    end
+
+    test "simplifies the file type for an unknown type" do
+      assert Attachments.simplified_attached_file_type("application_unknown") == "misc"
+    end
+
+    test "simplifies the file type for an empty type" do
+      assert Attachments.simplified_attached_file_type("") == "misc"
+    end
+
+    test "simplifies the file type for a missing type" do
+      assert Attachments.simplified_attached_file_type(nil) == "misc"
+    end
+  end
+
   describe "delete_attached_file" do
     test "deletes the file" do
       idea =

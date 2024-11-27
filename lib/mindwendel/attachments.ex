@@ -20,6 +20,24 @@ defmodule Mindwendel.Attachments do
   end
 
   @doc """
+  Returns a simplified file type: image, pdf or misc
+
+  ## Examples
+
+      iex> simplified_attached_file_type("application/pdf")
+      "pdf"
+
+  """
+  def simplified_attached_file_type(file_type) do
+    case String.split(file_type || "", "/") do
+      ["image", _] -> "image"
+      [_, "pdf"] -> "pdf"
+      [_, _] -> "misc"
+      [_] -> "misc"
+    end
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking attached_file changes.
 
   ## Examples

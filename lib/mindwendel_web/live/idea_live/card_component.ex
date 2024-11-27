@@ -1,5 +1,6 @@
 defmodule MindwendelWeb.IdeaLive.CardComponent do
   use MindwendelWeb, :live_component
+  alias Mindwendel.Attachments
   alias Mindwendel.Ideas
   alias Mindwendel.IdeaLabels
   alias Mindwendel.Likes
