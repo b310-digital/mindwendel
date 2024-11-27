@@ -20,7 +20,8 @@ defmodule MindwendelWeb.FileController do
       {:ok, decrypted_file} ->
         send_download(conn, {:binary, decrypted_file},
           filename: attached_file.name,
-          disposition: :attachment
+          content_type: attached_file.file_type,
+          disposition: :inline
         )
 
       {:error, _} ->
