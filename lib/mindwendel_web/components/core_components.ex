@@ -608,6 +608,28 @@ defmodule MindwendelWeb.CoreComponents do
   end
 
   @doc """
+  Renders a File Icon.
+
+  ## Examples
+
+      <.file_icon type="image" />
+  """
+  attr :type, :string, required: true
+  attr :class, :string, default: nil
+
+  def file_icon(assigns) do
+    ~H"""
+    <i class={[
+      "bi",
+      @type == "image" && "bi-file-earmark-image",
+      @type == "pdf" && "bi-file-earmark-pdf",
+      !Enum.member?(["image", "pdf"], @type) && "bi-file-earmark",
+      @class
+    ]} />
+    """
+  end
+
+  @doc """
   Renders a [Heroicon](https://heroicons.com).
 
   Heroicons come in three styles – outline, solid, and mini.
