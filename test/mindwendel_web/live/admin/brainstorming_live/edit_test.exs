@@ -64,16 +64,16 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     {:ok, edit_live_view, _html} =
       live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
-    edit_live_view
-    |> element("button", "Add idea label")
-    |> render_click()
+    add_label(edit_live_view)
 
-    assert edit_live_view |> element("input#brainstorming_labels_5_name") |> has_element?
+    # we had 5, now we have 6 (0-based index)
+    assert edit_live_view
+           |> element("input#brainstorming_labels_5_name")
+           |> has_element?
+
     refute edit_live_view |> element("input#brainstorming_labels_6_name") |> has_element?
 
-    edit_live_view
-    |> element("button", "Add idea label")
-    |> render_click()
+    add_label(edit_live_view)
 
     assert edit_live_view |> element("input#brainstorming_labels_6_name") |> has_element?
   end
@@ -101,26 +101,28 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     {:ok, edit_live_view, _html} =
       live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
-    brainstorming_label_first = Enum.at(brainstorming.labels, 0)
+    brainstorming_label_first = List.first(brainstorming.labels)
 
-    edit_live_view
-    |> element("button[value=\"#{brainstorming_label_first.id}\"]", "Remove")
-    |> render_click()
+    drop_label(edit_live_view, 0)
 
-    assert edit_live_view |> element("input#brainstorming_labels_0_name") |> has_element?
-
-    refute edit_live_view
-           |> element("button[value=#{brainstorming_label_first.id}]", "Remove")
+    assert edit_live_view
+           |> element(~s{input[name="brainstorming[labels_sort][]"][value="0"]})
            |> has_element?
 
-    refute edit_live_view |> element("input#brainstorming_labels_4_name") |> has_element?
+    refute edit_live_view
+           |> element("input[value=#{brainstorming_label_first.name}]")
+           |> has_element?
+
+    refute edit_live_view
+           |> element(~s{input[name="brainstorming[labels_sort][]"][value="4"]})
+           |> has_element?
   end
 
   test "does not remove idea label when idea is attached to this label", %{
     conn: conn,
     brainstorming: brainstorming
   } do
-    brainstorming_label_first = Enum.at(brainstorming.labels, 0)
+    brainstorming_label_first = List.first(brainstorming.labels)
 
     _idea =
       Factory.insert!(:idea,
@@ -133,9 +135,16 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     {:ok, edit_live_view, _html} =
       live(conn, ~p"/admin/brainstormings/#{brainstorming.admin_url_id}/edit")
 
-    assert edit_live_view
-           |> element(html_selector_remove_idea_label_button(brainstorming_label_first), "Remove")
-           |> render_click()
+    IO.puts("\n\n\n\n\n\n\n\n\n\n\n")
+    IO.puts("erroring")
+    IO.puts("\n\n\n\n\n\n\n\n\n\n\n")
+
+    # check with the changeset that it errors
+    drop_label(edit_live_view, 0)
+
+    IO.puts("post erroring")
+
+    edit_live_view |> element("form#form-labels") |> render() |> IO.puts()
 
     # It should still be there because the idea label is still connected iwth an idea and therefore cannot be deleted.
 
@@ -178,7 +187,22 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     end
   end
 
+  # simulates clicking the button
+  # https://elixirforum.com/t/tests-with-render-click-phx-click-js-dispatch-change-fail-best-way-to-fix-testing-inputs-for/67387
+  defp add_label(live_view) do
+    live_view
+    |> element("form#form-labels")
+    |> render_change(%{"brainstorming[labels_sort][]" => "new"})
+  end
+
+  # index is 0 based
+  defp drop_label(live_view, label_index) do
+    live_view
+    |> element("form#form-labels")
+    |> render_change(%{"brainstorming[labels_drop][]" => label_index})
+  end
+
   defp html_selector_remove_idea_label_button(idea_label) do
-    "button[value=\"#{idea_label.id}\"]"
+    "button[value=\"#{idea_label.position_order}\"]"
   end
 end
