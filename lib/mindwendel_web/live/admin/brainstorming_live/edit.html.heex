@@ -5,42 +5,9 @@
     </h4>
   </div>
   <div class="card-body">
-    <p><%= gettext("Save this link to update / delete your brainstorming later on:") %></p>
-    <div class="input-group">
-      <input
-        aria-describedby="brainstorming-link-copy-to-clipboard-button"
-        aria-label="Url to brainstorming"
-        class="form-control"
-        id="brainstorming-link-input-readonly"
-        readonly="true"
-        type="text"
-        value={URI.to_string(@uri)}
-      />
-      <button
-        class="btn btn-outline-secondary"
-        data-clipboard-target="#brainstorming-link-input-readonly"
-        id="brainstorming-link-copy-to-clipboard-button"
-        phx-hook="CopyBrainstormingLinkButton"
-        type="button"
-      >
-        <%= gettext("Copy") %>
-      </button>
-      <button
-        aria-label="Share brainstorming"
-        class="btn btn-outline-secondary"
-        data-native-sharing-button-share-data-text={gettext("Join my brainstorming")}
-        data-native-sharing-button-share-data-title={gettext("Mindwendel Brainstorming")}
-        data-native-sharing-button-share-data-url={URI.to_string(@uri)}
-        id="brainstorming-link-share-button"
-        phx-hook="NativeSharingButton"
-      >
-        <i class="bi-share-fill"></i>
-      </button>
-    </div>
-    <br />
     <i class="far fa-arrow-alt-circle-right"></i>
     <span class="fw-bold">
-      <.link href={~p"/brainstormings/#{@brainstorming.id}"}>
+      <.link href={~p"/brainstormings/#{@brainstorming.id}/##{@brainstorming.admin_url_id}"}>
         <%= gettext("Proceed to your brainstorming") %>
       </.link>
     </span>
