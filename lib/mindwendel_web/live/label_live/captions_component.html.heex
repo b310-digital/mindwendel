@@ -1,4 +1,4 @@
-<div class="justify-content-end">
+<div class="d-flex justify-content-end">
   <%= for brainstorming_idea_label <- @brainstorming.labels do %>
     <% filter_active = Enum.member?(@brainstorming.filter_labels_ids, brainstorming_idea_label.id) %>
     <.filter_button
