@@ -2,6 +2,7 @@ defmodule MindwendelWeb.StaticPageController do
   use MindwendelWeb, :controller
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.FeatureFlag
 
   plug :put_root_layout, {MindwendelWeb.Layouts, :static_page}
 
@@ -23,7 +24,7 @@ defmodule MindwendelWeb.StaticPageController do
   end
 
   def legal(conn, _params) do
-    if Application.fetch_env!(:mindwendel, :options)[:feature_privacy_imprint_enabled] do
+    if FeatureFlag.enabled?(:feature_privacy_imprint_enabled) do
       render(conn, "legal.html")
     else
       render_404(conn)
@@ -31,7 +32,7 @@ defmodule MindwendelWeb.StaticPageController do
   end
 
   def privacy(conn, _params) do
-    if Application.fetch_env!(:mindwendel, :options)[:feature_privacy_imprint_enabled] do
+    if FeatureFlag.enabled?(:feature_privacy_imprint_enabled) do
       render(conn, "privacy.html")
     else
       render_404(conn)

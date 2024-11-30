@@ -77,7 +77,7 @@
                 </ul>
               </li>
 
-              <%= if Application.fetch_env!(:mindwendel, :options)[:feature_privacy_imprint_enabled] do %>
+              <%= if Mindwendel.FeatureFlag.enabled?(:feature_privacy_imprint_enabled) do %>
                 <li aria-current="page" class="nav-item">
                   <.link href={~p"/privacy"} class="nav-link"><%= gettext("Privacy") %></.link>
                 </li>

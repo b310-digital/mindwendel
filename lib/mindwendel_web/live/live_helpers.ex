@@ -2,6 +2,7 @@ defmodule MindwendelWeb.LiveHelpers do
   use Gettext, backend: MindwendelWeb.Gettext
 
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.FeatureFlag
 
   def has_move_permission(brainstorming, current_user) do
     brainstorming.option_allow_manual_ordering or
@@ -36,6 +37,6 @@ defmodule MindwendelWeb.LiveHelpers do
   end
 
   def show_idea_file_upload do
-    Application.fetch_env!(:mindwendel, :options)[:feature_file_upload]
+    FeatureFlag.enabled?(:feature_file_upload)
   end
 end
