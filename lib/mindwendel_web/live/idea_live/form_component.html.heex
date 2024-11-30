@@ -8,7 +8,7 @@
   >
     <.input field={@form[:username]} type="text" label={gettext("Username")} phx-debounce={300} />
     <.input field={@form[:body]} type="textarea" label={gettext("Your idea")} phx-debounce={300} />
-    <%= if show_idea_file_upload() do %>
+    <%= if show_idea_file_upload?() do %>
       <div class="form-group">
         <.label for={@uploads.attachment.ref}><%= gettext("Additional Attachment") %></.label>
         <.live_file_input upload={@uploads.attachment} class="w-100" />
