@@ -59,10 +59,10 @@ defmodule Mindwendel.Brainstormings do
       %Brainstorming{ ... }
 
       iex> get_brainstorming("0323906b-b496-4778-ae67-1dd779d3de3c")
-      ** (Ecto.NoResultsError)
+      {:error, :not_found}
 
       iex> get_brainstorming("not_a_valid_uuid_string")
-      ** (Ecto.Query.CastError)
+      {:error, :invalid_uuid}
 
   """
   def get_brainstorming(id) do

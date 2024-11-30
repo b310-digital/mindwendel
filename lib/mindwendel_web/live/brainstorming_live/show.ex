@@ -3,7 +3,6 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
-  alias Mindwendel.FeatureFlag
   alias Mindwendel.Lanes
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
@@ -16,27 +15,36 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     # If the admin secret in the URL after the hash (only available inside the client session) is given, add the user as moderating user to the brainstorming.
     # If not, add the user as normal user.
     current_user_id = Mindwendel.Services.SessionService.get_current_user_id(session)
-    brainstorming = Brainstormings.get_brainstorming(id)
-    admin_secret = get_connect_params(socket)["adminSecret"]
 
-    if Brainstormings.validate_admin_secret(brainstorming, admin_secret) do
-      Accounts.add_moderating_user(brainstorming, current_user_id)
+    case Brainstormings.get_brainstorming(id) do
+      {:error, _} ->
+        {:ok,
+         socket
+         |> put_flash(:error, gettext("Brainstorming not found"))
+         |> push_navigate(to: "/")}
+
+      brainstorming ->
+        admin_secret = get_connect_params(socket)["adminSecret"]
+
+        if Brainstormings.validate_admin_secret(brainstorming, admin_secret) do
+          Accounts.add_moderating_user(brainstorming, current_user_id)
+        end
+
+        Accounts.merge_brainstorming_user(brainstorming, current_user_id)
+
+        lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
+        # load the user, also for permissions of brainstormings
+        current_user = Mindwendel.Accounts.get_user(current_user_id)
+
+        {
+          :ok,
+          socket
+          |> assign(:brainstorming, brainstorming)
+          |> assign(:lanes, lanes)
+          |> assign(:current_user, current_user)
+          |> assign(:inspiration, Mindwendel.Help.random_inspiration())
+        }
     end
-
-    Accounts.merge_brainstorming_user(brainstorming, current_user_id)
-
-    lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
-    # load the user, also for permissions of brainstormings
-    current_user = Mindwendel.Accounts.get_user(current_user_id)
-
-    {
-      :ok,
-      socket
-      |> assign(:brainstorming, brainstorming)
-      |> assign(:lanes, lanes)
-      |> assign(:current_user, current_user)
-      |> assign(:inspiration, inspiration())
-    }
   end
 
   def mount(%{"brainstorming_id" => brainstorming_id, "idea_id" => _idea_id}, session, socket) do
@@ -179,11 +187,5 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   defp apply_action(socket, :share, _params) do
     socket
     |> assign(:page_title, socket.assigns.brainstorming.name)
-  end
-
-  defp inspiration do
-    if FeatureFlag.enabled?(:feature_brainstorming_teasers) do
-      Mindwendel.Help.random_inspiration()
-    end
   end
 end

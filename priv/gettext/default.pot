@@ -25,12 +25,12 @@ msgstr ""
 msgid "Ready?"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:176
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:184
 #, elixir-autogen, elixir-format
 msgid "%{name} - Edit"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:153
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:161
 #, elixir-autogen, elixir-format
 msgid "%{name} - New Idea"
 msgstr ""
@@ -384,7 +384,7 @@ msgstr ""
 msgid "Type the label name"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:163
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:171
 #, elixir-autogen, elixir-format
 msgid "%{name} - New Lane"
 msgstr ""
@@ -560,4 +560,9 @@ msgstr ""
 #: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:43
 #, elixir-autogen, elixir-format
 msgid "Give moderating permissions"
+msgstr ""
+
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:23
+#, elixir-autogen, elixir-format
+msgid "Brainstorming not found"
 msgstr ""
