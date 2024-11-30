@@ -8,6 +8,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.Brainstormings.Comment
+  alias Mindwendel.FeatureFlag
   alias Mindwendel.Ideas
   alias Mindwendel.Attachments
   alias Mindwendel.Attachments.Link
@@ -75,9 +76,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   end
 
   defp maybe_put_attachments(changeset, idea, attrs) do
-    upload_feature_flag = Application.fetch_env!(:mindwendel, :options)[:feature_file_upload]
-
-    if upload_feature_flag and
+    if FeatureFlag.enabled?(:feature_file_upload) and
          attrs["tmp_attachments"] != nil and Enum.empty?(changeset.errors) do
       new_files =
         Enum.map(attrs["tmp_attachments"], fn change ->
