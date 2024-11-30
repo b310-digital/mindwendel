@@ -2,8 +2,22 @@
 # from environment variables. You can also hardcode secrets,
 # although such is generally not recommended and you have to
 # remember to add this file to your .gitignore.
+defmodule Mindwendel.EnvHelper do
+  def trimmed_env(env, default \\ nil) do
+    env
+    |> System.get_env(default)
+    |> String.trim()
+  end
+
+  def enabled?(env, default \\ "true") do
+    Enum.member?(["", "true"], trimmed_env(env, default))
+  end
+end
+
 import Config
 require Logger
+
+alias Mindwendel.EnvHelper
 
 if config_env() == :prod do
   config :logger, :default_handler,
@@ -147,14 +161,14 @@ end
 default_locale =
   case config_env() do
     :test -> "en"
-    _ -> String.trim(System.get_env("MW_DEFAULT_LOCALE") || "en")
+    _ -> EnvHelper.trimmed_env("MW_DEFAULT_LOCALE", "en")
   end
 
 config :gettext, :default_locale, default_locale
 config :timex, :default_locale, default_locale
 
 parsed_feature_brainstorming_removal_after_days =
-  String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS") || "")
+  EnvHelper.trimmed_env("MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS", "")
 
 delete_brainstormings_after_days =
   if parsed_feature_brainstorming_removal_after_days != "" do
@@ -163,25 +177,13 @@ delete_brainstormings_after_days =
     30
   end
 
-feature_file_upload =
-  Enum.member?(
-    ["", "true"],
-    String.trim(System.get_env("MW_FEATURE_IDEA_FILE_UPLOAD") || "")
-  )
+feature_file_upload = EnvHelper.enabled?("MW_FEATURE_IDEA_FILE_UPLOAD", "true")
 
-feature_privacy_imprint_enabled =
-  Enum.member?(
-    ["true"],
-    String.trim(System.get_env("MW_FEATURE_LEGAL_PRIVACY_LINKS") || "")
-  )
+feature_privacy_imprint_enabled = EnvHelper.enabled?("MW_FEATURE_LEGAL_PRIVACY_LINKS", "false")
 
 # enable/disable brainstorming teasers and configure delete brainstormings option:
 config :mindwendel, :options,
-  feature_brainstorming_teasers:
-    Enum.member?(
-      ["", "true"],
-      String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
-    ),
+  feature_brainstorming_teasers: EnvHelper.enabled?("MW_FEATURE_BRAINSTORMING_TEASER", "true"),
   feature_file_upload: feature_file_upload,
   feature_brainstorming_removal_after_days: delete_brainstormings_after_days,
   feature_privacy_imprint_enabled: feature_privacy_imprint_enabled,
