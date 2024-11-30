@@ -253,7 +253,7 @@ defmodule Mindwendel.BrainstormingsTest do
       assert Enum.count(brainstorming.ideas) == 1
       Brainstormings.empty(brainstorming)
       # reload brainstorming:
-      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id)
+      brainstorming = Brainstormings.get_brainstorming(brainstorming.id)
       brainstorming = brainstorming |> Repo.preload([:ideas, :lanes])
       assert Enum.empty?(brainstorming.lanes)
     end
@@ -302,7 +302,7 @@ defmodule Mindwendel.BrainstormingsTest do
       assert Enum.count(other_brainstorming.ideas) == 1
       Brainstormings.empty(brainstorming)
       # reload brainstorming:
-      brainstorming = Brainstormings.get_brainstorming!(brainstorming.id) |> Repo.preload(:lanes)
+      brainstorming = Brainstormings.get_brainstorming(brainstorming.id) |> Repo.preload(:lanes)
       brainstorming = brainstorming |> Repo.preload([:ideas])
       other_brainstorming = other_brainstorming |> Repo.preload([:ideas])
       assert Enum.empty?(brainstorming.lanes)

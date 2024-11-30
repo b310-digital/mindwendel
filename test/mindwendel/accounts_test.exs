@@ -33,7 +33,7 @@ defmodule Mindwendel.AccountsTest do
       assert brainstorming_moderatoring_user.brainstorming_id == brainstorming.id
 
       assert [%User{id: ^user_id}] =
-               Brainstormings.get_brainstorming!(brainstorming.id).moderating_users
+               Brainstormings.get_brainstorming(brainstorming.id).moderating_users
     end
 
     test "responds with an error when brainstorming already contains the moderating user", %{
