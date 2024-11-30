@@ -42,6 +42,7 @@ defmodule MindwendelWeb.IdeaLive.CardComponent do
     idea = Ideas.get_idea!(idea_id)
     idea_label = IdeaLabels.get_idea_label(idea_label_id)
 
+    # the case makes no sense?
     case(IdeaLabels.add_idea_label_to_idea(idea, idea_label)) do
       {:ok, _idea} ->
         {:noreply, socket}

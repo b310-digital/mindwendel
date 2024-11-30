@@ -28,18 +28,13 @@ defmodule Mindwendel.IdeaLabels do
     nil
   end
 
+  # As the broadcast results in a full reload of the ideas, we don't need to actually update
+  # the idea struct, a new association is enough
   def add_idea_label_to_idea(%Idea{} = idea, %IdeaLabel{} = idea_label) do
-    idea = Repo.preload(idea, :idea_labels)
-
-    idea_labels =
-      (idea.idea_labels ++ [idea_label])
-      |> Enum.map(&Ecto.Changeset.change/1)
-
     result =
-      idea
-      |> Ecto.Changeset.change()
-      |> Ecto.Changeset.put_assoc(:idea_labels, idea_labels)
-      |> Repo.update()
+      %{idea_id: idea.id, idea_label_id: idea_label.id}
+      |> IdeaIdeaLabel.bare_creation_changeset()
+      |> Repo.insert()
 
     Lanes.broadcast_lanes_update(idea.brainstorming_id)
     result

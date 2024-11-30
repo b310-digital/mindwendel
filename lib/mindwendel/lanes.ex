@@ -70,8 +70,10 @@ defmodule Mindwendel.Lanes do
 
   """
   def get_lanes_for_brainstorming_with_labels_filtered(id) do
+    # optimization: brainstorming is only needed for filter_label_ideas
     brainstorming = Brainstormings.get_brainstorming!(id)
 
+    # Enum/any?
     filter_label =
       if length(brainstorming.filter_labels_ids) > 0,
         do: %{filter_labels_ids: brainstorming.filter_labels_ids},
