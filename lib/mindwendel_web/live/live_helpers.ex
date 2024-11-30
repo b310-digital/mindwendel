@@ -36,7 +36,7 @@ defmodule MindwendelWeb.LiveHelpers do
     Brainstorming.brainstorming_available_until(brainstorming)
   end
 
-  def show_idea_file_upload do
+  def show_idea_file_upload? do
     FeatureFlag.enabled?(:feature_file_upload)
   end
 end
