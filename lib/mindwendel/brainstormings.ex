@@ -55,25 +55,30 @@ defmodule Mindwendel.Brainstormings do
 
   ## Examples
 
-      iex> get_brainstorming!("0323906b-b496-4778-ae67-1dd779d3de3c")
+      iex> get_brainstorming("0323906b-b496-4778-ae67-1dd779d3de3c")
       %Brainstorming{ ... }
 
-      iex> get_brainstorming!("0323906b-b496-4778-ae67-1dd779d3de3c")
+      iex> get_brainstorming("0323906b-b496-4778-ae67-1dd779d3de3c")
       ** (Ecto.NoResultsError)
 
-      iex> get_brainstorming!("not_a_valid_uuid_string")
+      iex> get_brainstorming("not_a_valid_uuid_string")
       ** (Ecto.Query.CastError)
 
   """
-  # See https://stackoverflow.com/questions/53802091/elixir-uuid-how-to-handle-500-error-when-uuid-doesnt-match
-  def get_brainstorming!(id) do
-    Repo.get!(Brainstorming, id)
-    |> Repo.preload([
-      :users,
-      :moderating_users,
-      labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
-    ])
-    |> update_last_accessed_at
+  def get_brainstorming(id) do
+    with {:ok, _} <- Ecto.UUID.dump(id),
+         brainstorming when not is_nil(brainstorming) <- Repo.get(Brainstorming, id) do
+      brainstorming
+      |> Repo.preload([
+        :users,
+        :moderating_users,
+        labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
+      ])
+      |> update_last_accessed_at()
+    else
+      :error -> {:error, :invalid_uuid}
+      nil -> {:error, :not_found}
+    end
   end
 
   @doc """

@@ -303,7 +303,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       |> render_click()
 
       assert(
-        Brainstormings.get_brainstorming!(brainstorming.id).filter_labels_ids == [
+        Brainstormings.get_brainstorming(brainstorming.id).filter_labels_ids == [
           selected_ideal_label.id
         ]
       )

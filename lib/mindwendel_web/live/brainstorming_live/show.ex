@@ -16,7 +16,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     # If the admin secret in the URL after the hash (only available inside the client session) is given, add the user as moderating user to the brainstorming.
     # If not, add the user as normal user.
     current_user_id = Mindwendel.Services.SessionService.get_current_user_id(session)
-    brainstorming = Brainstormings.get_brainstorming!(id)
+    brainstorming = Brainstormings.get_brainstorming(id)
     admin_secret = get_connect_params(socket)["adminSecret"]
 
     if Brainstormings.validate_admin_secret(brainstorming, admin_secret) do
