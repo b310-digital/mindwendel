@@ -42,13 +42,8 @@ defmodule MindwendelWeb.IdeaLive.CardComponent do
     idea = Ideas.get_idea!(idea_id)
     idea_label = IdeaLabels.get_idea_label(idea_label_id)
 
-    case(IdeaLabels.add_idea_label_to_idea(idea, idea_label)) do
-      {:ok, _idea} ->
-        {:noreply, socket}
-
-      {:error, _changeset} ->
-        {:noreply, socket}
-    end
+    IdeaLabels.add_idea_label_to_idea(idea, idea_label)
+    {:noreply, socket}
   end
 
   def handle_event(
