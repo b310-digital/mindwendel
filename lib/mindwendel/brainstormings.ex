@@ -67,13 +67,18 @@ defmodule Mindwendel.Brainstormings do
   """
   # See https://stackoverflow.com/questions/53802091/elixir-uuid-how-to-handle-500-error-when-uuid-doesnt-match
   def get_brainstorming!(id) do
-    Repo.get!(Brainstorming, id)
+    id
+    |> get_bare_brainstorming!()
     |> Repo.preload([
       :users,
       :moderating_users,
       labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
     ])
     |> update_last_accessed_at
+  end
+
+  def get_bare_brainstorming!(id) do
+    Repo.get!(Brainstorming, id)
   end
 
   @doc """

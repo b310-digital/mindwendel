@@ -24,4 +24,13 @@ defmodule Mindwendel.Brainstormings.IdeaIdeaLabel do
       name: :idea_idea_labels_idea_id_idea_label_id_index
     )
   end
+
+  def bare_creation_changeset(idea_idea_label \\ %__MODULE__{}, attrs) do
+    idea_idea_label
+    |> cast(attrs, [:idea_id, :idea_label_id])
+    |> validate_required([:idea_id, :idea_label_id])
+    |> unique_constraint([:idea_id, :idea_label_id],
+      name: :idea_idea_labels_idea_id_idea_label_id_index
+    )
+  end
 end
