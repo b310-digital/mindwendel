@@ -562,7 +562,7 @@ msgstr ""
 msgid "Give moderating permissions"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:23
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:45
 #, elixir-autogen, elixir-format
 msgid "Brainstorming not found"
 msgstr ""
