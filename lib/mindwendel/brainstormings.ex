@@ -51,7 +51,8 @@ defmodule Mindwendel.Brainstormings do
   @doc """
   Gets a single brainstorming.
 
-  Raises `Ecto.NoResultsError` if the Brainstorming does not exist.
+  Returns an error tuple instead of raising exceptions to handle invalid UUIDs gracefully,
+  particularly important for initial brainstorming fetches that may receive spam requests.
 
   ## Examples
 
@@ -66,18 +67,29 @@ defmodule Mindwendel.Brainstormings do
 
   """
   def get_brainstorming(id) do
-    with {:ok, _} <- Ecto.UUID.dump(id),
-         brainstorming when not is_nil(brainstorming) <- Repo.get(Brainstorming, id) do
-      brainstorming
-      |> Repo.preload([
-        :users,
-        :moderating_users,
-        labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
-      ])
-      |> update_last_accessed_at()
-    else
+    case Ecto.UUID.cast(id) do
+      {:ok, id} -> get_brainstorming_with_valid_uuid(id)
       :error -> {:error, :invalid_uuid}
-      nil -> {:error, :not_found}
+    end
+  end
+
+  # No uuid check here, has to be done before
+  defp get_brainstorming_with_valid_uuid(id) do
+    case Repo.get(Brainstorming, id) do
+      nil ->
+        {:error, :not_found}
+
+      brainstorming ->
+        preloaded_brainstorming =
+          brainstorming
+          |> Repo.preload([
+            :users,
+            :moderating_users,
+            labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
+          ])
+          |> update_last_accessed_at()
+
+        {:ok, preloaded_brainstorming}
     end
   end
 
@@ -245,7 +257,10 @@ defmodule Mindwendel.Brainstormings do
 
   """
   def validate_admin_secret(brainstorming, admin_secret_id) do
-    brainstorming.admin_url_id == admin_secret_id
+    case brainstorming.admin_url_id do
+      nil -> false
+      admin_url_id -> admin_url_id == admin_secret_id
+    end
   end
 
   @doc """

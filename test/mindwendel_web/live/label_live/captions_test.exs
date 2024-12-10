@@ -17,7 +17,7 @@ defmodule MindwendelWeb.LabelLive.CaptionsTest do
     brainstorming: brainstorming,
     user: user
   } do
-    preloaded_brainstorming = Brainstormings.get_brainstorming(brainstorming.id)
+    {:ok, preloaded_brainstorming} = Brainstormings.get_brainstorming(brainstorming.id)
     preloaded_user = Accounts.get_user(user.id)
 
     captions_component =

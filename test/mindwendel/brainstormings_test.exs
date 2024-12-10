@@ -32,6 +32,11 @@ defmodule Mindwendel.BrainstormingsTest do
       refute Brainstormings.validate_admin_secret(brainstorming, "wrong")
     end
 
+    test "returns false if secret is nil", %{brainstorming: brainstorming} do
+      brainstorming = %{brainstorming | admin_url_id: nil}
+      refute Brainstormings.validate_admin_secret(brainstorming, nil)
+    end
+
     test "returns true if secret is correct", %{brainstorming: brainstorming} do
       assert Brainstormings.validate_admin_secret(brainstorming, brainstorming.admin_url_id)
     end
@@ -253,7 +258,7 @@ defmodule Mindwendel.BrainstormingsTest do
       assert Enum.count(brainstorming.ideas) == 1
       Brainstormings.empty(brainstorming)
       # reload brainstorming:
-      brainstorming = Brainstormings.get_brainstorming(brainstorming.id)
+      {:ok, brainstorming} = Brainstormings.get_brainstorming(brainstorming.id)
       brainstorming = brainstorming |> Repo.preload([:ideas, :lanes])
       assert Enum.empty?(brainstorming.lanes)
     end
@@ -302,8 +307,8 @@ defmodule Mindwendel.BrainstormingsTest do
       assert Enum.count(other_brainstorming.ideas) == 1
       Brainstormings.empty(brainstorming)
       # reload brainstorming:
-      brainstorming = Brainstormings.get_brainstorming(brainstorming.id) |> Repo.preload(:lanes)
-      brainstorming = brainstorming |> Repo.preload([:ideas])
+      {:ok, brainstorming} = Brainstormings.get_brainstorming(brainstorming.id)
+      brainstorming = brainstorming |> Repo.preload([:ideas, :lanes])
       other_brainstorming = other_brainstorming |> Repo.preload([:ideas])
       assert Enum.empty?(brainstorming.lanes)
       assert Enum.count(other_brainstorming.lanes) == 1

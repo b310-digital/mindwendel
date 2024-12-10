@@ -17,13 +17,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     current_user_id = Mindwendel.Services.SessionService.get_current_user_id(session)
 
     case Brainstormings.get_brainstorming(id) do
-      {:error, _} ->
-        {:ok,
-         socket
-         |> put_flash(:error, gettext("Brainstorming not found"))
-         |> push_navigate(to: "/")}
-
-      brainstorming ->
+      {:ok, brainstorming} ->
         admin_secret = get_connect_params(socket)["adminSecret"]
 
         if Brainstormings.validate_admin_secret(brainstorming, admin_secret) do
@@ -44,6 +38,12 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
           |> assign(:current_user, current_user)
           |> assign(:inspiration, Mindwendel.Help.random_inspiration())
         }
+
+      {:error, _} ->
+        {:ok,
+         socket
+         |> put_flash(:error, gettext("Brainstorming not found"))
+         |> push_navigate(to: "/")}
     end
   end
 
