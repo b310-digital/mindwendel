@@ -27,6 +27,27 @@ defmodule Mindwendel.BrainstormingsTest do
     }
   end
 
+  describe "get_brainstorming" do
+    test "returns the brainstorming", %{brainstorming: brainstorming} do
+      {:ok, loaded_brainstorming} = Brainstormings.get_brainstorming(brainstorming.id)
+      assert loaded_brainstorming.id == brainstorming.id
+    end
+
+    test "returns an error for the wrong uuid" do
+      assert {:error, :invalid_uuid} == Brainstormings.get_brainstorming("invalid_uuid")
+    end
+
+    test "returns an error for a missing brainstorming" do
+      assert {:error, :not_found} ==
+               Brainstormings.get_brainstorming("8a4f5d37-28c4-424e-ac4a-5637a41486c4")
+    end
+
+    test "returns an error for a nil value" do
+      assert {:error, :invalid_uuid} ==
+               Brainstormings.get_brainstorming(nil)
+    end
+  end
+
   describe "validate_admin_secret" do
     test "returns false if secret is wrong", %{brainstorming: brainstorming} do
       refute Brainstormings.validate_admin_secret(brainstorming, "wrong")
