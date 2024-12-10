@@ -51,29 +51,46 @@ defmodule Mindwendel.Brainstormings do
   @doc """
   Gets a single brainstorming.
 
-  Raises `Ecto.NoResultsError` if the Brainstorming does not exist.
+  Returns an error tuple instead of raising exceptions to handle invalid UUIDs gracefully,
+  particularly important for initial brainstorming fetches that may receive spam requests.
 
   ## Examples
 
-      iex> get_brainstorming!("0323906b-b496-4778-ae67-1dd779d3de3c")
+      iex> get_brainstorming("0323906b-b496-4778-ae67-1dd779d3de3c")
       %Brainstorming{ ... }
 
-      iex> get_brainstorming!("0323906b-b496-4778-ae67-1dd779d3de3c")
-      ** (Ecto.NoResultsError)
+      iex> get_brainstorming("0323906b-b496-4778-ae67-1dd779d3de3c")
+      {:error, :not_found}
 
-      iex> get_brainstorming!("not_a_valid_uuid_string")
-      ** (Ecto.Query.CastError)
+      iex> get_brainstorming("not_a_valid_uuid_string")
+      {:error, :invalid_uuid}
 
   """
-  # See https://stackoverflow.com/questions/53802091/elixir-uuid-how-to-handle-500-error-when-uuid-doesnt-match
-  def get_brainstorming!(id) do
-    Repo.get!(Brainstorming, id)
-    |> Repo.preload([
-      :users,
-      :moderating_users,
-      labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
-    ])
-    |> update_last_accessed_at
+  def get_brainstorming(id) do
+    case Ecto.UUID.cast(id) do
+      {:ok, id} -> get_brainstorming_with_valid_uuid(id)
+      :error -> {:error, :invalid_uuid}
+    end
+  end
+
+  # No uuid check here, has to be done before
+  defp get_brainstorming_with_valid_uuid(id) do
+    case Repo.get(Brainstorming, id) do
+      nil ->
+        {:error, :not_found}
+
+      brainstorming ->
+        preloaded_brainstorming =
+          brainstorming
+          |> Repo.preload([
+            :users,
+            :moderating_users,
+            labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
+          ])
+          |> update_last_accessed_at()
+
+        {:ok, preloaded_brainstorming}
+    end
   end
 
   @doc """
@@ -240,7 +257,10 @@ defmodule Mindwendel.Brainstormings do
 
   """
   def validate_admin_secret(brainstorming, admin_secret_id) do
-    brainstorming.admin_url_id == admin_secret_id
+    case brainstorming.admin_url_id do
+      nil -> false
+      admin_url_id -> admin_url_id == admin_secret_id
+    end
   end
 
   @doc """
