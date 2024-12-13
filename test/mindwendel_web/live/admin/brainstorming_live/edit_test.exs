@@ -89,7 +89,9 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
            |> form("#form-labels", %{brainstorming: %{labels: %{"0": %{name: "new label"}}}})
            |> render_change()
 
-    assert Brainstormings.get_brainstorming!(brainstorming.id).labels
+    {:ok, brainstorming} = Brainstormings.get_brainstorming(brainstorming.id)
+
+    assert brainstorming.labels
            |> Enum.map(fn a -> a.name end)
            |> Enum.member?("new label")
   end

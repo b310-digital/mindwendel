@@ -70,7 +70,7 @@ defmodule Mindwendel.Lanes do
 
   """
   def get_lanes_for_brainstorming_with_labels_filtered(id) do
-    brainstorming = Brainstormings.get_brainstorming!(id)
+    {:ok, brainstorming} = Brainstormings.get_brainstorming(id)
 
     filter_label =
       if length(brainstorming.filter_labels_ids) > 0,
