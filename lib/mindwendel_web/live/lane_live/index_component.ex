@@ -31,7 +31,7 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
         },
         socket
       ) do
-    brainstorming = Brainstormings.get_brainstorming!(brainstorming_id)
+    {:ok, brainstorming} = Brainstormings.get_brainstorming(brainstorming_id)
 
     if has_move_permission(brainstorming, socket.assigns.current_user) do
       Ideas.update_ideas_for_brainstorming_by_user_move(
@@ -62,7 +62,7 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
   end
 
   def handle_event("sort_by_likes", %{"id" => id, "lane-id" => lane_id}, socket) do
-    brainstorming = Brainstormings.get_brainstorming!(id)
+    {:ok, brainstorming} = Brainstormings.get_brainstorming(id)
 
     if has_move_permission(brainstorming, socket.assigns.current_user) do
       Ideas.update_ideas_for_brainstorming_by_likes(id, lane_id)
@@ -72,7 +72,7 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
   end
 
   def handle_event("sort_by_label", %{"id" => id, "lane-id" => lane_id}, socket) do
-    brainstorming = Brainstormings.get_brainstorming!(id)
+    {:ok, brainstorming} = Brainstormings.get_brainstorming(id)
 
     if has_move_permission(brainstorming, socket.assigns.current_user) do
       Ideas.update_ideas_for_brainstorming_by_labels(id, lane_id)
