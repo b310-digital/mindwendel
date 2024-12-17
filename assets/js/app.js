@@ -168,7 +168,7 @@ Hooks.StoreRecentBrainstorming = {
     
     recentBrainstormings[brainstormingId] = {
       id: brainstormingId,
-      admin_url_id: this.el.dataset.adminUrlId,
+      admin_url_id: this.el.dataset.adminUrlId || recentBrainstormings?.brainstormingId?.admin_url_id,
       name: this.el.dataset.name,
       last_accessed_at: this.el.dataset.lastAccessedAt
     }

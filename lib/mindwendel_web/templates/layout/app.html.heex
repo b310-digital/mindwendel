@@ -47,11 +47,14 @@
               {gettext("Your brainstormings")}
             </a>
             <ul class="dropdown-menu">
-              <%= for brainstorming <- assigns[:brainstormings_stored] do %>
+              <%= for brainstorming <- assigns[:brainstormings_stored] || [] do %>
                 <a
                   class={"dropdown-item #{ if assigns[:brainstorming].id == brainstorming["id"], do: "active", else: "" }"}
                   href={
-                    ~p"/brainstormings/#{brainstorming["id"]}/##{brainstorming["admin_url_id"]}"
+                    brainstorming_url(
+                      brainstorming["id"],
+                      get_in(brainstorming, ["admin_url_id"])
+                    )
                   }
                 >
                   {brainstorming["name"]}
@@ -72,12 +75,12 @@
           <% end %>
 
           <li class="nav-item"><hr class="dropdown-divider" /></li>
-          <%= for brainstorming <- assigns[:brainstormings_stored] do %>
+          <%= for brainstorming <- assigns[:brainstormings_stored] || [] do %>
             <li class="nav-item d-lg-none">
               <a
                 class={"nav-link #{if assigns[:brainstorming].id == brainstorming["id"], do: "active", else: "" }"}
                 href={
-                  ~p"/brainstormings/#{brainstorming["id"]}/##{brainstorming["admin_url_id"]}"
+                  brainstorming_url(brainstorming["id"], get_in(brainstorming, ["admin_url_id"]))
                 }
               >
                 {brainstorming["name"]}

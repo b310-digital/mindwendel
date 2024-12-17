@@ -541,13 +541,13 @@ msgid "Your comment"
 msgstr ""
 
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:71
-#: lib/mindwendel_web/templates/layout/app.html.heex:69
+#: lib/mindwendel_web/templates/layout/app.html.heex:72
 #, elixir-autogen, elixir-format
 msgid "Legal Disclosure"
 msgstr ""
 
 #: lib/mindwendel_web/controllers/static_page_html/home.html.heex:72
-#: lib/mindwendel_web/templates/layout/app.html.heex:65
+#: lib/mindwendel_web/templates/layout/app.html.heex:68
 #, elixir-autogen, elixir-format
 msgid "Privacy"
 msgstr ""
