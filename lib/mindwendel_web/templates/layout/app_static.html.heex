@@ -1,6 +1,6 @@
 <main role="main" class="container" id="main-container">
   <%= if Phoenix.Flash.get(@flash, :info) do %>
-    <p class="alert alert-info" role="alert" phx-click="lv:clear-flash" phx-value-key="info">
+    <p class="alert alert-info" role="alert">
       {Phoenix.Flash.get(@flash, :info)}
     </p>
   <% end %>
