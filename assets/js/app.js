@@ -131,6 +131,54 @@ Hooks.SetIdeaLabelBackgroundColor = {
   }
 };
 
+Hooks.LoadBrainstormingLinks = {
+  mounted() {
+    if(this.el) {
+      const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
+      Object.values(recentBrainstormings)
+            .sort((a, b) => new Date(b.lastAccessedAt) - new Date(a.lastAccessedAt))
+            .slice(0, 5)
+            .forEach(brainstorming => {
+              const newListEl = document.createElement('li')
+              newListEl.classList.add('list-group-item', 'border-0', 'bg-transparent')
+
+              const newLink = document.createElement('a')
+              newLink.href = `/brainstormings/${brainstorming.id}/#${brainstorming.adminUrlId}`
+              newLink.textContent = brainstorming.name;
+
+              newListEl.append(newLink);
+              this.el.append(newListEl);
+      });
+    }
+  }
+};
+
+Hooks.StoreRecentBrainstorming = {
+  mounted() {
+    const brainstormingId = this.el.dataset.id;
+    const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
+    
+    recentBrainstormings[brainstormingId] = {
+      id: brainstormingId,
+      adminUrlId: this.el.dataset.adminUrlId,
+      name: this.el.dataset.name,
+      lastAccessedAt: this.el.dataset.lastAccessedAt
+    }
+    localStorage.setItem('brainstormings', JSON.stringify(recentBrainstormings));
+  }
+};
+
+Hooks.RemoveMissingBrainstorming = {
+  mounted() {
+    const missingId = this.el.dataset.missingId;
+    if (missingId) {
+      const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
+      delete recentBrainstormings[missingId]
+      localStorage.setItem('brainstormings', JSON.stringify(recentBrainstormings));
+    }
+  }
+};
+
 // The brainstorming secret from the url ("#123") is added as well to the socket. The secret is not available on the server side by default.
 let liveSocket = new LiveSocket("/live", Socket, { 
   hooks: Hooks, params: { _csrf_token: csrfToken, adminSecret: window.location.hash.substring(1) }

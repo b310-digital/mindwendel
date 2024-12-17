@@ -42,8 +42,9 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
       {:error, _} ->
         {:ok,
          socket
+         |> put_flash(:missing_brainstorming_id, id)
          |> put_flash(:error, gettext("Brainstorming not found"))
-         |> push_navigate(to: "/")}
+         |> redirect(to: "/")}
     end
   end
 

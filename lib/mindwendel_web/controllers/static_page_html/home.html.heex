@@ -44,29 +44,20 @@
       </div>
     </div>
 
-    <%= if @current_user && !Enum.empty?(@current_user.brainstormings) do %>
-      <div class="row mt-5">
-        <div class="col-md-12 col-lg-12 mt-2">
-          <h3>{gettext("Your latest brainstormings")}</h3>
-          <%= for brainstorming <- list_brainstormings_for(@current_user) do %>
-            <h5>
-              <.link href={~p"/brainstormings/#{brainstorming.id}"}>
-                {brainstorming.name}
-              </.link>
-              <span class="badge rounded-pill bg-light text-dark">
-                {Timex.format!(brainstorming.inserted_at, "{relative}", :relative)}
-              </span>
-            </h5>
-          <% end %>
-          <p>
-            {gettext(
-              "Attention: Brainstormings will be deleted %{available_until} after last access!",
-              available_until: brainstormings_available_until()
-            )}
-          </p>
-        </div>
+    <div class="row mt-5">
+      <div class="col-md-12 col-lg-12 mt-2">
+        <h3>{gettext("Your latest brainstormings")}</h3>
+        <ul phx-hook="LoadBrainstormingLinks" id="brainstormings-links" class="list-group">
+          <!-- Brainstormings are loaded from local storage within the hook -->
+        </ul>
+        <p>
+          {gettext(
+            "Attention: Brainstormings will be deleted %{available_until} after last access!",
+            available_until: brainstormings_available_until()
+          )}
+        </p>
       </div>
-    <% end %>
+    </div>
   </main>
   <footer class="mt-auto">
     <span class="me-2">Made with ❤️ in the 🇪🇺</span>
