@@ -33,6 +33,8 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
         {
           :ok,
           socket
+          |> assign(:brainstormings_stored, [])
+          |> assign(:current_view, socket.view)
           |> assign(:brainstorming, brainstorming)
           |> assign(:lanes, lanes)
           |> assign(:current_user, current_user)
@@ -58,6 +60,11 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   def mount(%{"id" => id, "lane_id" => _lane_id}, session, socket) do
     mount(%{"id" => id}, session, socket)
+  end
+
+  @impl true
+  def handle_event("brainstormings_from_local_storage", brainstormings_stored, socket) do
+    {:noreply, assign(socket, :brainstormings_stored, brainstormings_stored)}
   end
 
   @impl true
@@ -128,6 +135,10 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   def handle_info({:user_updated, user}, socket) do
     {:noreply, assign(socket, :current_user, user)}
+  end
+
+  def handle_info(_, _) do
+    IO.inspect("INFO")
   end
 
   defp apply_action(

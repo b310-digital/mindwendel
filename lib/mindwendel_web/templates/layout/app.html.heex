@@ -1,9 +1,104 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-2">
+  <div class="container">
+    <%= if admin_view(assigns.current_view) do %>
+      <span class="nav-mindwendel-caption">
+        <a
+          href={~p"/brainstormings/#{assigns[:brainstorming].id}"}
+          class="d-inline-flex align-items-center"
+        >
+          <i class="bi bi-arrow-left me-1"></i>
+          {gettext("Back")}
+        </a>
+      </span>
+    <% else %>
+      <a href={~p"/"} class="navbar-brand mb-0 h1">
+        <img src={~p"/images/mindwendel_logo_black.svg"} class="nav-mindwendel-logo" />
+      </a>
+    <% end %>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarDropdownToggler"
+      aria-controls="navbarDropdownToggler"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarDropdownToggler">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 bg-white">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/">
+            {gettext("New brainstorming")}
+          </a>
+        </li>
+
+        <%= if assigns[:current_user] do %>
+          <li class="nav-item dropdown d-none d-lg-block bg-white">
+            <a
+              class="nav-link dropdown-toggle"
+              data-bs-toggle="dropdown"
+              href="#"
+              role="button"
+              aria-expanded="false"
+            >
+              {gettext("Your brainstormings")}
+            </a>
+            <ul class="dropdown-menu">
+              <%= for brainstorming <- assigns[:brainstormings_stored] do %>
+                <a
+                  class={"dropdown-item #{ if assigns[:brainstorming].id == brainstorming["id"], do: "active", else: "" }"}
+                  href={
+                    ~p"/brainstormings/#{brainstorming["id"]}/##{brainstorming["admin_url_id"]}"
+                  }
+                >
+                  {brainstorming["name"]}
+                </a>
+              <% end %>
+            </ul>
+          </li>
+
+          <%= if Mindwendel.FeatureFlag.enabled?(:feature_privacy_imprint_enabled) do %>
+            <li aria-current="page" class="nav-item">
+              <.link href={~p"/privacy"} class="nav-link">{gettext("Privacy")}</.link>
+            </li>
+            <li aria-current="page" class="nav-item">
+              <.link href={~p"/legal"} class="nav-link">
+                {gettext("Legal Disclosure")}
+              </.link>
+            </li>
+          <% end %>
+
+          <li class="nav-item"><hr class="dropdown-divider" /></li>
+          <%= for brainstorming <- assigns[:brainstormings_stored] do %>
+            <li class="nav-item d-lg-none">
+              <a
+                class={"nav-link #{if assigns[:brainstorming].id == brainstorming["id"], do: "active", else: "" }"}
+                href={
+                  ~p"/brainstormings/#{brainstorming["id"]}/##{brainstorming["admin_url_id"]}"
+                }
+              >
+                {brainstorming["name"]}
+              </a>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>
 <main role="main" class="container">
   <%= if Phoenix.Flash.get(@flash, :info) do %>
-    <p id="alert-danger" class="alert alert-info" role="alert">{Phoenix.Flash.get(@flash, :info)}</p>
+    <p id="alert-danger" class="alert alert-info" role="alert">
+      {Phoenix.Flash.get(@flash, :info)}
+    </p>
   <% end %>
   <%= if Phoenix.Flash.get(@flash, :error) do %>
-    <p id="alert-danger" class="alert alert-danger" phx-hook="RemoveMissingBrainstorming" role="alert" data-brainstorming-id={Phoenix.Flash.get(@flash, :missing_brainstorming_id)}>{Phoenix.Flash.get(@flash, :error)}</p>
+    <p id="alert-danger" class="alert alert-danger" role="alert">
+      {Phoenix.Flash.get(@flash, :error)}
+    </p>
   <% end %>
   {@inner_content}
 </main>

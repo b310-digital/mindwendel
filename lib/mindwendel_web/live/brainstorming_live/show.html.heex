@@ -10,12 +10,16 @@
   </div>
 <% end %>
 
-<div 
-  id="brainstorming-details" 
+<div
+  id="brainstorming-details"
   data-id={@brainstorming.id}
   data-name={@brainstorming.name}
   data-last-accessed-at={@brainstorming.last_accessed_at}
-  data-admin-url-id={if has_moderating_permission(@brainstorming, @current_user), do: @brainstorming.admin_url_id, else: nil}
+  data-admin-url-id={
+    if has_moderating_permission(@brainstorming, @current_user),
+      do: @brainstorming.admin_url_id,
+      else: nil
+  }
   phx-hook="StoreRecentBrainstorming"
 >
   <div class="content">

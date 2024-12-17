@@ -1,7 +1,7 @@
 import { Modal, Tooltip } from "bootstrap"
 import Sortable from 'sortablejs';
 import { setIdeaLabelBackgroundColor } from "./label"
-
+import { getRelativeTimeString } from "./timeUtils"
 // activate all tooltips:
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
@@ -131,24 +131,32 @@ Hooks.SetIdeaLabelBackgroundColor = {
   }
 };
 
+// Only used for the landing page
 Hooks.LoadBrainstormingLinks = {
   mounted() {
     if(this.el) {
       const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
-      Object.values(recentBrainstormings)
-            .sort((a, b) => new Date(b.lastAccessedAt) - new Date(a.lastAccessedAt))
-            .slice(0, 5)
-            .forEach(brainstorming => {
-              const newListEl = document.createElement('li')
-              newListEl.classList.add('list-group-item', 'border-0', 'bg-transparent')
+      const newListItems = Object.values(recentBrainstormings)
+        .sort((a, b) => new Date(b.last_accessed_at) - new Date(a.last_accessed_at))
+        .slice(0, 5)
+        .map(brainstorming => {
+          const newListEl = document.createElement('li')
+          newListEl.classList.add('list-group-item', 'border-0', 'bg-transparent', 'h5', 'm-1', 'p-0')
 
-              const newLink = document.createElement('a')
-              newLink.href = `/brainstormings/${brainstorming.id}/#${brainstorming.adminUrlId}`
-              newLink.textContent = brainstorming.name;
+          const newLink = document.createElement('a')
+          newLink.href = `/brainstormings/${brainstorming.id}/#${brainstorming.admin_url_id}`
+          newLink.textContent = brainstorming.name;
 
-              newListEl.append(newLink);
-              this.el.append(newListEl);
+          const timeBadge = document.createElement('span')
+          timeBadge.classList.add('badge', 'rounded-pill', 'bg-light', 'text-dark')
+          timeBadge.textContent = getRelativeTimeString(new Date(brainstorming.last_accessed_at), this.el.dataset.language)
+
+          newListEl.append(newLink);
+          newListEl.append(timeBadge);
+          return newListEl;
       });
+      
+      newListItems.length > 0 ? this.el.append(...newListItems) : this.el.append(document.createElement('p').textContent = "-")
     }
   }
 };
@@ -160,11 +168,13 @@ Hooks.StoreRecentBrainstorming = {
     
     recentBrainstormings[brainstormingId] = {
       id: brainstormingId,
-      adminUrlId: this.el.dataset.adminUrlId,
+      admin_url_id: this.el.dataset.adminUrlId,
       name: this.el.dataset.name,
-      lastAccessedAt: this.el.dataset.lastAccessedAt
+      last_accessed_at: this.el.dataset.lastAccessedAt
     }
     localStorage.setItem('brainstormings', JSON.stringify(recentBrainstormings));
+    const lastSortedBrainstormings = Object.values(recentBrainstormings).sort((a, b) => new Date(b.last_accessed_at) - new Date(a.last_accessed_at)).slice(0, 10)
+    this.pushEventTo(this.el,"brainstormings_from_local_storage", lastSortedBrainstormings)
   }
 };
 

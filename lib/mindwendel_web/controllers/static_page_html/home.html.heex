@@ -47,7 +47,12 @@
     <div class="row mt-5">
       <div class="col-md-12 col-lg-12 mt-2">
         <h3>{gettext("Your latest brainstormings")}</h3>
-        <ul phx-hook="LoadBrainstormingLinks" id="brainstormings-links" class="list-group">
+        <ul
+          phx-hook="LoadBrainstormingLinks"
+          id="brainstormings-links"
+          class="list-group"
+          data-language={Gettext.get_locale()}
+        >
           <!-- Brainstormings are loaded from local storage within the hook -->
         </ul>
         <p>
