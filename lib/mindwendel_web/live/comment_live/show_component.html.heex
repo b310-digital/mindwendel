@@ -33,15 +33,15 @@
           </.link>
         <% end %>
       </div>
-      <%= @comment.body %>
+      {@comment.body}
 
       <div class="card-footer-mindwendel mt-2">
         <small class="text-muted">
-          <%= gettext("By") %> <%= Gettext.gettext(MindwendelWeb.Gettext, @comment.username) %> <%= Timex.format!(
+          {gettext("By")} {Gettext.gettext(MindwendelWeb.Gettext, @comment.username)} {Timex.format!(
             @comment.inserted_at,
             "{relative}",
             :relative
-          ) %>
+          )}
         </small>
       </div>
     <% end %>
