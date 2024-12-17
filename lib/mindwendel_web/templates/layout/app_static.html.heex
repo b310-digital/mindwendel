@@ -1,0 +1,19 @@
+<main role="main" class="container" id="main-container">
+  <%= if Phoenix.Flash.get(@flash, :info) do %>
+    <p class="alert alert-info" role="alert" phx-click="lv:clear-flash" phx-value-key="info">
+      {Phoenix.Flash.get(@flash, :info)}
+    </p>
+  <% end %>
+  <%= if Phoenix.Flash.get(@flash, :error) do %>
+    <p
+      id="alert-danger"
+      class="alert alert-danger"
+      phx-hook="RemoveMissingBrainstorming"
+      role="alert"
+      data-brainstorming-id={Phoenix.Flash.get(@flash, :missing_brainstorming_id)}
+    >
+      {Phoenix.Flash.get(@flash, :error)}
+    </p>
+  <% end %>
+  {@inner_content}
+</main>
