@@ -9,7 +9,7 @@
       phx-target={@myself}
       disabled={!has_moderating_permission(@brainstorming, @current_user)}
     >
-      <%= brainstorming_idea_label.name %>
+      {brainstorming_idea_label.name}
     </.filter_button>
   <% end %>
   <%= if has_moderating_permission(@brainstorming, @current_user) do %>
