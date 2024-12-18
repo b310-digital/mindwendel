@@ -64,10 +64,13 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   @impl true
   def handle_event("brainstormings_from_local_storage", brainstormings_stored, socket) do
+    # Brainstormings are used from session data and local storage. Session data can be removed later and is only used for a transition period.
     valid_stored_brainstormings =
-      if is_list(brainstormings_stored),
-        do: brainstormings_stored |> Enum.filter(&valid_stored_brainstorming?/1),
-        else: []
+      prepare_initial_brainstormings(
+        brainstormings_stored,
+        Brainstormings.list_brainstormings_for(socket.assigns.current_user.id),
+        socket.assigns.current_user
+      )
 
     {:noreply, assign(socket, :brainstormings_stored, valid_stored_brainstormings)}
   end

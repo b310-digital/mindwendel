@@ -47,11 +47,53 @@ defmodule MindwendelWeb.LiveHelpers do
     FeatureFlag.enabled?(:feature_file_upload)
   end
 
-  def format_iso8601(iso8601) do
+  def format_iso8601(iso8601) when iso8601 != nil do
     case DateTime.from_iso8601(iso8601) do
-      {:ok, date_time, _} -> Timex.from_now(date_time)
-      {:error, _} -> iso8601
+      {:ok, date_time, _} -> date_time
+      {:error, _} -> nil
     end
+  end
+
+  def format_iso8601(_) do
+    nil
+  end
+
+  def prepare_brainstormings_from_local_storage(brainstormings_stored) do
+    if is_list(brainstormings_stored) do
+      brainstormings_stored
+      |> Enum.map(fn e ->
+        Map.put(e, "last_accessed_at", format_iso8601(e["last_accessed_at"]))
+      end)
+      |> Enum.filter(&valid_stored_brainstorming?/1)
+    else
+      []
+    end
+  end
+
+  def prepare_brainstormings_from_session(brainstormings, user) do
+    Enum.map(brainstormings, fn brainstorming ->
+      %{
+        "last_accessed_at" => brainstorming.last_accessed_at,
+        "name" => brainstorming.name,
+        "id" => brainstorming.id,
+        "admin_url_id" =>
+          if(has_moderating_permission(brainstorming, user),
+            do: brainstorming.admin_url_id,
+            else: nil
+          )
+      }
+    end)
+  end
+
+  def prepare_initial_brainstormings(
+        brainstormings_from_local_storage,
+        brainstormings_from_session,
+        user
+      ) do
+    (prepare_brainstormings_from_local_storage(brainstormings_from_local_storage) ++
+       prepare_brainstormings_from_session(brainstormings_from_session, user))
+    |> Enum.uniq()
+    |> Enum.sort(&(&1["last_accessed_at"] > &2["last_accessed_at"]))
   end
 
   def valid_stored_brainstorming?(brainstorming) do

@@ -59,7 +59,7 @@
               {brainstorming["name"]}
             </.link>
             <span class="badge rounded-pill bg-light text-dark">
-              {format_iso8601(brainstorming["last_accessed_at"])}
+              {Timex.from_now(brainstorming["last_accessed_at"])}
             </span>
           </h5>
         <% end %>
