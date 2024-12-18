@@ -1,6 +1,8 @@
 defmodule MindwendelWeb.StartLive.Home do
   use MindwendelWeb, :live_view
 
+  import MindwendelWeb.LiveHelpers
+
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
 

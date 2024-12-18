@@ -18,11 +18,6 @@ defmodule MindwendelWeb.Layouts do
     Brainstormings.list_brainstormings_for(user.id, limit)
   end
 
-  def brainstorming_url(id, admin_url_id) do
-    admin_url_id = admin_url_id || ""
-    ~p"/brainstormings/#{id}/##{admin_url_id}"
-  end
-
   def admin_view(current_view) do
     current_view == MindwendelWeb.Admin.BrainstormingLive.Edit
   end
