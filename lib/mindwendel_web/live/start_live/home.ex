@@ -29,7 +29,9 @@ defmodule MindwendelWeb.StartLive.Home do
     valid_stored_brainstormings =
       LocalStorage.brainstormings_from_local_storage_and_session(
         brainstormings_stored,
-        Brainstormings.list_brainstormings_for(socket.assigns.current_user.id),
+        Brainstormings.list_brainstormings_for(
+          get_in(socket.assigns, [Access.key(:current_user), Access.key(:id)])
+        ),
         socket.assigns.current_user
       )
 
