@@ -11,17 +11,17 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:17
+#: lib/mindwendel_web/live/start_live/home.html.heex:17
 #, elixir-autogen, elixir-format
 msgid "Brainstorm"
 msgstr "Los geht's!"
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:26
+#: lib/mindwendel_web/live/start_live/home.html.heex:26
 #, elixir-autogen, elixir-format
 msgid "How might we ..."
 msgstr "Wie können wir ..."
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:16
+#: lib/mindwendel_web/live/start_live/home.html.heex:16
 #, elixir-autogen, elixir-format
 msgid "Ready?"
 msgstr "Fertig?"
@@ -62,12 +62,12 @@ msgstr "Schließen"
 msgid "Copy"
 msgstr "Kopieren"
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:15
+#: lib/mindwendel_web/live/start_live/home.html.heex:15
 #, elixir-autogen, elixir-format
 msgid "Create a challenge."
 msgstr "Erstelle ein Brainstorming."
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:32
+#: lib/mindwendel_web/live/start_live/home.html.heex:32
 #, elixir-autogen, elixir-format
 msgid "Create!"
 msgstr "Erstellen!"
@@ -178,7 +178,7 @@ msgstr "Editiere Brainstorming"
 msgid "Export"
 msgstr "Export"
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:49
+#: lib/mindwendel_web/live/start_live/home.html.heex:53
 #, elixir-autogen
 msgid "Your latest brainstormings"
 msgstr "Deine letzten Brainstormings"
@@ -206,7 +206,7 @@ msgstr "Von"
 msgid "Administration for brainstorming: %{name}"
 msgstr "Administration für: %{name}"
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:37
+#: lib/mindwendel_web/live/start_live/home.html.heex:37
 #, elixir-autogen, elixir-format
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr "Brainstormings werden nach %{days} Tagen gelöscht."
@@ -304,7 +304,7 @@ msgstr "Leere das Brainstorming"
 msgid "Brainstorming will be deleted %{days}"
 msgstr "Brainstorming wird gelöscht %{days}"
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:59
+#: lib/mindwendel_web/live/start_live/home.html.heex:67
 #, elixir-autogen, elixir-format
 msgid "Attention: Brainstormings will be deleted %{available_until} after last access!"
 msgstr "Achtung: Brainstormings werden %{available_until} nach dem letzten Zugriff gelöscht!"
@@ -541,13 +541,13 @@ msgstr "Zeige Idee"
 msgid "Your comment"
 msgstr "Kommentar"
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:71
+#: lib/mindwendel_web/live/start_live/home.html.heex:79
 #: lib/mindwendel_web/templates/layout/app.html.heex:72
 #, elixir-autogen, elixir-format
 msgid "Legal Disclosure"
 msgstr "Impressum"
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:72
+#: lib/mindwendel_web/live/start_live/home.html.heex:80
 #: lib/mindwendel_web/templates/layout/app.html.heex:68
 #, elixir-autogen, elixir-format
 msgid "Privacy"

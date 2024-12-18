@@ -158,7 +158,7 @@ Hooks.StoreRecentBrainstorming = {
 
 Hooks.RemoveMissingBrainstorming = {
   mounted() {
-    const missingId = this.el.dataset.missingId;
+    const missingId = this.el.dataset.brainstormingId;
     if (missingId) {
       const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
       delete recentBrainstormings[missingId]

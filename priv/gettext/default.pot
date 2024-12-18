@@ -10,17 +10,17 @@
 msgid ""
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:17
+#: lib/mindwendel_web/live/start_live/home.html.heex:17
 #, elixir-autogen, elixir-format
 msgid "Brainstorm"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:26
+#: lib/mindwendel_web/live/start_live/home.html.heex:26
 #, elixir-autogen, elixir-format
 msgid "How might we ..."
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:16
+#: lib/mindwendel_web/live/start_live/home.html.heex:16
 #, elixir-autogen, elixir-format
 msgid "Ready?"
 msgstr ""
@@ -61,12 +61,12 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:15
+#: lib/mindwendel_web/live/start_live/home.html.heex:15
 #, elixir-autogen, elixir-format
 msgid "Create a challenge."
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:32
+#: lib/mindwendel_web/live/start_live/home.html.heex:32
 #, elixir-autogen, elixir-format
 msgid "Create!"
 msgstr ""
@@ -177,7 +177,7 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:49
+#: lib/mindwendel_web/live/start_live/home.html.heex:53
 #, elixir-autogen
 msgid "Your latest brainstormings"
 msgstr ""
@@ -205,7 +205,7 @@ msgstr ""
 msgid "Administration for brainstorming: %{name}"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:37
+#: lib/mindwendel_web/live/start_live/home.html.heex:37
 #, elixir-autogen, elixir-format
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr ""
@@ -303,7 +303,7 @@ msgstr ""
 msgid "Brainstorming will be deleted %{days}"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:59
+#: lib/mindwendel_web/live/start_live/home.html.heex:67
 #, elixir-autogen, elixir-format
 msgid "Attention: Brainstormings will be deleted %{available_until} after last access!"
 msgstr ""
@@ -540,13 +540,13 @@ msgstr ""
 msgid "Your comment"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:71
+#: lib/mindwendel_web/live/start_live/home.html.heex:79
 #: lib/mindwendel_web/templates/layout/app.html.heex:72
 #, elixir-autogen, elixir-format
 msgid "Legal Disclosure"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:72
+#: lib/mindwendel_web/live/start_live/home.html.heex:80
 #: lib/mindwendel_web/templates/layout/app.html.heex:68
 #, elixir-autogen, elixir-format
 msgid "Privacy"
