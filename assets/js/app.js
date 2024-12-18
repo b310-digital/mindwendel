@@ -1,7 +1,6 @@
 import { Modal, Tooltip } from "bootstrap"
 import Sortable from 'sortablejs';
-import { setIdeaLabelBackgroundColor } from "./label"
-import { getRelativeTimeString } from "./timeUtils"
+import { setIdeaLabelBackgroundColor } from "./label";
 // activate all tooltips:
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
