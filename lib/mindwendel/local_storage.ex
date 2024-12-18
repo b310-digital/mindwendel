@@ -18,19 +18,20 @@ defmodule Mindwendel.LocalStorage do
     |> Enum.sort(&(&1["last_accessed_at"] > &2["last_accessed_at"]))
   end
 
-  defp brainstormings_from_local_storage(brainstormings_stored) do
-    if is_list(brainstormings_stored) do
-      brainstormings_stored
-      |> Enum.map(fn e ->
-        Map.put(e, "last_accessed_at", format_iso8601(e["last_accessed_at"]))
-      end)
-      |> Enum.filter(&valid_stored_brainstorming?/1)
-    else
-      []
-    end
+  defp brainstormings_from_local_storage(brainstormings_stored)
+       when is_list(brainstormings_stored) do
+    brainstormings_stored
+    |> Enum.map(fn e ->
+      Map.put(e, "last_accessed_at", format_iso8601(e["last_accessed_at"]))
+    end)
+    |> Enum.filter(&valid_stored_brainstorming?/1)
   end
 
-  defp brainstormings_from_session(brainstormings, user) do
+  defp brainstormings_from_local_storage(_) do
+    []
+  end
+
+  defp brainstormings_from_session(brainstormings, user) when is_list(brainstormings) do
     Enum.map(brainstormings, fn brainstorming ->
       %{
         "last_accessed_at" => brainstorming.last_accessed_at,
@@ -43,6 +44,10 @@ defmodule Mindwendel.LocalStorage do
           )
       }
     end)
+  end
+
+  defp brainstormings_from_session(_, _) do
+    []
   end
 
   defp valid_stored_brainstorming?(brainstorming) do
