@@ -6,6 +6,10 @@ import { getRelativeTimeString } from "./timeUtils"
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
 
+const sortBrainstormingsByLastAccessedAt = (brainstormings, sliceMax = 10) => {
+  return Object.values(brainstormings).sort((a, b) => new Date(b.last_accessed_at) - new Date(a.last_accessed_at)).slice(0, sliceMax)
+}
+
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
 // in "webpack.config.js".
@@ -134,7 +138,7 @@ Hooks.SetIdeaLabelBackgroundColor = {
 Hooks.TransferLocalStorageBrainstormings = {
   mounted() {
     const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
-    const lastSortedBrainstormings = Object.values(recentBrainstormings).sort((a, b) => new Date(b.last_accessed_at) - new Date(a.last_accessed_at)).slice(0, 5)
+    const lastSortedBrainstormings = sortBrainstormingsByLastAccessedAt(recentBrainstormings, 5)
     this.pushEventTo(this.el, "brainstormings_from_local_storage", lastSortedBrainstormings)
   }
 }
@@ -151,7 +155,7 @@ Hooks.StoreRecentBrainstorming = {
       last_accessed_at: this.el.dataset.lastAccessedAt
     }
     localStorage.setItem('brainstormings', JSON.stringify(recentBrainstormings));
-    const lastSortedBrainstormings = Object.values(recentBrainstormings).sort((a, b) => new Date(b.last_accessed_at) - new Date(a.last_accessed_at)).slice(0, 10)
+    const lastSortedBrainstormings = sortBrainstormingsByLastAccessedAt(recentBrainstormings)
     this.pushEventTo(this.el,"brainstormings_from_local_storage", lastSortedBrainstormings)
   }
 };
