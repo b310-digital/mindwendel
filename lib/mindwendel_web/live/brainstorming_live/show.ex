@@ -7,6 +7,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.LocalStorage
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
@@ -66,7 +67,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   def handle_event("brainstormings_from_local_storage", brainstormings_stored, socket) do
     # Brainstormings are used from session data and local storage. Session data can be removed later and is only used for a transition period.
     valid_stored_brainstormings =
-      prepare_initial_brainstormings(
+      LocalStorage.brainstormings_from_local_storage_and_session(
         brainstormings_stored,
         Brainstormings.list_brainstormings_for(socket.assigns.current_user.id),
         socket.assigns.current_user
