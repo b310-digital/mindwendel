@@ -25,14 +25,20 @@ defmodule Mindwendel.Brainstormings do
       [%Brainstorming{}, ...]
 
   """
-  def list_brainstormings_for(user_id, limit \\ 3) do
+  def list_brainstormings_for(user_id, limit \\ 3)
+
+  def list_brainstormings_for(user_id, limit) when user_id != nil do
     Repo.all(
       from brainstorming in Brainstorming,
         join: users in assoc(brainstorming, :users),
         where: users.id == ^user_id,
-        order_by: [desc: brainstorming.inserted_at],
+        order_by: [desc: brainstorming.last_accessed_at],
         limit: ^limit
     )
+  end
+
+  def list_brainstormings_for(nil, _) do
+    []
   end
 
   @doc """

@@ -1,0 +1,11 @@
+!*.heex
+!*.ex
+!*.exs
+!*.json
+!*.js
+!*.jsx
+!*.ts
+!*.tsx
+!*.scss
+!*.css
+!*.html

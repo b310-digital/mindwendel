@@ -7,6 +7,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.LocalStorage
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
@@ -33,6 +34,8 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
         {
           :ok,
           socket
+          |> assign(:brainstormings_stored, [])
+          |> assign(:current_view, socket.view)
           |> assign(:brainstorming, brainstorming)
           |> assign(:lanes, lanes)
           |> assign(:current_user, current_user)
@@ -42,8 +45,9 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
       {:error, _} ->
         {:ok,
          socket
+         |> put_flash(:missing_brainstorming_id, id)
          |> put_flash(:error, gettext("Brainstorming not found"))
-         |> push_navigate(to: "/")}
+         |> redirect(to: "/")}
     end
   end
 
@@ -57,6 +61,19 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   def mount(%{"id" => id, "lane_id" => _lane_id}, session, socket) do
     mount(%{"id" => id}, session, socket)
+  end
+
+  @impl true
+  def handle_event("brainstormings_from_local_storage", brainstormings_stored, socket) do
+    # Brainstormings are used from session data and local storage. Session data can be removed later and is only used for a transition period.
+    valid_stored_brainstormings =
+      LocalStorage.brainstormings_from_local_storage_and_session(
+        brainstormings_stored,
+        Brainstormings.list_brainstormings_for(socket.assigns.current_user.id),
+        socket.assigns.current_user
+      )
+
+    {:noreply, assign(socket, :brainstormings_stored, valid_stored_brainstormings)}
   end
 
   @impl true

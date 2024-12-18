@@ -1,10 +1,13 @@
 import { Modal, Tooltip } from "bootstrap"
 import Sortable from 'sortablejs';
-import { setIdeaLabelBackgroundColor } from "./label"
-
+import { setIdeaLabelBackgroundColor } from "./label";
 // activate all tooltips:
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
+
+const sortBrainstormingsByLastAccessedAt = (brainstormings, sliceMax = 10) => {
+  return Object.values(brainstormings).sort((a, b) => new Date(b.last_accessed_at) - new Date(a.last_accessed_at)).slice(0, sliceMax)
+}
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
@@ -128,6 +131,42 @@ Hooks.SetIdeaLabelBackgroundColor = {
   },
   updated() {
     setIdeaLabelBackgroundColor(this.el)
+  }
+};
+
+Hooks.TransferLocalStorageBrainstormings = {
+  mounted() {
+    const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
+    const lastSortedBrainstormings = sortBrainstormingsByLastAccessedAt(recentBrainstormings, 5)
+    this.pushEventTo(this.el, "brainstormings_from_local_storage", lastSortedBrainstormings)
+  }
+}
+
+Hooks.StoreRecentBrainstorming = {
+  mounted() {
+    const brainstormingId = this.el.dataset.id;
+    const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
+    
+    recentBrainstormings[brainstormingId] = {
+      id: brainstormingId,
+      admin_url_id: this.el.dataset.adminUrlId || recentBrainstormings?.brainstormingId?.admin_url_id,
+      name: this.el.dataset.name,
+      last_accessed_at: this.el.dataset.lastAccessedAt
+    }
+    localStorage.setItem('brainstormings', JSON.stringify(recentBrainstormings));
+    const lastSortedBrainstormings = sortBrainstormingsByLastAccessedAt(recentBrainstormings)
+    this.pushEventTo(this.el,"brainstormings_from_local_storage", lastSortedBrainstormings)
+  }
+};
+
+Hooks.RemoveMissingBrainstorming = {
+  mounted() {
+    const missingId = this.el.dataset.brainstormingId;
+    if (missingId) {
+      const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
+      delete recentBrainstormings[missingId]
+      localStorage.setItem('brainstormings', JSON.stringify(recentBrainstormings));
+    }
   }
 };
 
