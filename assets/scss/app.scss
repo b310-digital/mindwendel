@@ -58,6 +58,11 @@ a .bi {
   transition: opacity 1s ease-out;
 }
 
+.phx-connected {
+  height: 100%;
+  width: 100%;
+}
+
 .phx-disconnected {
   cursor: wait;
 }

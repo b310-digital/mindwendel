@@ -36,7 +36,21 @@ defmodule MindwendelWeb.LiveHelpers do
     Brainstorming.brainstorming_available_until(brainstorming)
   end
 
+  def brainstormings_available_until() do
+    Timex.Duration.from_days(
+      Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]
+    )
+    |> Timex.format_duration(:humanized)
+  end
+
   def show_idea_file_upload? do
     FeatureFlag.enabled?(:feature_file_upload)
+  end
+
+  def format_iso8601(iso8601) do
+    case DateTime.from_iso8601(iso8601) do
+      {:ok, date_time, _} -> Timex.from_now(date_time)
+      {:error, _} -> iso8601
+    end
   end
 end

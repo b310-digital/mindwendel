@@ -45,16 +45,24 @@
     </div>
 
     <div class="row mt-5">
-      <div class="col-md-12 col-lg-12 mt-2">
+      <div
+        id="brainstormings-list"
+        class="col-md-12 col-lg-12 mt-2"
+        phx-hook="TransferLocalStorageBrainstormings"
+      >
         <h3>{gettext("Your latest brainstormings")}</h3>
-        <ul
-          phx-hook="LoadBrainstormingLinks"
-          id="brainstormings-links"
-          class="list-group"
-          data-language={Gettext.get_locale()}
-        >
-          <!-- Brainstormings are loaded from local storage within the hook -->
-        </ul>
+        <%= for brainstorming <- @brainstormings_stored do %>
+          <h5>
+            <.link href={
+              ~p"/brainstormings/#{brainstorming["id"]}/##{brainstorming["admin_url_id"] || ""}"
+            }>
+              {brainstorming["name"]}
+            </.link>
+            <span class="badge rounded-pill bg-light text-dark">
+              {format_iso8601(brainstorming["last_accessed_at"])}
+            </span>
+          </h5>
+        <% end %>
         <p>
           {gettext(
             "Attention: Brainstormings will be deleted %{available_until} after last access!",

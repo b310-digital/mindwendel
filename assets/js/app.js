@@ -131,35 +131,13 @@ Hooks.SetIdeaLabelBackgroundColor = {
   }
 };
 
-// Only used for the landing page
-Hooks.LoadBrainstormingLinks = {
+Hooks.TransferLocalStorageBrainstormings = {
   mounted() {
-    if(this.el) {
-      const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
-      const newListItems = Object.values(recentBrainstormings)
-        .sort((a, b) => new Date(b.last_accessed_at) - new Date(a.last_accessed_at))
-        .slice(0, 5)
-        .map(brainstorming => {
-          const newListEl = document.createElement('li')
-          newListEl.classList.add('list-group-item', 'border-0', 'bg-transparent', 'h5', 'm-1', 'p-0')
-
-          const newLink = document.createElement('a')
-          newLink.href = `/brainstormings/${brainstorming.id}/#${brainstorming.admin_url_id}`
-          newLink.textContent = brainstorming.name;
-
-          const timeBadge = document.createElement('span')
-          timeBadge.classList.add('badge', 'rounded-pill', 'bg-light', 'text-dark')
-          timeBadge.textContent = getRelativeTimeString(new Date(brainstorming.last_accessed_at), this.el.dataset.language)
-
-          newListEl.append(newLink);
-          newListEl.append(timeBadge);
-          return newListEl;
-      });
-      
-      newListItems.length > 0 ? this.el.append(...newListItems) : this.el.append(document.createElement('p').textContent = "-")
-    }
+    const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
+    const lastSortedBrainstormings = Object.values(recentBrainstormings).sort((a, b) => new Date(b.last_accessed_at) - new Date(a.last_accessed_at)).slice(0, 5)
+    this.pushEventTo(this.el, "brainstormings_from_local_storage", lastSortedBrainstormings)
   }
-};
+}
 
 Hooks.StoreRecentBrainstorming = {
   mounted() {
