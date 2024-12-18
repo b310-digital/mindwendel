@@ -130,5 +130,31 @@ defmodule Mindwendel.LocalStorageTest do
                Enum.map(local_storage_brainstormings, & &1["id"]) ==
                Enum.map(merged_brainstormings, & &1["id"])
     end
+
+    test "returns no duplicated brainstormings" do
+      session_brainstormings = [
+        Factory.insert!(:brainstorming, %{
+          last_accessed_at: ~U[2024-12-18 13:10:35Z],
+          name: "Brainstorming 2"
+        })
+      ]
+
+      local_storage_brainstormings = [
+        %{
+          "id" => List.first(session_brainstormings).id,
+          "last_accessed_at" => "2024-01-02T00:00:00Z",
+          "name" => "Brainstorming 2"
+        }
+      ]
+
+      merged_brainstormings =
+        Mindwendel.LocalStorage.brainstormings_from_local_storage_and_session(
+          local_storage_brainstormings,
+          session_brainstormings,
+          nil
+        )
+
+      assert length(merged_brainstormings) == 1
+    end
   end
 end
