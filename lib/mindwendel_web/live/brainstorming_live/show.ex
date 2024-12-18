@@ -64,7 +64,12 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   @impl true
   def handle_event("brainstormings_from_local_storage", brainstormings_stored, socket) do
-    {:noreply, assign(socket, :brainstormings_stored, brainstormings_stored)}
+    valid_stored_brainstormings =
+      if is_list(brainstormings_stored),
+        do: brainstormings_stored |> Enum.filter(&valid_stored_brainstorming?/1),
+        else: []
+
+    {:noreply, assign(socket, :brainstormings_stored, valid_stored_brainstormings)}
   end
 
   @impl true

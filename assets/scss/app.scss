@@ -53,14 +53,15 @@ a .bi {
 
 /* LiveView specific classes for your customizations */
 
+// similar to .phx-connected but also works when javascript is disabled
+div[data-phx-session] {
+  height: 100%;
+  width: 100%;
+}
+
 .phx-click-loading {
   opacity: 0.5;
   transition: opacity 1s ease-out;
-}
-
-.phx-connected {
-  height: 100%;
-  width: 100%;
 }
 
 .phx-disconnected {

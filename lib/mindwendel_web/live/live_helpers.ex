@@ -53,4 +53,11 @@ defmodule MindwendelWeb.LiveHelpers do
       {:error, _} -> iso8601
     end
   end
+
+  def valid_stored_brainstorming?(brainstorming) do
+    case Ecto.UUID.cast(brainstorming["id"]) do
+      {:ok, _} -> brainstorming["last_accessed_at"] && brainstorming["name"]
+      :error -> false
+    end
+  end
 end
