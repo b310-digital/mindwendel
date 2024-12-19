@@ -25,11 +25,12 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   end
 
   def delete(conn, %{"id" => id}) do
-    Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
-    |> Brainstormings.delete_brainstorming()
+    brainstorming = Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
+    Brainstormings.delete_brainstorming(brainstorming)
 
     conn
     |> put_flash(:info, gettext("Successfully deleted brainstorming."))
+    |> put_flash(:missing_brainstorming_id, brainstorming.id)
     |> redirect(to: "/")
   end
 
