@@ -123,12 +123,9 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   def handle_info({:brainstorming_filter_updated, filtered_labels, lanes}, socket) do
     {:noreply,
-     push_patch(
-       socket
-       |> assign(:filtered_labels, filtered_labels)
-       |> assign(:lanes, lanes),
-       to: "/brainstormings/#{socket.assigns.brainstorming.id}"
-     )}
+     socket
+     |> assign(:filtered_labels, filtered_labels)
+     |> assign(:lanes, lanes)}
   end
 
   def handle_info({:brainstorming_updated, brainstorming}, socket) do

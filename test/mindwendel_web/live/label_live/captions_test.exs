@@ -24,6 +24,7 @@ defmodule MindwendelWeb.LabelLive.CaptionsTest do
       render_component(CaptionsComponent,
         id: "captions",
         brainstorming: preloaded_brainstorming,
+        filtered_labels: preloaded_brainstorming.filter_labels_ids,
         current_user: preloaded_user
       )
 
