@@ -19,6 +19,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
     case Brainstormings.get_brainstorming(id) do
       {:ok, brainstorming} ->
+        Brainstormings.update_last_accessed_at(brainstorming)
         admin_secret = get_connect_params(socket)["adminSecret"]
 
         if Brainstormings.validate_admin_secret(brainstorming, admin_secret) do

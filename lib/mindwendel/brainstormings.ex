@@ -94,8 +94,6 @@ defmodule Mindwendel.Brainstormings do
             labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
           ])
 
-        # |> update_last_accessed_at()
-
         {:ok, preloaded_brainstorming}
     end
   end
@@ -249,6 +247,15 @@ defmodule Mindwendel.Brainstormings do
     Brainstorming.changeset(brainstorming, attrs)
   end
 
+  @doc """
+  Updates the last_accessed_at field of a brainstorming.
+
+  ## Examples
+
+      iex> update_last_accessed_at(brainstorming)
+      %Brainstorming{last_accessed_at: ...}
+
+  """
   def update_last_accessed_at(brainstorming) do
     Repo.update(Brainstorming.changeset_with_upated_last_accessed_at(brainstorming))
     brainstorming

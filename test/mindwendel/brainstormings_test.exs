@@ -27,6 +27,14 @@ defmodule Mindwendel.BrainstormingsTest do
     }
   end
 
+  describe "update_last_accessed_at" do
+    test "updates the last accessed at field", %{brainstorming: brainstorming} do
+      Brainstormings.update_last_accessed_at(brainstorming)
+      {:ok, refreshed_brainstorming} = Brainstormings.get_brainstorming(brainstorming.id)
+      refute refreshed_brainstorming.last_accessed_at == nil
+    end
+  end
+
   describe "update_brainstorming" do
     test "updates the brainstorming with filter_labels_ids", %{brainstorming: brainstorming} do
       filter_label = Enum.at(brainstorming.labels, 0)
