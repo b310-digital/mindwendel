@@ -1,20 +1,31 @@
 <%= if @inspiration do %>
   <a data-bs-toggle="collapse" href="#inspiration" role="button" aria-expanded="false">
-    <i class="bi-question-circle"></i> <%= gettext("Got stuck? Try inspirational teasers!") %>
+    <i class="bi-question-circle"></i> {gettext("Got stuck? Try inspirational teasers!")}
   </a>
   <br /><br />
   <div class="alert alert-info collapse" id="inspiration">
     <p>
-      <%= @inspiration.title %>
+      {@inspiration.title}
     </p>
   </div>
 <% end %>
 
-<div id="brainstorming-details">
+<div
+  id="brainstorming-details"
+  data-id={@brainstorming.id}
+  data-name={@brainstorming.name}
+  data-last-accessed-at={@brainstorming.last_accessed_at}
+  data-admin-url-id={
+    if has_moderating_permission(@brainstorming, @current_user),
+      do: @brainstorming.admin_url_id,
+      else: nil
+  }
+  phx-hook="StoreRecentBrainstorming"
+>
   <div class="content">
     <div class="row">
       <div class="col-sm-12 col-md-12 col-xl-6">
-        <h2 id="brainstorming-title"><%= @brainstorming.name %></h2>
+        <h2 id="brainstorming-title">{@brainstorming.name}</h2>
       </div>
     </div>
 
@@ -25,7 +36,7 @@
           class="btn btn-primary m-1 d-inline-flex align-items-center"
           title={gettext("New lane")}
         >
-          <i class="bi bi-file-plus me-1"></i> <%= gettext("New lane") %>
+          <i class="bi bi-file-plus me-1"></i> {gettext("New lane")}
         </.link>
       <% end %>
 
@@ -53,7 +64,7 @@
         data-bs-custom-class="deletion-date-hint-tooltip"
         data-bs-title={brainstorming_available_until_full_text(@brainstorming)}
       >
-        <i class="bi-calendar-x"></i> <%= brainstorming_available_until(@brainstorming) %>
+        <i class="bi-calendar-x"></i> {brainstorming_available_until(@brainstorming)}
       </div>
     </div>
 

@@ -12,9 +12,9 @@
 
   <main class="container">
     <h1>
-      <%= gettext("Create a challenge.") %><br />
-      <%= gettext("Ready?") %><br />
-      <%= gettext("Brainstorm") %><br />
+      {gettext("Create a challenge.")}<br />
+      {gettext("Ready?")}<br />
+      {gettext("Brainstorm")}<br />
     </h1>
 
     <div class="row">
@@ -29,51 +29,57 @@
               required
             />
             <.button type="submit" class="btn btn-primary fw-bold">
-              <%= gettext("Create!") %>
+              {gettext("Create!")}
             </.button>
           </div>
         </.simple_form>
         <small class="text-light">
-          <%= gettext("Brainstormings will be deleted after %{days} days.",
+          {gettext("Brainstormings will be deleted after %{days} days.",
             days:
               Application.fetch_env!(:mindwendel, :options)[
                 :feature_brainstorming_removal_after_days
               ]
-          ) %>
+          )}
         </small>
       </div>
     </div>
 
-    <%= if @current_user && !Enum.empty?(@current_user.brainstormings) do %>
-      <div class="row mt-5">
-        <div class="col-md-12 col-lg-12 mt-2">
-          <h3><%= gettext("Your latest brainstormings") %></h3>
-          <%= for brainstorming <- list_brainstormings_for(@current_user) do %>
+    <div class="row mt-5">
+      <div
+        id="brainstormings-list"
+        class="col-md-12 col-lg-12 mt-2"
+        phx-hook="TransferLocalStorageBrainstormings"
+      >
+        <%= if !Enum.empty?(@brainstormings_stored) do %>
+          <h3>{gettext("Your latest brainstormings")}</h3>
+          <%= for brainstorming <- @brainstormings_stored do %>
             <h5>
-              <.link href={~p"/brainstormings/#{brainstorming.id}"}>
-                <%= brainstorming.name %>
+              <.link href={
+                ~p"/brainstormings/#{brainstorming["id"]}/##{brainstorming["admin_url_id"] || ""}"
+              }>
+                {brainstorming["name"]}
               </.link>
               <span class="badge rounded-pill bg-light text-dark">
-                <%= Timex.format!(brainstorming.inserted_at, "{relative}", :relative) %>
+                {Timex.from_now(brainstorming["last_accessed_at"])}
               </span>
             </h5>
           <% end %>
           <p>
-            <%= gettext(
+            {gettext(
               "Attention: Brainstormings will be deleted %{available_until} after last access!",
               available_until: brainstormings_available_until()
-            ) %>
+            )}
           </p>
-        </div>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   </main>
   <footer class="mt-auto">
     <span class="me-2">Made with ❤️ in the 🇪🇺</span>
-    <%= if Application.fetch_env!(:mindwendel, :options)[:feature_privacy_imprint_enabled] do %>
+    <%= if Mindwendel.FeatureFlag.enabled?(:feature_privacy_imprint_enabled) do %>
       <br class="d-md-none" />
-      <.link href={~p"/legal"}><%= gettext("Legal Disclosure") %></.link>
-      | <.link href={~p"/privacy"}><%= gettext("Privacy") %></.link>
+      <.link href={~p"/legal"}>{gettext("Legal Disclosure")}</.link>
+      | <.link href={~p"/privacy"}>{gettext("Privacy")}</.link>
     <% end %>
   </footer>
 </div>

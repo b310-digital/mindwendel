@@ -10,27 +10,27 @@
 msgid ""
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:17
+#: lib/mindwendel_web/live/start_live/home.html.heex:17
 #, elixir-autogen, elixir-format
 msgid "Brainstorm"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:26
+#: lib/mindwendel_web/live/start_live/home.html.heex:26
 #, elixir-autogen, elixir-format
 msgid "How might we ..."
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:16
+#: lib/mindwendel_web/live/start_live/home.html.heex:16
 #, elixir-autogen, elixir-format
 msgid "Ready?"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:175
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:201
 #, elixir-autogen, elixir-format
 msgid "%{name} - Edit"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:152
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:178
 #, elixir-autogen, elixir-format
 msgid "%{name} - New Idea"
 msgstr ""
@@ -61,12 +61,12 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:15
+#: lib/mindwendel_web/live/start_live/home.html.heex:15
 #, elixir-autogen, elixir-format
 msgid "Create a challenge."
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:32
+#: lib/mindwendel_web/live/start_live/home.html.heex:32
 #, elixir-autogen, elixir-format
 msgid "Create!"
 msgstr ""
@@ -101,12 +101,12 @@ msgstr ""
 msgid "Idea created successfully"
 msgstr ""
 
-#: lib/mindwendel_web/templates/layout/root.html.heex:53
+#: lib/mindwendel_web/templates/layout/app.html.heex:34
 #, elixir-autogen, elixir-format
 msgid "New brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:80
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:91
 #, elixir-autogen, elixir-format
 msgid "New idea"
 msgstr ""
@@ -147,7 +147,7 @@ msgstr ""
 msgid "Sort by likes"
 msgstr ""
 
-#: lib/mindwendel_web/templates/layout/root.html.heex:66
+#: lib/mindwendel_web/templates/layout/app.html.heex:47
 #, elixir-autogen, elixir-format
 msgid "Your brainstormings"
 msgstr ""
@@ -177,7 +177,7 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:50
+#: lib/mindwendel_web/live/start_live/home.html.heex:54
 #, elixir-autogen
 msgid "Your latest brainstormings"
 msgstr ""
@@ -205,7 +205,7 @@ msgstr ""
 msgid "Administration for brainstorming: %{name}"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:37
+#: lib/mindwendel_web/live/start_live/home.html.heex:37
 #, elixir-autogen, elixir-format
 msgid "Brainstormings will be deleted after %{days} days."
 msgstr ""
@@ -235,9 +235,9 @@ msgstr ""
 msgid "yellow"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:74
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:114
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:153
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:75
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:115
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:154
 #, elixir-autogen, elixir-format
 msgid "Your brainstorming was not saved."
 msgstr ""
@@ -252,12 +252,12 @@ msgstr ""
 msgid "Mindwendel Brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:35
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:46
 #, elixir-autogen, elixir-format
 msgid "Share"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:164
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:175
 #, elixir-autogen, elixir-format
 msgid "Share brainstorming"
 msgstr ""
@@ -277,7 +277,7 @@ msgstr ""
 msgid "Brainstorming delete are you sure"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:131
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:142
 #, elixir-autogen, elixir-format
 msgid "Update idea"
 msgstr ""
@@ -298,12 +298,12 @@ msgstr ""
 msgid "Empty brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/live_helpers.ex:29
+#: lib/mindwendel_web/live/live_helpers.ex:31
 #, elixir-autogen, elixir-format
 msgid "Brainstorming will be deleted %{days}"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:62
+#: lib/mindwendel_web/live/start_live/home.html.heex:68
 #, elixir-autogen, elixir-format
 msgid "Attention: Brainstormings will be deleted %{available_until} after last access!"
 msgstr ""
@@ -313,7 +313,7 @@ msgstr ""
 msgid "Allow users to change the order of ideas"
 msgstr ""
 
-#: lib/mindwendel_web/templates/layout/root.html.heex:29
+#: lib/mindwendel_web/templates/layout/app.html.heex:10
 #, elixir-autogen, elixir-format
 msgid "Back"
 msgstr ""
@@ -384,7 +384,7 @@ msgstr ""
 msgid "Type the label name"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:162
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:188
 #, elixir-autogen, elixir-format
 msgid "%{name} - New Lane"
 msgstr ""
@@ -399,15 +399,15 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:26
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:28
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:114
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:37
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:39
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:125
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:130
 #, elixir-autogen, elixir-format
 msgid "New lane"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:148
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:159
 #, elixir-autogen, elixir-format
 msgid "Update lane"
 msgstr ""
@@ -540,19 +540,19 @@ msgstr ""
 msgid "Your comment"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:75
-#: lib/mindwendel_web/templates/layout/root.html.heex:86
+#: lib/mindwendel_web/live/start_live/home.html.heex:81
+#: lib/mindwendel_web/templates/layout/app.html.heex:69
 #, elixir-autogen, elixir-format
 msgid "Legal Disclosure"
 msgstr ""
 
-#: lib/mindwendel_web/controllers/static_page_html/home.html.heex:76
-#: lib/mindwendel_web/templates/layout/root.html.heex:82
+#: lib/mindwendel_web/live/start_live/home.html.heex:82
+#: lib/mindwendel_web/templates/layout/app.html.heex:65
 #, elixir-autogen, elixir-format
 msgid "Privacy"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:97
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:108
 #, elixir-autogen, elixir-format
 msgid "Idea details"
 msgstr ""
@@ -560,4 +560,9 @@ msgstr ""
 #: lib/mindwendel_web/live/brainstorming_live/share_component.html.heex:43
 #, elixir-autogen, elixir-format
 msgid "Give moderating permissions"
+msgstr ""
+
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:49
+#, elixir-autogen, elixir-format
+msgid "Brainstorming not found"
 msgstr ""

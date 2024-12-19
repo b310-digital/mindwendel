@@ -1,6 +1,8 @@
 defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
   @content_secrity_policy_response_header_key "content-security-policy"
 
+  alias Mindwendel.FeatureFlag
+
   # @impl true
   def init(opts) do
     opts
@@ -50,13 +52,13 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
   end
 
   def get_script_src() do
-    if Application.fetch_env!(:mindwendel, :options)[:csp_relax],
+    if FeatureFlag.enabled?(:csp_relax),
       do: "'self' 'unsafe-eval'",
       else: "'self'"
   end
 
   def get_style_src() do
-    if Application.fetch_env!(:mindwendel, :options)[:csp_relax],
+    if FeatureFlag.enabled?(:csp_relax),
       do: "'self' 'unsafe-inline'",
       else: "'self'"
   end

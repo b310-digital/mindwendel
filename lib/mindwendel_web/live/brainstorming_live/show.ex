@@ -7,6 +7,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.LocalStorage
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
@@ -15,27 +16,39 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     # If the admin secret in the URL after the hash (only available inside the client session) is given, add the user as moderating user to the brainstorming.
     # If not, add the user as normal user.
     current_user_id = Mindwendel.Services.SessionService.get_current_user_id(session)
-    brainstorming = Brainstormings.get_brainstorming!(id)
-    admin_secret = get_connect_params(socket)["adminSecret"]
 
-    if Brainstormings.validate_admin_secret(brainstorming, admin_secret) do
-      Accounts.add_moderating_user(brainstorming, current_user_id)
+    case Brainstormings.get_brainstorming(id) do
+      {:ok, brainstorming} ->
+        admin_secret = get_connect_params(socket)["adminSecret"]
+
+        if Brainstormings.validate_admin_secret(brainstorming, admin_secret) do
+          Accounts.add_moderating_user(brainstorming, current_user_id)
+        end
+
+        Accounts.merge_brainstorming_user(brainstorming, current_user_id)
+
+        lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
+        # load the user, also for permissions of brainstormings
+        current_user = Mindwendel.Accounts.get_user(current_user_id)
+
+        {
+          :ok,
+          socket
+          |> assign(:brainstormings_stored, [])
+          |> assign(:current_view, socket.view)
+          |> assign(:brainstorming, brainstorming)
+          |> assign(:lanes, lanes)
+          |> assign(:current_user, current_user)
+          |> assign(:inspiration, Mindwendel.Help.random_inspiration())
+        }
+
+      {:error, _} ->
+        {:ok,
+         socket
+         |> put_flash(:missing_brainstorming_id, id)
+         |> put_flash(:error, gettext("Brainstorming not found"))
+         |> redirect(to: "/")}
     end
-
-    Accounts.merge_brainstorming_user(brainstorming, current_user_id)
-
-    lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
-    # load the user, also for permissions of brainstormings
-    current_user = Mindwendel.Accounts.get_user(current_user_id)
-
-    {
-      :ok,
-      socket
-      |> assign(:brainstorming, brainstorming)
-      |> assign(:lanes, lanes)
-      |> assign(:current_user, current_user)
-      |> assign(:inspiration, Mindwendel.Help.random_inspiration())
-    }
   end
 
   def mount(%{"brainstorming_id" => brainstorming_id, "idea_id" => _idea_id}, session, socket) do
@@ -48,6 +61,19 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   def mount(%{"id" => id, "lane_id" => _lane_id}, session, socket) do
     mount(%{"id" => id}, session, socket)
+  end
+
+  @impl true
+  def handle_event("brainstormings_from_local_storage", brainstormings_stored, socket) do
+    # Brainstormings are used from session data and local storage. Session data can be removed later and is only used for a transition period.
+    valid_stored_brainstormings =
+      LocalStorage.brainstormings_from_local_storage_and_session(
+        brainstormings_stored,
+        Brainstormings.list_brainstormings_for(socket.assigns.current_user.id),
+        socket.assigns.current_user
+      )
+
+    {:noreply, assign(socket, :brainstormings_stored, valid_stored_brainstormings)}
   end
 
   @impl true

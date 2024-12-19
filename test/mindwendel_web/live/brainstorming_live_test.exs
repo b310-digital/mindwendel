@@ -302,8 +302,10 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       |> element(".btn[data-testid=\"#{selected_ideal_label.id}\"]")
       |> render_click()
 
+      {:ok, brainstorming} = Brainstormings.get_brainstorming(brainstorming.id)
+
       assert(
-        Brainstormings.get_brainstorming!(brainstorming.id).filter_labels_ids == [
+        brainstorming.filter_labels_ids == [
           selected_ideal_label.id
         ]
       )

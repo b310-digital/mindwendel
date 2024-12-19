@@ -40,7 +40,7 @@ defmodule MindwendelWeb do
     quote do
       use Phoenix.Controller,
         formats: [:html, :json],
-        layouts: [html: MindwendelWeb.Layouts]
+        layouts: [html: {MindwendelWeb.Layouts, :app_static}]
 
       import Plug.Conn
       use Gettext, backend: MindwendelWeb.Gettext

@@ -2,6 +2,8 @@ defmodule MindwendelWeb.LiveHelpers do
   use Gettext, backend: MindwendelWeb.Gettext
 
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.FeatureFlag
+  alias Mindwendel.Permissions
 
   def has_move_permission(brainstorming, current_user) do
     brainstorming.option_allow_manual_ordering or
@@ -9,7 +11,7 @@ defmodule MindwendelWeb.LiveHelpers do
   end
 
   def has_moderating_permission(brainstorming, current_user) do
-    Enum.member?(current_user.moderated_brainstormings |> Enum.map(& &1.id), brainstorming.id)
+    Permissions.has_moderating_permission(brainstorming, current_user)
   end
 
   def has_ownership(record, current_user) do
@@ -35,7 +37,14 @@ defmodule MindwendelWeb.LiveHelpers do
     Brainstorming.brainstorming_available_until(brainstorming)
   end
 
-  def show_idea_file_upload do
-    Application.fetch_env!(:mindwendel, :options)[:feature_file_upload]
+  def brainstormings_available_until() do
+    Timex.Duration.from_days(
+      Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]
+    )
+    |> Timex.format_duration(:humanized)
+  end
+
+  def show_idea_file_upload? do
+    FeatureFlag.enabled?(:feature_file_upload)
   end
 end

@@ -1,26 +1,26 @@
 <div class="card mb-3">
   <div class="card-header">
     <h4>
-      <%= gettext("Administration for brainstorming: %{name}", name: @brainstorming.name) %>
+      {gettext("Administration for brainstorming: %{name}", name: @brainstorming.name)}
     </h4>
   </div>
   <div class="card-body">
     <i class="far fa-arrow-alt-circle-right"></i>
     <span class="fw-bold">
       <.link href={~p"/brainstormings/#{@brainstorming.id}/##{@brainstorming.admin_url_id}"}>
-        <%= gettext("Proceed to your brainstorming") %>
+        {gettext("Proceed to your brainstorming")}
       </.link>
     </span>
     <br />
     <p>
-      (<%= brainstorming_available_until_full_text(@brainstorming) %>)
+      ({brainstorming_available_until_full_text(@brainstorming)})
     </p>
   </div>
 </div>
 
 <div class="card mb-3">
   <div class="card-header">
-    <h4><%= gettext("Edit Brainstorming") %></h4>
+    <h4>{gettext("Edit Brainstorming")}</h4>
   </div>
   <div class="card-body">
     <.simple_form for={@form} phx-submit="save" phx-change="save" id="form-edit-brainstorming">
@@ -39,7 +39,7 @@
 
 <div class="card mb-3">
   <div class="card-header">
-    <h4><%= gettext("Edit Brainstorming Labels") %></h4>
+    <h4>{gettext("Edit Brainstorming Labels")}</h4>
   </div>
   <div class="card-body">
     <.simple_form id="form-labels" for={@form} phx-change="save" phx-submit="save">
@@ -66,10 +66,10 @@
                 value={f_label.data.id}
                 class="btn-outline-secondary"
               >
-                <%= gettext("Remove idea label") %>
+                {gettext("Remove idea label")}
               </.button>
               <.error :for={msg <- Enum.map(f_label[:name].errors, &translate_error(&1))}>
-                <%= msg %>
+                {msg}
               </.error>
             </div>
           </.inputs_for>
@@ -78,7 +78,7 @@
       <div class="row mb-3">
         <div class="col-12 d-grid mt-2">
           <.button type="button" class="btn btn-secondary" phx-click="add_idea_label">
-            <%= gettext("Add idea label") %>
+            {gettext("Add idea label")}
           </.button>
         </div>
       </div>
@@ -88,33 +88,33 @@
 
 <div class="card mb-3">
   <div class="card-header">
-    <h4><%= gettext("Export") %></h4>
+    <h4>{gettext("Export")}</h4>
   </div>
   <div class="card-body">
     <.link
       class="fw-bold"
       href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}/export?#{[_format: "csv"]}"}
     >
-      <%= gettext("Export to CSV") %>
+      {gettext("Export to CSV")}
     </.link>
     <br />
     <.link class="fw-bold" href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}/export"}>
-      <%= gettext("Export to HTML") %>
+      {gettext("Export to HTML")}
     </.link>
   </div>
 </div>
 
 <div class="card border-danger mb-3">
   <div class="card-header">
-    <h4><%= gettext("Empty brainstorming") %></h4>
+    <h4>{gettext("Empty brainstorming")}</h4>
   </div>
   <div class="card-body">
     <div class="row mb-3">
       <div class="col">
         <p>
-          <%= gettext(
+          {gettext(
             "Attention: This will delete all ideas in this brainstorming. The brainstorming itself and labels will be left unchanged. This cant be undone."
-          ) %>
+          )}
         </p>
         <button
           class="btn btn-danger"
@@ -122,7 +122,7 @@
           value={@brainstorming.admin_url_id}
           data-confirm={gettext("Brainstorming will be emptied - are you sure")}
         >
-          <%= gettext("Empty brainstorming") %>
+          {gettext("Empty brainstorming")}
         </button>
       </div>
     </div>
@@ -131,15 +131,15 @@
 
 <div class="card border-danger mb-3">
   <div class="card-header">
-    <h4><%= gettext("Delete Brainstorming") %></h4>
+    <h4>{gettext("Delete Brainstorming")}</h4>
   </div>
   <div class="card-body">
     <div class="row mb-3">
       <div class="col">
         <p>
-          <%= gettext(
+          {gettext(
             "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
-          ) %>
+          )}
         </p>
         <.link
           href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}"}
@@ -147,7 +147,7 @@
           method="delete"
         >
           <.button class="btn btn-danger">
-            <%= gettext("Delete") %>
+            {gettext("Delete")}
           </.button>
         </.link>
       </div>

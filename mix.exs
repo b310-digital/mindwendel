@@ -52,7 +52,7 @@ defmodule Mindwendel.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "1.7.14"},
+      {:phoenix, "1.7.18"},
       {:phoenix_ecto, "4.6.3"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "1.5.3", only: :dev},
@@ -62,14 +62,14 @@ defmodule Mindwendel.MixProject do
       {:bypass, "2.1.0", only: :test},
       {:csv, "3.2.1"},
       {:ecto_sql, "3.12.1"},
-      {:floki, "0.36.3"},
+      {:floki, "0.37.0"},
       {:gettext, "0.26.2"},
       {:httpoison, "2.2.1"},
       {:jason, "1.4.4"},
       {:oban, "2.18.3"},
       {:plug_cowboy, "2.7.2"},
       {:cowboy, "2.12.0"},
-      {:postgrex, "0.19.2"},
+      {:postgrex, "0.19.3"},
       {:sobelow, "0.13.0", only: [:dev, :test], runtime: false},
       {:credo, "1.7.10", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18"},
@@ -80,8 +80,8 @@ defmodule Mindwendel.MixProject do
       {:libcluster, "3.4.1"},
       {:tzdata, "1.1.2"},
       {:waffle, "~> 1.1"},
-      {:ex_aws, "2.5.7"},
-      {:ex_aws_s3, "2.5.5"},
+      {:ex_aws, "2.5.8"},
+      {:ex_aws_s3, "2.5.6"},
       {:cloak, "1.1.4"}
     ]
   end

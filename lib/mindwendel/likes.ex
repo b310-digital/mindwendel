@@ -1,6 +1,6 @@
 defmodule Mindwendel.Likes do
   @moduledoc """
-  The Brainstormings context.
+  The Likes context.
   """
 
   import Ecto.Query, warn: false
