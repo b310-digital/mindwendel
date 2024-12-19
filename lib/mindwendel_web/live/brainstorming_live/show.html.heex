@@ -90,12 +90,14 @@
       show
       on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
       title={gettext("New idea")}
+      phx_update="ignore"
     >
       <.live_component
         module={MindwendelWeb.IdeaLive.FormComponent}
         id={:new}
         action={:new}
         brainstorming={@brainstorming}
+        filtered_labels={@filtered_labels}
         current_user={@current_user}
         idea={@idea}
       />

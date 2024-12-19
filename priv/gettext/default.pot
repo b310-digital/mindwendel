@@ -257,7 +257,7 @@ msgstr ""
 msgid "Share"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:176
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:178
 #, elixir-autogen, elixir-format
 msgid "Share brainstorming"
 msgstr ""
@@ -277,7 +277,7 @@ msgstr ""
 msgid "Brainstorming delete are you sure"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:143
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:145
 #, elixir-autogen, elixir-format
 msgid "Update idea"
 msgstr ""
@@ -318,43 +318,43 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:528
+#: lib/mindwendel_web/components/core_components.ex:530
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:156
+#: lib/mindwendel_web/components/core_components.ex:158
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:147
+#: lib/mindwendel_web/components/core_components.ex:149
 #, elixir-autogen, elixir-format
 msgid "Error!"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:168
+#: lib/mindwendel_web/components/core_components.ex:170
 #, elixir-autogen, elixir-format
 msgid "Hang in there while we get back on track"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:163
+#: lib/mindwendel_web/components/core_components.ex:165
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:146
+#: lib/mindwendel_web/components/core_components.ex:148
 #, elixir-autogen, elixir-format
 msgid "Success!"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:151
+#: lib/mindwendel_web/components/core_components.ex:153
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/mindwendel_web/components/core_components.ex:71
-#: lib/mindwendel_web/components/core_components.ex:126
+#: lib/mindwendel_web/components/core_components.ex:73
+#: lib/mindwendel_web/components/core_components.ex:128
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr ""
@@ -401,13 +401,13 @@ msgstr ""
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:37
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:39
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:126
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:128
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:130
 #, elixir-autogen, elixir-format
 msgid "New lane"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:160
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:162
 #, elixir-autogen, elixir-format
 msgid "Update lane"
 msgstr ""
@@ -552,7 +552,7 @@ msgstr ""
 msgid "Privacy"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:109
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:111
 #, elixir-autogen, elixir-format
 msgid "Idea details"
 msgstr ""
