@@ -38,6 +38,7 @@ defmodule MindwendelWeb.CoreComponents do
   """
   attr :id, :string, required: true
   attr :title, :string, required: false
+  attr :phx_update, :string, default: "replace"
   attr :show, :boolean, default: false
   attr :on_cancel, JS, default: %JS{}
   slot :inner_block, required: true
@@ -53,6 +54,7 @@ defmodule MindwendelWeb.CoreComponents do
       tabindex="-1"
       aria-hidden="true"
       aria-labelledby="{@id}-title"
+      phx-update={@phx_update}
     >
       <div class="modal-dialog modal-lg">
         <div class="modal-content">

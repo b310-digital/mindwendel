@@ -93,7 +93,6 @@ defmodule Mindwendel.Brainstormings do
             :moderating_users,
             labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
           ])
-          |> update_last_accessed_at()
 
         {:ok, preloaded_brainstorming}
     end
@@ -156,12 +155,12 @@ defmodule Mindwendel.Brainstormings do
       )
     end
 
-    updated_brainstorming =
+    updated_brainstorming_result =
       brainstorming
       |> Brainstorming.changeset(attrs)
       |> Repo.update()
 
-    broadcast(updated_brainstorming, :brainstorming_filter_updated)
+    broadcast(updated_brainstorming_result, :brainstorming_filter_updated)
   end
 
   def update_brainstorming(%Brainstorming{} = brainstorming, attrs) do
@@ -248,6 +247,15 @@ defmodule Mindwendel.Brainstormings do
     Brainstorming.changeset(brainstorming, attrs)
   end
 
+  @doc """
+  Updates the last_accessed_at field of a brainstorming.
+
+  ## Examples
+
+      iex> update_last_accessed_at(brainstorming)
+      %Brainstorming{last_accessed_at: ...}
+
+  """
   def update_last_accessed_at(brainstorming) do
     Repo.update(Brainstorming.changeset_with_upated_last_accessed_at(brainstorming))
     brainstorming
@@ -292,13 +300,7 @@ defmodule Mindwendel.Brainstormings do
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
       "brainstormings:" <> brainstorming.id,
-      {event,
-       brainstorming
-       |> Repo.preload([
-         :users,
-         :moderating_users,
-         labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
-       ]), lanes}
+      {event, brainstorming.filter_labels_ids, lanes}
     )
 
     {:ok, brainstorming}

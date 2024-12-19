@@ -94,7 +94,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
       |> Map.put("user_id", socket.assigns.current_user.id)
       |> Map.put(
         "idea_labels",
-        IdeaLabels.get_idea_labels(socket.assigns.brainstorming.filter_labels_ids)
+        IdeaLabels.get_idea_labels(socket.assigns.filtered_labels)
       )
       |> Map.put("tmp_attachments", tmp_attachments)
 
