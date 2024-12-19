@@ -38,6 +38,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
           |> assign(:current_view, socket.view)
           |> assign(:brainstorming, brainstorming)
           |> assign(:lanes, lanes)
+          |> assign(:filtered_labels, brainstorming.filter_labels_ids)
           |> assign(:current_user, current_user)
           |> assign(:inspiration, Mindwendel.Help.random_inspiration())
         }
@@ -120,13 +121,13 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {:noreply, socket}
   end
 
-  def handle_info({:brainstorming_filter_updated, brainstorming, lanes}, socket) do
+  def handle_info({:brainstorming_filter_updated, filtered_labels, lanes}, socket) do
     {:noreply,
      push_patch(
        socket
-       |> assign(:brainstorming, brainstorming)
+       |> assign(:filtered_labels, filtered_labels)
        |> assign(:lanes, lanes),
-       to: "/brainstormings/#{brainstorming.id}"
+       to: "/brainstormings/#{socket.assigns.brainstorming.id}"
      )}
   end
 
