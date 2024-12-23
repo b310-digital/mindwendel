@@ -39,15 +39,14 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
   def handle_event("close", _, socket) do
     # The close button is either pressed inside the comment component, where a comment might be edited, or inside the "new comment" form.
     # Depending on the location, either patch back to the brainstorming or simply change back to view mode inside the comment.
-    %{brainstorming: brainstorming, comment: comment} = socket.assigns
+    %{brainstorming_id: brainstorming_id, comment: comment} = socket.assigns
 
     case socket.assigns.action do
       :new ->
         {:noreply,
          push_patch(
-           socket
-           |> assign(:brainstorming, brainstorming),
-           to: "/brainstormings/#{brainstorming.id}"
+           socket,
+           to: "/brainstormings/#{brainstorming_id}"
          )}
 
       :update ->
@@ -67,9 +66,10 @@ defmodule MindwendelWeb.CommentLive.FormComponent do
   end
 
   defp save_comment(socket, :update, comment_params) do
-    %{current_user: current_user, comment: comment, brainstorming: brainstorming} = socket.assigns
+    %{current_user: current_user, comment: comment, brainstorming_id: brainstorming_id} =
+      socket.assigns
 
-    if has_moderating_or_ownership_permission(brainstorming, comment, current_user) do
+    if has_moderating_or_ownership_permission(brainstorming_id, comment, current_user) do
       comment_params_merged =
         comment_params
         |> Map.put("user_id", comment.user_id || current_user.id)

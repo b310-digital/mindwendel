@@ -11,7 +11,7 @@ defmodule Mindwendel.PermissionsTest do
       Accounts.add_moderating_user(brainstorming, moderating_user)
 
       assert Permissions.has_moderating_permission(
-               brainstorming,
+               brainstorming.id,
                Accounts.get_user(moderating_user.id)
              )
     end
@@ -19,7 +19,7 @@ defmodule Mindwendel.PermissionsTest do
     test "returns false if user is not moderating" do
       user = Factory.insert!(:user)
       brainstorming = Factory.insert!(:brainstorming)
-      refute Permissions.has_moderating_permission(brainstorming, Accounts.get_user(user.id))
+      refute Permissions.has_moderating_permission(brainstorming.id, Accounts.get_user(user.id))
     end
   end
 end

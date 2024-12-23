@@ -7,12 +7,12 @@
       color={brainstorming_idea_label.color}
       label_id={brainstorming_idea_label.id}
       phx-target={@myself}
-      disabled={!has_moderating_permission(@brainstorming, @current_user)}
+      disabled={!has_moderating_permission(@brainstorming.id, @current_user)}
     >
       {brainstorming_idea_label.name}
     </.filter_button>
   <% end %>
-  <%= if has_moderating_permission(@brainstorming, @current_user) do %>
+  <%= if has_moderating_permission(@brainstorming.id, @current_user) do %>
     <.filter_button
       label_id="filter-label-reset"
       color="grey"

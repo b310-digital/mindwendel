@@ -134,11 +134,8 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     # therefore we patch the url to reload it
 
     {:noreply,
-     push_patch(
-       socket
-       |> assign(:brainstorming, brainstorming),
-       to: "/brainstormings/#{brainstorming.id}"
-     )}
+     socket
+     |> assign(:brainstorming, brainstorming)}
   end
 
   def handle_info({:user_updated, user}, socket) do

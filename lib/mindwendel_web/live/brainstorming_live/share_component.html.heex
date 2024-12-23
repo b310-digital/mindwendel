@@ -31,7 +31,7 @@
       </button>
     </div>
     <div class="input-group mt-3">
-      <%= if has_moderating_permission(@brainstorming, @current_user) do %>
+      <%= if has_moderating_permission(@brainstorming.id, @current_user) do %>
         <.input
           name="admin_url_id"
           type="checkbox"

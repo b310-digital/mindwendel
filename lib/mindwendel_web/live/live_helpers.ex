@@ -7,11 +7,11 @@ defmodule MindwendelWeb.LiveHelpers do
 
   def has_move_permission(brainstorming, current_user) do
     brainstorming.option_allow_manual_ordering or
-      has_moderating_permission(brainstorming, current_user)
+      has_moderating_permission(brainstorming.id, current_user)
   end
 
-  def has_moderating_permission(brainstorming, current_user) do
-    Permissions.has_moderating_permission(brainstorming, current_user)
+  def has_moderating_permission(brainstorming_id, current_user) do
+    Permissions.has_moderating_permission(brainstorming_id, current_user)
   end
 
   def has_ownership(record, current_user) do
@@ -19,8 +19,9 @@ defmodule MindwendelWeb.LiveHelpers do
     user_id == current_user.id
   end
 
-  def has_moderating_or_ownership_permission(brainstorming, record, current_user) do
-    has_ownership(record, current_user) or has_moderating_permission(brainstorming, current_user)
+  def has_moderating_or_ownership_permission(brainstorming_id, record, current_user) do
+    has_ownership(record, current_user) or
+      has_moderating_permission(brainstorming_id, current_user)
   end
 
   def uuid do

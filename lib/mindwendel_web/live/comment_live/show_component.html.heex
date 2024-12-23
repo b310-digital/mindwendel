@@ -4,7 +4,7 @@
       <.live_component
         module={MindwendelWeb.CommentLive.FormComponent}
         id={"comment-form-#{@comment.id}"}
-        brainstorming={@brainstorming}
+        brainstorming_id={@brainstorming_id}
         current_user={@current_user}
         comment={@comment}
         idea={@idea}
@@ -12,7 +12,7 @@
       />
     <% else %>
       <div class="card-title">
-        <%= if has_moderating_or_ownership_permission(@brainstorming, @comment, @current_user) do %>
+        <%= if has_moderating_or_ownership_permission(@brainstorming_id, @comment, @current_user) do %>
           <.link
             class="float-end ms-3 mb-3"
             phx-click="delete_comment"
