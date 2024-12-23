@@ -84,24 +84,25 @@
       lanes={@lanes}
     />
 
-    <.modal
-      :if={@live_action in [:new_idea]}
-      id="idea-modal"
-      show
-      on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
-      title={gettext("New idea")}
-    >
-      <.live_component
-        module={MindwendelWeb.IdeaLive.FormComponent}
-        id={:new}
-        action={:new}
-        phx-update="ignore"
-        brainstorming_id={@brainstorming.id}
-        filtered_labels={@filtered_labels}
-        current_user={@current_user}
-        idea={@idea}
-      />
-    </.modal>
+    <div id="testerer" phx-update="ignore">
+      <.modal
+        :if={@live_action in [:new_idea]}
+        id="idea-modal"
+        show
+        on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
+        title={gettext("New idea")}
+      >
+        <.live_component
+          module={MindwendelWeb.IdeaLive.FormComponent}
+          id={:new}
+          action={:new}
+          brainstorming_id={@brainstorming.id}
+          filtered_labels={@filtered_labels}
+          current_user={@current_user}
+          idea={@idea}
+        />
+      </.modal>
+    </div>
 
     <.modal
       :if={@live_action in [:show_idea]}
@@ -181,10 +182,12 @@
         module={MindwendelWeb.BrainstormingLive.ShareComponent}
         id={:share}
         action={:share}
-        phx-update="ignore"
-        brainstorming={@brainstorming}
+        brainstorming_id={@brainstorming.id}
         current_user={@current_user}
         uri={url(~p"/brainstormings/#{@brainstorming.id}")}
+        admin_uri={url(~p"/brainstormings/#{@brainstorming.id}/##{@brainstorming.admin_url_id}")}
+        active_uri={url(~p"/brainstormings/#{@brainstorming.id}")}
+        activated_uri_type={:uri}
       />
     </.modal>
   </div>
