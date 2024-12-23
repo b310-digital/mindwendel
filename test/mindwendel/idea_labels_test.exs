@@ -18,14 +18,14 @@ defmodule Mindwendel.IdeaLabelsTest do
 
   describe "#add_idea_label_to_idea" do
     test "adds IdeaLabel to Idea", %{idea_label: idea_label, idea: idea} do
-      {:ok, _idea_idea_label} = IdeaLabels.add_idea_label_to_idea(idea, idea_label)
+      {:ok, _idea_idea_label} = IdeaLabels.add_idea_label_to_idea(idea, idea_label.id)
 
       assert [idea_label] == labels_of(idea)
       assert Repo.count(IdeaIdeaLabel) == 1
     end
 
     test "creates one IdeaIdeaLabel", %{idea_label: idea_label, idea: idea} do
-      {:ok, _idea_idea_label} = IdeaLabels.add_idea_label_to_idea(idea, idea_label)
+      {:ok, _idea_idea_label} = IdeaLabels.add_idea_label_to_idea(idea, idea_label.id)
 
       assert Repo.count(IdeaIdeaLabel) == 1
 
@@ -37,7 +37,7 @@ defmodule Mindwendel.IdeaLabelsTest do
     test "does not create additional IdeaLabel", %{idea_label: idea_label, idea: idea} do
       assert Repo.count(IdeaLabel) == 1
 
-      {:ok, _idea_idea_label} = IdeaLabels.add_idea_label_to_idea(idea, idea_label)
+      {:ok, _idea_idea_label} = IdeaLabels.add_idea_label_to_idea(idea, idea_label.id)
 
       assert Repo.count(IdeaLabel) == 1
       assert Repo.one(IdeaLabel) == idea_label
@@ -47,10 +47,10 @@ defmodule Mindwendel.IdeaLabelsTest do
     test "does not add the same IdeaLabel twice to Idea", %{idea_label: idea_label, idea: idea} do
       # Calling this method twice does not fail and does not create duplicates
       {:ok, idea_idea_label_after_method_call_1} =
-        IdeaLabels.add_idea_label_to_idea(idea, idea_label)
+        IdeaLabels.add_idea_label_to_idea(idea, idea_label.id)
 
       {:ok, idea_idea_label_after_method_call_2} =
-        IdeaLabels.add_idea_label_to_idea(idea, idea_label)
+        IdeaLabels.add_idea_label_to_idea(idea, idea_label.id)
 
       # There should still be only one IdeaIdeaLabel
       assert Repo.count(IdeaIdeaLabel) == 1
@@ -71,7 +71,7 @@ defmodule Mindwendel.IdeaLabelsTest do
         })
 
       {:error, _changeset} =
-        IdeaLabels.add_idea_label_to_idea(idea, idea_label_from_another_brainstorming)
+        IdeaLabels.add_idea_label_to_idea(idea, idea_label_from_another_brainstorming.id)
     end
 
     @tag :skip
@@ -95,7 +95,7 @@ defmodule Mindwendel.IdeaLabelsTest do
       idea = Repo.preload(idea, [:idea_labels, :idea_idea_labels])
       idea_label = idea.brainstorming.labels |> Enum.at(0)
 
-      IdeaLabels.add_idea_label_to_idea(idea, idea_label)
+      IdeaLabels.add_idea_label_to_idea(idea, idea_label.id)
 
       assert Repo.count(IdeaIdeaLabel) == 1
       assert Repo.one(IdeaIdeaLabel).idea_id == idea.id
@@ -113,14 +113,14 @@ defmodule Mindwendel.IdeaLabelsTest do
 
   describe "#delete_idea_label_from_idea" do
     setup %{idea_label: idea_label, idea: idea} do
-      {:ok, _idea_idea_label} = IdeaLabels.add_idea_label_to_idea(idea, idea_label)
+      {:ok, _idea_idea_label} = IdeaLabels.add_idea_label_to_idea(idea, idea_label.id)
       idea = idea |> Repo.reload!() |> Repo.preload(:idea_labels)
       assert Repo.count(IdeaIdeaLabel) == 1
       %{idea: idea}
     end
 
     test "removes successfully IdeaLabel from Idea", %{idea_label: idea_label, idea: idea} do
-      IdeaLabels.remove_idea_label_from_idea(idea, idea_label)
+      IdeaLabels.remove_idea_label_from_idea(idea, idea_label.id)
       assert Enum.empty?(Repo.all(IdeaIdeaLabel))
     end
 
@@ -129,8 +129,8 @@ defmodule Mindwendel.IdeaLabelsTest do
       idea: idea
     } do
       # Calling this method twice does not fail
-      IdeaLabels.remove_idea_label_from_idea(idea, idea_label)
-      IdeaLabels.remove_idea_label_from_idea(idea, idea_label)
+      IdeaLabels.remove_idea_label_from_idea(idea, idea_label.id)
+      IdeaLabels.remove_idea_label_from_idea(idea, idea_label.id)
 
       assert Enum.empty?(Repo.all(IdeaIdeaLabel))
     end

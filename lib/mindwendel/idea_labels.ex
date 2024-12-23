@@ -30,9 +30,9 @@ defmodule Mindwendel.IdeaLabels do
 
   # As the broadcast results in a full reload of the ideas, we don't need to actually update
   # the idea struct, a new association is enough
-  def add_idea_label_to_idea(%Idea{} = idea, %IdeaLabel{} = idea_label) do
+  def add_idea_label_to_idea(idea, idea_label_id) do
     result =
-      %{idea_id: idea.id, idea_label_id: idea_label.id}
+      %{idea_id: idea.id, idea_label_id: idea_label_id}
       |> IdeaIdeaLabel.bare_creation_changeset()
       |> Repo.insert()
 
@@ -40,12 +40,12 @@ defmodule Mindwendel.IdeaLabels do
     result
   end
 
-  def remove_idea_label_from_idea(%Idea{} = idea, %IdeaLabel{} = idea_label) do
+  def remove_idea_label_from_idea(%Idea{} = idea, idea_label_id) do
     result =
       from(idea_idea_label in IdeaIdeaLabel,
         where:
           idea_idea_label.idea_id == ^idea.id and
-            idea_idea_label.idea_label_id == ^idea_label.id
+            idea_idea_label.idea_label_id == ^idea_label_id
       )
       |> Repo.delete_all()
 

@@ -34,30 +34,22 @@ defmodule MindwendelWeb.IdeaLive.CardComponent do
   def handle_event(
         "add_idea_label_to_idea",
         %{
-          "idea-id" => idea_id,
           "idea-label-id" => idea_label_id
         },
         socket
       ) do
-    idea = Ideas.get_idea!(idea_id)
-    idea_label = IdeaLabels.get_idea_label(idea_label_id)
-
-    IdeaLabels.add_idea_label_to_idea(idea, idea_label)
+    IdeaLabels.add_idea_label_to_idea(socket.assigns.idea, idea_label_id)
     {:noreply, socket}
   end
 
   def handle_event(
         "remove_idea_label_from_idea",
         %{
-          "idea-id" => idea_id,
           "idea-label-id" => idea_label_id
         },
         socket
       ) do
-    idea = Ideas.get_idea!(idea_id)
-    idea_label = IdeaLabels.get_idea_label(idea_label_id)
-
-    IdeaLabels.remove_idea_label_from_idea(idea, idea_label)
+    IdeaLabels.remove_idea_label_from_idea(socket.assigns.idea, idea_label_id)
     {:noreply, socket}
   end
 end
