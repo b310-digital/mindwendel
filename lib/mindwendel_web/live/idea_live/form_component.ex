@@ -4,6 +4,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   alias MIME
   alias Mindwendel.Ideas
   alias Mindwendel.Attachments
+  alias Mindwendel.Brainstormings
   alias Mindwendel.IdeaLabels
 
   @whitelisted_file_extensions ~w(.jpg .jpeg .gif .png .pdf)
@@ -89,12 +90,17 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   defp save_idea(socket, :new, idea_params) do
     tmp_attachments = prepare_attachments(socket)
 
+    # This is a workaround to get the filtered labels for the idea without (!) passing them as a parameter to the form component.
+    # Unfortunatly, passing either the brainstorming or filter labels directly triggers a re-render of the form component when changing the filter labels and results in a stuck bootstrap modal.
+    {:ok, brainstorming} = Brainstormings.get_brainstorming(socket.assigns.brainstorming_id)
+    filtered_labels = brainstorming.filter_labels_ids
+
     idea_params_merged =
       idea_params
       |> Map.put("user_id", socket.assigns.current_user.id)
       |> Map.put(
         "idea_labels",
-        IdeaLabels.get_idea_labels(socket.assigns.filtered_labels)
+        IdeaLabels.get_idea_labels(filtered_labels)
       )
       |> Map.put("tmp_attachments", tmp_attachments)
 

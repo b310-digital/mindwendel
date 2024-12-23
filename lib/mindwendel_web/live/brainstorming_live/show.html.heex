@@ -90,14 +90,12 @@
       show
       on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
       title={gettext("New idea")}
-      phx_update="ignore"
     >
       <.live_component
         module={MindwendelWeb.IdeaLive.FormComponent}
         id={:new}
         action={:new}
         brainstorming_id={@brainstorming.id}
-        filtered_labels={@filtered_labels}
         current_user={@current_user}
         idea={@idea}
       />
@@ -176,15 +174,17 @@
       show
       on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
       title={gettext("Share brainstorming")}
-      phx_update="ignore"
     >
       <.live_component
         module={MindwendelWeb.BrainstormingLive.ShareComponent}
         id={:share}
         action={:share}
-        brainstorming={@brainstorming}
+        brainstorming_id={@brainstorming.id}
         current_user={@current_user}
         uri={url(~p"/brainstormings/#{@brainstorming.id}")}
+        admin_uri={url(~p"/brainstormings/#{@brainstorming.id}/##{@brainstorming.admin_url_id}")}
+        active_uri={url(~p"/brainstormings/#{@brainstorming.id}")}
+        activated_uri_type={:uri}
       />
     </.modal>
   </div>
