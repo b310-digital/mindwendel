@@ -16,7 +16,7 @@
   data-name={@brainstorming.name}
   data-last-accessed-at={@brainstorming.last_accessed_at}
   data-admin-url-id={
-    if has_moderating_permission(@brainstorming, @current_user),
+    if has_moderating_permission(@brainstorming.id, @current_user),
       do: @brainstorming.admin_url_id,
       else: nil
   }
@@ -30,7 +30,7 @@
     </div>
 
     <div class="d-flex justify-content-end flex-wrap">
-      <%= if has_moderating_permission(@brainstorming, @current_user) do %>
+      <%= if has_moderating_permission(@brainstorming.id, @current_user) do %>
         <.link
           patch={~p"/brainstormings/#{@brainstorming.id}/new_lane"}
           class="btn btn-primary m-1 d-inline-flex align-items-center"
@@ -48,7 +48,7 @@
         <i class="bi-share-fill"></i>
       </.link>
 
-      <%= if has_moderating_permission(@brainstorming, @current_user) do %>
+      <%= if has_moderating_permission(@brainstorming.id, @current_user) do %>
         <.link
           href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}/edit"}
           class="btn btn-secondary m-1"
@@ -90,14 +90,12 @@
       show
       on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
       title={gettext("New idea")}
-      phx_update="ignore"
     >
       <.live_component
         module={MindwendelWeb.IdeaLive.FormComponent}
         id={:new}
         action={:new}
-        brainstorming={@brainstorming}
-        filtered_labels={@filtered_labels}
+        brainstorming_id={@brainstorming.id}
         current_user={@current_user}
         idea={@idea}
       />
@@ -114,7 +112,7 @@
         module={MindwendelWeb.IdeaLive.ShowComponent}
         id={:show}
         action={:show}
-        brainstorming={@brainstorming}
+        brainstorming_id={@brainstorming.id}
         current_user={@current_user}
         idea={@idea}
       />
@@ -131,7 +129,7 @@
         module={MindwendelWeb.LaneLive.FormComponent}
         id={:new}
         action={:new}
-        brainstorming={@brainstorming}
+        brainstorming_id={@brainstorming.id}
         current_user={@current_user}
         lane={@lane}
       />
@@ -148,7 +146,7 @@
         module={MindwendelWeb.IdeaLive.FormComponent}
         id={:update}
         action={:update}
-        brainstorming={@brainstorming}
+        brainstorming_id={@brainstorming.id}
         current_user={@current_user}
         idea={@idea}
       />
@@ -165,7 +163,7 @@
         module={MindwendelWeb.LaneLive.FormComponent}
         id={:update}
         action={:update}
-        brainstorming={@brainstorming}
+        brainstorming_id={@brainstorming.id}
         current_user={@current_user}
         lane={@lane}
       />
@@ -181,9 +179,12 @@
         module={MindwendelWeb.BrainstormingLive.ShareComponent}
         id={:share}
         action={:share}
-        brainstorming={@brainstorming}
+        brainstorming_id={@brainstorming.id}
         current_user={@current_user}
         uri={url(~p"/brainstormings/#{@brainstorming.id}")}
+        admin_uri={url(~p"/brainstormings/#{@brainstorming.id}/##{@brainstorming.admin_url_id}")}
+        active_uri={url(~p"/brainstormings/#{@brainstorming.id}")}
+        activated_uri_type={:uri}
       />
     </.modal>
   </div>

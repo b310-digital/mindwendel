@@ -38,7 +38,7 @@
         id={comment.id}
         comment={comment}
         idea={@idea}
-        brainstorming={@brainstorming}
+        brainstorming_id={@brainstorming_id}
         current_user={@current_user}
         live_action={:show}
       />
@@ -54,7 +54,7 @@
     <.live_component
       module={MindwendelWeb.CommentLive.FormComponent}
       id={:new}
-      brainstorming={@brainstorming}
+      brainstorming_id={@brainstorming_id}
       current_user={@current_user}
       idea={@idea}
       action={:new}

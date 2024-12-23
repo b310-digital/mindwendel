@@ -38,7 +38,7 @@ defmodule Mindwendel.LocalStorage do
         "name" => brainstorming.name,
         "id" => brainstorming.id,
         "admin_url_id" =>
-          if(Permissions.has_moderating_permission(brainstorming, user),
+          if(Permissions.has_moderating_permission(brainstorming.id, user),
             do: brainstorming.admin_url_id,
             else: nil
           )

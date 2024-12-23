@@ -98,6 +98,10 @@ defmodule Mindwendel.Brainstormings do
     end
   end
 
+  def get_bare_brainstorming!(id) do
+    Repo.get!(Brainstorming, id)
+  end
+
   @doc """
   Gets a single brainstorming with the admin url id
   """

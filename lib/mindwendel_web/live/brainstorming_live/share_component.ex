@@ -1,27 +1,27 @@
 defmodule MindwendelWeb.BrainstormingLive.ShareComponent do
   use MindwendelWeb, :live_component
 
-  def handle_event("toggle_url_secret", _value, socket) do
-    %{brainstorming: brainstorming, uri: uri, current_user: current_user} = socket.assigns
+  alias Mindwendel.Permissions
 
-    if has_moderating_permission(brainstorming, current_user) do
-      new_uri = create_download_link(brainstorming, uri)
-      {:noreply, assign(socket, :uri, new_uri)}
+  def handle_event("toggle_url_secret", _value, socket) do
+    %{
+      brainstorming_id: brainstorming_id,
+      uri: uri,
+      admin_uri: admin_uri,
+      current_user: current_user,
+      activated_uri_type: activated_uri_type
+    } = socket.assigns
+
+    if Permissions.has_moderating_permission(brainstorming_id, current_user) do
+      toggled_activated_uri = if activated_uri_type == :uri, do: :admin_uri, else: :uri
+      active_uri = if toggled_activated_uri == :uri, do: uri, else: admin_uri
+
+      {:noreply,
+       socket
+       |> assign(:activated_uri_type, toggled_activated_uri)
+       |> assign(:active_uri, active_uri)}
     else
       {:noreply, socket}
-    end
-  end
-
-  def secret_in_uri(uri) do
-    uri |> String.split("#") |> length == 2
-  end
-
-  defp create_download_link(brainstorming, uri) do
-    if secret_in_uri(uri) do
-      url_fragments = String.split(uri, "#")
-      List.first(url_fragments)
-    else
-      "#{uri}##{brainstorming.admin_url_id}"
     end
   end
 end

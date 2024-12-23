@@ -6,12 +6,12 @@ defmodule MindwendelWeb.IdeaLive.CardComponent do
   alias Mindwendel.Likes
 
   @impl true
-  def handle_event("delete_idea", %{"id" => id}, socket) do
-    idea = Ideas.get_idea!(id)
+  def handle_event("delete_idea", _params, socket) do
+    idea = socket.assigns.idea
 
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
-    if has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
+    if has_moderating_or_ownership_permission(brainstorming.id, idea, current_user) do
       {:ok, _} = Ideas.delete_idea(idea)
     end
 
@@ -19,14 +19,14 @@ defmodule MindwendelWeb.IdeaLive.CardComponent do
     {:noreply, socket}
   end
 
-  def handle_event("like", %{"id" => id}, socket) do
-    Likes.add_like(id, socket.assigns.current_user.id)
+  def handle_event("like", _params, socket) do
+    Likes.add_like(socket.assigns.idea.id, socket.assigns.current_user.id)
 
     {:noreply, socket}
   end
 
-  def handle_event("unlike", %{"id" => id}, socket) do
-    Likes.delete_like(id, socket.assigns.current_user.id)
+  def handle_event("unlike", _params, socket) do
+    Likes.delete_like(socket.assigns.idea.id, socket.assigns.current_user.id)
 
     {:noreply, socket}
   end
@@ -34,35 +34,22 @@ defmodule MindwendelWeb.IdeaLive.CardComponent do
   def handle_event(
         "add_idea_label_to_idea",
         %{
-          "idea-id" => idea_id,
           "idea-label-id" => idea_label_id
         },
         socket
       ) do
-    idea = Ideas.get_idea!(idea_id)
-    idea_label = IdeaLabels.get_idea_label(idea_label_id)
-
-    case(IdeaLabels.add_idea_label_to_idea(idea, idea_label)) do
-      {:ok, _idea} ->
-        {:noreply, socket}
-
-      {:error, _changeset} ->
-        {:noreply, socket}
-    end
+    IdeaLabels.add_idea_label_to_idea(socket.assigns.idea, idea_label_id)
+    {:noreply, socket}
   end
 
   def handle_event(
         "remove_idea_label_from_idea",
         %{
-          "idea-id" => idea_id,
           "idea-label-id" => idea_label_id
         },
         socket
       ) do
-    idea = Ideas.get_idea!(idea_id)
-    idea_label = IdeaLabels.get_idea_label(idea_label_id)
-
-    IdeaLabels.remove_idea_label_from_idea(idea, idea_label)
+    IdeaLabels.remove_idea_label_from_idea(socket.assigns.idea, idea_label_id)
     {:noreply, socket}
   end
 end

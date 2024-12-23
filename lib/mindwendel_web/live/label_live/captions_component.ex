@@ -7,7 +7,7 @@ defmodule MindwendelWeb.LabelLive.CaptionsComponent do
     %{current_user: current_user, brainstorming: brainstorming, filtered_labels: filtered_labels} =
       socket.assigns
 
-    if has_moderating_permission(brainstorming, current_user) do
+    if has_moderating_permission(brainstorming.id, current_user) do
       # If the filter is already present, remove it as its toggled. If not, add it.
       toggled_filters = build_filter_labels(filtered_labels, idea_label_id)
 

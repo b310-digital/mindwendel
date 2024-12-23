@@ -8,12 +8,11 @@
   data-position={@idea.position_order}
 >
   <div class="card-body-mindwendel-idea">
-    <%= if has_moderating_or_ownership_permission(@brainstorming, @idea, @current_user) do %>
+    <%= if has_moderating_or_ownership_permission(@brainstorming.id, @idea, @current_user) do %>
       <.link
         class="float-end ms-3 mb-3"
         phx-click="delete_idea"
         phx-target={@myself}
-        phx-value-id={@idea.id}
         title={gettext("Delete idea")}
         data-confirm={gettext("Are you sure you want to delete this idea?")}
       >
@@ -97,7 +96,6 @@
             data-testid={brainstorming_idea_label.id}
             phx-click="add_idea_label_to_idea"
             phx-target={@myself}
-            phx-value-idea-id={@idea.id}
             title={"Label #{brainstorming_idea_label.name}"}
             phx-value-idea-label-id={brainstorming_idea_label.id}
           >
@@ -116,7 +114,6 @@
             data-testid={brainstorming_idea_label.id}
             phx-click="remove_idea_label_from_idea"
             phx-target={@myself}
-            phx-value-idea-id={@idea.id}
             title={"Label #{brainstorming_idea_label.name}"}
             phx-value-idea-label-id={brainstorming_idea_label.id}
           >
@@ -145,11 +142,11 @@
       </span>
       <span class="me-1 text-dark">{length(@idea.likes)}</span>
       <%= if Mindwendel.Likes.exists_user_in_likes?(@idea.likes, @current_user.id) do %>
-        <.link phx-click="unlike" phx-target={@myself} phx-value-id={@idea.id} title="Unlike">
+        <.link phx-click="unlike" phx-target={@myself} title="Unlike">
           <i class="bi-star-fill"></i>
         </.link>
       <% else %>
-        <.link phx-click="like" phx-target={@myself} phx-value-id={@idea.id} title="Like">
+        <.link phx-click="like" phx-target={@myself} title="Like">
           <i class="bi-star"></i>
         </.link>
       <% end %>

@@ -50,7 +50,7 @@
     <.input field={@form[:lane_id]} type="hidden" />
     <:actions>
       <.link
-        patch={~p"/brainstormings/#{@brainstorming.id}"}
+        patch={~p"/brainstormings/#{@brainstorming_id}"}
         class="btn btn-secondary form-cancel me-2"
         title={gettext("Close")}
       >
