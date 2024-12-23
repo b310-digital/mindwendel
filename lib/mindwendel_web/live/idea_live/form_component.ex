@@ -91,7 +91,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
     tmp_attachments = prepare_attachments(socket)
 
     # This is a workaround to get the filtered labels for the idea without (!) passing them as a parameter to the form component.
-    # Unfortunatly, passing either the brainstorming or filter labels directly triggers a re-render of the form component when changing the filter labels and results in a stuck bootstrapmodal.
+    # Unfortunatly, passing either the brainstorming or filter labels directly triggers a re-render of the form component when changing the filter labels and results in a stuck bootstrap modal.
     {:ok, brainstorming} = Brainstormings.get_brainstorming(socket.assigns.brainstorming_id)
     filtered_labels = brainstorming.filter_labels_ids
 
