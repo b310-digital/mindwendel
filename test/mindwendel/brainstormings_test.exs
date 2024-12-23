@@ -322,8 +322,8 @@ defmodule Mindwendel.BrainstormingsTest do
 
       like = Factory.insert!(:like, idea: idea)
 
-      {:ok, idea} =
-        IdeaLabels.add_idea_label_to_idea(idea, Enum.at(brainstorming.labels, 0))
+      {:ok, _idea_idea_label} =
+        IdeaLabels.add_idea_label_to_idea(idea, Enum.at(brainstorming.labels, 0).id)
 
       idea = idea |> Repo.preload([:idea_labels])
 

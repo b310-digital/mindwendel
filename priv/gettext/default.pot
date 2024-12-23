@@ -36,7 +36,7 @@ msgid "%{name} - New Idea"
 msgstr ""
 
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:22
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:18
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:17
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this idea?"
 msgstr ""
@@ -195,7 +195,7 @@ msgstr ""
 
 #: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:3
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:40
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:85
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:84
 #, elixir-autogen, elixir-format
 msgid "By"
 msgstr ""
@@ -451,13 +451,13 @@ msgstr ""
 msgid "No lanes available"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:25
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:24
 #, elixir-autogen, elixir-format
 msgid "Edit idea"
 msgstr ""
 
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:30
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:17
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:16
 #, elixir-autogen, elixir-format
 msgid "Delete idea"
 msgstr ""
@@ -472,7 +472,7 @@ msgstr ""
 msgid "Additional Attachment"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:75
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:74
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:43
 #: lib/mindwendel_web/live/idea_live/show_component.html.heex:27
 #, elixir-autogen, elixir-format
@@ -529,8 +529,8 @@ msgstr ""
 msgid "No comments available"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:33
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:140
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:32
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:137
 #, elixir-autogen, elixir-format
 msgid "Show idea"
 msgstr ""
