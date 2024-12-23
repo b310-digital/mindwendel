@@ -90,12 +90,12 @@
       show
       on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
       title={gettext("New idea")}
-      phx_update="ignore"
     >
       <.live_component
         module={MindwendelWeb.IdeaLive.FormComponent}
         id={:new}
         action={:new}
+        phx-update="ignore"
         brainstorming_id={@brainstorming.id}
         filtered_labels={@filtered_labels}
         current_user={@current_user}
@@ -176,12 +176,12 @@
       show
       on_cancel={JS.patch(~p"/brainstormings/#{@brainstorming.id}")}
       title={gettext("Share brainstorming")}
-      phx_update="ignore"
     >
       <.live_component
         module={MindwendelWeb.BrainstormingLive.ShareComponent}
         id={:share}
         action={:share}
+        phx-update="ignore"
         brainstorming={@brainstorming}
         current_user={@current_user}
         uri={url(~p"/brainstormings/#{@brainstorming.id}")}
