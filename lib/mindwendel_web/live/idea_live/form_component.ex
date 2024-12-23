@@ -44,9 +44,9 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   end
 
   def handle_event("delete_attachment", %{"id" => id}, socket) do
-    %{current_user: current_user, brainstorming: brainstorming, idea: idea} = socket.assigns
+    %{current_user: current_user, brainstorming_id: brainstorming_id, idea: idea} = socket.assigns
 
-    if has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
+    if has_moderating_or_ownership_permission(brainstorming_id, idea, current_user) do
       attachment = Attachments.get_attached_file(id)
       Attachments.delete_attached_file(attachment)
     end
@@ -57,9 +57,9 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   defp save_idea(socket, :update, idea_params) do
     idea = Ideas.get_idea!(idea_params["id"])
 
-    %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
+    %{current_user: current_user, brainstorming_id: brainstorming_id} = socket.assigns
 
-    if has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
+    if has_moderating_or_ownership_permission(brainstorming_id, idea, current_user) do
       tmp_attachments = prepare_attachments(socket)
 
       idea_params_merged =
@@ -75,7 +75,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
           {:noreply,
            socket
            |> put_flash(:info, gettext("Idea updated"))
-           |> push_patch(to: ~p"/brainstormings/#{brainstorming.id}")}
+           |> push_patch(to: ~p"/brainstormings/#{brainstorming_id}")}
 
         {:error, %Ecto.Changeset{} = changeset} ->
           remove_tmp_attachments(tmp_attachments)

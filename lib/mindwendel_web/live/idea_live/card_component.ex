@@ -11,7 +11,7 @@ defmodule MindwendelWeb.IdeaLive.CardComponent do
 
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
-    if has_moderating_or_ownership_permission(brainstorming, idea, current_user) do
+    if has_moderating_or_ownership_permission(brainstorming.id, idea, current_user) do
       {:ok, _} = Ideas.delete_idea(idea)
     end
 

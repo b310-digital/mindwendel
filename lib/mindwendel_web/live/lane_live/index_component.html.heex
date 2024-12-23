@@ -30,7 +30,7 @@
                   else: ""
 
               moderating_disabled =
-                unless has_moderating_permission(@brainstorming, @current_user),
+                unless has_moderating_permission(@brainstorming.id, @current_user),
                   do: "disabled",
                   else: "" %>
               <.link

@@ -1,10 +1,12 @@
 defmodule MindwendelWeb.BrainstormingLive.ShareComponent do
   use MindwendelWeb, :live_component
 
+  alias Mindwendel.Permissions
+
   def handle_event("toggle_url_secret", _value, socket) do
     %{brainstorming: brainstorming, uri: uri, current_user: current_user} = socket.assigns
 
-    if has_moderating_permission(brainstorming, current_user) do
+    if Permissions.has_moderating_permission(brainstorming.id, current_user) do
       new_uri = create_download_link(brainstorming, uri)
       {:noreply, assign(socket, :uri, new_uri)}
     else
