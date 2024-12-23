@@ -6,8 +6,8 @@ defmodule MindwendelWeb.IdeaLive.CardComponent do
   alias Mindwendel.Likes
 
   @impl true
-  def handle_event("delete_idea", %{"id" => id}, socket) do
-    idea = Ideas.get_idea!(id)
+  def handle_event("delete_idea", _params, socket) do
+    idea = socket.assigns.idea
 
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
 
@@ -19,14 +19,14 @@ defmodule MindwendelWeb.IdeaLive.CardComponent do
     {:noreply, socket}
   end
 
-  def handle_event("like", %{"id" => id}, socket) do
-    Likes.add_like(id, socket.assigns.current_user.id)
+  def handle_event("like", _params, socket) do
+    Likes.add_like(socket.assigns.idea.id, socket.assigns.current_user.id)
 
     {:noreply, socket}
   end
 
-  def handle_event("unlike", %{"id" => id}, socket) do
-    Likes.delete_like(id, socket.assigns.current_user.id)
+  def handle_event("unlike", _params, socket) do
+    Likes.delete_like(socket.assigns.idea.id, socket.assigns.current_user.id)
 
     {:noreply, socket}
   end
