@@ -21,5 +21,10 @@ defmodule Mindwendel.PermissionsTest do
       brainstorming = Factory.insert!(:brainstorming)
       refute Permissions.has_moderating_permission(brainstorming.id, Accounts.get_user(user.id))
     end
+
+    test "returns false if user is nil" do
+      brainstorming = Factory.insert!(:brainstorming)
+      refute Permissions.has_moderating_permission(brainstorming.id, nil)
+    end
   end
 end

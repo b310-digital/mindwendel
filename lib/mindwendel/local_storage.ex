@@ -1,5 +1,6 @@
 defmodule Mindwendel.LocalStorage do
   alias Mindwendel.Permissions
+  alias Mindwendel.Brainstormings.Brainstorming
 
   @moduledoc """
   The LocalStorage context. It includes helpers to handle local storage data from clients.
@@ -15,7 +16,7 @@ defmodule Mindwendel.LocalStorage do
     (brainstormings_from_local_storage(brainstormings_from_local_storage) ++
        brainstormings_from_session(brainstormings_from_session, user))
     |> Enum.uniq_by(& &1["id"])
-    |> Enum.sort(&(&1["last_accessed_at"] > &2["last_accessed_at"]))
+    |> Enum.sort_by(& &1["last_accessed_at"], {:desc, DateTime})
   end
 
   defp brainstormings_from_local_storage(brainstormings_stored)
@@ -50,9 +51,9 @@ defmodule Mindwendel.LocalStorage do
     []
   end
 
-  defp valid_stored_brainstorming?(brainstorming) do
-    case Ecto.UUID.cast(brainstorming["id"]) do
-      {:ok, _} -> brainstorming["last_accessed_at"] && brainstorming["name"]
+  defp valid_stored_brainstorming?(attrs) do
+    case Ecto.UUID.cast(attrs["id"]) do
+      {:ok, _} -> Brainstorming.changeset(%Brainstorming{}, attrs)
       :error -> false
     end
   end
