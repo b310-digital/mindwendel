@@ -53,7 +53,7 @@ defmodule Mindwendel.LocalStorage do
 
   defp valid_stored_brainstorming?(attrs) do
     case Ecto.UUID.cast(attrs["id"]) do
-      {:ok, _} -> Brainstorming.changeset(%Brainstorming{}, attrs)
+      {:ok, _} -> Brainstorming.changeset(%Brainstorming{}, attrs).valid?
       :error -> false
     end
   end
