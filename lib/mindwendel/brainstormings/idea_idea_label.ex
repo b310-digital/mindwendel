@@ -21,7 +21,7 @@ defmodule Mindwendel.Brainstormings.IdeaIdeaLabel do
     |> cast_assoc(:idea, required: true)
     |> cast_assoc(:idea_label, required: true)
     |> unique_constraint([:idea_id, :idea_label_id],
-      name: :idea_idea_labels_idea_id_idea_label_id_index
+      name: :idea_idea_labels_pkey
     )
   end
 
@@ -30,7 +30,7 @@ defmodule Mindwendel.Brainstormings.IdeaIdeaLabel do
     |> cast(attrs, [:idea_id, :idea_label_id])
     |> validate_required([:idea_id, :idea_label_id])
     |> unique_constraint([:idea_id, :idea_label_id],
-      name: :idea_idea_labels_idea_id_idea_label_id_index
+      name: :idea_idea_labels_pkey
     )
   end
 end
