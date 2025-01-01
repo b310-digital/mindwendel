@@ -23,6 +23,8 @@ end
 
 config :mindwendel, :s3_storage_provider, Mindwendel.Services.S3ObjectStorageService
 
+force_ssl = System.get_env("FORCE_SSL", "true") == "true"
+
 config :mindwendel, MindwendelWeb.Endpoint,
   # This configuration ensures / enforces ssl requests sent to this mindwendel instance.
   # See https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#module-compile-time-configuration
@@ -33,7 +35,7 @@ config :mindwendel, MindwendelWeb.Endpoint,
   # See https://hexdocs.pm/plug/Plug.SSL.html#module-x-forwarded
   # See https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#module-compile-time-configuration
   force_ssl: [
-    hsts: true,
+    hsts: force_ssl,
     rewrite_on: [
       :x_forwarded_host,
       :x_forwarded_port,

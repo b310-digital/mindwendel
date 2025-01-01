@@ -39,6 +39,8 @@ services:
       # E.g. `date +%s | sha256sum | base64 | head -c 64 ; echo`
       # See https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
       SECRET_KEY_BASE: ${DOCKER_COMPOSE_APP_PROD_SECRET_KEY_BASE:?}
+      # force ssl for production, see config/prod.exs
+      FORCE_SSL: ${DOCKER_COMPOSE_APP_PROD_FORCE_SSL:-true}
 
       # Add the url host that points to this mindwendel installation.
       # This is used by mindwendel to generate urls with the right host throughout the app.
@@ -48,7 +50,7 @@ services:
 
       # This env var defines to what port the phoeinx (cowboy) server should listen to.
       # Given that we are target port is 4000 (see below) it likely that the phoenix server should also listen to this port 4000.
-      MW_ENDPOINT_HTTP_PORT: ${DOCKER_COMPOSE_APP_MW_ENDPOINT_HTTP_PORT:-4000}
+      MW_ENDPOINT_HTTP_PORT: ${DOCKER_COMPOSE_APP_PROD_PORT_TARGET:-4000}
     ports:
       - "${DOCKER_COMPOSE_APP_PROD_PORT_PUBLISHED:-4000}:${DOCKER_COMPOSE_APP_PROD_PORT_TARGET:-4000}"
     depends_on:
