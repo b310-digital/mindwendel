@@ -5,6 +5,7 @@ We have prepared different installation configurations for you. A postgres datab
 Below, we provide detailed instructions on how to install and run mindwendel:
 
 - [Running on Docker Compose](#running-on-docker-compose)
+- [Running behind a reverse proxy](#running-behind-a-reverse-proxy)
 - [Running on Gigalixir](#running-on-gigalixir)
 
 ## Running on Docker Compose
@@ -164,9 +165,69 @@ When you use [docker compose](https://docs.docker.com/compose/), you will be usi
   exit
   ```
 
+  ...or use any other database client of your choice to create the database!
+
   After that, adjust the db password in the docker compose file accordingly.
 
   Note: Adjust the env vars in `docker-compose.yml` according to your preferences.
+
+## Running behind a reverse proxy
+
+Mindwendel can be configured to run behind a reverse proxy with SSL termination. Here's how to set it up:
+
+### Prerequisites
+
+- A reverse proxy server (e.g., Nginx)
+- A valid SSL certificate
+
+### SSL Certificate Requirements
+
+Your reverse proxy needs to handle SSL termination with a valid certificate. You can obtain one through:
+- Let's Encrypt (recommended)
+- Your own Certificate Authority (CA)
+- A commercial SSL provider
+
+### Nginx Configuration Example
+
+Here's a basic Nginx configuration template. Adjust the values according to your setup:
+
+```
+events {
+  worker_connections 1024;
+}
+
+http {
+	server {
+	  listen 80;
+	  listen [::]:80;
+	
+	  server_name mindwendel.domain.tld;
+	  return 301 https://$host$request_uri;
+	}
+	
+	server {
+	
+	  listen 443 ssl;
+	  listen [::]:443 ssl;
+	
+	  server_name mindwendel.domain.tld;
+	
+	  ssl_certificate /etc/letsencrypt/live/domain.tld/fullchain.pem;
+	  ssl_certificate_key /etc/letsencrypt/live/domain.tld/privkey.pem;
+	
+	  location / {
+	      proxy_pass http://mindwendel:4000/;
+	      proxy_http_version 1.1;
+	      proxy_set_header Host $http_host;
+	      proxy_set_header X-Real-IP $remote_addr;
+	      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	      proxy_set_header X-Forwarded-Proto $scheme;
+	      proxy_set_header Upgrade $http_upgrade;
+	      proxy_set_header Connection "Upgrade";
+	  }
+	}
+}
+```
 
 ## Running on Gigalixir
 
