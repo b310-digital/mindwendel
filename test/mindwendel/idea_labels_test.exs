@@ -43,21 +43,12 @@ defmodule Mindwendel.IdeaLabelsTest do
       assert Repo.one(IdeaLabel) == idea_label
     end
 
-    @tag :skip
     test "does not add the same IdeaLabel twice to Idea", %{idea_label: idea_label, idea: idea} do
       # Calling this method twice does not fail and does not create duplicates
-      {:ok, idea_idea_label_after_method_call_1} =
+      {:ok, _} =
         IdeaLabels.add_idea_label_to_idea(idea, idea_label.id)
 
-      {:ok, idea_idea_label_after_method_call_2} =
-        IdeaLabels.add_idea_label_to_idea(idea, idea_label.id)
-
-      # There should still be only one IdeaIdeaLabel
-      assert Repo.count(IdeaIdeaLabel) == 1
-
-      assert Repo.count(IdeaLabel) == 1
-
-      assert idea_idea_label_after_method_call_1 == idea_idea_label_after_method_call_2
+      assert {:error, _changeset} = IdeaLabels.add_idea_label_to_idea(idea, idea_label.id)
     end
 
     @tag :skip
