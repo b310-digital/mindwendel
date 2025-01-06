@@ -19,7 +19,7 @@ defmodule Mindwendel.IdeaIdeaLabelTest do
       }
     end
 
-    test "s", %{idea: idea} do
+    test "valid with idea and idea_label", %{idea: idea} do
       idea_label = idea.brainstorming.labels |> Enum.at(0)
 
       idea_idea_label_changeset =
