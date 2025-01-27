@@ -73,7 +73,7 @@ defmodule Mindwendel.MixProject do
       {:sobelow, "0.13.0", only: [:dev, :test], runtime: false},
       {:credo, "1.7.11", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18"},
-      {:telemetry_metrics, "1.0.0"},
+      {:telemetry_metrics, "1.1.0"},
       {:telemetry_poller, "1.1.0"},
       {:timex, "3.7.11"},
       {:logger_json, "6.2.1"},
