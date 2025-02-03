@@ -52,7 +52,7 @@ defmodule Mindwendel.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "1.7.18"},
+      {:phoenix, "1.7.19"},
       {:phoenix_ecto, "4.6.3"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "1.5.3", only: :dev},
