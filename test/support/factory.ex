@@ -6,6 +6,7 @@ defmodule Mindwendel.Factory do
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
+  alias Mindwendel.Brainstormings.Comment
   alias Mindwendel.Attachments.Link
   alias Mindwendel.Attachments.File
   alias Mindwendel.Accounts.User
@@ -17,7 +18,8 @@ defmodule Mindwendel.Factory do
       # This can be removed as soon the todo is solved in lib/mindwendel/brainstormings/brainstorming.ex:12
       admin_url_id: Ecto.UUID.generate(),
       labels: Brainstorming.idea_label_factory(),
-      lanes: [build(:lane)]
+      lanes: [build(:lane)],
+      moderating_users: []
     }
   end
 
@@ -62,6 +64,10 @@ defmodule Mindwendel.Factory do
 
   def build(:lane) do
     %Lane{}
+  end
+
+  def build(:comment) do
+    %Comment{}
   end
 
   def build(:brainstorming, :with_users) do

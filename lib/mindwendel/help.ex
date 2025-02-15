@@ -8,8 +8,6 @@ defmodule Mindwendel.Help do
   alias Mindwendel.Help.Inspiration
 
   def random_inspiration do
-    if Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_teasers] do
-      Repo.one(from t in Inspiration, order_by: fragment("RANDOM()"), limit: 1)
-    end
+    Repo.one(from t in Inspiration, order_by: fragment("RANDOM()"), limit: 1)
   end
 end

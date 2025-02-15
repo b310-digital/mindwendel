@@ -1,14 +1,14 @@
 defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
-  use MindwendelWeb.ConnCase
+  use MindwendelWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
-  alias Mindwendel.Brainstormings
+  alias Mindwendel.Accounts
 
   alias Mindwendel.Factory
 
   setup do
     moderating_user = Factory.insert!(:user)
     brainstorming = Factory.insert!(:brainstorming)
-    Brainstormings.add_moderating_user(brainstorming, moderating_user)
+    Accounts.add_moderating_user(brainstorming, moderating_user)
     %{brainstorming: brainstorming, moderating_user: moderating_user}
   end
 
@@ -32,24 +32,27 @@ defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
     brainstorming: brainstorming,
     moderating_user: moderating_user
   } do
+    lane = List.first(brainstorming.lanes)
+    [first_label, second_label | _] = brainstorming.labels
+
     idea_with_first_label =
       Factory.insert!(:idea, %{
         brainstorming: brainstorming,
-        label: Enum.at(brainstorming.labels, 0),
-        lane: Enum.at(brainstorming.lanes, 0)
+        idea_labels: [first_label],
+        lane: lane
       })
 
     idea_with_second_label =
       Factory.insert!(:idea, %{
         brainstorming: brainstorming,
-        label: Enum.at(brainstorming.labels, 1),
-        lane: Enum.at(brainstorming.lanes, 0)
+        idea_labels: [second_label],
+        lane: lane
       })
 
     idea_without_label =
       Factory.insert!(:idea, %{
         brainstorming: brainstorming,
-        lane: Enum.at(brainstorming.lanes, 0)
+        lane: lane
       })
 
     {:ok, show_live_view, _html} =

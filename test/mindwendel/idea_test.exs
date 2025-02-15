@@ -1,5 +1,5 @@
 defmodule Mindwendel.IdeaTest do
-  use Mindwendel.DataCase
+  use Mindwendel.DataCase, async: true
   alias Mindwendel.Factory
 
   alias Mindwendel.Ideas
@@ -87,8 +87,9 @@ defmodule Mindwendel.IdeaTest do
     end
   end
 
-  @tag :skip
   describe "#update_idea" do
+    @describetag :skip
+
     setup do
       %{idea: Factory.insert!(:idea)}
     end

@@ -1,6 +1,6 @@
 <%= for idea <- @ideas do %>
-  <%= idea.body %><br />
-  <%= gettext("By") %> <%= Gettext.gettext(MindwendelWeb.Gettext, idea.username) %>, <%= Likes.count_likes_for_idea(
+  {idea.body}<br />
+  {gettext("By")} {Gettext.gettext(MindwendelWeb.Gettext, idea.username)}, {Likes.count_likes_for_idea(
     idea
-  ) %> likes <br /><br />
+  )} likes <br /><br />
 <% end %>

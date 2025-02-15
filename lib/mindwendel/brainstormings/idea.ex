@@ -7,6 +7,8 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Brainstormings.Comment
+  alias Mindwendel.FeatureFlag
   alias Mindwendel.Ideas
   alias Mindwendel.Attachments
   alias Mindwendel.Attachments.Link
@@ -14,20 +16,19 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.UrlPreview
   alias Mindwendel.Accounts.User
 
-  @label_values [:label_1, :label_2, :label_3, :label_4, :label_5]
   @max_file_attachments 2
 
   schema "ideas" do
     field :body, :string
     field :position_order, :integer
     field :username, :string, default: "Anonymous"
-    field :deprecated_label, Ecto.Enum, source: :label, values: @label_values
+    field :comments_count, :integer
     has_one :link, Link
     belongs_to :user, User
     has_many :likes, Like
+    has_many :comments, Comment, preload_order: [desc: :inserted_at]
     has_many :files, File
     belongs_to :brainstorming, Brainstorming
-    belongs_to :label, IdeaLabel, on_replace: :nilify
     belongs_to :lane, Lane
     many_to_many :idea_labels, IdeaLabel, join_through: IdeaIdeaLabel, on_replace: :delete
 
@@ -42,15 +43,13 @@ defmodule Mindwendel.Brainstormings.Idea do
       :body,
       :brainstorming_id,
       :lane_id,
-      :deprecated_label,
-      :label_id,
       :user_id,
-      :position_order
+      :position_order,
+      :comments_count
     ])
     |> validate_required([:username, :body, :brainstorming_id])
     |> maybe_put_idea_labels(attrs)
     |> validate_length(:body, min: 1, max: 1023)
-    |> validate_inclusion(:deprecated_label, @label_values)
     |> add_position_order_if_missing()
     |> validate_attachment_count(attrs)
     |> maybe_put_attachments(idea, attrs)
@@ -77,9 +76,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   end
 
   defp maybe_put_attachments(changeset, idea, attrs) do
-    upload_feature_flag = Application.fetch_env!(:mindwendel, :options)[:feature_file_upload]
-
-    if upload_feature_flag and
+    if FeatureFlag.enabled?(:feature_file_upload) and
          attrs["tmp_attachments"] != nil and Enum.empty?(changeset.errors) do
       new_files =
         Enum.map(attrs["tmp_attachments"], fn change ->

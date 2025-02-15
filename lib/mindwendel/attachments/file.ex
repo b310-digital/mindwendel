@@ -2,6 +2,7 @@ defmodule Mindwendel.Attachments.File do
   use Mindwendel.Schema
   import Ecto.Changeset
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.FeatureFlag
   alias Mindwendel.Services.StorageService
 
   schema "idea_files" do
@@ -23,9 +24,7 @@ defmodule Mindwendel.Attachments.File do
   end
 
   defp maybe_store_from_path_tmp(changeset) do
-    upload_feature_flag = Application.fetch_env!(:mindwendel, :options)[:feature_file_upload]
-
-    if upload_feature_flag and get_change(changeset, :path) do
+    if FeatureFlag.enabled?(:feature_file_upload) and get_change(changeset, :path) do
       object_filename = Path.basename(get_change(changeset, :path))
 
       {:ok, encrypted_file_path} =

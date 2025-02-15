@@ -70,12 +70,9 @@ defmodule Mindwendel.Lanes do
 
   """
   def get_lanes_for_brainstorming_with_labels_filtered(id) do
-    brainstorming = Brainstormings.get_brainstorming!(id)
+    {:ok, brainstorming} = Brainstormings.get_brainstorming(id)
 
-    filter_label =
-      if length(brainstorming.filter_labels_ids) > 0,
-        do: %{filter_labels_ids: brainstorming.filter_labels_ids},
-        else: %{}
+    filter_label = %{filter_labels_ids: brainstorming.filter_labels_ids}
 
     get_lanes_for_brainstorming(id, filter_label)
   end
@@ -89,7 +86,7 @@ defmodule Mindwendel.Lanes do
       [%Lane{}, ...]
 
   """
-  def get_lanes_for_brainstorming(id, filters \\ %{}) do
+  def get_lanes_for_brainstorming(id, filters \\ %{filter_labels_ids: []}) do
     lane_query =
       from lane in Lane,
         where: lane.brainstorming_id == ^id,
@@ -102,16 +99,11 @@ defmodule Mindwendel.Lanes do
 
     lane_query
     |> Repo.all()
-    |> Repo.preload(
-      ideas:
-        ideas_advanced_query
-        |> preload([
-          :link,
-          :likes,
-          :idea_labels,
-          :files
-        ])
-    )
+    |> Repo.preload(ideas: {ideas_advanced_query, [:link, :likes, :idea_labels, :files]})
+  end
+
+  defp build_ideas_query_with_filter(%{filter_labels_ids: []}) do
+    from(idea in Idea)
   end
 
   defp build_ideas_query_with_filter(%{filter_labels_ids: filter_labels_ids}) do
@@ -125,10 +117,6 @@ defmodule Mindwendel.Lanes do
     from(i in subquery(distinct_ideas),
       order_by: [asc: i.position_order]
     )
-  end
-
-  defp build_ideas_query_with_filter(%{} = _filters) do
-    Idea
   end
 
   @doc """

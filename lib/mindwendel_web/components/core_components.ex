@@ -38,6 +38,7 @@ defmodule MindwendelWeb.CoreComponents do
   """
   attr :id, :string, required: true
   attr :title, :string, required: false
+  attr :phx_update, :string, default: "replace"
   attr :show, :boolean, default: false
   attr :on_cancel, JS, default: %JS{}
   slot :inner_block, required: true
@@ -53,6 +54,7 @@ defmodule MindwendelWeb.CoreComponents do
       tabindex="-1"
       aria-hidden="true"
       aria-labelledby="{@id}-title"
+      phx-update={@phx_update}
     >
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -62,7 +64,7 @@ defmodule MindwendelWeb.CoreComponents do
             phx-key="escape"
           >
             <div class="modal-header">
-              <h5 class="modal-title"><%= @title %></h5>
+              <h5 class="modal-title">{@title}</h5>
               <button
                 phx-click={JS.exec("data-cancel", to: "##{@id}")}
                 type="button"
@@ -72,7 +74,7 @@ defmodule MindwendelWeb.CoreComponents do
               />
             </div>
             <div id={"#{@id}-content"} class="modal-body">
-              <%= render_slot(@inner_block) %>
+              {render_slot(@inner_block)}
             </div>
           </.focus_wrap>
         </div>
@@ -120,9 +122,9 @@ defmodule MindwendelWeb.CoreComponents do
       <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
         <.icon :if={@kind == :info} name="hero-information-circle-mini" class="h-4 w-4" />
         <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="h-4 w-4" />
-        <%= @title %>
+        {@title}
       </p>
-      <p class="mt-2 text-sm leading-5"><%= msg %></p>
+      <p class="mt-2 text-sm leading-5">{msg}</p>
       <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
         <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
       </button>
@@ -153,7 +155,7 @@ defmodule MindwendelWeb.CoreComponents do
         phx-connected={hide("#client-error")}
         hidden
       >
-        <%= gettext("Attempting to reconnect") %>
+        {gettext("Attempting to reconnect")}
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
 
@@ -165,7 +167,7 @@ defmodule MindwendelWeb.CoreComponents do
         phx-connected={hide("#server-error")}
         hidden
       >
-        <%= gettext("Hang in there while we get back on track") %>
+        {gettext("Hang in there while we get back on track")}
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
     </div>
@@ -198,9 +200,9 @@ defmodule MindwendelWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <%= render_slot(@inner_block, f) %>
+      {render_slot(@inner_block, f)}
       <div :for={action <- @actions} class="mt-2">
-        <%= render_slot(action, f) %>
+        {render_slot(action, f)}
       </div>
     </.form>
     """
@@ -231,7 +233,7 @@ defmodule MindwendelWeb.CoreComponents do
       ]}
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </button>
     """
   end
@@ -280,19 +282,27 @@ defmodule MindwendelWeb.CoreComponents do
   attr :errors, :list, default: []
   attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
-  attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+
+  attr :options, :list,
+    default: [],
+    doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
 
   attr :rest, :global,
     include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
                 multiple pattern placeholder readonly required rows size step)
 
+  attr :used?, :boolean, doc: "This field was actually used (set by compoenent itself)"
+
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
-    errors = if Phoenix.Component.used_input?(field), do: field.errors, else: []
+    used? = Phoenix.Component.used_input?(field)
+    errors = if used?, do: field.errors, else: []
 
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
     |> assign(:errors, Enum.map(errors, &translate_error(&1)))
+    |> assign(:used?, used?)
     |> assign_new(:name, fn -> if assigns.multiple, do: field.name <> "[]", else: field.name end)
     |> assign_new(:value, fn -> field.value end)
     |> input()
@@ -305,7 +315,11 @@ defmodule MindwendelWeb.CoreComponents do
       end)
 
     ~H"""
-    <div class="form-check form-check-inline">
+    <div class={[
+      "form-check",
+      @options == [] && "form-check-inline",
+      @options == ["switch"] && "form-switch"
+    ]}>
       <label class="form-check-label">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
         <input
@@ -317,9 +331,9 @@ defmodule MindwendelWeb.CoreComponents do
           class="form-check-input"
           {@rest}
         />
-        <%= @label %>
+        {@label}
       </label>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -327,12 +341,12 @@ defmodule MindwendelWeb.CoreComponents do
   def input(%{type: "select"} = assigns) do
     ~H"""
     <div class="form-group">
-      <.label for={@id}><%= @label %></.label>
+      <.label for={@id}>{@label}</.label>
       <select id={@id} name={@name} class="form-control" , multiple={@multiple} {@rest}>
-        <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+        <option :if={@prompt} value="">{@prompt}</option>
+        {Phoenix.HTML.Form.options_for_select(@options, @value)}
       </select>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -366,18 +380,17 @@ defmodule MindwendelWeb.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div class="form-group">
-      <.label for={@id}><%= @label %></.label>
+      <.label for={@id}>{@label}</.label>
       <textarea
         id={@id}
         name={@name}
         class={[
           "form-control",
-          @errors == [] && "is-valid",
-          @errors != [] && "is-invalid"
+          error_class(@used?, @errors)
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -391,8 +404,7 @@ defmodule MindwendelWeb.CoreComponents do
       value={Phoenix.HTML.Form.normalize_value(@type, @value)}
       class={[
         "form-control",
-        @errors == [] && "is-valid",
-        @errors != [] && "is-invalid"
+        error_class(@used?, @errors)
       ]}
       {@rest}
     />
@@ -403,7 +415,7 @@ defmodule MindwendelWeb.CoreComponents do
   def input(assigns) do
     ~H"""
     <div class="form-group">
-      <.label for={@id}><%= @label %></.label>
+      <.label for={@id}>{@label}</.label>
       <input
         type={@type}
         name={@name}
@@ -411,15 +423,19 @@ defmodule MindwendelWeb.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
           "form-control",
-          @errors == [] && "is-valid",
-          @errors != [] && "is-invalid"
+          error_class(@used?, @errors)
         ]}
         {@rest}
       />
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
+
+  defp error_class(used?, errors)
+  defp error_class(false, _errors), do: nil
+  defp error_class(true, []), do: "is-valid"
+  defp error_class(_true, _non_empty), do: "is-invalid"
 
   @doc """
   Renders a label.
@@ -430,7 +446,7 @@ defmodule MindwendelWeb.CoreComponents do
   def label(assigns) do
     ~H"""
     <label for={@for}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </label>
     """
   end
@@ -443,7 +459,7 @@ defmodule MindwendelWeb.CoreComponents do
   def error(assigns) do
     ~H"""
     <div class="invalid-feedback">
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </div>
     """
   end
@@ -462,13 +478,13 @@ defmodule MindwendelWeb.CoreComponents do
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
         <h1 class="text-lg font-semibold leading-8 text-zinc-800">
-          <%= render_slot(@inner_block) %>
+          {render_slot(@inner_block)}
         </h1>
         <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
-          <%= render_slot(@subtitle) %>
+          {render_slot(@subtitle)}
         </p>
       </div>
-      <div class="flex-none"><%= render_slot(@actions) %></div>
+      <div class="flex-none">{render_slot(@actions)}</div>
     </header>
     """
   end
@@ -509,9 +525,9 @@ defmodule MindwendelWeb.CoreComponents do
       <table class="w-[40rem] mt-11 sm:w-full">
         <thead class="text-sm text-left leading-6 text-zinc-500">
           <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
+            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal">{col[:label]}</th>
             <th :if={@action != []} class="relative p-0 pb-4">
-              <span class="sr-only"><%= gettext("Actions") %></span>
+              <span class="sr-only">{gettext("Actions")}</span>
             </th>
           </tr>
         </thead>
@@ -529,7 +545,7 @@ defmodule MindwendelWeb.CoreComponents do
               <div class="block py-4 pr-6">
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
                 <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
-                  <%= render_slot(col, @row_item.(row)) %>
+                  {render_slot(col, @row_item.(row))}
                 </span>
               </div>
             </td>
@@ -540,7 +556,7 @@ defmodule MindwendelWeb.CoreComponents do
                   :for={action <- @action}
                   class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
                 >
-                  <%= render_slot(action, @row_item.(row)) %>
+                  {render_slot(action, @row_item.(row))}
                 </span>
               </div>
             </td>
@@ -570,8 +586,8 @@ defmodule MindwendelWeb.CoreComponents do
     <div class="mt-14">
       <dl class="-my-4 divide-y divide-zinc-100">
         <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
-          <dt class="w-1/4 flex-none text-zinc-500"><%= item.title %></dt>
-          <dd class="text-zinc-700"><%= render_slot(item) %></dd>
+          <dt class="w-1/4 flex-none text-zinc-500">{item.title}</dt>
+          <dd class="text-zinc-700">{render_slot(item)}</dd>
         </div>
       </dl>
     </div>
@@ -593,9 +609,31 @@ defmodule MindwendelWeb.CoreComponents do
     <div class="mt-16">
       <.link navigate={@navigate}>
         <i class="bi bi-arrow-left"></i>
-        <%= render_slot(@inner_block) %>
+        {render_slot(@inner_block)}
       </.link>
     </div>
+    """
+  end
+
+  @doc """
+  Renders a File Icon.
+
+  ## Examples
+
+      <.file_icon type="image" />
+  """
+  attr :type, :string, required: true
+  attr :class, :string, default: nil
+
+  def file_icon(assigns) do
+    ~H"""
+    <i class={[
+      "bi",
+      @type == "image" && "bi-file-earmark-image",
+      @type == "pdf" && "bi-file-earmark-pdf",
+      !Enum.member?(["image", "pdf"], @type) && "bi-file-earmark",
+      @class
+    ]} />
     """
   end
 
@@ -695,7 +733,7 @@ defmodule MindwendelWeb.CoreComponents do
       @lane_count > 3 && "col-12 col-md-3",
       @class
     ]}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </div>
     """
   end
@@ -716,11 +754,11 @@ defmodule MindwendelWeb.CoreComponents do
 
   def filter_button(assigns) do
     ~H"""
-    <div class="m-1">
+    <div class="d-inline">
       <button
         type="button"
         class={[
-          "btn btn-sm text-light rounded-pill",
+          "btn btn-sm text-light rounded-pill m-1",
           @filter_active && "border border-2 border-primary",
           @class
         ]}
@@ -732,7 +770,7 @@ defmodule MindwendelWeb.CoreComponents do
         phx-value-id={@label_id}
         {@rest}
       >
-        <%= render_slot(@inner_block) %>
+        {render_slot(@inner_block)}
       </button>
     </div>
     """
