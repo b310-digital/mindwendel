@@ -1,20 +1,19 @@
-<div class="d-flex flex-row justify-content-end">
+<div class="d-flex justify-content-end">
   <%= for brainstorming_idea_label <- @brainstorming.labels do %>
-    <% filter_active = Enum.member?(@brainstorming.filter_labels_ids, brainstorming_idea_label.id) %>
+    <% filter_active = Enum.member?(@filtered_labels, brainstorming_idea_label.id) %>
     <.filter_button
       filter_active={filter_active}
       id={"idea-caption-#{uuid()}"}
       color={brainstorming_idea_label.color}
       label_id={brainstorming_idea_label.id}
       phx-target={@myself}
-      disabled={!has_moderating_permission(@brainstorming, @current_user)}
+      disabled={!has_moderating_permission(@brainstorming.id, @current_user)}
     >
-      <%= brainstorming_idea_label.name %>
+      {brainstorming_idea_label.name}
     </.filter_button>
   <% end %>
-  <%= if has_moderating_permission(@brainstorming, @current_user) do %>
+  <%= if has_moderating_permission(@brainstorming.id, @current_user) do %>
     <.filter_button
-      class="d-flex"
       label_id="filter-label-reset"
       color="grey"
       id={"idea-caption-#{uuid()}"}

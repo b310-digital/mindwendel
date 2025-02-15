@@ -1,5 +1,5 @@
 defmodule Mindwendel.IdeasTest do
-  use Mindwendel.DataCase
+  use Mindwendel.DataCase, async: true
   alias Mindwendel.Factory
 
   alias Mindwendel.Ideas
@@ -8,8 +8,8 @@ defmodule Mindwendel.IdeasTest do
   setup do
     user = Factory.insert!(:user)
     brainstorming = Factory.insert!(:brainstorming, users: [user])
-    lane = Enum.at(brainstorming.lanes, 0)
-    label_first = Enum.at(brainstorming.labels, 0)
+    lane = List.first(brainstorming.lanes)
+    label_first = List.first(brainstorming.labels)
 
     %{
       brainstorming: brainstorming,
@@ -27,6 +27,27 @@ defmodule Mindwendel.IdeasTest do
       lane: lane,
       label: label_first
     }
+  end
+
+  describe "increment_comment_count" do
+    test "increments comment count on an idea",
+         %{
+           idea: idea
+         } do
+      {:ok, idea} = Ideas.increment_comment_count(idea.id)
+      assert idea.comments_count == 1
+    end
+  end
+
+  describe "decrements_comment_count" do
+    test "increments comment count on an idea",
+         %{
+           idea: idea
+         } do
+      Ideas.update_idea(idea, %{comments_count: 1})
+      {:ok, idea} = Ideas.decrement_comment_count(idea.id)
+      assert idea.comments_count == 0
+    end
   end
 
   describe "get_max_position_order" do
@@ -322,11 +343,13 @@ defmodule Mindwendel.IdeasTest do
       lane: lane,
       idea: idea
     } do
+      [first_label, second_label | _] = brainstorming.labels
+
       second_idea =
         Factory.insert!(:idea,
           brainstorming: brainstorming,
           lane: lane,
-          label: Enum.at(brainstorming.labels, 0),
+          idea_labels: [first_label],
           inserted_at: ~N[2022-01-01 15:06:30]
         )
 
@@ -334,7 +357,7 @@ defmodule Mindwendel.IdeasTest do
         Factory.insert!(:idea,
           brainstorming: brainstorming,
           lane: lane,
-          label: Enum.at(brainstorming.labels, 1),
+          idea_labels: [second_label],
           inserted_at: ~N[2021-01-01 15:06:30]
         )
 

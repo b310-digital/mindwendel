@@ -1,7 +1,8 @@
 defmodule MindwendelWeb.BrainstormingLiveTest do
-  use MindwendelWeb.ConnCase
+  use MindwendelWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
 
+  alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
   alias Mindwendel.Factory
   alias Mindwendel.Brainstormings.Brainstorming
@@ -149,7 +150,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
     test "enables dragging for admin", %{conn: conn, brainstorming: brainstorming, lane: lane} do
       moderating_user = List.first(brainstorming.users)
-      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+      Accounts.add_moderating_user(brainstorming, moderating_user)
 
       {:ok, view, _html} =
         conn
@@ -191,7 +192,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       brainstorming: brainstorming
     } do
       moderating_user = List.first(brainstorming.users)
-      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+      Accounts.add_moderating_user(brainstorming, moderating_user)
 
       {:ok, view, _html} =
         conn
@@ -241,7 +242,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       brainstorming: brainstorming
     } do
       moderating_user = List.first(brainstorming.users)
-      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+      Accounts.add_moderating_user(brainstorming, moderating_user)
 
       {:ok, view, _html} =
         conn
@@ -257,7 +258,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       lane: lane
     } do
       moderating_user = List.first(brainstorming.users)
-      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+      Accounts.add_moderating_user(brainstorming, moderating_user)
 
       {:ok, view, _html} =
         conn
@@ -289,7 +290,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
     test "sets a label filter as admin", %{conn: conn, brainstorming: brainstorming} do
       moderating_user = List.first(brainstorming.users)
-      Brainstormings.add_moderating_user(brainstorming, moderating_user)
+      Accounts.add_moderating_user(brainstorming, moderating_user)
       selected_ideal_label = Enum.at(brainstorming.labels, 0)
 
       {:ok, view, _html} =
@@ -301,8 +302,10 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       |> element(".btn[data-testid=\"#{selected_ideal_label.id}\"]")
       |> render_click()
 
+      {:ok, brainstorming} = Brainstormings.get_brainstorming(brainstorming.id)
+
       assert(
-        Brainstormings.get_brainstorming!(brainstorming.id).filter_labels_ids == [
+        brainstorming.filter_labels_ids == [
           selected_ideal_label.id
         ]
       )
@@ -331,7 +334,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       lane: lane
     } do
       {:ok, _show_live, html} =
-        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/lanes/#{lane.id}/new_idea")
+        live(conn, ~p"/brainstormings/#{brainstorming.id}/lanes/#{lane.id}/new_idea")
 
       assert html =~ "Anonymous"
     end
@@ -342,14 +345,14 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
       lane: lane
     } do
       {:ok, show_live_view, _html} =
-        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/lanes/#{lane.id}/new_idea")
+        live(conn, ~p"/brainstormings/#{brainstorming.id}/lanes/#{lane.id}/new_idea")
 
       assert show_live_view
              |> form("#idea-form", idea: %{username: "I am new", body: "test"})
              |> render_submit()
 
       {:ok, _show_live_view, html} =
-        live(conn, ~p"/brainstormings/#{brainstorming.id}/show/lanes/#{lane.id}/new_idea")
+        live(conn, ~p"/brainstormings/#{brainstorming.id}/lanes/#{lane.id}/new_idea")
 
       assert html =~ "I am new"
     end

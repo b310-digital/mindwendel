@@ -2,11 +2,24 @@
 # from environment variables. You can also hardcode secrets,
 # although such is generally not recommended and you have to
 # remember to add this file to your .gitignore.
+defmodule Mindwendel.EnvHelper do
+  def trimmed_env(env, default \\ nil) do
+    env
+    |> System.get_env(default)
+    |> String.trim()
+  end
+
+  def enabled?(env, default \\ "true") do
+    Enum.member?(["", "true"], trimmed_env(env, default))
+  end
+end
+
 import Config
 require Logger
 
+alias Mindwendel.EnvHelper
+
 if config_env() == :prod do
-  # configure logging:
   config :logger, :default_handler,
     formatter: {
       LoggerJSON.Formatters.Basic,
@@ -49,13 +62,21 @@ if config_env() != :test do
   # disable on prod, because logger_json will take care of this. set to :debug for test and dev
   ecto_log_level = if config_env() == :prod, do: false, else: :debug
 
+  # either use system certificates or specify files:
   ssl_config =
-    if System.get_env("DATABASE_SSL", "true") == "true",
-      do: [cacerts: :public_key.cacerts_get()],
-      else: nil
+    if System.get_env("DATABASE_SSL", "true") == "true" do
+      if System.get_env("DATABASE_CERT_FILE") do
+        Logger.info("Loading DATABASE_CERT_FILE")
+        [cacertfile: System.get_env("DATABASE_CERT_FILE")]
+      else
+        Logger.info("Loading System Certificates")
+        [cacerts: :public_key.cacerts_get()]
+      end
+    else
+      nil
+    end
 
   config :mindwendel, Mindwendel.Repo,
-    start_apps_before_migration: [:logger_json],
     database: System.get_env("DATABASE_NAME"),
     hostname: System.get_env("DATABASE_HOST"),
     password: System.get_env("DATABASE_USER_PASSWORD"),
@@ -140,14 +161,14 @@ end
 default_locale =
   case config_env() do
     :test -> "en"
-    _ -> String.trim(System.get_env("MW_DEFAULT_LOCALE") || "en")
+    _ -> EnvHelper.trimmed_env("MW_DEFAULT_LOCALE", "en")
   end
 
 config :gettext, :default_locale, default_locale
 config :timex, :default_locale, default_locale
 
 parsed_feature_brainstorming_removal_after_days =
-  String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS") || "")
+  EnvHelper.trimmed_env("MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS", "")
 
 delete_brainstormings_after_days =
   if parsed_feature_brainstorming_removal_after_days != "" do
@@ -156,21 +177,16 @@ delete_brainstormings_after_days =
     30
   end
 
-feature_file_upload =
-  Enum.member?(
-    ["", "true"],
-    String.trim(System.get_env("MW_FEATURE_IDEA_FILE_UPLOAD") || "")
-  )
+feature_file_upload = EnvHelper.enabled?("MW_FEATURE_IDEA_FILE_UPLOAD", "true")
+
+feature_privacy_imprint_enabled = EnvHelper.enabled?("MW_FEATURE_LEGAL_PRIVACY_LINKS", "false")
 
 # enable/disable brainstorming teasers and configure delete brainstormings option:
 config :mindwendel, :options,
-  feature_brainstorming_teasers:
-    Enum.member?(
-      ["", "true"],
-      String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
-    ),
+  feature_brainstorming_teasers: EnvHelper.enabled?("MW_FEATURE_BRAINSTORMING_TEASER", "true"),
   feature_file_upload: feature_file_upload,
   feature_brainstorming_removal_after_days: delete_brainstormings_after_days,
+  feature_privacy_imprint_enabled: feature_privacy_imprint_enabled,
   # use a strict csp everywhere except in development. we need to relax the setting a bit for webpack
   csp_relax: config_env() == :dev
 

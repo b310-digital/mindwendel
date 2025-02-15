@@ -1,5 +1,6 @@
 defmodule Mindwendel.AttachmentsTest do
-  use Mindwendel.DataCase
+  use Mindwendel.DataCase, async: true
+
   alias Mindwendel.Factory
   alias Mindwendel.Attachments
 
@@ -7,6 +8,28 @@ defmodule Mindwendel.AttachmentsTest do
     test "returns the file" do
       attachment = Factory.insert!(:file)
       assert Attachments.get_attached_file(attachment.id) == attachment
+    end
+  end
+
+  describe "simplified_attached_file_type" do
+    test "simplifies the file type for an image" do
+      assert Attachments.simplified_attached_file_type("image/jpeg") == "image"
+    end
+
+    test "simplifies the file type for a pdf" do
+      assert Attachments.simplified_attached_file_type("application/pdf") == "pdf"
+    end
+
+    test "simplifies the file type for an unknown type" do
+      assert Attachments.simplified_attached_file_type("application_unknown") == "misc"
+    end
+
+    test "simplifies the file type for an empty type" do
+      assert Attachments.simplified_attached_file_type("") == "misc"
+    end
+
+    test "simplifies the file type for a missing type" do
+      assert Attachments.simplified_attached_file_type(nil) == "misc"
     end
   end
 

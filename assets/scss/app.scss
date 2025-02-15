@@ -46,12 +46,18 @@ a .bi {
 }
 
 .bg-mindwendel {
-  background-image: url("/images/mindwendel.jpg");
+  background-image: url("/images/mindwendel.png");
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 /* LiveView specific classes for your customizations */
+
+// similar to .phx-connected but also works when javascript is disabled
+div[data-phx-session] {
+  height: 100%;
+  width: 100%;
+}
 
 .phx-click-loading {
   opacity: 0.5;

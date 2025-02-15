@@ -3,6 +3,7 @@ defmodule Mindwendel.Accounts do
   alias Mindwendel.Repo
   alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Accounts.BrainstormingModeratingUser
 
   require Logger
 
@@ -47,7 +48,7 @@ defmodule Mindwendel.Accounts do
   end
 
   def get_user(id) do
-    Repo.get(User, id) |> Repo.preload(:brainstormings)
+    Repo.get(User, id) |> Repo.preload([:brainstormings, :moderated_brainstormings])
   rescue
     Ecto.Query.CastError -> nil
   end
@@ -71,6 +72,36 @@ defmodule Mindwendel.Accounts do
   end
 
   @doc """
+  Adds a user as moderating user to a brainstorming.
+
+  ## Examples
+
+      iex> add_moderating_user(brainstorming, user)
+      %Brainstorming{}
+
+  """
+  def add_moderating_user(%Brainstorming{} = brainstorming, %User{} = user) do
+    if user.id in Enum.map(brainstorming.moderating_users, fn e -> e.id end) do
+      {:error}
+    else
+      %BrainstormingModeratingUser{brainstorming_id: brainstorming.id, user_id: user.id}
+      |> BrainstormingModeratingUser.changeset()
+      |> Repo.insert()
+    end
+  end
+
+  def add_moderating_user(%Brainstorming{} = brainstorming, user_id) when is_binary(user_id) do
+    case Ecto.UUID.dump(user_id) do
+      :error -> {:error}
+      {:ok, _} -> add_moderating_user(brainstorming, get_or_create_user(user_id))
+    end
+  end
+
+  def add_moderating_user(%Brainstorming{} = _brainstorming, user_id) when is_nil(user_id) do
+    {:error}
+  end
+
+  @doc """
   Connects user to a brainstorm.
 
   Returns a valid brainstorming with preloaded user list.
@@ -79,9 +110,6 @@ defmodule Mindwendel.Accounts do
 
       iex> merge_brainstorming_user(brainstorming, user)
       %Brainstorming{}
-
-      iex> update_user(user, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
 
   """
   def merge_brainstorming_user(%Brainstorming{} = brainstorming, %User{} = user) do

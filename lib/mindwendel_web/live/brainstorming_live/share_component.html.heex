@@ -8,7 +8,7 @@
         id="brainstorming-link-input-readonly"
         readonly="true"
         type="text"
-        value={@uri}
+        value={@active_uri}
       />
       <button
         class="btn btn-outline-secondary"
@@ -17,18 +17,32 @@
         phx-hook="CopyBrainstormingLinkButton"
         type="button"
       >
-        <%= gettext("Copy") %>
+        {gettext("Copy")}
       </button>
       <button
         class="btn btn-outline-secondary"
         data-native-sharing-button-share-data-text={gettext("Join my brainstorming")}
         data-native-sharing-button-share-data-title={gettext("Mindwendel Brainstorming")}
-        data-native-sharing-button-share-data-url={@uri}
+        data-native-sharing-button-share-data-url={@active_uri}
         id="brainstorming-link-share-button"
         phx-hook="NativeSharingButton"
       >
         <i class="bi-share-fill"></i>
       </button>
+    </div>
+    <div class="input-group mt-3">
+      <%= if has_moderating_permission(@brainstorming_id, @current_user) do %>
+        <.input
+          name="admin_url_id"
+          type="checkbox"
+          options={["switch"]}
+          id="brainstorming-link-toggle-admin-secret"
+          phx-click="toggle_url_secret"
+          phx-target={@myself}
+          checked={@activated_uri_type == :admin_uri}
+          label={gettext("Give moderating permissions")}
+        />
+      <% end %>
     </div>
   </div>
 
@@ -36,7 +50,11 @@
 
   <div class="row mb-3">
     <div class="d-flex justify-content-center">
-      <div data-qr-code-url={@uri} id="brainstorming-link-qr-code-canvas" phx-hook="QrCodeCanvas">
+      <div
+        data-qr-code-url={@active_uri}
+        id="brainstorming-link-qr-code-canvas"
+        phx-hook="QrCodeCanvas"
+      >
       </div>
     </div>
   </div>
@@ -46,23 +64,23 @@
       <a
         class="btn btn-primary"
         data-qr-code-file-extension="svg"
-        data-qr-code-filename={@uri}
-        data-qr-code-url={@uri}
+        data-qr-code-filename="qrcode"
+        data-qr-code-url={@active_uri}
         id="brainstorming-link-qr-code-download-as-svg-button"
         phx-hook="QrCodeDownloadButton"
       >
-        <i class="bi-download"></i> <%= gettext("Download as svg") %>
+        <i class="bi-download"></i> {gettext("Download as svg")}
       </a>
       &nbsp;
       <a
         class="btn btn-primary"
         data-qr-code-file-extension="png"
-        data-qr-code-filename={@uri}
-        data-qr-code-url={@uri}
+        data-qr-code-filename="qrcode"
+        data-qr-code-url={@active_uri}
         id="brainstorming-link-qr-code-download-as-png-button"
         phx-hook="QrCodeDownloadButton"
       >
-        <i class="bi-download"></i> <%= gettext("Download as png") %>
+        <i class="bi-download"></i> {gettext("Download as png")}
       </a>
     </div>
   </div>

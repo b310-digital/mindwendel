@@ -1,10 +1,13 @@
 import { Modal, Tooltip } from "bootstrap"
 import Sortable from 'sortablejs';
-import { setIdeaLabelBackgroundColor } from "./label"
-
+import { setIdeaLabelBackgroundColor } from "./label";
 // activate all tooltips:
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
+
+const sortBrainstormingsByLastAccessedAt = (brainstormings, sliceMax = 10) => {
+  return Object.values(brainstormings).sort((a, b) => new Date(b.last_accessed_at) - new Date(a.last_accessed_at)).slice(0, sliceMax)
+}
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
@@ -20,38 +23,14 @@ import "phoenix_html"
 import { Socket } from "phoenix"
 import NProgress from "nprogress"
 import { LiveSocket } from "phoenix_live_view"
-import QRCodeStyling from "qr-code-styling";
 import ClipboardJS from "clipboard"
-import { buildQrCodeOptions } from "./qrCodeUtils.js"
+import { appendQrCode, initQrDownload } from "./qrCodeUtils.js"
+import { initShareButtonClickHandler } from "./shareUtils.js"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
 let Hooks = {}
 const sortables = [];
-
-Hooks.CopyBrainstormingLinkButton = {
-  mounted() {
-    new ClipboardJS(this.el);
-  }
-}
-
-Hooks.NativeSharingButton = {
-  mounted() {
-    const shareData = {
-      title: this.el.getAttribute(`data-native-sharing-button-share-data-title`) || 'Mindwendel Brainstorming',
-      text: this.el.getAttribute(`data-native-sharing-button-share-data-text`) || 'Join my brainstorming',
-      url: this.el.getAttribute(`data-native-sharing-button-share-data-url`) || document.getElementById("brainstorming-link").value
-    }
-
-    if (navigator.share) {
-      this.el.addEventListener('click', (event) => {
-        navigator.share(shareData)
-          .then() // Do nothing
-          .catch(err => { console.log(`Error: ${err}`) })
-      })
-    }
-  }
-}
 
 // see https://github.com/drag-drop-touch-js/dragdroptouch for mobile support
 Hooks.Sortable = {
@@ -89,32 +68,49 @@ Hooks.Modal = {
     window.addEventListener('mindwendel:hide-modal', closeModal);
   }
 }
-Hooks.QrCodeCanvas = {
+
+Hooks.CopyBrainstormingLinkButton = {
   mounted() {
-    const qrCodeCanvasElement = this.el
-    const qrCodeUrl = qrCodeCanvasElement.getAttribute("data-qr-code-url")
-
-    const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
-    const qrCode = new QRCodeStyling(qrCodeOptions)
-
-    qrCode.append(qrCodeCanvasElement);
+    new ClipboardJS(this.el);
   }
 }
 
+let refShareClickListenerFunction;
+let refShareButton;
+
+Hooks.NativeSharingButton = {
+  mounted() {
+    refShareButton = this.el;
+    refShareClickListenerFunction = initShareButtonClickHandler(refShareButton);
+  },
+  updated() {
+    refShareButton.removeEventListener("click", refShareClickListenerFunction);
+    refShareButton = this.el;
+    refShareClickListenerFunction = initShareButtonClickHandler(refShareButton);
+  }
+}
+
+Hooks.QrCodeCanvas = {
+  mounted() {
+    appendQrCode(this.el);
+  },
+  updated() {
+    appendQrCode(this.el);
+  }
+}
+
+let refQrClickListenerFunction;
+let refQrCodeDownloadButton;
+
 Hooks.QrCodeDownloadButton = {
   mounted() {
-    const qrCodeUrl = this.el.getAttribute("data-qr-code-url");
-    const qrCodeFilename = this.el.getAttribute("data-qr-code-filename") || qrCodeUrl || "qrcode";
-    const qrCodeFileExtension = this.el.getAttribute("data-qr-code-file-extension") || "png";
-
-    const qrCodeOptions = buildQrCodeOptions(qrCodeUrl)
-    const qrCode = new QRCodeStyling(qrCodeOptions)
-
-    this.el && this.el.addEventListener('click', () => {
-      qrCode.download({ name: qrCodeFilename, extension: qrCodeFileExtension })
-        .then() // Do nothing
-        .catch(err => { console.log(`Error: ${err}`) })
-    })
+    refQrCodeDownloadButton = this.el;
+    refQrClickListenerFunction = initQrDownload(refQrCodeDownloadButton);
+  },
+  updated() {
+    refQrCodeDownloadButton.removeEventListener("click", refQrClickListenerFunction);
+    refQrCodeDownloadButton = this.el;
+    refQrClickListenerFunction = initQrDownload(refQrCodeDownloadButton);
   }
 }
 
@@ -123,6 +119,10 @@ Hooks.SetIdeaLabelColor = {
     const color = this.el.getAttribute("data-color");
     this.el.style.color = color;
   },
+  updated() {
+    const color = this.el.getAttribute("data-color");
+    this.el.style.color = color;
+  }
 };
 
 Hooks.SetIdeaLabelBackgroundColor = {
@@ -134,8 +134,45 @@ Hooks.SetIdeaLabelBackgroundColor = {
   }
 };
 
+Hooks.TransferLocalStorageBrainstormings = {
+  mounted() {
+    const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
+    const lastSortedBrainstormings = sortBrainstormingsByLastAccessedAt(recentBrainstormings, 5)
+    this.pushEventTo(this.el, "brainstormings_from_local_storage", lastSortedBrainstormings)
+  }
+}
+
+Hooks.StoreRecentBrainstorming = {
+  mounted() {
+    const brainstormingId = this.el.dataset.id;
+    const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
+    
+    recentBrainstormings[brainstormingId] = {
+      id: brainstormingId,
+      admin_url_id: this.el.dataset.adminUrlId || recentBrainstormings?.brainstormingId?.admin_url_id,
+      name: this.el.dataset.name,
+      last_accessed_at: this.el.dataset.lastAccessedAt
+    }
+    localStorage.setItem('brainstormings', JSON.stringify(recentBrainstormings));
+    const lastSortedBrainstormings = sortBrainstormingsByLastAccessedAt(recentBrainstormings)
+    this.pushEventTo(this.el,"brainstormings_from_local_storage", lastSortedBrainstormings)
+  }
+};
+
+Hooks.RemoveMissingBrainstorming = {
+  mounted() {
+    const missingId = this.el.dataset.brainstormingId;
+    if (missingId) {
+      const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
+      delete recentBrainstormings[missingId]
+      localStorage.setItem('brainstormings', JSON.stringify(recentBrainstormings));
+    }
+  }
+};
+
+// The brainstorming secret from the url ("#123") is added as well to the socket. The secret is not available on the server side by default.
 let liveSocket = new LiveSocket("/live", Socket, { 
-  hooks: Hooks, params: { _csrf_token: csrfToken }
+  hooks: Hooks, params: { _csrf_token: csrfToken, adminSecret: window.location.hash.substring(1) }
 })
 
 // Show progress bar on live navigation and form submits
