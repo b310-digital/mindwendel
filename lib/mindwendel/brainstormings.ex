@@ -9,8 +9,10 @@ defmodule Mindwendel.Brainstormings do
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Lanes
+  alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
 
   require Logger
 
@@ -23,20 +25,20 @@ defmodule Mindwendel.Brainstormings do
       [%Brainstorming{}, ...]
 
   """
-  def list_brainstormings_for(user_id, limit \\ 3) do
+  def list_brainstormings_for(user_id, limit \\ 3)
+
+  def list_brainstormings_for(nil, _) do
+    []
+  end
+
+  def list_brainstormings_for(user_id, limit) do
     Repo.all(
       from brainstorming in Brainstorming,
         join: users in assoc(brainstorming, :users),
         where: users.id == ^user_id,
-        order_by: [desc: brainstorming.inserted_at],
+        order_by: [desc: brainstorming.last_accessed_at],
         limit: ^limit
     )
-  end
-
-  def add_moderating_user(%Brainstorming{} = brainstorming, %User{} = user) do
-    %BrainstormingModeratingUser{brainstorming_id: brainstorming.id, user_id: user.id}
-    |> BrainstormingModeratingUser.changeset()
-    |> Repo.insert()
   end
 
   @doc """
@@ -55,35 +57,49 @@ defmodule Mindwendel.Brainstormings do
   @doc """
   Gets a single brainstorming.
 
-  Raises `Ecto.NoResultsError` if the Brainstorming does not exist.
+  Returns an error tuple instead of raising exceptions to handle invalid UUIDs gracefully,
+  particularly important for initial brainstorming fetches that may receive spam requests.
 
   ## Examples
 
-      iex> get_brainstorming!("0323906b-b496-4778-ae67-1dd779d3de3c")
+      iex> get_brainstorming("0323906b-b496-4778-ae67-1dd779d3de3c")
       %Brainstorming{ ... }
 
-      iex> get_brainstorming!("0323906b-b496-4778-ae67-1dd779d3de3c")
-      ** (Ecto.NoResultsError)
+      iex> get_brainstorming("0323906b-b496-4778-ae67-1dd779d3de3c")
+      {:error, :not_found}
 
-      iex> get_brainstorming!("not_a_valid_uuid_string")
-      ** (Ecto.Query.CastError)
+      iex> get_brainstorming("not_a_valid_uuid_string")
+      {:error, :invalid_uuid}
 
   """
-  # See https://stackoverflow.com/questions/53802091/elixir-uuid-how-to-handle-500-error-when-uuid-doesnt-match
-  def get_brainstorming!(id) do
+  def get_brainstorming(id) do
+    case Ecto.UUID.cast(id) do
+      {:ok, id} -> get_brainstorming_with_valid_uuid(id)
+      :error -> {:error, :invalid_uuid}
+    end
+  end
+
+  # No uuid check here, has to be done before
+  defp get_brainstorming_with_valid_uuid(id) do
+    case Repo.get(Brainstorming, id) do
+      nil ->
+        {:error, :not_found}
+
+      brainstorming ->
+        preloaded_brainstorming =
+          brainstorming
+          |> Repo.preload([
+            :users,
+            :moderating_users,
+            labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
+          ])
+
+        {:ok, preloaded_brainstorming}
+    end
+  end
+
+  def get_bare_brainstorming!(id) do
     Repo.get!(Brainstorming, id)
-    |> Repo.preload([
-      :users,
-      :moderating_users,
-      labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order),
-      ideas: [
-        :link,
-        :likes,
-        :label,
-        :idea_labels
-      ]
-    ])
-    |> update_last_accessed_at
   end
 
   @doc """
@@ -112,6 +128,7 @@ defmodule Mindwendel.Brainstormings do
     user
     |> Ecto.build_assoc(:created_brainstormings,
       labels: Brainstorming.idea_label_factory(),
+      lanes: [%Lane{position_order: 1}],
       moderating_users: [user],
       users: [user]
     )
@@ -131,6 +148,25 @@ defmodule Mindwendel.Brainstormings do
       {:error, %Ecto.Changeset{}}
 
   """
+  def update_brainstorming(
+        %Brainstorming{} = brainstorming,
+        %{filter_labels_ids: filter_labels_ids} = attrs
+      ) do
+    if length(filter_labels_ids) != 0 do
+      Ideas.update_disjoint_idea_positions_for_brainstorming_by_labels(
+        brainstorming.id,
+        filter_labels_ids
+      )
+    end
+
+    updated_brainstorming_result =
+      brainstorming
+      |> Brainstorming.changeset(attrs)
+      |> Repo.update()
+
+    broadcast(updated_brainstorming_result, :brainstorming_filter_updated)
+  end
+
   def update_brainstorming(%Brainstorming{} = brainstorming, attrs) do
     brainstorming
     |> Brainstorming.changeset(attrs)
@@ -152,14 +188,16 @@ defmodule Mindwendel.Brainstormings do
   """
   def delete_brainstorming(%Brainstorming{} = brainstorming) do
     Repo.transaction(fn ->
-      Repo.delete_all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
+      ideas = Repo.all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
+      # delete_idea deletes the idea and potentially associated files
+      Enum.each(ideas, fn idea -> Ideas.delete_idea(idea) end)
       Repo.delete(brainstorming)
     end)
   end
 
   def empty(%Brainstorming{} = brainstorming) do
     # we only delete ideas - labels and users should be left intact:
-    Repo.delete_all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
+    Repo.delete_all(from lane in Lane, where: lane.brainstorming_id == ^brainstorming.id)
 
     broadcast({:ok, brainstorming}, :brainstorming_updated)
   end
@@ -213,9 +251,34 @@ defmodule Mindwendel.Brainstormings do
     Brainstorming.changeset(brainstorming, attrs)
   end
 
+  @doc """
+  Updates the last_accessed_at field of a brainstorming.
+
+  ## Examples
+
+      iex> update_last_accessed_at(brainstorming)
+      %Brainstorming{last_accessed_at: ...}
+
+  """
   def update_last_accessed_at(brainstorming) do
     Repo.update(Brainstorming.changeset_with_upated_last_accessed_at(brainstorming))
     brainstorming
+  end
+
+  @doc """
+  Validates the given secret against the brainstorming. Returns true/false.
+
+  ## Examples
+
+      iex> validate_admin_secret(brainstorming, abc)
+      false
+
+  """
+  def validate_admin_secret(brainstorming, admin_secret_id) do
+    case brainstorming.admin_url_id do
+      nil -> false
+      admin_url_id -> admin_url_id == admin_secret_id
+    end
   end
 
   @doc """
@@ -234,11 +297,30 @@ defmodule Mindwendel.Brainstormings do
     )
   end
 
+  def broadcast({:ok, %Brainstorming{} = brainstorming}, :brainstorming_filter_updated = event) do
+    lanes =
+      Lanes.get_lanes_for_brainstorming_with_labels_filtered(brainstorming.id)
+
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> brainstorming.id,
+      {event, brainstorming.filter_labels_ids, lanes}
+    )
+
+    {:ok, brainstorming}
+  end
+
   def broadcast({:ok, %Brainstorming{} = brainstorming}, event) do
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
       "brainstormings:" <> brainstorming.id,
-      {event, brainstorming}
+      {event,
+       brainstorming
+       |> Repo.preload([
+         :users,
+         :moderating_users,
+         labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
+       ])}
     )
 
     {:ok, brainstorming}
@@ -263,13 +345,48 @@ defmodule Mindwendel.Brainstormings do
         |> Repo.preload([
           :link,
           :likes,
-          :label,
-          :idea_labels
+          :idea_labels,
+          :files,
+          :comments
         ])
       }
     )
 
     {:ok, idea}
+  end
+
+  def broadcast({:ok, %Lane{} = lane}, event) do
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> lane.brainstorming_id,
+      {
+        event,
+        lane
+        |> Repo.preload(
+          ideas: [
+            :link,
+            :likes,
+            :idea_labels,
+            :files
+          ]
+        )
+      }
+    )
+
+    {:ok, lane}
+  end
+
+  def broadcast({:ok, brainstorming_id, lanes}, :lanes_updated) do
+    Phoenix.PubSub.broadcast(
+      Mindwendel.PubSub,
+      "brainstormings:" <> brainstorming_id,
+      {
+        :lanes_updated,
+        lanes
+      }
+    )
+
+    {:ok, brainstorming_id}
   end
 
   def broadcast({:error, _reason} = error, _event), do: error

@@ -1,0 +1,85 @@
+<div class="d-flex w-100 h-100 p-3 pb-0 mx-auto flex-column bg-mindwendel text-white">
+  <header class="mb-auto bg-none container">
+    <.link
+      href="https://github.com/b310-digital/mindwendel"
+      class="text-reset text-decoration-none"
+    >
+      <img src={~p"/images/GitHub-Mark-Light-64px.png"} height="40" class="float-end" />
+    </.link>
+    <img src={~p"/images/mindwendel_logo_white.svg"} height="40" class="float-md-start me-3" />
+    <h3 class="mb-0">mindwendel</h3>
+  </header>
+
+  <main class="container">
+    <h1>
+      {gettext("Create a challenge.")}<br />
+      {gettext("Ready?")}<br />
+      {gettext("Brainstorm")}<br />
+    </h1>
+
+    <div class="row">
+      <div class="col-md-12 col-lg-5 mt-2">
+        <.simple_form for={@form} action={~p"/brainstormings"} method="post">
+          <div class="input-group">
+            <.input
+              field={@form[:name]}
+              placeholder={gettext("How might we ...")}
+              form_group_wrapper={false}
+              autofocus
+              required
+            />
+            <.button type="submit" class="btn btn-primary fw-bold">
+              {gettext("Create!")}
+            </.button>
+          </div>
+        </.simple_form>
+        <small class="text-light">
+          {gettext("Brainstormings will be deleted after %{days} days.",
+            days:
+              Application.fetch_env!(:mindwendel, :options)[
+                :feature_brainstorming_removal_after_days
+              ]
+          )}
+        </small>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div
+        id="brainstormings-list"
+        class="col-md-12 col-lg-12 mt-2"
+        phx-hook="TransferLocalStorageBrainstormings"
+      >
+        <%= if !Enum.empty?(@brainstormings_stored) do %>
+          <h3>{gettext("Your latest brainstormings")}</h3>
+          <%= for brainstorming <- @brainstormings_stored do %>
+            <h5>
+              <.link href={
+                ~p"/brainstormings/#{brainstorming["id"]}/##{brainstorming["admin_url_id"] || ""}"
+              }>
+                {brainstorming["name"]}
+              </.link>
+              <span class="badge rounded-pill bg-light text-dark">
+                {Timex.from_now(brainstorming["last_accessed_at"])}
+              </span>
+            </h5>
+          <% end %>
+          <p>
+            {gettext(
+              "Attention: Brainstormings will be deleted %{available_until} after last access!",
+              available_until: brainstormings_available_until()
+            )}
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </main>
+  <footer class="mt-auto">
+    <span class="me-2">Made with ❤️ in the 🇪🇺</span>
+    <%= if Mindwendel.FeatureFlag.enabled?(:feature_privacy_imprint_enabled) do %>
+      <br class="d-md-none" />
+      <.link href={~p"/legal"}>{gettext("Legal Disclosure")}</.link>
+      | <.link href={~p"/privacy"}>{gettext("Privacy")}</.link>
+    <% end %>
+  </footer>
+</div>

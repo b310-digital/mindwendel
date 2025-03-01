@@ -21,6 +21,8 @@ unless secret_key_base do
   )
 end
 
+config :mindwendel, :s3_storage_provider, Mindwendel.Services.S3ObjectStorageService
+
 config :mindwendel, MindwendelWeb.Endpoint,
   # This configuration ensures / enforces ssl requests sent to this mindwendel instance.
   # See https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#module-compile-time-configuration
@@ -49,13 +51,6 @@ config :mindwendel, MindwendelWeb.Endpoint,
 
 # Do not print debug messages in production
 config :logger, level: :info
-
-config :mindwendel, :options,
-  feature_brainstorming_teasers:
-    Enum.member?(
-      ["", "true"],
-      String.trim(System.get_env("MW_FEATURE_BRAINSTORMING_TEASER") || "")
-    )
 
 # ## SSL Support
 #

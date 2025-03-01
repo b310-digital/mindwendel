@@ -38,7 +38,16 @@ defmodule MindwendelWeb.Router do
   scope "/", MindwendelWeb do
     pipe_through(:browser)
 
-    get("/", StaticPageController, :home)
+    get("/files/:id", FileController, :get_file)
+
+    get("/legal", StaticPageController, :legal)
+    get("/privacy", StaticPageController, :privacy)
+
+    live_session :default,
+      root_layout: {MindwendelWeb.Layouts, :static_page},
+      layout: {MindwendelWeb.Layouts, :app_static} do
+      live "/", StartLive.Home, :home
+    end
 
     scope "/admin", Admin, as: :admin do
       delete("/brainstormings/:id", BrainstormingController, :delete)
@@ -50,14 +59,20 @@ defmodule MindwendelWeb.Router do
     post("/brainstormings", BrainstormingController, :create)
 
     live "/brainstormings/:id", BrainstormingLive.Show, :show
-    live "/brainstormings/:id/show/edit", BrainstormingLive.Show, :edit
-    # Maybe rather "/brainstormings/:id/ideas/new" ?
-    live "/brainstormings/:id/show/new_idea", BrainstormingLive.Show, :new_idea
-    live "/brainstormings/:id/show/share", BrainstormingLive.Show, :share
+    live "/brainstormings/:id/edit", BrainstormingLive.Show, :edit
+    live "/brainstormings/:id/lanes/:lane_id/new_idea", BrainstormingLive.Show, :new_idea
+    live "/brainstormings/:id/new_lane", BrainstormingLive.Show, :new_lane
+    live "/brainstormings/:id/share", BrainstormingLive.Show, :share
 
     live "/brainstormings/:brainstorming_id/ideas/:idea_id/edit",
          BrainstormingLive.Show,
          :edit_idea
+
+    live "/brainstormings/:brainstorming_id/ideas/:idea_id", BrainstormingLive.Show, :show_idea
+
+    live "/brainstormings/:brainstorming_id/lanes/:lane_id/edit",
+         BrainstormingLive.Show,
+         :edit_lane
   end
 
   # Other scopes may use custom stacks.

@@ -10,10 +10,6 @@ defmodule MindwendelWeb.Endpoint do
     signing_salt: "Kxo5qCGx"
   ]
 
-  socket "/socket", MindwendelWeb.UserSocket,
-    websocket: true,
-    longpoll: false
-
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
   # Serve at "/" the static files from "priv/static" directory.
@@ -24,7 +20,7 @@ defmodule MindwendelWeb.Endpoint do
     at: "/",
     from: :mindwendel,
     gzip: false,
-    only: ~w(assets fonts images favicon.ico robots.txt)
+    only: ~w(assets fonts images uploads favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

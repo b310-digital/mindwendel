@@ -2,24 +2,26 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   use Mindwendel.Schema
 
   import Ecto.Changeset
-  import MindwendelWeb.Gettext
+  use Gettext, backend: MindwendelWeb.Gettext
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
-  alias Mindwendel.Brainstormings.BrainstormingModeratingUser
+  alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Accounts.BrainstormingModeratingUser
   alias Mindwendel.Accounts.User
   alias Mindwendel.Accounts.BrainstormingUser
 
   schema "brainstormings" do
     field :name, :string
-    field :option_show_link_to_settings, :boolean
     field :option_allow_manual_ordering, :boolean
     # credo:disable-for-next-line
     # Todo: The following line can be changed `field :admin_url_id, Ecto.UUID, autogenerate: true`
     # This will automatically generate a UUID for the admin_url_id which would make the method `gen_admin_url_id/2` obsolete.
     field :admin_url_id, :binary_id
     field :last_accessed_at, :utc_datetime
+    field :filter_labels_ids, {:array, :binary_id}
     belongs_to :creating_user, User
     has_many :ideas, Idea
+    has_many :lanes, Lane, preload_order: [asc: :position_order]
     has_many :labels, IdeaLabel
     many_to_many :users, User, join_through: BrainstormingUser
     many_to_many :moderating_users, User, join_through: BrainstormingModeratingUser
@@ -30,7 +32,11 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
   @doc false
   def changeset(brainstorming, attrs) do
     brainstorming
-    |> cast(attrs, [:name, :option_show_link_to_settings, :option_allow_manual_ordering])
+    |> cast(attrs, [
+      :name,
+      :option_allow_manual_ordering,
+      :filter_labels_ids
+    ])
     |> validate_required([:name])
     |> cast_assoc(:labels)
     |> shorten_name

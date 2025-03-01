@@ -1,20 +1,31 @@
 defmodule MindwendelWeb.StaticPageController do
   use MindwendelWeb, :controller
-  alias Mindwendel.Brainstormings
-  alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.FeatureFlag
 
   plug :put_root_layout, {MindwendelWeb.Layouts, :static_page}
 
-  def home(conn, _params) do
-    current_user =
-      conn
-      |> Mindwendel.Services.SessionService.get_current_user_id()
-      |> Mindwendel.Accounts.get_user()
+  def legal(conn, _params) do
+    if FeatureFlag.enabled?(:feature_privacy_imprint_enabled) do
+      render(conn, "legal.html")
+    else
+      render_404(conn)
+    end
+  end
 
-    render(conn, "home.html",
-      current_user: current_user,
-      brainstorming: %Brainstorming{},
-      changeset: Brainstormings.change_brainstorming(%Brainstorming{}, %{})
-    )
+  def privacy(conn, _params) do
+    if FeatureFlag.enabled?(:feature_privacy_imprint_enabled) do
+      render(conn, "privacy.html")
+    else
+      render_404(conn)
+    end
+  end
+
+  defp render_404(conn) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(MindwendelWeb.ErrorHTML)
+    |> put_layout(false)
+    |> put_root_layout(false)
+    |> render(:"404")
   end
 end

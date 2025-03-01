@@ -3,102 +3,188 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Lanes
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.FeatureFlag
+  alias Mindwendel.LocalStorage
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
     if connected?(socket), do: Brainstormings.subscribe(id)
 
+    # If the admin secret in the URL after the hash (only available inside the client session) is given, add the user as moderating user to the brainstorming.
+    # If not, add the user as normal user.
     current_user_id = Mindwendel.Services.SessionService.get_current_user_id(session)
 
-    brainstorming =
-      Brainstormings.get_brainstorming!(id)
-      |> Accounts.merge_brainstorming_user(current_user_id)
+    case Brainstormings.get_brainstorming(id) do
+      {:ok, brainstorming} ->
+        Brainstormings.update_last_accessed_at(brainstorming)
+        admin_secret = get_connect_params(socket)["adminSecret"]
 
-    current_user = Mindwendel.Accounts.get_user(current_user_id)
+        if Brainstormings.validate_admin_secret(brainstorming, admin_secret) do
+          Accounts.add_moderating_user(brainstorming, current_user_id)
+        end
 
-    {
-      :ok,
-      socket
-      |> assign(:brainstorming, brainstorming)
-      |> assign(:current_user, current_user)
-      |> assign(:inspiration, Mindwendel.Help.random_inspiration())
-    }
+        Accounts.merge_brainstorming_user(brainstorming, current_user_id)
+
+        lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
+        # load the user, also for permissions of brainstormings
+        current_user = Mindwendel.Accounts.get_user(current_user_id)
+
+        {
+          :ok,
+          socket
+          |> assign(:brainstormings_stored, [])
+          |> assign(:current_view, socket.view)
+          |> assign(:brainstorming, brainstorming)
+          |> assign(:lanes, lanes)
+          |> assign(:filtered_labels, brainstorming.filter_labels_ids)
+          |> assign(:current_user, current_user)
+          |> assign(:inspiration, inspiration())
+        }
+
+      {:error, _} ->
+        {:ok,
+         socket
+         |> put_flash(:missing_brainstorming_id, id)
+         |> put_flash(:error, gettext("Brainstorming not found"))
+         |> redirect(to: "/")}
+    end
   end
 
   def mount(%{"brainstorming_id" => brainstorming_id, "idea_id" => _idea_id}, session, socket) do
     mount(%{"id" => brainstorming_id}, session, socket)
   end
 
+  def mount(%{"brainstorming_id" => brainstorming_id, "lane_id" => _lane_id}, session, socket) do
+    mount(%{"id" => brainstorming_id}, session, socket)
+  end
+
+  def mount(%{"id" => id, "lane_id" => _lane_id}, session, socket) do
+    mount(%{"id" => id}, session, socket)
+  end
+
+  @impl true
+  def handle_event("brainstormings_from_local_storage", brainstormings_stored, socket) do
+    # Brainstormings are used from session data and local storage. Session data can be removed later and is only used for a transition period.
+    valid_stored_brainstormings =
+      LocalStorage.brainstormings_from_local_storage_and_session(
+        brainstormings_stored,
+        Brainstormings.list_brainstormings_for(socket.assigns.current_user.id),
+        socket.assigns.current_user
+      )
+
+    {:noreply, assign(socket, :brainstormings_stored, valid_stored_brainstormings)}
+  end
+
+  @impl true
   def handle_params(
-        %{"brainstorming_id" => brainstorming_id, "idea_id" => idea_id},
-        uri,
+        params,
+        _uri,
         socket
       ) do
-    {
-      :noreply,
-      socket
-      |> assign(:ideas, Ideas.list_ideas_for_brainstorming(brainstorming_id))
-      |> assign(:idea, Ideas.get_idea!(idea_id))
-      |> assign(:uri, uri)
-      |> apply_action(socket.assigns.live_action,
-        brainstorming_id: brainstorming_id,
-        idea_id: idea_id
-      )
-    }
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
   @impl true
-  def handle_params(%{"id" => id}, uri, socket) do
+  def handle_info({:lane_created, lane}, socket) do
+    lanes = socket.assigns.lanes ++ [lane]
+    {:noreply, assign(socket, :lanes, lanes)}
+  end
+
+  def handle_info({:lane_removed, lane}, socket) do
+    lanes = Enum.filter(socket.assigns.lanes, fn existing_lane -> existing_lane.id != lane.id end)
+    {:noreply, assign(socket, :lanes, lanes)}
+  end
+
+  def handle_info({:lanes_updated, lanes}, socket) do
+    {:noreply, assign(socket, :lanes, lanes)}
+  end
+
+  def handle_info({:lane_updated, lane}, socket) do
+    new_lanes =
+      Enum.map(socket.assigns.lanes, fn existing_lane ->
+        if lane.id == existing_lane.id, do: lane, else: existing_lane
+      end)
+
+    {:noreply, assign(socket, :lanes, new_lanes)}
+  end
+
+  def handle_info({:idea_updated, idea}, socket) do
+    # first, update the specific card of the idea
+    send_update(MindwendelWeb.IdeaLive.CardComponent, id: idea.id, idea: idea)
+    # if the idea show modal is opened, also update the idea within the modal
+    if socket.assigns.live_action == :show_idea and socket.assigns.idea.id == idea.id do
+      send_update(MindwendelWeb.IdeaLive.ShowComponent, id: :show, idea: idea)
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:brainstorming_filter_updated, filtered_labels, lanes}, socket) do
     {:noreply,
      socket
-     |> assign(:ideas, Ideas.list_ideas_for_brainstorming(id))
-     |> assign(:uri, uri)
-     |> apply_action(socket.assigns.live_action, id)}
+     |> assign(:filtered_labels, filtered_labels)
+     |> assign(:lanes, lanes)}
   end
 
-  @impl true
-  def handle_info({:idea_added, idea}, socket) do
-    # uses the database to sort and update all ideas, instead of appending the idea to the end of list (which would be more performant)
-    new_ideas = Ideas.list_ideas_for_brainstorming(idea.brainstorming_id)
-    {:noreply, assign(socket, :ideas, new_ideas)}
-  end
-
-  @impl true
-  def handle_info({:idea_removed, idea}, socket) do
-    new_ideas = Enum.filter(socket.assigns.ideas, fn x -> x.id != idea.id end)
-    {:noreply, assign(socket, :ideas, new_ideas)}
-  end
-
-  @impl true
   def handle_info({:brainstorming_updated, brainstorming}, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(:brainstorming, Brainstormings.get_brainstorming!(brainstorming.id))
-      |> assign(:ideas, Ideas.list_ideas_for_brainstorming(brainstorming.id))
-    }
+    # the backdrop of the bootstrap modal gets sometimes stuck on the pages as its out of reach for the component
+    # therefore we patch the url to reload it
+
+    {:noreply,
+     socket
+     |> assign(:brainstorming, brainstorming)}
   end
 
-  @impl true
-  def handle_info({:idea_updated, idea}, socket) do
-    # another option is to reload the ideas from the db - but this would trigger a new sorting which might confuse the user
-    new_ideas = Enum.map(socket.assigns.ideas, fn e -> if e.id == idea.id, do: idea, else: e end)
-
-    {:noreply, assign(socket, :ideas, new_ideas)}
+  def handle_info({:user_updated, user}, socket) do
+    {:noreply, assign(socket, :current_user, user)}
   end
 
-  defp apply_action(socket, :edit_idea, brainstorming_id: _brainstorming_id, idea_id: _idea_id) do
+  defp apply_action(
+         socket,
+         :edit_idea,
+         %{"brainstorming_id" => _brainstorming_id, "idea_id" => idea_id}
+       ) do
     socket
+    |> assign(:idea, Ideas.get_idea!(idea_id))
   end
 
-  defp apply_action(socket, :new_idea, brainstorming_id) do
+  defp apply_action(
+         socket,
+         :show_idea,
+         %{"brainstorming_id" => _brainstorming_id, "idea_id" => idea_id}
+       ) do
+    socket
+    |> assign(:idea, Ideas.get_idea!(idea_id))
+  end
+
+  defp apply_action(
+         socket,
+         :edit_lane,
+         %{"brainstorming_id" => _brainstorming_id, "lane_id" => lane_id}
+       ) do
+    socket
+    |> assign(:lane, Lanes.get_lane!(lane_id))
+  end
+
+  defp apply_action(socket, :new_idea, %{"id" => id, "lane_id" => lane_id}) do
     socket
     |> assign(:page_title, gettext("%{name} - New Idea", name: socket.assigns.brainstorming.name))
     |> assign(:idea, %Idea{
-      brainstorming_id: brainstorming_id,
+      brainstorming_id: id,
+      lane_id: lane_id,
       username: socket.assigns.current_user.username
+    })
+  end
+
+  defp apply_action(socket, :new_lane, %{"id" => brainstorming_id}) do
+    socket
+    |> assign(:page_title, gettext("%{name} - New Lane", name: socket.assigns.brainstorming.name))
+    |> assign(:lane, %Lane{
+      brainstorming_id: brainstorming_id
     })
   end
 
@@ -117,36 +203,9 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     |> assign(:page_title, socket.assigns.brainstorming.name)
   end
 
-  @impl true
-  def handle_event("sort_by_likes", %{"id" => id}, socket) do
-    brainstorming = Brainstormings.get_brainstorming!(id)
-
-    if has_move_permission(brainstorming, socket.assigns.current_user) do
-      Ideas.update_ideas_for_brainstorming_by_likes(id)
-      Brainstormings.broadcast({:ok, brainstorming}, :brainstorming_updated)
-    end
-
-    {:noreply, socket}
-  end
-
-  def handle_event("sort_by_label", %{"id" => id}, socket) do
-    brainstorming = Brainstormings.get_brainstorming!(id)
-
-    if has_move_permission(brainstorming, socket.assigns.current_user) do
-      Ideas.update_ideas_for_brainstorming_by_labels(id)
-      Brainstormings.broadcast({:ok, brainstorming}, :brainstorming_updated)
-    end
-
-    {:noreply, socket}
-  end
-
-  def handle_event("handle_hotkey_i", _, socket) do
-    if socket.assigns.live_action == :show do
-      {:noreply,
-       push_patch(
-         socket,
-         ~p"/brainstormings/#{socket.assigns.brainstorming.id}"
-       )}
+  defp inspiration do
+    if FeatureFlag.enabled?(:feature_brainstorming_teasers) do
+      Mindwendel.Help.random_inspiration()
     end
   end
 end

@@ -1,7 +1,8 @@
 defmodule Mindwendel.LikesTest do
-  use Mindwendel.DataCase
+  use Mindwendel.DataCase, async: true
   alias Mindwendel.Factory
   alias Mindwendel.Likes
+  alias Mindwendel.Brainstormings.Like
 
   setup do
     user = Factory.insert!(:user)
@@ -16,14 +17,16 @@ defmodule Mindwendel.LikesTest do
     }
   end
 
-  describe "exists_like_for_idea?" do
+  describe "exists_user_in_likes?" do
     test "returns true if like is given", %{idea: idea, user: user} do
       Factory.insert!(:like, %{idea_id: idea.id, user_id: user.id})
-      assert Likes.exists_like_for_idea?(idea.id, user.id) == true
+      likes = Repo.all(from like in Like, where: like.idea_id == ^idea.id)
+      assert Likes.exists_user_in_likes?(likes, user.id) == true
     end
 
     test "returns false if like is not given", %{idea: idea, user: user} do
-      assert Likes.exists_like_for_idea?(idea.id, user.id) == false
+      likes = Repo.all(from like in Like, where: like.idea_id == ^idea.id)
+      assert Likes.exists_user_in_likes?(likes, user.id) == false
     end
   end
 
