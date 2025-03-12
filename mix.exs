@@ -68,7 +68,7 @@ defmodule Mindwendel.MixProject do
       {:jason, "1.4.4"},
       {:oban, "2.19.2"},
       {:plug_cowboy, "2.7.2"},
-      {:cowboy, "2.12.0"},
+      {:cowboy, "2.13.0"},
       {:postgrex, "0.20.0"},
       {:sobelow, "0.13.0", only: [:dev, :test], runtime: false},
       {:credo, "1.7.11", only: [:dev, :test], runtime: false},
