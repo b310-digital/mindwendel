@@ -21,7 +21,7 @@ When you use [docker compose](https://docs.docker.com/compose/), you will be usi
 
     # Add the following mindwendel service
     mindwendel:
-      image: ghcr.io/mindwendel/mindwendel:latest
+      image: ghcr.io/b310-digital/mindwendel:latest
       environment:
         # Add the address of the database host, so that mindwendel can find the database, e.g. an ip address or a reference to another service in the docker-compose file
         DATABASE_HOST: db
