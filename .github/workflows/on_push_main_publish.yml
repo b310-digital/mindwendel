@@ -1,6 +1,10 @@
 #
 name: Create and publish a Docker image
-
+permissions:
+  packages: write
+  contents: read
+  id-token: write
+  
 # This action is based on https://docs.github.com/en/actions/publishing-packages/publishing-docker-images and https://github.com/marketplace/actions/build-and-push-docker-images
 
 # Configures this workflow to run every time a change is pushed to the branch called `master`.
