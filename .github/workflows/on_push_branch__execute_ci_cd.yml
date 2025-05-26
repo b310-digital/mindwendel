@@ -1,6 +1,8 @@
 # Do not forget to change status badge in ./README.md
 name: on_push_branch__execute_ci_cd
-
+permissions:
+  contents: read
+  
 on:
   push:
     branches: [master]
