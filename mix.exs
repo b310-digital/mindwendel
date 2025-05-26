@@ -52,7 +52,7 @@ defmodule Mindwendel.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "1.7.20"},
+      {:phoenix, "1.7.21"},
       {:phoenix_ecto, "4.6.3"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "1.5.3", only: :dev},
@@ -66,7 +66,7 @@ defmodule Mindwendel.MixProject do
       {:gettext, "0.26.2"},
       {:httpoison, "2.2.2"},
       {:jason, "1.4.4"},
-      {:oban, "2.19.2"},
+      {:oban, "2.19.4"},
       {:plug_cowboy, "2.7.3"},
       {:cowboy, "2.13.0"},
       {:postgrex, "0.20.0"},
