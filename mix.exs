@@ -81,7 +81,7 @@ defmodule Mindwendel.MixProject do
       {:tzdata, "1.1.3"},
       {:waffle, "~> 1.1"},
       {:ex_aws, "2.5.8"},
-      {:ex_aws_s3, "2.5.6"},
+      {:ex_aws_s3, "2.5.7"},
       {:cloak, "1.1.4"}
     ]
   end
