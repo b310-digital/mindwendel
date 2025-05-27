@@ -62,7 +62,7 @@ defmodule Mindwendel.MixProject do
       {:bypass, "2.1.0", only: :test},
       {:csv, "3.2.2"},
       {:ecto_sql, "3.12.1"},
-      {:floki, "0.37.0"},
+      {:floki, "0.37.1"},
       {:gettext, "0.26.2"},
       {:httpoison, "2.2.2"},
       {:jason, "1.4.4"},
@@ -76,12 +76,12 @@ defmodule Mindwendel.MixProject do
       {:telemetry_metrics, "1.1.0"},
       {:telemetry_poller, "1.1.0"},
       {:timex, "3.7.11"},
-      {:logger_json, "6.2.1"},
+      {:logger_json, "7.0.3"},
       {:libcluster, "3.5.0"},
       {:tzdata, "1.1.3"},
       {:waffle, "~> 1.1"},
       {:ex_aws, "2.5.8"},
-      {:ex_aws_s3, "2.5.6"},
+      {:ex_aws_s3, "2.5.7"},
       {:cloak, "1.1.4"}
     ]
   end
