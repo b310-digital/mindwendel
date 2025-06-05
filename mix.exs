@@ -64,7 +64,7 @@ defmodule Mindwendel.MixProject do
       {:ecto_sql, "3.12.1"},
       {:floki, "0.37.1"},
       {:gettext, "0.26.2"},
-      {:httpoison, "2.2.2"},
+      {:httpoison, "2.2.3"},
       {:jason, "1.4.4"},
       {:oban, "2.19.4"},
       {:plug_cowboy, "2.7.3"},
