@@ -3,7 +3,7 @@
     <%= if admin_view(assigns.current_view) do %>
       <span class="nav-mindwendel-caption">
         <a
-          href={~p"/brainstormings/#{assigns[:brainstorming].id}"}
+          href={~p"/brainstormings/#{assigns[:brainstorming].id}/##{assigns[:admin_url_id]}"}
           class="d-inline-flex align-items-center"
         >
           <i class="bi bi-arrow-left me-1"></i>
