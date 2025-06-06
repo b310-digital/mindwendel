@@ -236,9 +236,9 @@ msgstr "Rot"
 msgid "yellow"
 msgstr "Gelb"
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:75
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:115
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:154
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:74
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:114
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.ex:153
 #, elixir-autogen, elixir-format
 msgid "Your brainstorming was not saved."
 msgstr "Dein Brainstorming wurde nicht gespeichert."
