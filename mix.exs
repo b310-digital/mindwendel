@@ -70,7 +70,7 @@ defmodule Mindwendel.MixProject do
       {:plug_cowboy, "2.7.3"},
       {:cowboy, "2.13.0"},
       {:postgrex, "0.20.0"},
-      {:sobelow, "0.13.0", only: [:dev, :test], runtime: false},
+      {:sobelow, "0.14.0", only: [:dev, :test], runtime: false},
       {:credo, "1.7.12", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18"},
       {:telemetry_metrics, "1.1.0"},
