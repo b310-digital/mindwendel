@@ -19,5 +19,6 @@ defmodule Mindwendel.Brainstormings.Comment do
     comment
     |> cast(attrs, [:idea_id, :user_id, :body, :username])
     |> validate_required([:idea_id, :body, :username])
+    |> validate_length(:body, min: 1, max: 500)
   end
 end

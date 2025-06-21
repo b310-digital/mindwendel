@@ -17,7 +17,7 @@ defmodule MindwendelWeb.BrainstormingController do
             "Your brainstorming was created successfully! Share the link with other people and start brainstorming."
           )
         )
-        |> redirect(to: ~p"/brainstormings/#{brainstorming.id}")
+        |> redirect(to: ~p"/brainstormings/#{brainstorming.id}/##{brainstorming.admin_url_id}")
 
       {:error, _} ->
         conn

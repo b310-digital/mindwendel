@@ -9,11 +9,9 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
 
   import Ecto.Query
 
-  def mount(%{"id" => id}, _session, socket) do
-    if connected?(socket), do: Brainstormings.subscribe(id)
-
+  def mount(%{"id" => admin_url_id}, _session, socket) do
     brainstorming =
-      Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
+      Brainstormings.get_brainstorming_by!(%{admin_url_id: admin_url_id})
       |> Repo.preload(
         labels:
           from(idea_label in IdeaLabel,
@@ -28,6 +26,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
       :ok,
       socket
       |> assign(:current_view, socket.view)
+      |> assign(:admin_url_id, admin_url_id)
       |> assign(:page_title, "Admin")
       |> assign(:brainstorming, brainstorming)
       |> assign(:form, to_form(changeset))
