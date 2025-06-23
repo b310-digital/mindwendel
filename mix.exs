@@ -61,7 +61,7 @@ defmodule Mindwendel.MixProject do
       {:dart_sass, "0.7.0", runtime: Mix.env() == :dev},
       {:bypass, "2.1.0", only: :test},
       {:csv, "3.2.2"},
-      {:ecto_sql, "3.12.1"},
+      {:ecto_sql, "3.13.1"},
       {:floki, "0.37.1"},
       {:gettext, "0.26.2"},
       {:httpoison, "2.2.3"},
