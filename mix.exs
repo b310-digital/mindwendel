@@ -53,7 +53,7 @@ defmodule Mindwendel.MixProject do
   defp deps do
     [
       {:phoenix, "1.7.21"},
-      {:phoenix_ecto, "4.6.4"},
+      {:phoenix_ecto, "4.6.5"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "1.5.3", only: :dev},
       {:phoenix_live_view, "~> 1.0.0-rc.6"},
