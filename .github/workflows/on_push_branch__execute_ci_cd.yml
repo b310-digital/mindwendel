@@ -21,7 +21,7 @@ jobs:
 
     steps:
       # See https://github.com/actions/checkout
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # See https://github.com/actions/checkout
       - uses: actions/cache@v4
@@ -79,7 +79,7 @@ jobs:
 
     steps:
       # Downloads a copy of the code in your repository before running CI tests
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -103,7 +103,7 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -124,7 +124,7 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -145,7 +145,7 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
@@ -167,7 +167,7 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: actions/cache@v4
         with:
