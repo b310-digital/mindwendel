@@ -56,7 +56,7 @@ defmodule Mindwendel.MixProject do
       {:phoenix_ecto, "4.6.5"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "1.5.3", only: :dev},
-      {:phoenix_live_view, "~> 1.0.0-rc.6"},
+      {:phoenix_live_view, "~> 1.1.11"},
       {:esbuild, "0.10.0", runtime: Mix.env() == :dev},
       {:dart_sass, "0.7.0", runtime: Mix.env() == :dev},
       {:bypass, "2.1.0", only: :test},
