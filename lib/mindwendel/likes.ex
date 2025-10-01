@@ -42,7 +42,11 @@ defmodule Mindwendel.Likes do
 
     case status do
       :ok ->
-        {:ok, Brainstormings.broadcast({:ok, Ideas.get_idea!(idea_id)}, :idea_updated)}
+        idea =
+          Ideas.get_idea!(idea_id)
+          |> Brainstormings.preload_idea_for_broadcast()
+
+        {:ok, Brainstormings.broadcast({:ok, idea}, :idea_updated)}
 
       :error ->
         {:error, result}
@@ -64,7 +68,11 @@ defmodule Mindwendel.Likes do
       from like in Like, where: like.user_id == ^user_id and like.idea_id == ^idea_id
     )
 
-    Brainstormings.broadcast({:ok, Ideas.get_idea!(idea_id)}, :idea_updated)
+    idea =
+      Ideas.get_idea!(idea_id)
+      |> Brainstormings.preload_idea_for_broadcast()
+
+    Brainstormings.broadcast({:ok, idea}, :idea_updated)
   end
 
   @doc """
