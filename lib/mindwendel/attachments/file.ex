@@ -33,7 +33,7 @@ defmodule Mindwendel.Attachments.File do
       # Store the file and handle both success and error cases
       result = StorageService.store_file(object_filename, tmp_path, file_type)
 
-      # CRITICAL: Always clean up the temporary file, regardless of storage outcome
+      # Always clean up the temporary file, regardless of storage outcome
       # This prevents temporary file accumulation even when storage fails
       cleanup_tmp_file(tmp_path)
 
