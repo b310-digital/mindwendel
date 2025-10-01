@@ -4,6 +4,7 @@ defmodule Mindwendel.Attachments.File do
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.FeatureFlag
   alias Mindwendel.Services.StorageService
+  require Logger
 
   schema "idea_files" do
     field :name, :string
@@ -25,20 +26,54 @@ defmodule Mindwendel.Attachments.File do
 
   defp maybe_store_from_path_tmp(changeset) do
     if FeatureFlag.enabled?(:feature_file_upload) and get_change(changeset, :path) do
-      object_filename = Path.basename(get_change(changeset, :path))
+      tmp_path = get_change(changeset, :path)
+      object_filename = Path.basename(tmp_path)
+      file_type = get_change(changeset, :file_type)
 
-      {:ok, encrypted_file_path} =
-        StorageService.store_file(
-          object_filename,
-          get_change(changeset, :path),
-          get_change(changeset, :file_type)
-        )
+      # Store the file and handle both success and error cases
+      result = StorageService.store_file(object_filename, tmp_path, file_type)
 
-      # clear old tmp file
-      File.rm(get_change(changeset, :path))
-      changeset |> put_change(:path, encrypted_file_path)
+      # Always clean up the temporary file, regardless of storage outcome
+      # This prevents temporary file accumulation even when storage fails
+      cleanup_tmp_file(tmp_path)
+
+      # Handle the storage result and update changeset accordingly
+      handle_storage_result(changeset, result)
     else
       changeset
+    end
+  end
+
+  # Handles successful storage by updating the path to the encrypted storage path
+  defp handle_storage_result(changeset, {:ok, encrypted_file_path}) do
+    put_change(changeset, :path, encrypted_file_path)
+  end
+
+  # Handles storage failures by adding a validation error to the changeset
+  # This prevents Ecto from saving the record and provides user feedback
+  defp handle_storage_result(changeset, {:error, reason}) do
+    Logger.error("File storage failed: #{inspect(reason)}")
+    add_error(changeset, :path, "failed to store file")
+  end
+
+  # Cleans up temporary file with robust error handling
+  # This function ALWAYS attempts deletion and logs any issues
+  defp cleanup_tmp_file(tmp_path) do
+    case File.rm(tmp_path) do
+      :ok ->
+        # Successfully deleted, no action needed
+        :ok
+
+      {:error, :enoent} ->
+        # File doesn't exist - this is acceptable (might have been already deleted)
+        Logger.debug("Temporary file already removed: #{tmp_path}")
+        :ok
+
+      {:error, reason} ->
+        # Deletion failed for other reasons - log but don't crash
+        # This prevents blocking the user flow, but alerts ops to potential issues
+        Logger.error("Failed to delete temporary file #{tmp_path}: #{inspect(reason)}")
+        :ok
     end
   end
 end
