@@ -34,3 +34,6 @@ config :gettext, :default_locale, "en"
 config :timex, :default_locale, "en"
 
 config :mindwendel, Oban, repo: Mindwendel.Repo, testing: :inline
+
+# Allow private IPs for URL preview in tests
+config :mindwendel, :allow_private_ips, true
