@@ -24,6 +24,7 @@ defmodule Mindwendel.Accounts do
     Repo.get(User, id) ||
       case %User{id: id} |> Repo.insert() do
         {:ok, user} -> user
+        {:error, _changeset} -> nil
       end
   end
 
@@ -82,7 +83,7 @@ defmodule Mindwendel.Accounts do
   """
   def add_moderating_user(%Brainstorming{} = brainstorming, %User{} = user) do
     if user.id in Enum.map(brainstorming.moderating_users, fn e -> e.id end) do
-      {:error}
+      {:error, :already_moderator}
     else
       %BrainstormingModeratingUser{brainstorming_id: brainstorming.id, user_id: user.id}
       |> BrainstormingModeratingUser.changeset()
@@ -92,13 +93,13 @@ defmodule Mindwendel.Accounts do
 
   def add_moderating_user(%Brainstorming{} = brainstorming, user_id) when is_binary(user_id) do
     case Ecto.UUID.dump(user_id) do
-      :error -> {:error}
+      :error -> {:error, :invalid_uuid}
       {:ok, _} -> add_moderating_user(brainstorming, get_or_create_user(user_id))
     end
   end
 
   def add_moderating_user(%Brainstorming{} = _brainstorming, user_id) when is_nil(user_id) do
-    {:error}
+    {:error, :nil_user_id}
   end
 
   @doc """

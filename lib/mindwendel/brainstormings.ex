@@ -191,7 +191,14 @@ defmodule Mindwendel.Brainstormings do
       ideas = Repo.all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
       # delete_idea deletes the idea and potentially associated files
       Enum.each(ideas, fn idea -> Ideas.delete_idea(idea) end)
-      Repo.delete(brainstorming)
+
+      case Repo.delete(brainstorming) do
+        {:ok, deleted_brainstorming} ->
+          deleted_brainstorming
+
+        {:error, changeset} ->
+          Repo.rollback(changeset)
+      end
     end)
   end
 
