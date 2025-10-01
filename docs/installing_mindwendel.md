@@ -50,7 +50,6 @@ When you use [docker compose](https://docs.docker.com/compose/), you will be usi
 
         # MW Features
         MW_FEATURE_BRAINSTORMING_REMOVAL_AFTER_DAYS: 30
-        MW_FEATURE_BRAINSTORMING_TEASER: true
         MW_FEATURE_IDEA_FILE_UPLOAD: true
 
         # Variables for your s3 file storage
