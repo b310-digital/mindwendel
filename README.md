@@ -217,9 +217,6 @@ There is an example given inside the `docker-compose.yml` with a docker compose 
 
 To deactivate file storage, use `MW_FEATURE_IDEA_FILE_UPLOAD` (defaults to `true`) and set it to `false`.
 
-### Brainstorming teasers
-If you want to display some teasers and help for your brainstorming, use `MW_FEATURE_BRAINSTORMING_TEASER` and set it to `true`.
-
 ### Localization
 
 Currently, there are two language files available, german (`de`) and english (`en`). To set the default_locale, you can set `MW_DEFAULT_LOCALE`. The default is english.

@@ -7,7 +7,6 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Lane
-  alias Mindwendel.FeatureFlag
   alias Mindwendel.LocalStorage
 
   @impl true
@@ -42,7 +41,6 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
           |> assign(:lanes, lanes)
           |> assign(:filtered_labels, brainstorming.filter_labels_ids)
           |> assign(:current_user, current_user)
-          |> assign(:inspiration, inspiration())
         }
 
       {:error, _} ->
@@ -201,11 +199,5 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   defp apply_action(socket, :share, _params) do
     socket
     |> assign(:page_title, socket.assigns.brainstorming.name)
-  end
-
-  defp inspiration do
-    if FeatureFlag.enabled?(:feature_brainstorming_teasers) do
-      Mindwendel.Help.random_inspiration()
-    end
   end
 end

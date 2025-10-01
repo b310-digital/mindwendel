@@ -181,9 +181,8 @@ feature_file_upload = EnvHelper.enabled?("MW_FEATURE_IDEA_FILE_UPLOAD", "true")
 
 feature_privacy_imprint_enabled = EnvHelper.enabled?("MW_FEATURE_LEGAL_PRIVACY_LINKS", "false")
 
-# enable/disable brainstorming teasers and configure delete brainstormings option:
+# configure options:
 config :mindwendel, :options,
-  feature_brainstorming_teasers: EnvHelper.enabled?("MW_FEATURE_BRAINSTORMING_TEASER", "true"),
   feature_file_upload: feature_file_upload,
   feature_brainstorming_removal_after_days: delete_brainstormings_after_days,
   feature_privacy_imprint_enabled: feature_privacy_imprint_enabled,
