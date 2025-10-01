@@ -34,6 +34,8 @@ defmodule Mindwendel.Application do
       # Start the Endpoint (http/https)
       MindwendelWeb.Endpoint,
       Mindwendel.Services.Vault,
+      # Start Task Supervisor for supervised async tasks
+      {Task.Supervisor, name: Mindwendel.TaskSupervisor},
       # Start a worker by calling: Mindwendel.Worker.start_link(arg)
       # {Mindwendel.Worker, arg}
       {Oban, oban_config()}

@@ -323,13 +323,35 @@ defmodule Mindwendel.Ideas do
 
   """
   def scan_for_link_in_idea(idea) do
-    Task.start(fn ->
-      Repo.preload(idea, :link)
-      |> Idea.build_link()
-      |> Repo.update()
+    Task.Supervisor.start_child(
+      Mindwendel.TaskSupervisor,
+      fn ->
+        try do
+          idea_with_link =
+            Repo.preload(idea, :link)
+            |> Idea.build_link()
 
-      Lanes.broadcast_lanes_update(idea.brainstorming_id)
-    end)
+          case Repo.update(idea_with_link) do
+            {:ok, _updated_idea} ->
+              Lanes.broadcast_lanes_update(idea.brainstorming_id)
+              :ok
+
+            {:error, changeset} ->
+              Logger.warning(
+                "Failed to update idea with link: #{idea.id}, errors: #{inspect(changeset.errors)}"
+              )
+
+              :error
+          end
+        rescue
+          error ->
+            Logger.error("Error scanning for link in idea #{idea.id}: #{inspect(error)}")
+            Logger.error(Exception.format(:error, error, __STACKTRACE__))
+            :error
+        end
+      end,
+      timeout: 10_000
+    )
 
     {:ok, idea}
   end
