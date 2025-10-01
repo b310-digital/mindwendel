@@ -234,10 +234,10 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaCommentTest do
   end
 
   defp html_selector_button_delete() do
-    "a[@phx-click='delete_comment']"
+    "a[phx-click='delete_comment']"
   end
 
   defp html_selector_button_edit() do
-    "a[@phx-click='edit_comment']"
+    "a[phx-click='edit_comment']"
   end
 end

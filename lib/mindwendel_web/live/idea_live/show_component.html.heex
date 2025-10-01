@@ -1,11 +1,11 @@
 <div>
   <%= unless @idea.link do %>
-    <p>{raw(@idea.body)}</p>
+    <p>{@idea.body}</p>
   <% end %>
 
   <%= if @idea.link do %>
     <.link href={@idea.link.url}>
-      {raw(@idea.body)}
+      {@idea.body}
     </.link>
     <hr />
     <div class="row">

@@ -459,4 +459,62 @@ defmodule Mindwendel.IdeasTest do
              idea.id
            ]
   end
+
+  describe "create_idea with HTML stripping" do
+    test "strips HTML tags when creating an idea", %{brainstorming: brainstorming, lane: lane} do
+      {:ok, idea} =
+        Ideas.create_idea(%{
+          body: "<script>alert('XSS')</script>Clean text",
+          brainstorming_id: brainstorming.id,
+          lane_id: lane.id,
+          username: "TestUser"
+        })
+
+      # Verify HTML was stripped before saving
+      assert idea.body == "Clean text"
+
+      # Verify the stripped value is persisted in the database
+      reloaded_idea = Repo.get!(Idea, idea.id)
+      assert reloaded_idea.body == "Clean text"
+    end
+
+    test "strips complex HTML when creating an idea", %{brainstorming: brainstorming, lane: lane} do
+      {:ok, idea} =
+        Ideas.create_idea(%{
+          body: "<div><p>Paragraph 1</p><p>Paragraph 2</p></div>",
+          brainstorming_id: brainstorming.id,
+          lane_id: lane.id,
+          username: "TestUser"
+        })
+
+      assert idea.body == "Paragraph 1 Paragraph 2"
+    end
+
+    test "fails validation when body becomes empty after stripping", %{
+      brainstorming: brainstorming,
+      lane: lane
+    } do
+      {:error, changeset} =
+        Ideas.create_idea(%{
+          body: "<script>alert('XSS')</script>",
+          brainstorming_id: brainstorming.id,
+          lane_id: lane.id,
+          username: "TestUser"
+        })
+
+      refute changeset.valid?
+    end
+  end
+
+  describe "update_idea with HTML stripping" do
+    test "strips HTML tags when updating an idea", %{idea: idea} do
+      {:ok, updated_idea} = Ideas.update_idea(idea, %{body: "<b>Bold</b> updated text"})
+
+      assert updated_idea.body == "Bold updated text"
+
+      # Verify the stripped value is persisted in the database
+      reloaded_idea = Repo.get!(Idea, idea.id)
+      assert reloaded_idea.body == "Bold updated text"
+    end
+  end
 end
