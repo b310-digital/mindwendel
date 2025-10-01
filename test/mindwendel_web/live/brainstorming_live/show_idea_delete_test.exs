@@ -85,6 +85,6 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaDeleteTest do
   end
 
   defp html_selector_button_idea_delete_link do
-    "a[@title='Delete idea']"
+    "a[title='Delete idea']"
   end
 end

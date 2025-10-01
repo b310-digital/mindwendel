@@ -52,11 +52,11 @@ defmodule Mindwendel.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "1.7.21"},
+      {:phoenix, "1.8.1"},
       {:phoenix_ecto, "4.6.5"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "1.6.1", only: :dev},
-      {:phoenix_live_view, "~> 1.0.0-rc.6"},
+      {:phoenix_live_view, "~> 1.1.13"},
       {:esbuild, "0.10.0", runtime: Mix.env() == :dev},
       {:dart_sass, "0.7.0", runtime: Mix.env() == :dev},
       {:bypass, "2.1.0", only: :test},
@@ -66,7 +66,7 @@ defmodule Mindwendel.MixProject do
       {:gettext, "0.26.2"},
       {:httpoison, "2.2.3"},
       {:jason, "1.4.4"},
-      {:oban, "2.19.4"},
+      {:oban, "2.20.1"},
       {:plug_cowboy, "2.7.4"},
       {:cowboy, "2.13.0"},
       {:postgrex, "0.21.1"},
@@ -82,7 +82,8 @@ defmodule Mindwendel.MixProject do
       {:waffle, "~> 1.1"},
       {:ex_aws, "2.5.10"},
       {:ex_aws_s3, "2.5.7"},
-      {:cloak, "1.1.4"}
+      {:cloak, "1.1.4"},
+      {:lazy_html, ">= 0.1.0", only: :test}
     ]
   end
 

@@ -112,7 +112,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     assert edit_live_view |> element("input#brainstorming_labels_0_name") |> has_element?
 
     refute edit_live_view
-           |> element("button[value=#{brainstorming_label_first.id}]", "Remove")
+           |> element("button[value=\"#{brainstorming_label_first.id}\"]", "Remove")
            |> has_element?
 
     refute edit_live_view |> element("input#brainstorming_labels_4_name") |> has_element?
@@ -146,7 +146,7 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.EditTest do
     #        |> has_element?()
 
     assert edit_live_view
-           |> element("input[type=hidden][value=#{brainstorming_label_first.id}]")
+           |> element("input[type=hidden][value=\"#{brainstorming_label_first.id}\"]")
            |> has_element?
 
     assert edit_live_view

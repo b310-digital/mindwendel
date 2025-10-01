@@ -319,9 +319,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         |> live(~p"/brainstormings/#{brainstorming.id}")
 
       assert view
-             |> has_element?(
-               ".btn[data-testid=\"#{selected_ideal_label.id}\"][disabled='disabled']"
-             )
+             |> has_element?(".btn[data-testid=\"#{selected_ideal_label.id}\"][disabled]")
     end
   end
 
