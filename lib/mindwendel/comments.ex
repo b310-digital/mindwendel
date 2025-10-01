@@ -108,7 +108,9 @@ defmodule Mindwendel.Comments do
   defp handle_result_for_broadcast(result) do
     case result do
       {:ok, comment} ->
-        idea = Ideas.get_idea!(comment.idea_id)
+        idea =
+          Ideas.get_idea!(comment.idea_id)
+          |> Brainstormings.preload_idea_for_broadcast()
 
         Brainstormings.broadcast(
           {:ok, idea},
