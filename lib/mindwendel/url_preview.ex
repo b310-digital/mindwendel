@@ -41,24 +41,42 @@ defmodule Mindwendel.UrlPreview do
     if Mix.env() == :test do
       true
     else
-      # Block private IP ranges and localhost in production/dev
+      # Block private IP ranges and localhost to prevent SSRF attacks.
+      # These ranges are defined by RFC 1918 (private networks) and RFC 3927 (link-local).
+      # The 169.254.x.x range is particularly dangerous as it includes cloud metadata endpoints
+      # (AWS, GCP, Azure) that expose credentials and sensitive configuration.
       case :inet.getaddr(String.to_charlist(host), :inet) do
         # localhost
-        {:ok, {127, _, _, _}} -> false
-        # private 10.x.x.x
-        {:ok, {10, _, _, _}} -> false
-        # private 172.16-31.x.x
-        {:ok, {172, second, _, _}} when second >= 16 and second <= 31 -> false
-        # private 192.168.x.x
-        {:ok, {192, 168, _, _}} -> false
-        # link-local / cloud metadata
-        {:ok, {169, 254, _, _}} -> false
+        {:ok, {127, _, _, _}} ->
+          false
+
+        # private 10.x.x.x (RFC 1918)
+        {:ok, {10, _, _, _}} ->
+          false
+
+        # private 172.16.0.0 - 172.31.255.255 (RFC 1918)
+        {:ok, {172, second, _, _}} when second >= 16 and second <= 31 ->
+          false
+
+        # private 192.168.x.x (RFC 1918)
+        {:ok, {192, 168, _, _}} ->
+          false
+
+        # link-local / cloud metadata 169.254.x.x (RFC 3927)
+        {:ok, {169, 254, _, _}} ->
+          false
+
         # invalid
-        {:ok, {0, 0, 0, 0}} -> false
+        {:ok, {0, 0, 0, 0}} ->
+          false
+
         # public IP
-        {:ok, _} -> true
+        {:ok, _} ->
+          true
+
         # DNS resolution failed
-        {:error, _} -> false
+        {:error, _} ->
+          false
       end
     end
   end
