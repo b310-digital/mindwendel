@@ -48,11 +48,51 @@ defmodule Mindwendel.Brainstormings.Idea do
       :comments_count
     ])
     |> validate_required([:username, :body, :brainstorming_id])
+    |> strip_html_from_body()
     |> maybe_put_idea_labels(attrs)
     |> validate_length(:body, min: 1, max: 1023)
     |> add_position_order_if_missing()
     |> validate_attachment_count(attrs)
     |> maybe_put_attachments(idea, attrs)
+  end
+
+  defp strip_html_from_body(changeset) do
+    case get_change(changeset, :body) do
+      nil ->
+        changeset
+
+      body when is_binary(body) ->
+        stripped_body = strip_html(body)
+        put_change(changeset, :body, stripped_body)
+
+      _ ->
+        changeset
+    end
+  end
+
+  defp strip_html(text) when is_binary(text) do
+    # Strip all HTML tags by parsing with Floki and extracting text content
+    # This removes all tags, event handlers, and JavaScript
+    case Floki.parse_document(text) do
+      {:ok, parsed} ->
+        parsed
+        |> Floki.text(sep: " ")
+        |> normalize_whitespace()
+
+      {:error, _} ->
+        # If parsing fails, fall back to basic regex stripping
+        text
+        |> String.replace(~r/<[^>]*>/, "")
+        |> normalize_whitespace()
+    end
+  end
+
+  defp strip_html(text), do: text
+
+  defp normalize_whitespace(text) do
+    text
+    |> String.trim()
+    |> String.replace(~r/\s+/, " ")
   end
 
   defp maybe_put_idea_labels(changeset, attrs) do
