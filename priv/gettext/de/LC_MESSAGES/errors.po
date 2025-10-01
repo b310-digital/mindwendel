@@ -88,6 +88,3 @@ msgstr "muss gleich sein zu %{number}"
 
 msgid "idea label associated with idea"
 msgstr "Dieses Label ist mit einer Idee assoziiert"
-
-msgid "failed to store file"
-msgstr "Speichern der Datei fehlgeschlagen"
