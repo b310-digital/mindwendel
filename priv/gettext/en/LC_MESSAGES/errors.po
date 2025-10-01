@@ -99,3 +99,6 @@ msgstr ""
 
 msgid "idea label associated with idea"
 msgstr "This label is associated with an idea"
+
+msgid "failed to store file"
+msgstr "Failed to store file"
