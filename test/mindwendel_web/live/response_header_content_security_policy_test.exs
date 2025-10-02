@@ -1,6 +1,6 @@
 defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
   use MindwendelWeb.ConnCase, async: true
-  use Mindwendel.ChatCompletionsCase
+  use Mindwendel.ChatCompletionsCase, async: true
 
   alias Mindwendel.Factory
 

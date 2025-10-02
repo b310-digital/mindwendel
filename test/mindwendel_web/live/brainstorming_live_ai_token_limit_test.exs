@@ -9,7 +9,7 @@ defmodule MindwendelWeb.BrainstormingLiveAITokenLimitTest do
   """
 
   use MindwendelWeb.ConnCase, async: true
-  use Mindwendel.ChatCompletionsCase
+  use Mindwendel.ChatCompletionsCase, async: true
   import Phoenix.LiveViewTest
   import Mindwendel.BrainstormingsFixtures
 

@@ -1,7 +1,7 @@
 defmodule Mindwendel.Services.IdeaServiceTest do
   alias Mindwendel.Services.IdeaService
-  use Mindwendel.DataCase
-  use Mindwendel.ChatCompletionsCase
+  use Mindwendel.DataCase, async: true
+  use Mindwendel.ChatCompletionsCase, async: true
   alias Mindwendel.Factory
   alias Mindwendel.Brainstormings
   alias Mindwendel.Accounts.User

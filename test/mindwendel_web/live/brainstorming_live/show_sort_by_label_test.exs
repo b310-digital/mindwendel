@@ -1,6 +1,6 @@
 defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
   use MindwendelWeb.ConnCase, async: true
-  use Mindwendel.ChatCompletionsCase
+  use Mindwendel.ChatCompletionsCase, async: true
   import Phoenix.LiveViewTest
   alias Mindwendel.Accounts
 
