@@ -196,7 +196,9 @@ if config_env() == :prod || config_env() == :dev do
       {Oban.Plugins.Cron,
        crontab: [
          {System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_CRON", "@midnight"),
-          Mindwendel.Worker.RemoveBrainstormingsAndUsersAfterPeriodWorker}
+          Mindwendel.Worker.RemoveBrainstormingsAndUsersAfterPeriodWorker},
+         # Add daily cleanup at 1 AM UTC
+         {"0 1 * * *", Mindwendel.Workers.AiTokenCleanupWorker}
        ]}
     ],
     queues: [default: 1]
@@ -231,10 +233,44 @@ end
 # configure ai only in prod and dev, not test. default is disabled:
 if config_env() == :prod || config_env() == :dev do
   if System.get_env("MW_AI_ENABLED") == "true" do
+    api_key = System.get_env("MW_AI_API_KEY")
+    api_base_url = System.get_env("MW_AI_API_BASE_URL")
+
+    # Determine provider: use openai_compatible if custom base URL is set, otherwise openai
+    provider =
+      if api_base_url do
+        :openai_compatible
+      else
+        :openai
+      end
+
+    model = System.get_env("MW_AI_API_MODEL", "gpt-4o-mini")
+
+    # Token limits
+    daily_limit = String.to_integer(System.get_env("MW_AI_TOKEN_LIMIT_DAILY", "1000000"))
+    hourly_limit = String.to_integer(System.get_env("MW_AI_TOKEN_LIMIT_HOURLY", "100000"))
+    reset_hour = String.to_integer(System.get_env("MW_AI_TOKEN_RESET_HOUR", "0"))
+
+    unless api_key do
+      raise """
+      AI is enabled but required configuration is missing.
+      When MW_AI_ENABLED=true, you must provide:
+        - MW_AI_API_KEY
+        - MW_AI_API_MODEL (default: gpt-4o-mini)
+        - MW_AI_API_BASE_URL (optional, for OpenAI-compatible endpoints)
+      """
+    end
+
     config :mindwendel, :ai,
       enabled: true,
-      api_key: System.get_env("MW_AI_API_KEY"),
-      api_base_url: System.get_env("MW_AI_API_BASE_URL")
+      provider: provider,
+      model: model,
+      api_key: api_key,
+      token_limit_daily: daily_limit,
+      token_limit_hourly: hourly_limit,
+      token_reset_hour: reset_hour
+  else
+    config :mindwendel, :ai, enabled: false
   end
 else
   config :mindwendel, :ai, enabled: false

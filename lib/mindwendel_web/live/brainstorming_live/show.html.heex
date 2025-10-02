@@ -28,10 +28,16 @@
         </.link>
       <% end %>
 
-      <%= if idea_generation_enabled?() do %>
-        <%= link to: "#", class: "btn btn-primary m-1", phx_click: "generate_ai_ideas", phx_value_id: @brainstorming.id, title: gettext("AI") do %>
-          <i class="bi-magic"></i> <%= gettext("AI") %>
-        <% end %>
+      <%= if idea_generation_enabled?() and has_moderating_permission(@brainstorming.id, @current_user) do %>
+        <button
+          type="button"
+          class="btn btn-primary m-1"
+          phx-click="generate_ai_ideas"
+          phx-value-id={@brainstorming.id}
+          title={gettext("AI")}
+        >
+          <i class="bi-magic"></i> {gettext("AI")}
+        </button>
       <% end %>
 
       <.link

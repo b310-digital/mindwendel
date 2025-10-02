@@ -15,6 +15,7 @@ defmodule Mindwendel.DataCase do
   """
 
   use ExUnit.CaseTemplate
+  import Mox
 
   using do
     quote do
@@ -24,8 +25,14 @@ defmodule Mindwendel.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Mindwendel.DataCase
+      import Mox
     end
   end
+
+  # Set up Mox properly for all data tests
+  setup :set_mox_from_context
+  setup :verify_on_exit!
+  setup :setup_ai_disabled_stub
 
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Mindwendel.Repo)
@@ -33,6 +40,17 @@ defmodule Mindwendel.DataCase do
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Mindwendel.Repo, {:shared, self()})
     end
+
+    :ok
+  end
+
+  # Provide default AI disabled stub for all DataCase tests
+  defp setup_ai_disabled_stub(_context) do
+    Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
+    |> Mox.stub(:enabled?, fn -> false end)
+    |> Mox.stub(:generate_ideas, fn _title, _lanes, _existing_ideas, _locale ->
+      {:error, :ai_not_enabled}
+    end)
 
     :ok
   end

@@ -1,6 +1,8 @@
 defmodule MindwendelWeb.BrainstormingLive.Show do
   use MindwendelWeb, :live_view
 
+  require Logger
+
   alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
   alias Mindwendel.Lanes
@@ -78,6 +80,37 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {:noreply, assign(socket, :brainstormings_stored, valid_stored_brainstormings)}
   end
 
+  def handle_event("generate_ai_ideas", %{"id" => id}, socket) do
+    # Send async message to self to perform the AI generation
+    # This allows us to show the loading message immediately and return control to the UI
+    # Note: HTTP timeout is configured via MW_AI_REQUEST_TIMEOUT (default: 60s)
+    # If the request times out, handle_info will replace this flash with an error message
+    if has_moderating_permission(id, socket.assigns.current_user) do
+      send(self(), {:do_generate_ai_ideas, id})
+      {:noreply, put_flash(socket, :info, gettext("Generating ideas... thinking..."))}
+    else
+      {:noreply, put_flash(socket, :error, gettext("Permission denied"))}
+    end
+  end
+
+  def handle_event("handle_hotkey_i", _, socket) do
+    if socket.assigns.live_action == :show do
+      case socket.assigns.lanes do
+        [first_lane | _] ->
+          {:noreply,
+           push_patch(socket,
+             to:
+               ~p"/brainstormings/#{socket.assigns.brainstorming}/lanes/#{first_lane.id}/new_idea"
+           )}
+
+        [] ->
+          {:noreply, socket}
+      end
+    else
+      {:noreply, socket}
+    end
+  end
+
   @impl true
   def handle_params(
         params,
@@ -142,6 +175,61 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {:noreply, assign(socket, :current_user, user)}
   end
 
+  def handle_info({:do_generate_ai_ideas, id}, socket) do
+    if has_moderating_permission(id, socket.assigns.current_user) do
+      case Brainstormings.get_brainstorming(id) do
+        {:ok, brainstorming} ->
+          # Preload lanes for idea creation
+          brainstorming = Mindwendel.Repo.preload(brainstorming, :lanes)
+
+          case IdeaService.add_ideas_to_brainstorming(brainstorming) do
+            {:ok, [_ | _] = ideas} ->
+              lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
+
+              {:noreply,
+               socket
+               |> assign(:lanes, lanes)
+               |> put_flash(
+                 :info,
+                 gettext("%{length} idea(s) generated", %{length: length(ideas)})
+               )}
+
+            {:ok, []} ->
+              {:noreply, put_flash(socket, :error, gettext("No ideas generated"))}
+
+            {:error, :daily_limit_exceeded} ->
+              Logger.warning("AI request blocked: daily token limit exceeded")
+
+              {:noreply,
+               put_flash(
+                 socket,
+                 :error,
+                 gettext("Daily AI token limit exceeded. Please try again tomorrow.")
+               )}
+
+            {:error, :hourly_limit_exceeded} ->
+              Logger.warning("AI request blocked: hourly token limit exceeded")
+
+              {:noreply,
+               put_flash(
+                 socket,
+                 :error,
+                 gettext("Hourly AI request limit exceeded. Please try again later.")
+               )}
+
+            {:error, reason} ->
+              Logger.error("AI idea generation failed: #{inspect(reason)}")
+              {:noreply, put_flash(socket, :error, gettext("Failed to generate ideas"))}
+          end
+
+        {:error, _} ->
+          {:noreply, put_flash(socket, :error, gettext("Brainstorming not found"))}
+      end
+    else
+      {:noreply, put_flash(socket, :error, gettext("Permission denied"))}
+    end
+  end
+
   defp apply_action(
          socket,
          :edit_idea,
@@ -200,41 +288,5 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   defp apply_action(socket, :share, _params) do
     socket
     |> assign(:page_title, socket.assigns.brainstorming.name)
-  end
-
-  @impl true
-  def handle_event("sort_by_likes", %{"id" => id}, socket) do
-    {:noreply, assign(socket, :ideas, Ideas.list_ideas_for_brainstorming(id))}
-  end
-
-  def handle_event("sort_by_label", %{"id" => id}, socket) do
-    {:noreply, assign(socket, :ideas, Ideas.sort_ideas_by_labels(id))}
-  end
-
-  def handle_event("generate_ai_ideas", %{"id" => id}, socket) do
-    brainstorming =
-      Brainstormings.get_brainstorming!(id)
-
-    ideas = IdeaService.add_ideas_to_brainstorming(brainstorming)
-
-    case length(ideas) do
-      0 ->
-        {:noreply, put_flash(socket, :error, gettext("No ideas generated"))}
-
-      length ->
-        socket = assign(socket, :ideas, Ideas.list_ideas_for_brainstorming(id))
-
-        {:noreply,
-         put_flash(socket, :info, gettext("%{length} idea(s) generated", %{length: length}))}
-    end
-  end
-
-  def handle_event("handle_hotkey_i", _, socket) do
-    if socket.assigns.live_action == :show do
-      {:noreply,
-       push_patch(socket,
-         to: Routes.brainstorming_show_path(socket, :new_idea, socket.assigns.brainstorming)
-       )}
-    end
   end
 end

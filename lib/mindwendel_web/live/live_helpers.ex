@@ -42,4 +42,15 @@ defmodule MindwendelWeb.LiveHelpers do
   def idea_generation_enabled? do
     IdeaService.idea_generation_enabled?()
   end
+
+  def show_idea_file_upload? do
+    FeatureFlag.enabled?(:feature_file_upload)
+  end
+
+  def brainstormings_available_until() do
+    Timex.Duration.from_days(
+      Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]
+    )
+    |> Timex.format_duration(:humanized)
+  end
 end
