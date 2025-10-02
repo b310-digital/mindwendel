@@ -154,7 +154,7 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
 
     # Log the request details for debugging (sanitize sensitive data)
     Logger.debug(
-      "Making LLM request - Provider: #{ai_config[:provider]}, Model: #{ai_config[:model]}, Config: #{inspect(sanitize_config(ai_config))}"
+      "Making LLM request - Provider: #{ai_config[:provider]}, Model: #{ai_config[:model]}"
     )
 
     # Make the API call - it returns the decoded response directly
@@ -170,7 +170,6 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
         Full error: #{inspect(error)}
         Provider: #{ai_config[:provider]}
         Model: #{ai_config[:model]}
-        Config: #{inspect(sanitize_config(ai_config))}
         """)
 
         {:error, :llm_request_failed}
@@ -320,14 +319,6 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
         end)
 
       "Idea #{index}:\n#{field_messages}"
-    end)
-  end
-
-  defp sanitize_config(config) when is_list(config) do
-    Keyword.update(config, :api_key, nil, fn
-      nil -> nil
-      key when is_binary(key) -> "[REDACTED #{String.length(key)} chars]"
-      _ -> "[REDACTED]"
     end)
   end
 
