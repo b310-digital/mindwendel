@@ -1,11 +1,13 @@
 defmodule MindwendelWeb.BrainstormingLive.ShowSortByLabelTest do
   use MindwendelWeb.ConnCase, async: true
+  use Mindwendel.ChatCompletionsCase, async: true
   import Phoenix.LiveViewTest
   alias Mindwendel.Accounts
 
   alias Mindwendel.Factory
 
   setup do
+    disable_ai()
     moderating_user = Factory.insert!(:user)
     brainstorming = Factory.insert!(:brainstorming)
     Accounts.add_moderating_user(brainstorming, moderating_user)

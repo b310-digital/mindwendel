@@ -1,6 +1,8 @@
 defmodule MindwendelWeb.BrainstormingLive.Show do
   use MindwendelWeb, :live_view
 
+  require Logger
+
   alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
   alias Mindwendel.Lanes
@@ -8,6 +10,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.LocalStorage
+  alias Mindwendel.Services.IdeaService
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
@@ -77,6 +80,37 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     {:noreply, assign(socket, :brainstormings_stored, valid_stored_brainstormings)}
   end
 
+  def handle_event("generate_ai_ideas", %{"id" => id}, socket) do
+    # Send async message to self to perform the AI generation
+    # This allows us to show the loading message immediately and return control to the UI
+    # Note: HTTP timeout is configured via MW_AI_REQUEST_TIMEOUT (default: 60s)
+    # If the request times out, handle_info will replace this flash with an error message
+    if has_moderating_permission(id, socket.assigns.current_user) do
+      send(self(), {:do_generate_ai_ideas, id})
+      {:noreply, put_flash(socket, :info, gettext("Generating ideas... thinking..."))}
+    else
+      {:noreply, put_flash(socket, :error, gettext("Permission denied"))}
+    end
+  end
+
+  def handle_event("handle_hotkey_i", _, socket) do
+    if socket.assigns.live_action == :show do
+      case socket.assigns.lanes do
+        [first_lane | _] ->
+          {:noreply,
+           push_patch(socket,
+             to:
+               ~p"/brainstormings/#{socket.assigns.brainstorming}/lanes/#{first_lane.id}/new_idea"
+           )}
+
+        [] ->
+          {:noreply, socket}
+      end
+    else
+      {:noreply, socket}
+    end
+  end
+
   @impl true
   def handle_params(
         params,
@@ -139,6 +173,68 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   def handle_info({:user_updated, user}, socket) do
     {:noreply, assign(socket, :current_user, user)}
+  end
+
+  def handle_info({:do_generate_ai_ideas, id}, socket) do
+    if has_moderating_permission(id, socket.assigns.current_user) do
+      do_generate_ai_ideas(id, socket)
+    else
+      {:noreply, put_flash(socket, :error, gettext("Permission denied"))}
+    end
+  end
+
+  defp do_generate_ai_ideas(id, socket) do
+    with {:ok, brainstorming} <- Brainstormings.get_brainstorming(id),
+         brainstorming <- Mindwendel.Repo.preload(brainstorming, :lanes),
+         result <- IdeaService.add_ideas_to_brainstorming(brainstorming) do
+      handle_ai_generation_result(result, id, socket)
+    else
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, gettext("Brainstorming not found"))}
+    end
+  end
+
+  defp handle_ai_generation_result({:ok, [_ | _] = ideas}, id, socket) do
+    lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
+
+    {:noreply,
+     socket
+     |> assign(:lanes, lanes)
+     |> put_flash(
+       :info,
+       gettext("%{length} idea(s) generated", %{length: length(ideas)})
+     )}
+  end
+
+  defp handle_ai_generation_result({:ok, []}, _id, socket) do
+    {:noreply, put_flash(socket, :error, gettext("No ideas generated"))}
+  end
+
+  defp handle_ai_generation_result({:error, :daily_limit_exceeded}, _id, socket) do
+    Logger.warning("AI request blocked: daily token limit exceeded")
+
+    {:noreply,
+     put_flash(
+       socket,
+       :error,
+       gettext("Daily AI token limit exceeded. Please try again tomorrow.")
+     )}
+  end
+
+  defp handle_ai_generation_result({:error, :hourly_limit_exceeded}, _id, socket) do
+    Logger.warning("AI request blocked: hourly token limit exceeded")
+
+    {:noreply,
+     put_flash(
+       socket,
+       :error,
+       gettext("Hourly AI request limit exceeded. Please try again later.")
+     )}
+  end
+
+  defp handle_ai_generation_result({:error, reason}, _id, socket) do
+    Logger.error("AI idea generation failed: #{inspect(reason)}")
+    {:noreply, put_flash(socket, :error, gettext("Failed to generate ideas"))}
   end
 
   defp apply_action(

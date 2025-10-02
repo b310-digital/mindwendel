@@ -1,5 +1,6 @@
 defmodule MindwendelWeb.BrainstormingLiveTest do
   use MindwendelWeb.ConnCase, async: true
+  use Mindwendel.ChatCompletionsCase, async: true
   import Phoenix.LiveViewTest
 
   alias Mindwendel.Accounts
@@ -7,6 +8,10 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
   alias Mindwendel.Factory
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Repo
+
+  setup do
+    disable_ai()
+  end
 
   import Mindwendel.BrainstormingsFixtures
   import Mindwendel.IdeasFixtures

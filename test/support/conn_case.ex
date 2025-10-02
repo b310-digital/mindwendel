@@ -16,6 +16,7 @@ defmodule MindwendelWeb.ConnCase do
   """
 
   use ExUnit.CaseTemplate
+  import Mox
 
   using do
     quote do
@@ -26,10 +27,18 @@ defmodule MindwendelWeb.ConnCase do
       import Phoenix.ConnTest
       import MindwendelWeb.ConnCase
 
+      # Import Mox for tests that need to override AI behavior
+      import Mox
+
       # The default endpoint for testing
       @endpoint MindwendelWeb.Endpoint
     end
   end
+
+  # Set up Mox properly for all conn tests
+  setup :set_mox_from_context
+  setup :verify_on_exit!
+  setup :setup_ai_disabled_stub
 
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Mindwendel.Repo)
@@ -39,5 +48,17 @@ defmodule MindwendelWeb.ConnCase do
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}
+  end
+
+  # Provide default AI disabled stub for all ConnCase tests
+  # This prevents Mox.UnexpectedCallError when LiveViews render
+  defp setup_ai_disabled_stub(_context) do
+    Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
+    |> Mox.stub(:enabled?, fn -> false end)
+    |> Mox.stub(:generate_ideas, fn _title, _lanes, _existing_ideas, _locale ->
+      {:error, :ai_not_enabled}
+    end)
+
+    :ok
   end
 end
