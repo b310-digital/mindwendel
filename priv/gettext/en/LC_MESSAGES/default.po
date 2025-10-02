@@ -26,12 +26,12 @@ msgstr ""
 msgid "Ready?"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:285
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:292
 #, elixir-autogen, elixir-format
 msgid "%{name} - Edit"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:262
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:269
 #, elixir-autogen, elixir-format
 msgid "%{name} - New Idea"
 msgstr ""
@@ -380,7 +380,7 @@ msgstr ""
 msgid "Type the label name"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:272
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:279
 #, elixir-autogen, elixir-format, fuzzy
 msgid "%{name} - New Lane"
 msgstr ""
@@ -559,12 +559,12 @@ msgid "Give moderating permissions"
 msgstr ""
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:53
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:226
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:193
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Brainstorming not found"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:194
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:205
 #, elixir-autogen, elixir-format
 msgid "%{length} idea(s) generated"
 msgstr ""
@@ -575,22 +575,22 @@ msgstr ""
 msgid "AI"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:222
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:237
 #, elixir-autogen, elixir-format
 msgid "Failed to generate ideas"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:198
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:210
 #, elixir-autogen, elixir-format
 msgid "No ideas generated"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:207
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:220
 #, elixir-autogen, elixir-format
 msgid "Daily AI token limit exceeded. Please try again tomorrow."
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:217
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:231
 #, elixir-autogen, elixir-format
 msgid "Hourly AI request limit exceeded. Please try again later."
 msgstr ""
@@ -601,7 +601,7 @@ msgid "Generating ideas... thinking..."
 msgstr ""
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:92
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:229
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:182
 #, elixir-autogen, elixir-format
 msgid "Permission denied"
 msgstr ""
