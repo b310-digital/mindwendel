@@ -285,30 +285,18 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
   end
 
   defp build_openai_client(ai_config) do
-    # Create base client with API key
+    # Create base client with API key - defaults to https://api.openai.com/v1
     client = OpenaiEx.new(ai_config[:api_key])
 
-    # Set base URL based on provider
+    # Only override base URL for openai_compatible providers
     client =
-      case ai_config[:provider] do
-        :openai_compatible ->
-          # Use custom base URL for OpenAI-compatible providers
-          base_url = System.get_env("MW_AI_API_BASE_URL") || "https://api.openai.com/v1"
-          OpenaiEx.with_base_url(client, base_url)
-
-        :openai ->
-          # Explicitly set OpenAI base URL to ensure proper API endpoint
-          OpenaiEx.with_base_url(client, "https://api.openai.com/v1")
-
-        _ ->
-          # For other providers, return the client as is
-          client
+      if ai_config[:provider] == :openai_compatible do
+        OpenaiEx.with_base_url(client, ai_config[:api_base_url])
+      else
+        client
       end
 
-    # Configure timeout for LLM requests (default 15s is too short)
-    # Allow override via environment variable, default to 60 seconds
-    timeout = System.get_env("MW_AI_REQUEST_TIMEOUT", "60000") |> String.to_integer()
-    OpenaiEx.with_receive_timeout(client, timeout)
+    OpenaiEx.with_receive_timeout(client, ai_config[:request_timeout])
   end
 
   defp format_validation_errors(errors) when is_map(errors) do

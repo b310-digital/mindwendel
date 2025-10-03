@@ -13,7 +13,8 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImplTest do
         model: "gpt-4o-mini",
         api_key: "test-key",
         token_limit_daily: 1000,
-        token_limit_hourly: 100
+        token_limit_hourly: 100,
+        request_timeout: 60_000
       )
 
       on_exit(fn ->
@@ -21,7 +22,8 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImplTest do
         Application.put_env(:mindwendel, :ai,
           enabled: false,
           token_limit_daily: nil,
-          token_limit_hourly: nil
+          token_limit_hourly: nil,
+          request_timeout: 60_000
         )
       end)
 

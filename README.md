@@ -220,21 +220,29 @@ To deactivate file storage, use `MW_FEATURE_IDEA_FILE_UPLOAD` (defaults to `true
 
 ### AI Integration
 
-Mindwendel supports AI-powered idea generation using OpenAI-compatible APIs. To enable AI features:
+Mindwendel supports AI-powered idea generation using OpenAI and OpenAI-compatible APIs. To enable AI features:
 
+**For OpenAI (default):**
+```
+MW_AI_ENABLED=true
+MW_AI_API_KEY=your-openai-api-key
+MW_AI_API_MODEL=gpt-4o-mini           # Optional, defaults to gpt-4o-mini
+```
+
+**For OpenAI-compatible endpoints (e.g., local LLMs, Mistral, etc.):**
 ```
 MW_AI_ENABLED=true
 MW_AI_API_KEY=your-api-key
-MW_AI_API_MODEL=gpt-4o-mini
-MW_AI_API_BASE_URL=https://api.openai.com/v1  # Optional, for custom endpoints
+MW_AI_API_MODEL=mistral-large-latest  # Or your model name
+MW_AI_API_BASE_URL=https://api.mistral.ai/v1  # Required for non-OpenAI endpoints
 ```
 
-Optional token limits to control usage:
-
+**Optional token limits to control usage:**
 ```
 MW_AI_TOKEN_LIMIT_DAILY=1000000      # Daily token limit (default: 1M)
 MW_AI_TOKEN_LIMIT_HOURLY=100000      # Hourly token limit (default: 100K)
 MW_AI_TOKEN_RESET_HOUR=0             # Hour of day to reset daily limit (default: 0/midnight UTC)
+MW_AI_REQUEST_TIMEOUT=60000          # Request timeout in milliseconds (default: 60000)
 ```
 
 AI features are disabled by default. When enabled, users can generate ideas using AI based on their brainstorming context.
