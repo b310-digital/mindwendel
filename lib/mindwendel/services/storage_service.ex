@@ -3,14 +3,19 @@ defmodule Mindwendel.Services.StorageService do
   require Logger
 
   def store_file(filename, file_path, content_type, s3_client \\ storage_provider()) do
-    {:ok, file} = File.read(file_path)
+    case File.read(file_path) do
+      {:ok, file} ->
+        case Vault.encrypt(file) do
+          {:ok, encrypted_file} ->
+            store_encrypted_file(filename, encrypted_file, content_type, s3_client)
 
-    case Vault.encrypt(file) do
-      {:ok, encrypted_file} ->
-        store_encrypted_file(filename, encrypted_file, content_type, s3_client)
+          {:error, error_message} ->
+            {:error, "Issue while encrypting file: #{inspect(error_message)}"}
+        end
 
-      {:error, error_message} ->
-        {:error, "Issue while encrypting file: #{inspect(error_message)}"}
+      {:error, reason} ->
+        Logger.error("Failed to read file #{file_path}: #{inspect(reason)}")
+        {:error, "Failed to read file: #{inspect(reason)}"}
     end
   end
 

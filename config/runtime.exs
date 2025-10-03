@@ -181,9 +181,8 @@ feature_file_upload = EnvHelper.enabled?("MW_FEATURE_IDEA_FILE_UPLOAD", "true")
 
 feature_privacy_imprint_enabled = EnvHelper.enabled?("MW_FEATURE_LEGAL_PRIVACY_LINKS", "false")
 
-# enable/disable brainstorming teasers and configure delete brainstormings option:
+# configure options:
 config :mindwendel, :options,
-  feature_brainstorming_teasers: EnvHelper.enabled?("MW_FEATURE_BRAINSTORMING_TEASER", "true"),
   feature_file_upload: feature_file_upload,
   feature_brainstorming_removal_after_days: delete_brainstormings_after_days,
   feature_privacy_imprint_enabled: feature_privacy_imprint_enabled,
@@ -191,14 +190,24 @@ config :mindwendel, :options,
   csp_relax: config_env() == :dev
 
 if config_env() == :prod || config_env() == :dev do
+  # Build cron jobs list conditionally
+  cron_jobs = [
+    {System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_CRON", "@midnight"),
+     Mindwendel.Worker.RemoveBrainstormingsAndUsersAfterPeriodWorker}
+  ]
+
+  # Only add AI cleanup worker if AI is enabled
+  cron_jobs =
+    if System.get_env("MW_AI_ENABLED") == "true" do
+      cron_jobs ++ [{"@midnight", Mindwendel.Workers.AiTokenCleanupWorker}]
+    else
+      cron_jobs
+    end
+
   config :mindwendel, Oban,
     repo: Mindwendel.Repo,
     plugins: [
-      {Oban.Plugins.Cron,
-       crontab: [
-         {System.get_env("MW_FEATURE_BRAINSTORMING_REMOVAL_CRON", "@midnight"),
-          Mindwendel.Worker.RemoveBrainstormingsAndUsersAfterPeriodWorker}
-       ]}
+      {Oban.Plugins.Cron, crontab: cron_jobs}
     ],
     queues: [default: 1]
 end
@@ -227,4 +236,96 @@ if feature_file_upload and (config_env() == :prod || config_env() == :dev) do
     access_key_id: System.fetch_env!("OBJECT_STORAGE_USER"),
     secret_access_key: System.fetch_env!("OBJECT_STORAGE_PASSWORD")
   )
+end
+
+# configure ai only in prod and dev, not test. default is disabled:
+if config_env() == :prod || config_env() == :dev do
+  if System.get_env("MW_AI_ENABLED") == "true" do
+    api_key = System.get_env("MW_AI_API_KEY")
+    model = System.get_env("MW_AI_API_MODEL", "gpt-4o-mini")
+
+    # Determine provider and base URL
+    # For openai_compatible, MW_AI_API_BASE_URL is required
+    # For openai (default), base_url defaults to https://api.openai.com/v1
+    {provider, api_base_url} =
+      case System.get_env("MW_AI_API_BASE_URL") do
+        nil -> {:openai, nil}
+        url -> {:openai_compatible, url}
+      end
+
+    # Safe integer parsing helper
+    parse_int = fn env_var, default ->
+      case System.get_env(env_var, Integer.to_string(default)) do
+        value when is_binary(value) ->
+          case Integer.parse(value) do
+            {int, _} -> int
+            :error -> default
+          end
+
+        _ ->
+          default
+      end
+    end
+
+    # Token limits - parse safely with fallback to defaults
+    daily_limit = parse_int.("MW_AI_TOKEN_LIMIT_DAILY", 1_000_000)
+    hourly_limit = parse_int.("MW_AI_TOKEN_LIMIT_HOURLY", 100_000)
+    reset_hour = parse_int.("MW_AI_TOKEN_RESET_HOUR", 0)
+    request_timeout = parse_int.("MW_AI_REQUEST_TIMEOUT", 60_000)
+
+    # Validate configuration
+    cond do
+      !api_key ->
+        raise """
+        AI is enabled but required configuration is missing.
+        When MW_AI_ENABLED=true, you must provide:
+          - MW_AI_API_KEY (required)
+          - MW_AI_API_MODEL (default: gpt-4o-mini)
+          - MW_AI_API_BASE_URL (required only for openai_compatible providers)
+        """
+
+      provider == :openai_compatible && !api_base_url ->
+        raise """
+        AI provider is set to openai_compatible but MW_AI_API_BASE_URL is not configured.
+        For OpenAI-compatible endpoints, you must provide MW_AI_API_BASE_URL.
+        For standard OpenAI, do not set MW_AI_API_BASE_URL.
+        """
+
+      true ->
+        :ok
+    end
+
+    config :mindwendel, :ai,
+      enabled: true,
+      provider: provider,
+      model: model,
+      api_key: api_key,
+      api_base_url: api_base_url,
+      request_timeout: request_timeout,
+      token_limit_daily: daily_limit,
+      token_limit_hourly: hourly_limit,
+      token_reset_hour: reset_hour
+  else
+    config :mindwendel, :ai,
+      enabled: false,
+      provider: nil,
+      model: nil,
+      api_key: nil,
+      api_base_url: nil,
+      request_timeout: 60_000,
+      token_limit_daily: nil,
+      token_limit_hourly: nil,
+      token_reset_hour: 0
+  end
+else
+  config :mindwendel, :ai,
+    enabled: false,
+    provider: nil,
+    model: nil,
+    api_key: nil,
+    api_base_url: nil,
+    request_timeout: 60_000,
+    token_limit_daily: nil,
+    token_limit_hourly: nil,
+    token_reset_hour: 0
 end

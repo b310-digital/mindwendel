@@ -1,10 +1,12 @@
 defmodule MindwendelWeb.LiveHelpersTest do
   use MindwendelWeb.ConnCase, async: true
+  use Mindwendel.ChatCompletionsCase, async: true
   import Phoenix.LiveViewTest
 
   alias Mindwendel.Factory
 
   setup do
+    disable_ai()
     %{brainstorming: Factory.insert!(:brainstorming)}
   end
 

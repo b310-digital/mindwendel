@@ -9,10 +9,23 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 15
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "phoenix"
+          - "ecto"
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/assets" # Location of package manifests
     schedule:
       interval: "weekly"
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
   - package-ecosystem: "docker" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:

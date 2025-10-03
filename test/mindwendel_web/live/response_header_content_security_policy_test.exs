@@ -1,9 +1,12 @@
 defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
   use MindwendelWeb.ConnCase, async: true
+  use Mindwendel.ChatCompletionsCase, async: true
 
   alias Mindwendel.Factory
 
   setup do
+    disable_ai()
+
     %{
       brainstorming: Factory.insert!(:brainstorming)
     }

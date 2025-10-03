@@ -4,6 +4,7 @@ defmodule MindwendelWeb.LiveHelpers do
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.FeatureFlag
   alias Mindwendel.Permissions
+  alias Mindwendel.Services.IdeaService
 
   def has_move_permission(brainstorming, current_user) do
     brainstorming.option_allow_manual_ordering or
@@ -38,14 +39,18 @@ defmodule MindwendelWeb.LiveHelpers do
     Brainstorming.brainstorming_available_until(brainstorming)
   end
 
+  def idea_generation_enabled? do
+    IdeaService.idea_generation_enabled?()
+  end
+
+  def show_idea_file_upload? do
+    FeatureFlag.enabled?(:feature_file_upload)
+  end
+
   def brainstormings_available_until() do
     Timex.Duration.from_days(
       Application.fetch_env!(:mindwendel, :options)[:feature_brainstorming_removal_after_days]
     )
     |> Timex.format_duration(:humanized)
-  end
-
-  def show_idea_file_upload? do
-    FeatureFlag.enabled?(:feature_file_upload)
   end
 end

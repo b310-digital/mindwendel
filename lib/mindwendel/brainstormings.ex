@@ -191,7 +191,14 @@ defmodule Mindwendel.Brainstormings do
       ideas = Repo.all(from idea in Idea, where: idea.brainstorming_id == ^brainstorming.id)
       # delete_idea deletes the idea and potentially associated files
       Enum.each(ideas, fn idea -> Ideas.delete_idea(idea) end)
-      Repo.delete(brainstorming)
+
+      case Repo.delete(brainstorming) do
+        {:ok, deleted_brainstorming} ->
+          deleted_brainstorming
+
+        {:error, changeset} ->
+          Repo.rollback(changeset)
+      end
     end)
   end
 
@@ -326,30 +333,19 @@ defmodule Mindwendel.Brainstormings do
     {:ok, brainstorming}
   end
 
-  @doc """
-  Returns a broadcast status tuple
-
-  ## Examples
-
-      iex> broadcast({:ok, %Idea{}}, :idea_added)
-      {:ok, %Idea{}}
-
-  """
   def broadcast({:ok, %Idea{} = idea}, event) do
+    # Check if associations are loaded; if not, preload them as a fallback
+    idea_with_associations =
+      if idea_associations_loaded?(idea) do
+        idea
+      else
+        preload_idea_for_broadcast(idea)
+      end
+
     Phoenix.PubSub.broadcast(
       Mindwendel.PubSub,
       "brainstormings:" <> idea.brainstorming_id,
-      {
-        event,
-        idea
-        |> Repo.preload([
-          :link,
-          :likes,
-          :idea_labels,
-          :files,
-          :comments
-        ])
-      }
+      {event, idea_with_associations}
     )
 
     {:ok, idea}
@@ -390,4 +386,36 @@ defmodule Mindwendel.Brainstormings do
   end
 
   def broadcast({:error, _reason} = error, _event), do: error
+
+  @doc """
+  Preloads all associations needed for broadcasting an Idea.
+  This function should be called before passing an idea to broadcast/2 to avoid N+1 queries.
+
+  ## Examples
+
+      iex> preload_idea_for_broadcast(%Idea{})
+      %Idea{...}
+
+  """
+  def preload_idea_for_broadcast(%Idea{} = idea) do
+    idea
+    |> Repo.preload([
+      :link,
+      :likes,
+      :idea_labels,
+      :files,
+      :comments
+    ])
+  end
+
+  # Private helper to check if all required associations are loaded
+  # Note: For has_one associations like :link, Ecto.assoc_loaded?/1 returns true
+  # even when the value is nil (meaning no link exists), which is correct behavior
+  defp idea_associations_loaded?(%Idea{} = idea) do
+    Ecto.assoc_loaded?(idea.link) and
+      Ecto.assoc_loaded?(idea.likes) and
+      Ecto.assoc_loaded?(idea.idea_labels) and
+      Ecto.assoc_loaded?(idea.files) and
+      Ecto.assoc_loaded?(idea.comments)
+  end
 end

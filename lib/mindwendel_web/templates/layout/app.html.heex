@@ -91,12 +91,12 @@
 </nav>
 <main role="main" class="container">
   <%= if Phoenix.Flash.get(@flash, :info) do %>
-    <p id="alert-danger" class="alert alert-info" role="alert">
+    <p id="alert-info" class="alert alert-info" role="alert">
       {Phoenix.Flash.get(@flash, :info)}
     </p>
   <% end %>
   <%= if Phoenix.Flash.get(@flash, :error) do %>
-    <p id="alert-danger" class="alert alert-danger" role="alert">
+    <p id="alert-error" class="alert alert-danger" role="alert">
       {Phoenix.Flash.get(@flash, :error)}
     </p>
   <% end %>

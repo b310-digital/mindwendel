@@ -1,12 +1,13 @@
 defmodule MindwendelWeb.BrainstormingLive.ShowIdeaDeleteTest do
   use MindwendelWeb.ConnCase, async: true
-
+  use Mindwendel.ChatCompletionsCase, async: true
   import Phoenix.LiveViewTest
   alias Mindwendel.Accounts
 
   alias Mindwendel.Factory
 
   setup %{conn: conn} do
+    disable_ai()
     brainstorming = Factory.insert!(:brainstorming)
     current_user_id = Ecto.UUID.generate()
     user = Factory.insert!(:user, id: current_user_id)
@@ -85,6 +86,6 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaDeleteTest do
   end
 
   defp html_selector_button_idea_delete_link do
-    "a[@title='Delete idea']"
+    "a[title='Delete idea']"
   end
 end

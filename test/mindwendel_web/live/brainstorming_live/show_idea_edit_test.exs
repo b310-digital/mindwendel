@@ -1,5 +1,6 @@
 defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
   use MindwendelWeb.ConnCase, async: true
+  use Mindwendel.ChatCompletionsCase, async: true
   import Phoenix.LiveViewTest
   alias Mindwendel.Accounts
   alias Mindwendel.Accounts.User
@@ -7,6 +8,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
   alias Mindwendel.Factory
 
   setup %{conn: conn} do
+    disable_ai()
     brainstorming = Factory.insert!(:brainstorming)
     lane = Enum.at(brainstorming.lanes, 0)
     current_user_id = Ecto.UUID.generate()

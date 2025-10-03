@@ -1,5 +1,6 @@
 defmodule MindwendelWeb.BrainstormingLiveTest do
   use MindwendelWeb.ConnCase, async: true
+  use Mindwendel.ChatCompletionsCase, async: true
   import Phoenix.LiveViewTest
 
   alias Mindwendel.Accounts
@@ -7,6 +8,10 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
   alias Mindwendel.Factory
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Repo
+
+  setup do
+    disable_ai()
+  end
 
   import Mindwendel.BrainstormingsFixtures
   import Mindwendel.IdeasFixtures
@@ -319,9 +324,7 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
         |> live(~p"/brainstormings/#{brainstorming.id}")
 
       assert view
-             |> has_element?(
-               ".btn[data-testid=\"#{selected_ideal_label.id}\"][disabled='disabled']"
-             )
+             |> has_element?(".btn[data-testid=\"#{selected_ideal_label.id}\"][disabled]")
     end
   end
 
