@@ -249,7 +249,7 @@ AI features are disabled by default. When enabled, users can generate ideas usin
 
 ### Localization
 
-Currently, there are two language files available, german (`de`) and english (`en`). To set the default_locale, you can set `MW_DEFAULT_LOCALE`. The default is english.
+Currently, there are three language files available, german (`de`), english (`en`) and italian (`it`). To set the default_locale, you can set `MW_DEFAULT_LOCALE`. The default is english.
 
 ## Testimonials
 
