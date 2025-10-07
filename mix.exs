@@ -68,7 +68,7 @@ defmodule Mindwendel.MixProject do
       {:jason, "1.4.4"},
       {:oban, "2.20.1"},
       {:plug_cowboy, "2.7.4"},
-      {:cowboy, "2.14.0"},
+      {:cowboy, "2.14.1"},
       {:postgrex, "0.21.1"},
       {:sobelow, "0.14.0", only: [:dev, :test], runtime: false},
       {:credo, "1.7.12", only: [:dev, :test], runtime: false},
@@ -80,12 +80,12 @@ defmodule Mindwendel.MixProject do
       {:libcluster, "3.5.0"},
       {:tzdata, "1.1.3"},
       {:waffle, "~> 1.1"},
-      {:ex_aws, "2.5.11"},
+      {:ex_aws, "2.6.0"},
       {:ex_aws_s3, "2.5.8"},
       {:cloak, "1.1.4"},
       {:lazy_html, ">= 0.1.0", only: :test},
       {:openai_ex, "0.9.17"},
-      {:mox, "1.1.0", only: :test}
+      {:mox, "1.2.0", only: :test}
     ]
   end
 
