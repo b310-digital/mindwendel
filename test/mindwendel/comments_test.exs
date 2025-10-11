@@ -1,9 +1,9 @@
 defmodule Mindwendel.CommentsTest do
   use Mindwendel.DataCase, async: true
-  alias Mindwendel.Factory
 
-  alias Mindwendel.Comments
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Comments
+  alias Mindwendel.Factory
 
   setup do
     idea = Factory.insert!(:idea)

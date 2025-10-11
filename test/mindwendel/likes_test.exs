@@ -1,8 +1,9 @@
 defmodule Mindwendel.LikesTest do
   use Mindwendel.DataCase, async: true
+
+  alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Factory
   alias Mindwendel.Likes
-  alias Mindwendel.Brainstormings.Like
 
   setup do
     user = Factory.insert!(:user)

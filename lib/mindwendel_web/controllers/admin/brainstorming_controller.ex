@@ -1,8 +1,11 @@
 defmodule MindwendelWeb.Admin.BrainstormingController do
   use MindwendelWeb, :controller
+
+  alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
-  alias Mindwendel.Ideas
   alias Mindwendel.CSVFormatter
+  alias Mindwendel.Ideas
+  alias Mindwendel.Services.SessionService
 
   plug :fetch_user
 
@@ -35,8 +38,8 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
   end
 
   defp fetch_user(conn, _params) do
-    current_user_id = Mindwendel.Services.SessionService.get_current_user_id(get_session(conn))
-    current_user = Mindwendel.Accounts.get_user(current_user_id)
+    current_user_id = SessionService.get_current_user_id(get_session(conn))
+    current_user = Accounts.get_user(current_user_id)
 
     assign(conn, :current_user, current_user)
   end

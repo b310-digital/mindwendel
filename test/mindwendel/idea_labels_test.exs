@@ -1,11 +1,12 @@
 defmodule Mindwendel.IdeaLabelsTest do
   use Mindwendel.DataCase, async: true
-  alias Mindwendel.Factory
 
-  alias Mindwendel.Ideas
-  alias Mindwendel.IdeaLabels
-  alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.IdeaIdeaLabel
+  alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Factory
+  alias Mindwendel.IdeaLabels
+  alias Mindwendel.Ideas
 
   setup do
     brainstorming = Factory.insert!(:brainstorming, %{labels: [Factory.build(:idea_label)]})
@@ -124,6 +125,65 @@ defmodule Mindwendel.IdeaLabelsTest do
       IdeaLabels.remove_idea_label_from_idea(idea, idea_label.id)
 
       assert Enum.empty?(Repo.all(IdeaIdeaLabel))
+    end
+  end
+
+  describe "replace_labels_for_brainstorming/2" do
+    setup %{brainstorming: brainstorming, idea: idea} do
+      idea = Repo.preload(idea, :idea_labels)
+      %{brainstorming: brainstorming, idea: idea}
+    end
+
+    test "replaces existing assignments and broadcasts lanes update", %{
+      brainstorming: brainstorming,
+      idea: idea
+    } do
+      first_label = hd(brainstorming.labels)
+      second_label = Factory.insert!(:idea_label, brainstorming: brainstorming)
+
+      {:ok, _} = IdeaLabels.add_idea_label_to_idea(idea, first_label.id)
+      Brainstormings.subscribe(brainstorming.id)
+
+      assert {:ok, 1} =
+               IdeaLabels.replace_labels_for_brainstorming(brainstorming.id, [
+                 %{idea_id: idea.id, label_ids: [second_label.id]}
+               ])
+
+      reloaded =
+        idea
+        |> Repo.reload!()
+        |> Repo.preload(:idea_labels)
+
+      assert Enum.map(reloaded.idea_labels, & &1.id) == [second_label.id]
+      assert_receive {:lanes_updated, _lanes}
+    end
+
+    test "returns ok with zero and avoids broadcast for empty assignments", %{
+      brainstorming: brainstorming
+    } do
+      Brainstormings.subscribe(brainstorming.id)
+
+      assert {:ok, 0} =
+               IdeaLabels.replace_labels_for_brainstorming(brainstorming.id, [])
+
+      refute_receive {:lanes_updated, _}
+    end
+
+    test "rolls back all changes on error", %{brainstorming: brainstorming, idea: idea} do
+      [label | _] = brainstorming.labels
+      {:ok, _} = IdeaLabels.add_idea_label_to_idea(idea, label.id)
+
+      assert {:error, _reason} =
+               IdeaLabels.replace_labels_for_brainstorming(brainstorming.id, [
+                 %{idea_id: idea.id, label_ids: ["non-existent-label"]}
+               ])
+
+      persisted =
+        idea
+        |> Repo.reload!()
+        |> Repo.preload(:idea_labels)
+
+      assert Enum.map(persisted.idea_labels, & &1.id) == [label.id]
     end
   end
 

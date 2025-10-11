@@ -10,8 +10,8 @@ defmodule Mindwendel.AI.TokenTrackingService do
   """
 
   import Ecto.Query
-  alias Mindwendel.Repo
   alias Mindwendel.AI.TokenUsage
+  alias Mindwendel.Repo
 
   require Logger
 

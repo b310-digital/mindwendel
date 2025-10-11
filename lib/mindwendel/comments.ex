@@ -1,9 +1,9 @@
 defmodule Mindwendel.Comments do
   import Ecto.Query, warn: false
-  alias Mindwendel.Repo
-  alias Mindwendel.Brainstormings.Comment
   alias Mindwendel.Brainstormings
+  alias Mindwendel.Brainstormings.Comment
   alias Mindwendel.Ideas
+  alias Mindwendel.Repo
 
   require Logger
 

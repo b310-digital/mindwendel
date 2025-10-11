@@ -9,6 +9,7 @@ defmodule Mindwendel.FeatureFlag do
   def enabled?(flag_name) do
     :mindwendel
     |> Application.fetch_env!(:options)
-    |> Access.get(flag_name)
+    |> Keyword.get(flag_name, false)
+    |> Kernel.==(true)
   end
 end

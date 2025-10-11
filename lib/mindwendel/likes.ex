@@ -4,10 +4,10 @@ defmodule Mindwendel.Likes do
   """
 
   import Ecto.Query, warn: false
-  alias Mindwendel.Repo
-  alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Like
+  alias Mindwendel.Ideas
+  alias Mindwendel.Repo
 
   require Logger
 
@@ -63,9 +63,12 @@ defmodule Mindwendel.Likes do
 
   """
   def delete_like(idea_id, user_id) do
-    # we ignore the result, delete_all returns the count of deleted items. We'll reload and broadcast the idea either way:
+    # Ignore the result; delete_all returns the count of deleted items. We'll reload
+    # and broadcast the idea either way.
     Repo.delete_all(
-      from like in Like, where: like.user_id == ^user_id and like.idea_id == ^idea_id
+      from(like in Like,
+        where: like.user_id == ^user_id and like.idea_id == ^idea_id
+      )
     )
 
     idea =

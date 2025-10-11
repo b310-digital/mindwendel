@@ -13,15 +13,14 @@ defmodule MindwendelWeb.BrainstormingLiveAITokenLimitTest do
   import Phoenix.LiveViewTest
   import Mindwendel.BrainstormingsFixtures
 
-  alias Mindwendel.AI.TokenTrackingService
   alias Mindwendel.Accounts
+  alias Mindwendel.AI.TokenTrackingService
 
   describe "AI generation with token limits" do
     setup do
       brainstorming = brainstorming_fixture()
-      # Allow multiple calls to enabled? as the template checks it
+
       Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
-      |> allow(self(), fn -> true end)
       |> stub(:enabled?, fn -> true end)
 
       # Get moderating user from brainstorming
@@ -44,6 +43,8 @@ defmodule MindwendelWeb.BrainstormingLiveAITokenLimitTest do
         conn
         |> init_test_session(%{current_user_id: moderating_user.id})
         |> live(~p"/brainstormings/#{brainstorming.id}")
+
+      allow_chat_completions(view.pid)
 
       # Trigger AI idea generation
       view |> element("button[phx-click='generate_ai_ideas']") |> render_click()
@@ -70,6 +71,8 @@ defmodule MindwendelWeb.BrainstormingLiveAITokenLimitTest do
         |> init_test_session(%{current_user_id: moderating_user.id})
         |> live(~p"/brainstormings/#{brainstorming.id}")
 
+      allow_chat_completions(view.pid)
+
       # Trigger AI idea generation
       view |> element("button[phx-click='generate_ai_ideas']") |> render_click()
 
@@ -95,11 +98,16 @@ defmodule MindwendelWeb.BrainstormingLiveAITokenLimitTest do
         |> init_test_session(%{current_user_id: moderating_user.id})
         |> live(~p"/brainstormings/#{brainstorming.id}")
 
+      allow_chat_completions(view.pid)
+
       # Trigger AI idea generation
-      view |> element("button[phx-click='generate_ai_ideas']") |> render_click()
+      click_html =
+        view
+        |> element("button[phx-click='generate_ai_ideas']")
+        |> render_click()
 
       # Initial loading message should appear
-      assert render(view) =~ "Generating ideas... thinking..."
+      assert click_html =~ "Generating ideas..."
 
       # Wait for async message to process
       :timer.sleep(200)
@@ -122,6 +130,8 @@ defmodule MindwendelWeb.BrainstormingLiveAITokenLimitTest do
         conn
         |> init_test_session(%{current_user_id: moderating_user.id})
         |> live(~p"/brainstormings/#{brainstorming.id}")
+
+      allow_chat_completions(view.pid)
 
       # Trigger AI idea generation
       view |> element("button[phx-click='generate_ai_ideas']") |> render_click()
@@ -149,9 +159,8 @@ defmodule MindwendelWeb.BrainstormingLiveAITokenLimitTest do
   describe "Token limit boundary conditions" do
     setup do
       brainstorming = brainstorming_fixture()
-      # Allow multiple calls to enabled? as the template checks it
+
       Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
-      |> allow(self(), fn -> true end)
       |> stub(:enabled?, fn -> true end)
 
       # Get moderating user from brainstorming
@@ -176,6 +185,8 @@ defmodule MindwendelWeb.BrainstormingLiveAITokenLimitTest do
         conn
         |> init_test_session(%{current_user_id: moderating_user.id})
         |> live(~p"/brainstormings/#{brainstorming.id}")
+
+      allow_chat_completions(view.pid)
 
       # Trigger AI idea generation - should succeed
       view |> element("button[phx-click='generate_ai_ideas']") |> render_click()
@@ -203,6 +214,8 @@ defmodule MindwendelWeb.BrainstormingLiveAITokenLimitTest do
         |> init_test_session(%{current_user_id: moderating_user.id})
         |> live(~p"/brainstormings/#{brainstorming.id}")
 
+      allow_chat_completions(view.pid)
+
       # Trigger AI idea generation - should be blocked
       view |> element("button[phx-click='generate_ai_ideas']") |> render_click()
 
@@ -213,5 +226,10 @@ defmodule MindwendelWeb.BrainstormingLiveAITokenLimitTest do
       html = render(view)
       assert html =~ "Failed to generate ideas"
     end
+  end
+
+  defp allow_chat_completions(pid) do
+    Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
+    |> allow(self(), pid)
   end
 end

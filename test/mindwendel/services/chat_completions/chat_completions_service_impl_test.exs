@@ -1,8 +1,8 @@
 defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImplTest do
   use Mindwendel.DataCase, async: true
 
-  alias Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl
   alias Mindwendel.AI.TokenTrackingService
+  alias Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl
 
   describe "generate_ideas/1" do
     setup do

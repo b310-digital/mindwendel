@@ -3,8 +3,8 @@ defmodule MindwendelWeb.Admin.BrainstormingLive.Edit do
 
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.IdeaLabelFactory
   alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.IdeaLabelFactory
   alias Mindwendel.Repo
 
   import Ecto.Query

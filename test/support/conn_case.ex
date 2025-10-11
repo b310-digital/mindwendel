@@ -17,6 +17,9 @@ defmodule MindwendelWeb.ConnCase do
 
   use ExUnit.CaseTemplate
   import Mox
+  alias Ecto.Adapters.SQL.Sandbox
+  alias Mindwendel.Repo
+  alias Phoenix.ConnTest
 
   using do
     quote do
@@ -41,13 +44,13 @@ defmodule MindwendelWeb.ConnCase do
   setup :setup_ai_disabled_stub
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Mindwendel.Repo)
+    :ok = Sandbox.checkout(Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Mindwendel.Repo, {:shared, self()})
+      Sandbox.mode(Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    {:ok, conn: ConnTest.build_conn()}
   end
 
   # Provide default AI disabled stub for all ConnCase tests

@@ -1,9 +1,10 @@
 defmodule Mindwendel.AccountsMergeBrainstormingUserTest do
   use Mindwendel.DataCase, async: true
-  alias Mindwendel.Factory
+
   alias Mindwendel.Accounts
-  alias Mindwendel.Accounts.User
   alias Mindwendel.Accounts.BrainstormingUser
+  alias Mindwendel.Accounts.User
+  alias Mindwendel.Factory
 
   setup do
     %{user: Factory.insert!(:user)}

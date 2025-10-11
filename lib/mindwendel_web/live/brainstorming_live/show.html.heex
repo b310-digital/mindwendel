@@ -40,6 +40,18 @@
         </button>
       <% end %>
 
+      <%= if ai_clustering_enabled?() and has_moderating_permission(@brainstorming.id, @current_user) do %>
+        <button
+          type="button"
+          class="btn btn-outline-primary m-1"
+          phx-click="cluster_ai_ideas"
+          phx-value-id={@brainstorming.id}
+          title={gettext("Cluster ideas")}
+        >
+          <i class="bi-diagram-3"></i> {gettext("Cluster")}
+        </button>
+      <% end %>
+
       <.link
         patch={~p"/brainstormings/#{@brainstorming.id}/share"}
         class="btn btn-secondary m-1"

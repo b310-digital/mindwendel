@@ -1,12 +1,13 @@
 defmodule Mindwendel.AccountsTest do
   use Mindwendel.DataCase, async: true
-  alias Mindwendel.Factory
+
   alias Mindwendel.Accounts
-  alias Mindwendel.Brainstormings
-  alias Mindwendel.Accounts.User
-  alias Mindwendel.Accounts.BrainstormingUser
   alias Mindwendel.Accounts.BrainstormingModeratingUser
+  alias Mindwendel.Accounts.BrainstormingUser
+  alias Mindwendel.Accounts.User
+  alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Factory
 
   import ExUnit.CaptureLog
 
@@ -130,14 +131,15 @@ defmodule Mindwendel.AccountsTest do
     } do
       Factory.insert!(:idea, brainstorming: old_brainstorming, user: old_user)
 
-      # we want to make sure that the database is not handling this with a foreign key restraint, but rather that it's handled in the app:
+      # Ensure the database is not enforcing this via foreign keys but that the
+      # application handles the constraint.
       log = capture_log(fn -> Accounts.delete_inactive_users() end)
 
       assert Repo.exists?(from u in User, where: u.id == ^old_user.id)
 
-      # The code only logs normal messages on `info` level which tests don't print (only warning and above)
-      # since we're run async we can't assert an empty log (picks up log messages from other tests as well),
-      # but we can assert we're not hitting the messages we know we'll throw.
+      # The code only logs normal messages on `info` level which tests don't print
+      # (only warning and above). Since tests run async we can't assert an empty
+      # log, but we can assert we do not hit the messages we expect to see.
       refute log =~ ~r/error.*delete.*inactive.*user.*#{old_user.id}/i
     end
 
@@ -149,7 +151,8 @@ defmodule Mindwendel.AccountsTest do
         inserted_at: ~N[2021-01-01 10:00:00]
       )
 
-      # we want to make sure that the database is not handling this with a foreign key restraint, but rather that it's handled in the app:
+      # Ensure the database is not enforcing this via foreign keys but that the
+      # application handles the constraint.
       log = capture_log(fn -> Accounts.delete_inactive_users() end)
 
       assert Repo.exists?(from u in User, where: u.id == ^old_user.id)
@@ -164,13 +167,13 @@ defmodule Mindwendel.AccountsTest do
         inserted_at: ~N[2021-01-01 10:00:00]
       )
 
-      # we want to make sure that the database is not handling this with a foreign key restraint, but rather that it's handled in the app:
+      # Ensure the database is not enforcing this via foreign keys but that the
+      # application handles the constraint.
       log = capture_log(fn -> Accounts.delete_inactive_users() end)
 
       assert Repo.exists?(from u in User, where: u.id == ^old_user.id)
-      # we don't expect actual logs but due to async running other tests may emit logs at
-      # the same time and so we want to make sure here that no delete logs around the user
-      # are emitted
+      # We do not expect actual logs, but other async tests may emit logs at the
+      # same time. Make sure no delete logs around the user are emitted.
       refute log =~ ~r/error.*delete.*inactive.*user.*#{old_user.id}/i
     end
   end

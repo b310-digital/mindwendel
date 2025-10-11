@@ -1,7 +1,8 @@
 defmodule Mindwendel.LocalStorageTest do
   use Mindwendel.DataCase, async: true
-  alias Mindwendel.Factory
+
   alias Mindwendel.Accounts
+  alias Mindwendel.Factory
 
   describe "brainstormings_from_local_storage_and_session" do
     test "returns empty list when input is nil" do

@@ -6,13 +6,13 @@ defmodule Mindwendel.Brainstormings do
   import Ecto.Query, warn: false
   alias Mindwendel.Repo
 
-  alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Accounts.User
+  alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Lane
-  alias Mindwendel.Lanes
   alias Mindwendel.Ideas
-  alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Lanes
 
   require Logger
 
@@ -91,6 +91,7 @@ defmodule Mindwendel.Brainstormings do
           |> Repo.preload([
             :users,
             :moderating_users,
+            lanes: from(lane in Lane, order_by: lane.position_order),
             labels: from(idea_label in IdeaLabel, order_by: idea_label.position_order)
           ])
 

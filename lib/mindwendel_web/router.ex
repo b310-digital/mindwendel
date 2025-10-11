@@ -17,13 +17,17 @@ defmodule MindwendelWeb.Router do
     # See https://furlough.merecomplexities.com/elixir/phoenix/security/2021/02/26/content-security-policy-configuration-in-phoenix.html
     # See https://elixirforum.com/t/phoenix-blog-post-content-security-policy-configuration-in-phoenix-with-liveview/37809
     #
-    # However for this to work, we would need to know / define the env var URL_HOST and URL_PORT during compile-time as the router and its pipelines are compiled.
-    # This is certainly a problem when deploying the app with `mix release` as we do not know the URl_HOST etc. at this moment.
+    # However for this to work, we would need to know or define URL_HOST and
+    # URL_PORT during compile-time as the router and its pipelines are compiled.
+    # This is a problem when deploying with `mix release` because the host is not
+    # known yet.
     #
-    # Therefore, we are setting the CSP header dynamically in a custom plug after we set the other secure browser headers.
+    # Therefore, we set the CSP header dynamically in a custom plug after we set
+    # the other secure browser headers.
     #
-    # The static analysis tool sobelow wants us to include the CSP header when calling this plug. It does not recognize that
-    # the CSP header is included in a custom plug. This is why we need to skip this check here.
+    # The static analysis tool sobelow wants us to include the CSP header when
+    # calling this plug. It does not recognize that the CSP header is included in
+    # a custom plug. This is why we need to skip this check here.
     # sobelow_skip(["Config.CSP"])
     plug(:put_secure_browser_headers)
     plug(Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy)

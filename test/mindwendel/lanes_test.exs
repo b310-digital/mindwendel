@@ -1,11 +1,12 @@
 defmodule Mindwendel.LanesTest do
   use Mindwendel.DataCase, async: true
-  alias Mindwendel.Lanes
+
+  alias Mindwendel.Attachments
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Factory
+  alias Mindwendel.Lanes
   import Mindwendel.BrainstormingsFixtures
   import Mindwendel.LanesFixtures
-  alias Mindwendel.Attachments
-  alias Mindwendel.Factory
 
   setup do
     label = Factory.insert!(:idea_label)

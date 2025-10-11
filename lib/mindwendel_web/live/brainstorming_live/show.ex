@@ -5,20 +5,25 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
-  alias Mindwendel.Lanes
-  alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Ideas
+  alias Mindwendel.Lanes
   alias Mindwendel.LocalStorage
+  alias Mindwendel.Services.IdeaClusteringService
   alias Mindwendel.Services.IdeaService
+  alias Mindwendel.Services.SessionService
+  alias MindwendelWeb.IdeaLive.CardComponent
+  alias MindwendelWeb.IdeaLive.ShowComponent
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
     if connected?(socket), do: Brainstormings.subscribe(id)
 
-    # If the admin secret in the URL after the hash (only available inside the client session) is given, add the user as moderating user to the brainstorming.
+    # If the admin secret in the URL after the hash (only available inside the client
+    # session) is given, add the user as moderating user to the brainstorming.
     # If not, add the user as normal user.
-    current_user_id = Mindwendel.Services.SessionService.get_current_user_id(session)
+    current_user_id = SessionService.get_current_user_id(session)
 
     case Brainstormings.get_brainstorming(id) do
       {:ok, brainstorming} ->
@@ -33,7 +38,7 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
         lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
         # load the user, also for permissions of brainstormings
-        current_user = Mindwendel.Accounts.get_user(current_user_id)
+        current_user = Accounts.get_user(current_user_id)
 
         {
           :ok,
@@ -69,7 +74,8 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   @impl true
   def handle_event("brainstormings_from_local_storage", brainstormings_stored, socket) do
-    # Brainstormings are used from session data and local storage. Session data can be removed later and is only used for a transition period.
+    # Brainstormings are used from session data and local storage. Session data can be
+    # removed later and is only used for a transition period.
     valid_stored_brainstormings =
       LocalStorage.brainstormings_from_local_storage_and_session(
         brainstormings_stored,
@@ -87,9 +93,23 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     # If the request times out, handle_info will replace this flash with an error message
     if has_moderating_permission(id, socket.assigns.current_user) do
       send(self(), {:do_generate_ai_ideas, id})
-      {:noreply, put_flash(socket, :info, gettext("Generating ideas... thinking..."))}
+      {:noreply, put_flash(socket, :info, gettext("Generating ideas..."))}
     else
       {:noreply, put_flash(socket, :error, gettext("Permission denied"))}
+    end
+  end
+
+  def handle_event("cluster_ai_ideas", %{"id" => id}, socket) do
+    cond do
+      not ai_clustering_enabled?() ->
+        {:noreply, put_flash(socket, :error, gettext("AI clustering is disabled"))}
+
+      not has_moderating_permission(id, socket.assigns.current_user) ->
+        {:noreply, put_flash(socket, :error, gettext("Permission denied"))}
+
+      true ->
+        send(self(), {:do_cluster_ai_ideas, id})
+        {:noreply, put_flash(socket, :info, gettext("Clustering ideas..."))}
     end
   end
 
@@ -146,10 +166,10 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
 
   def handle_info({:idea_updated, idea}, socket) do
     # first, update the specific card of the idea
-    send_update(MindwendelWeb.IdeaLive.CardComponent, id: idea.id, idea: idea)
+    send_update(CardComponent, id: idea.id, idea: idea)
     # if the idea show modal is opened, also update the idea within the modal
     if socket.assigns.live_action == :show_idea and socket.assigns.idea.id == idea.id do
-      send_update(MindwendelWeb.IdeaLive.ShowComponent, id: :show, idea: idea)
+      send_update(ShowComponent, id: :show, idea: idea)
     end
 
     {:noreply, socket}
@@ -163,8 +183,8 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   end
 
   def handle_info({:brainstorming_updated, brainstorming}, socket) do
-    # the backdrop of the bootstrap modal gets sometimes stuck on the pages as its out of reach for the component
-    # therefore we patch the url to reload it
+    # The backdrop of the bootstrap modal sometimes gets stuck on the page because
+    # it is out of reach for the component. Patch the URL to reload it.
 
     {:noreply,
      socket
@@ -183,6 +203,19 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     end
   end
 
+  def handle_info({:do_cluster_ai_ideas, id}, socket) do
+    cond do
+      not has_moderating_permission(id, socket.assigns.current_user) ->
+        {:noreply, put_flash(socket, :error, gettext("Permission denied"))}
+
+      not ai_clustering_enabled?() ->
+        {:noreply, put_flash(socket, :error, gettext("AI clustering is disabled"))}
+
+      true ->
+        do_cluster_ai_ideas(id, socket)
+    end
+  end
+
   defp do_generate_ai_ideas(id, socket) do
     with {:ok, brainstorming} <- Brainstormings.get_brainstorming(id),
          brainstorming <- Mindwendel.Repo.preload(brainstorming, :lanes),
@@ -194,20 +227,25 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     end
   end
 
-  defp handle_ai_generation_result({:ok, [_ | _] = ideas}, id, socket) do
-    lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
-
-    {:noreply,
-     socket
-     |> assign(:lanes, lanes)
-     |> put_flash(
-       :info,
-       gettext("%{length} idea(s) generated", %{length: length(ideas)})
-     )}
+  defp do_cluster_ai_ideas(id, socket) do
+    with {:ok, brainstorming} <- Brainstormings.get_brainstorming(id),
+         result <- IdeaClusteringService.cluster_labels(brainstorming) do
+      handle_ai_clustering_result(result, id, socket)
+    else
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, gettext("Brainstorming not found"))}
+    end
   end
 
-  defp handle_ai_generation_result({:ok, []}, _id, socket) do
-    {:noreply, put_flash(socket, :error, gettext("No ideas generated"))}
+  defp handle_ai_generation_result({:ok, ideas}, id, socket) do
+    lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
+
+    socket =
+      socket
+      |> assign(:lanes, lanes)
+      |> put_generation_flash(ideas)
+
+    {:noreply, socket}
   end
 
   defp handle_ai_generation_result({:error, :daily_limit_exceeded}, _id, socket) do
@@ -235,6 +273,64 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   defp handle_ai_generation_result({:error, reason}, _id, socket) do
     Logger.error("AI idea generation failed: #{inspect(reason)}")
     {:noreply, put_flash(socket, :error, gettext("Failed to generate ideas"))}
+  end
+
+  defp put_generation_flash(socket, []),
+    do: put_flash(socket, :error, gettext("No ideas generated"))
+
+  defp put_generation_flash(socket, ideas) do
+    put_flash(
+      socket,
+      :info,
+      gettext("%{length} idea(s) generated", %{length: length(ideas)})
+    )
+  end
+
+  defp handle_ai_clustering_result({:ok, outcome} = result, id, socket)
+       when is_list(outcome) or outcome == :skipped do
+    lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
+
+    socket =
+      socket
+      |> assign(:lanes, lanes)
+      |> maybe_assign_updated_brainstorming(id)
+      |> put_clustering_flash(result)
+
+    {:noreply, socket}
+  end
+
+  defp handle_ai_clustering_result({:error, _reason} = result, _id, socket) do
+    {:noreply, put_clustering_flash(socket, result)}
+  end
+
+  defp put_clustering_flash(socket, {:ok, assignments}) when is_list(assignments) do
+    if assignments == [] do
+      put_flash(socket, :info, gettext("No new clustering changes"))
+    else
+      put_flash(socket, :info, gettext("Ideas clustered into labels"))
+    end
+  end
+
+  defp put_clustering_flash(socket, {:ok, :skipped}) do
+    put_flash(socket, :info, gettext("Nothing to cluster right now"))
+  end
+
+  defp put_clustering_flash(socket, {:error, _reason}) do
+    put_flash(socket, :error, gettext("AI clustering failed"))
+  end
+
+  defp maybe_assign_updated_brainstorming(socket, id) do
+    case Brainstormings.get_brainstorming(id) do
+      {:ok, brainstorming} ->
+        assign(socket, :brainstorming, brainstorming)
+
+      {:error, reason} ->
+        Logger.warning(
+          "Failed to refresh brainstorming #{id} after AI clustering: #{inspect(reason)}"
+        )
+
+        socket
+    end
   end
 
   defp apply_action(

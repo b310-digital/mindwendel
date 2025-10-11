@@ -11,7 +11,9 @@ defmodule Mindwendel.Attachments.File do
     field :path, :string
     field :file_type, :string
 
-    # Uploaded files are not deleted automatically, therefore if an idea is deleted and an attachment still present, the attachment db entry should still be available for reference. It has to be deleted first.
+    # Uploaded files are not deleted automatically. If an idea is deleted and an
+    # attachment still present, the attachment db entry should remain available for
+    # reference. It has to be deleted first.
     belongs_to :idea, Idea, on_replace: :raise
 
     timestamps()

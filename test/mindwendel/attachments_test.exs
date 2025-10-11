@@ -1,8 +1,8 @@
 defmodule Mindwendel.AttachmentsTest do
   use Mindwendel.DataCase, async: true
 
-  alias Mindwendel.Factory
   alias Mindwendel.Attachments
+  alias Mindwendel.Factory
 
   describe "get_attached_file" do
     test "returns the file" do

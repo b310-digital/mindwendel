@@ -2,9 +2,9 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
   require Logger
   use MindwendelWeb, :live_component
 
+  alias Mindwendel.Brainstormings
   alias Mindwendel.Ideas
   alias Mindwendel.Lanes
-  alias Mindwendel.Brainstormings
 
   @impl true
   def handle_event("delete_lane", %{"id" => id}, socket) do

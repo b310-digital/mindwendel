@@ -20,10 +20,10 @@ ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-$
 ARG RUNNER_IMAGE="debian:${DEBIAN_VERSION}"
 
 # This is our base image for development as well as building the production image:
-FROM ${BUILDER_IMAGE} as base
+FROM ${BUILDER_IMAGE} AS base
 
 # Install node
-ENV NODE_MAJOR=18
+ENV NODE_MAJOR=22
 
 RUN apt-get -y update
 
@@ -44,24 +44,27 @@ RUN apt-get update && apt-get install -y nodejs \
   apt-get clean && \ 
   rm -f /var/lib/apt/lists/*_*
 
-# prepare build dir
-WORKDIR /app
-
 # install hex + rebar
 RUN mix local.hex --force && \
   mix local.rebar --force
 
-FROM base as development
+FROM base AS development
+RUN groupadd --gid 1000 elixir \
+  && useradd --uid 1000 --gid elixir --shell /bin/bash --create-home elixir
 
-# Install mix dependencies
-COPY mix.exs mix.lock ./
-RUN mix do deps.get
+RUN mkdir -p /usr/local/share/npm-global && \
+  chown -R elixir:elixir /usr/local/share
 
-# Install npm packages:
-COPY assets/package.json assets/package-lock.json ./assets/
-RUN npm install --prefix assets
+# Install global packages
+ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
+ENV PATH=$PATH:/usr/local/share/npm-global/bin
 
-FROM base as production_builder
+WORKDIR /home/elixir/app
+USER elixir
+
+FROM base AS production_builder
+# prepare build dir
+WORKDIR /app
 
 # set build ENV
 ENV MIX_ENV="prod"
@@ -108,7 +111,7 @@ RUN mix release
 
 # start a new build stage so that the final image will only contain
 # the compiled release and other runtime necessities
-FROM ${RUNNER_IMAGE} as production
+FROM ${RUNNER_IMAGE} AS production
 
 RUN apt-get update -y && apt-get install -y ca-certificates libstdc++6 postgresql-client openssl libncurses5 locales \
   && apt-get clean && rm -f /var/lib/apt/lists/*_*

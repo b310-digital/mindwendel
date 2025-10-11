@@ -17,7 +17,7 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
     )
   end
 
-  def content_security_policy_directives() do
+  def content_security_policy_directives do
     [
       "default-src 'none' ;",
 
@@ -27,9 +27,11 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
       # However, the `connect-src 'self'` does not resolve to websocket schemes in all browsers, e.g. Safari,
       # see https://github.com/w3c/webappsec-csp/issues/7 .
       #
-      # Therefore, we need to explicitly add the allowed websocket uris here so that live views will work in Safari in combination with CSP policies.
+      # Therefore, we need to explicitly add the allowed websocket URIs so that live
+      # views will work in Safari in combination with CSP policies.
       # e.g. `connect-src ws://localhost:*` or `connect-src wss://#{@host}` .
-      "connect-src 'self' #{%URI{scheme: get_websocket_scheme(), host: get_host(), port: get_port()}} ;",
+      "connect-src 'self' " <>
+        "#{%URI{scheme: get_websocket_scheme(), host: get_host(), port: get_port()}} ;",
       "font-src    'self' ;",
       "frame-src   'self' ;",
 
@@ -44,40 +46,40 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
     |> Enum.join(" ")
   end
 
-  def get_host() do
+  def get_host do
     :mindwendel
     |> Application.fetch_env!(MindwendelWeb.Endpoint)
     |> Keyword.fetch!(:url)
     |> Keyword.fetch!(:host)
   end
 
-  def get_script_src() do
+  def get_script_src do
     if FeatureFlag.enabled?(:csp_relax),
       do: "'self' 'unsafe-eval'",
       else: "'self'"
   end
 
-  def get_style_src() do
+  def get_style_src do
     if FeatureFlag.enabled?(:csp_relax),
       do: "'self' 'unsafe-inline'",
       else: "'self'"
   end
 
-  def get_scheme() do
+  def get_scheme do
     :mindwendel
     |> Application.fetch_env!(MindwendelWeb.Endpoint)
     |> Keyword.fetch!(:url)
     |> Keyword.fetch!(:scheme)
   end
 
-  def get_port() do
+  def get_port do
     :mindwendel
     |> Application.fetch_env!(MindwendelWeb.Endpoint)
     |> Keyword.fetch!(:url)
     |> Keyword.fetch!(:port)
   end
 
-  def get_websocket_scheme() do
+  def get_websocket_scheme do
     get_scheme() |> get_websocket_scheme()
   end
 

@@ -1,7 +1,7 @@
 defmodule Mindwendel.Attachments do
   import Ecto.Query, warn: false
-  alias Mindwendel.Repo
   alias Mindwendel.Attachments.File
+  alias Mindwendel.Repo
   alias Mindwendel.Services.StorageService
 
   require Logger

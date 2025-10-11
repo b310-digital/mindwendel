@@ -1,15 +1,15 @@
 defmodule Mindwendel.Factory do
-  alias Mindwendel.Repo
-  alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.Idea
-  alias Mindwendel.Brainstormings.Lane
-  alias Mindwendel.Brainstormings.IdeaLabel
-  alias Mindwendel.Brainstormings.IdeaIdeaLabel
-  alias Mindwendel.Brainstormings.Like
-  alias Mindwendel.Brainstormings.Comment
-  alias Mindwendel.Attachments.Link
-  alias Mindwendel.Attachments.File
   alias Mindwendel.Accounts.User
+  alias Mindwendel.Attachments.File
+  alias Mindwendel.Attachments.Link
+  alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.Comment
+  alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Brainstormings.IdeaIdeaLabel
+  alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Brainstormings.Like
+  alias Mindwendel.Repo
 
   def build(:brainstorming) do
     %Brainstorming{

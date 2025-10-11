@@ -1,8 +1,8 @@
 defmodule MindwendelWeb.FileControllerTest do
   use MindwendelWeb.ConnCase, async: true
 
-  alias Mindwendel.Services.Vault
   alias Mindwendel.Factory
+  alias Mindwendel.Services.Vault
 
   @file_dest "priv/static/uploads/encrypted-file-controller-test.jpg"
 

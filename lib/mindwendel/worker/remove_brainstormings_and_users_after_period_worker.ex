@@ -1,7 +1,7 @@
 defmodule Mindwendel.Worker.RemoveBrainstormingsAndUsersAfterPeriodWorker do
   use Oban.Worker, unique: [fields: [:worker], period: 60]
-  alias Mindwendel.Brainstormings
   alias Mindwendel.Accounts
+  alias Mindwendel.Brainstormings
 
   require Logger
 

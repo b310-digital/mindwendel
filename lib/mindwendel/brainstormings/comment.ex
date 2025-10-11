@@ -2,8 +2,8 @@ defmodule Mindwendel.Brainstormings.Comment do
   use Mindwendel.Schema
 
   import Ecto.Changeset
-  alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Accounts.User
+  alias Mindwendel.Brainstormings.Idea
 
   schema "idea_comments" do
     belongs_to :idea, Idea
