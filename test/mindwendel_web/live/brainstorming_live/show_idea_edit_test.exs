@@ -167,7 +167,7 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaEditTest do
     assert ^user_id = Mindwendel.Ideas.get_idea!(idea.id).user_id
   end
 
-  defp html_selector_button_idea_edit_link() do
+  defp html_selector_button_idea_edit_link do
     ".card-body-mindwendel-idea > a:nth-child(2)"
   end
 end

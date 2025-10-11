@@ -2,19 +2,19 @@ defmodule Mindwendel.Brainstormings.Idea do
   use Mindwendel.Schema
 
   import Ecto.Changeset
+  alias Mindwendel.Accounts.User
+  alias Mindwendel.Attachments
+  alias Mindwendel.Attachments.File
+  alias Mindwendel.Attachments.Link
   alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.IdeaLabel
-  alias Mindwendel.Brainstormings.IdeaIdeaLabel
-  alias Mindwendel.Brainstormings.Like
-  alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.Brainstormings.Comment
+  alias Mindwendel.Brainstormings.IdeaIdeaLabel
+  alias Mindwendel.Brainstormings.IdeaLabel
+  alias Mindwendel.Brainstormings.Lane
+  alias Mindwendel.Brainstormings.Like
   alias Mindwendel.FeatureFlag
   alias Mindwendel.Ideas
-  alias Mindwendel.Attachments
-  alias Mindwendel.Attachments.Link
-  alias Mindwendel.Attachments.File
   alias Mindwendel.UrlPreview
-  alias Mindwendel.Accounts.User
 
   @max_file_attachments 2
 

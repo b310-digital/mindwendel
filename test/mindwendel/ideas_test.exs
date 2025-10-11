@@ -1,9 +1,9 @@
 defmodule Mindwendel.IdeasTest do
   use Mindwendel.DataCase, async: true
-  alias Mindwendel.Factory
 
-  alias Mindwendel.Ideas
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Factory
+  alias Mindwendel.Ideas
 
   setup do
     user = Factory.insert!(:user)

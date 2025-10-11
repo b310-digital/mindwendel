@@ -2,9 +2,9 @@ defmodule Mindwendel.Brainstormings.Lane do
   use Mindwendel.Schema
 
   import Ecto.Changeset
-  alias Mindwendel.Lanes
-  alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Lanes
 
   schema "lanes" do
     field :name, :string

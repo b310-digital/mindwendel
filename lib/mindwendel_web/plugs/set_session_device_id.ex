@@ -1,4 +1,6 @@
 defmodule Mindwendel.Plugs.SetSessionUserId do
+  alias Mindwendel.Services.SessionService
+
   # @impl true
   def init(opts) do
     opts
@@ -6,9 +8,9 @@ defmodule Mindwendel.Plugs.SetSessionUserId do
 
   # @impl true
   def call(conn, _opts) do
-    case Mindwendel.Services.SessionService.get_current_user_id(conn) do
+    case SessionService.get_current_user_id(conn) do
       nil ->
-        Mindwendel.Services.SessionService.set_current_user_id(conn)
+        SessionService.set_current_user_id(conn)
 
       _ ->
         conn

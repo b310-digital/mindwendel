@@ -32,16 +32,22 @@ defmodule Mindwendel.ChatCompletionsCase do
     |> stub(:generate_ideas, fn _title, _lanes, _existing_ideas, _locale ->
       {:error, :ai_not_enabled}
     end)
+    |> stub(:classify_labels, fn _title, _labels, _ideas, _locale ->
+      {:error, :ai_not_enabled}
+    end)
 
     :ok
   end
 
   # Helper to explicitly stub AI as disabled (for clarity in tests)
-  def disable_ai() do
+  def disable_ai do
     # Already stubbed in setup, but this allows explicit calls
     Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
     |> stub(:enabled?, fn -> false end)
     |> stub(:generate_ideas, fn _title, _lanes, _existing_ideas, _locale ->
+      {:error, :ai_not_enabled}
+    end)
+    |> stub(:classify_labels, fn _title, _labels, _ideas, _locale ->
       {:error, :ai_not_enabled}
     end)
 
@@ -68,6 +74,20 @@ defmodule Mindwendel.ChatCompletionsCase do
     Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
     |> expect(:generate_ideas, fn _title, _lanes, _existing_ideas, _locale ->
       {:error, error_reason}
+    end)
+  end
+
+  def mock_classify_labels(assignments) when is_list(assignments) do
+    Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
+    |> expect(:classify_labels, fn _title, _labels, _ideas, _locale ->
+      {:ok, assignments}
+    end)
+  end
+
+  def mock_classify_labels_error(reason) do
+    Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
+    |> expect(:classify_labels, fn _title, _labels, _ideas, _locale ->
+      {:error, reason}
     end)
   end
 end

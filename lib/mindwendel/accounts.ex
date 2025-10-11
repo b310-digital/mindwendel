@@ -1,9 +1,9 @@
 defmodule Mindwendel.Accounts do
   import Ecto.Query, warn: false
-  alias Mindwendel.Repo
+  alias Mindwendel.Accounts.BrainstormingModeratingUser
   alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Accounts.BrainstormingModeratingUser
+  alias Mindwendel.Repo
 
   require Logger
 
@@ -159,7 +159,9 @@ defmodule Mindwendel.Accounts do
 
     Enum.each(inactive_users, fn inactive_user ->
       try do
-        # first, check if this user is still a moderating user somewhere. in this case, we don't delete the user. we wait until the other brainstorming has been deleted, and delete this user subsequently:
+        # first, check if this user is still a moderating user somewhere. in this case,
+        # we don't delete the user. we wait until the other brainstorming has been
+        # deleted, and delete this user subsequently:
         unless user_has_active_brainstormings(inactive_user) do
           delete_user(inactive_user)
         end
@@ -178,7 +180,8 @@ defmodule Mindwendel.Accounts do
   end
 
   def user_has_active_brainstormings(user) do
-    # check if the user is still listed as creating_user, a moderating user somewhere or if the user is still attached to ideas:
+    # check if the user is still listed as creating_user, a moderating user somewhere
+    # or if the user is still attached to ideas:
     still_has(user, :created_brainstormings) || still_has(user, :ideas) ||
       still_has(user, :moderated_brainstormings)
   end

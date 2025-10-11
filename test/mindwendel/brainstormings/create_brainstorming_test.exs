@@ -1,13 +1,13 @@
 defmodule Mindwendel.Brainstormings.CreateBrainstormingTest do
   use Mindwendel.DataCase, async: true
+
   alias Mindwendel.Accounts.BrainstormingModeratingUser
   alias Mindwendel.Accounts.BrainstormingUser
-  alias Mindwendel.Factory
-
+  alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.IdeaLabel
-  alias Mindwendel.Accounts.User
+  alias Mindwendel.Factory
 
   describe "#create_brainstorming" do
     @brainstorming_attrs %{name: "brainstorming_name"}
