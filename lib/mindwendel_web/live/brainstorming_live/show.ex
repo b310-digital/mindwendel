@@ -286,20 +286,8 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     )
   end
 
-  defp handle_ai_clustering_result({:ok, assignments} = result, id, socket)
-       when is_list(assignments) do
-    lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
-
-    socket =
-      socket
-      |> assign(:lanes, lanes)
-      |> maybe_assign_updated_brainstorming(id)
-      |> put_clustering_flash(result)
-
-    {:noreply, socket}
-  end
-
-  defp handle_ai_clustering_result({:ok, :skipped} = result, id, socket) do
+  defp handle_ai_clustering_result({:ok, outcome} = result, id, socket)
+       when is_list(outcome) or outcome == :skipped do
     lanes = Lanes.get_lanes_for_brainstorming_with_labels_filtered(id)
 
     socket =

@@ -8,11 +8,8 @@ defmodule Mindwendel.Services.IdeaClusteringService do
 
   require Logger
 
-  import Ecto.Query, only: [from: 2]
-
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Brainstormings.IdeaLabel
-  alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.IdeaLabels
   alias Mindwendel.Ideas
   alias Mindwendel.Repo
@@ -486,16 +483,5 @@ defmodule Mindwendel.Services.IdeaClusteringService do
 
   defp normalize_label_name(_), do: nil
 
-  defp preload_brainstorming(brainstorming) do
-    Repo.preload(brainstorming, [
-      :labels,
-      lanes:
-        from(l in Lane,
-          order_by: [
-            asc: l.position_order,
-            asc: l.inserted_at
-          ]
-        )
-    ])
-  end
+  defp preload_brainstorming(brainstorming), do: Repo.preload(brainstorming, :labels)
 end

@@ -82,7 +82,7 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
 
     has_multiple_lanes = length(lanes) > 1
 
-    # System prompt - contains only instructions, no user-generated content
+    # System prompt must contain only instructions, never user-generated content
     system_content =
       if has_multiple_lanes do
         ~s|Generate ONLY valid JSON in the specified language. Format: [{"idea": "string", "lane_id": "uuid-or-null"}]. | <>
@@ -148,6 +148,7 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
       ideas
       |> Enum.map(&normalize_idea_payload/1)
 
+    # System prompt must remain free of user-generated content to avoid prompt injection
     system_content =
       "You cluster brainstorming ideas into the existing labels provided. Respond ONLY with valid JSON. " <>
         ~s|Format: [{"idea_id": "uuid", "label_ids": ["uuid"...], "new_labels": [{"id": "uuid", "name": "string or null", "color": "#rrggbb or null"}]}]. | <>
