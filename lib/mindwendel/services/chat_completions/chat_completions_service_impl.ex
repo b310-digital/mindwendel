@@ -151,12 +151,11 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
     # System prompt must remain free of user-generated content to avoid prompt injection
     system_content =
       "You cluster brainstorming ideas into the existing labels provided. Respond ONLY with valid JSON. " <>
-        ~s|Format: [{"idea_id": "uuid", "label_ids": ["uuid"...], "new_labels": [{"id": "uuid", "name": "string or null", "color": "#rrggbb or null"}]}]. | <>
+        ~s|Format: [{"idea_id": "uuid", "label_ids": ["uuid"...], "new_labels": [{"id": "uuid", "name": "string"}]}]. | <>
         "Assign each idea to the most suitable existing labels by referencing their ids exactly as listed. " <>
         "Never invent or reference labels that are not in Available labels. " <>
-        "Use new_labels to propose improved names or colors for existing labels, and always include that label's id in each suggestion. " <>
-        "When a label's rename_hint marks it as a placeholder (for example a color name) or its name is otherwise generic, you MUST provide a clearer name that reflects the ideas you assigned to it. " <>
-        "Leave new_labels empty only when every label you used already has a descriptive name. " <>
+        "Use new_labels to propose improved names for labels you assign; each rename must include the label's id and a concise descriptive name. " <>
+        "Leave new_labels empty when you have no rename suggestions. " <>
         "Across label_ids and new_labels, never reference more than 5 distinct labels in total. " <>
         "Leave label_ids empty only when an idea truly has no matching existing label. " <>
         "Do not include explanations or any text outside the JSON array."
@@ -176,8 +175,8 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
     [
       "Language: #{language}",
       "Brainstorming title: #{title}",
-      "Available labels JSON (each entry has id, name, and optional rename_hint explaining if the current name is a placeholder): #{Jason.encode!(labels_payload)}",
-      "Reuse the id of matching labels from Available labels. Do not invent new labels. For every label you use that has a rename_hint or otherwise needs a clearer name, include exactly one new_labels entry with its id and the improved name (and optional color). Keep the total distinct labels across label_ids and new_labels at 5 or fewer.",
+      "Available labels JSON (each entry has id and name): #{Jason.encode!(labels_payload)}",
+      "Reuse the id of matching labels from Available labels. Do not invent new labels. When you want to rename a label you used, include exactly one new_labels entry with its id and the improved name. Keep the total distinct labels across label_ids and new_labels at 5 or fewer.",
       "Ideas JSON (each entry has id and text only): #{Jason.encode!(ideas_payload)}",
       "Return the JSON array described above and nothing else."
     ]
@@ -197,15 +196,10 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
   end
 
   defp normalize_label_payload(label) do
-    base_payload = %{
+    %{
       id: fetch_value(label, :id),
       name: fetch_value(label, :name)
     }
-
-    case fetch_value(label, :rename_hint) do
-      nil -> base_payload
-      hint -> Map.put(base_payload, :rename_hint, hint)
-    end
   end
 
   defp normalize_idea_payload(idea) do

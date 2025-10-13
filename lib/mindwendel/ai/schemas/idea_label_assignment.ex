@@ -9,7 +9,7 @@ defmodule Mindwendel.AI.Schemas.IdeaLabelAssignment do
           "idea_id" => "uuid",
           "label_ids" => ["uuid", ...],
           "new_labels" => [
-            %{"name" => "Label name", "color" => "#ffffff"}
+            %{"id" => "uuid", "name" => "Label name"}
           ]
         }
       ]
@@ -19,10 +19,10 @@ defmodule Mindwendel.AI.Schemas.IdeaLabelAssignment do
 
   use Ecto.Schema
   import Ecto.Changeset
-  import Phoenix.HTML, only: [html_escape: 1]
+
+  require Logger
 
   alias __MODULE__.NewLabel
-  alias Phoenix.HTML.Safe
 
   @primary_key false
   embedded_schema do
@@ -46,21 +46,18 @@ defmodule Mindwendel.AI.Schemas.IdeaLabelAssignment do
     embedded_schema do
       field :id, :string
       field :name, :string
-      field :color, :string
     end
 
     @type t :: %__MODULE__{
             id: String.t() | nil,
-            name: String.t() | nil,
-            color: String.t() | nil
+            name: String.t() | nil
           }
 
     def changeset(new_label, attrs) do
       new_label
-      |> cast(attrs, [:id, :name, :color])
+      |> cast(attrs, [:id, :name])
       |> validate_change(:id, &validate_uuid/2)
       |> validate_change(:name, &validate_name_length/2)
-      |> validate_change(:color, &validate_color_format/2)
       |> ensure_identifier_present()
     end
 
@@ -90,16 +87,6 @@ defmodule Mindwendel.AI.Schemas.IdeaLabelAssignment do
       end
     end
 
-    defp validate_color_format(:color, nil), do: []
-
-    defp validate_color_format(:color, value) do
-      if Regex.match?(~r/^#[0-9a-fA-F]{6}$/, value) do
-        []
-      else
-        [color: "has invalid format"]
-      end
-    end
-
     defp ensure_identifier_present(%Ecto.Changeset{} = changeset) do
       id = fetch_field!(changeset, :id)
       name = fetch_field!(changeset, :name)
@@ -125,35 +112,46 @@ defmodule Mindwendel.AI.Schemas.IdeaLabelAssignment do
   end
 
   @doc """
+  Casts a list of assignments returned by the AI model into typed structs.
+
+  Returns `{:ok, [IdeaLabelAssignment.t()]}` on success,
+  or `{:error, errors}` with index-keyed error maps.
+  """
+  @spec cast_assignments(any()) ::
+          {:ok, [t()]}
+          | {:error, %{base: [String.t()]}}
+          | {:error, %{optional(non_neg_integer()) => map()}}
+  def cast_assignments(assignments) when is_list(assignments) do
+    assignments
+    |> Enum.reduce_while({:ok, 0, []}, fn attrs, {:ok, index, acc} ->
+      changeset = changeset(%__MODULE__{}, attrs)
+
+      if changeset.valid? do
+        {:cont, {:ok, index + 1, [apply_changes(changeset) | acc]}}
+      else
+        {:halt, {:error, format_errors(changeset, index)}}
+      end
+    end)
+    |> finalize_cast_result()
+  end
+
+  def cast_assignments(_), do: {:error, %{base: ["expected a list of assignments"]}}
+
+  @doc """
   Validates a list of assignments returned by the AI model.
 
-  Returns `{:ok, [assignment]}` with hydrated structs on success,
+  Returns `{:ok, [assignment]}` with sanitized maps on success,
   or `{:error, errors}` with index-keyed error maps.
   """
   @spec validate_assignments(any()) ::
           {:ok, list(map())}
           | {:error, %{base: [String.t()]}}
           | {:error, %{optional(non_neg_integer()) => map()}}
-  def validate_assignments(assignments) when is_list(assignments) do
-    assignments
-    |> Enum.reduce_while({:ok, 0, []}, fn attrs, {:ok, index, acc} ->
-      changeset = changeset(%__MODULE__{}, attrs)
-
-      if changeset.valid? do
-        validated =
-          changeset
-          |> apply_changes()
-          |> to_result_map()
-
-        {:cont, {:ok, index + 1, [validated | acc]}}
-      else
-        {:halt, {:error, format_errors(changeset, index)}}
-      end
-    end)
-    |> finalize_validation_result()
+  def validate_assignments(assignments) do
+    with {:ok, structs} <- cast_assignments(assignments) do
+      {:ok, Enum.map(structs, &to_result_map/1)}
+    end
   end
-
-  def validate_assignments(_), do: {:error, %{base: ["expected a list of assignments"]}}
 
   defp to_result_map(%__MODULE__{} = assignment) do
     %{
@@ -161,37 +159,15 @@ defmodule Mindwendel.AI.Schemas.IdeaLabelAssignment do
       label_ids: assignment.label_ids || [],
       new_labels:
         assignment.new_labels
-        |> Enum.map(&%{id: &1.id, name: &1.name, color: &1.color})
+        |> Enum.map(&%{id: &1.id, name: &1.name})
     }
   end
 
-  defp finalize_validation_result({:ok, _index, acc}), do: {:ok, Enum.reverse(acc)}
-  defp finalize_validation_result({:error, _} = error), do: error
+  defp finalize_cast_result({:ok, _index, acc}), do: {:ok, Enum.reverse(acc)}
+  defp finalize_cast_result({:error, _} = error), do: error
 
   defp format_errors(changeset, index) do
-    errors =
-      Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
-        msg
-        |> replace_interpolations(opts)
-        |> html_escape()
-        |> Safe.to_iodata()
-        |> IO.iodata_to_binary()
-      end)
-
-    %{index => errors}
-  end
-
-  defp replace_interpolations(msg, opts) do
-    Regex.replace(~r/%{(\w+)}/, msg, fn _, key ->
-      opts
-      |> find_interpolation_value(key)
-      |> to_string()
-    end)
-  end
-
-  defp find_interpolation_value(opts, key) do
-    Enum.find_value(opts, key, fn {opt_key, value} ->
-      if to_string(opt_key) == key, do: value
-    end)
+    Logger.debug("Invalid AI label assignment at index #{index}: #{inspect(changeset.errors)}")
+    %{index => %{base: ["invalid assignment data"]}}
   end
 end

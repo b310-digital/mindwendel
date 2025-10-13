@@ -31,8 +31,7 @@ defmodule Mindwendel.AI.Schemas.IdeaLabelAssignmentTest do
           "new_labels" => [
             %{
               "id" => "d2a58c6b-bd15-45ec-9f42-455b54f3506b",
-              "name" => "Fresh",
-              "color" => "#ff00ff"
+              "name" => "Fresh"
             },
             %{"name" => "Brand New"}
           ]
@@ -44,10 +43,9 @@ defmodule Mindwendel.AI.Schemas.IdeaLabelAssignmentTest do
       assert assignment[:new_labels] == [
                %{
                  id: "d2a58c6b-bd15-45ec-9f42-455b54f3506b",
-                 name: "Fresh",
-                 color: "#ff00ff"
+                 name: "Fresh"
                },
-               %{id: nil, name: "Brand New", color: nil}
+               %{id: nil, name: "Brand New"}
              ]
     end
 
@@ -61,12 +59,7 @@ defmodule Mindwendel.AI.Schemas.IdeaLabelAssignmentTest do
 
       assert {:error, errors} = IdeaLabelAssignment.validate_assignments(payload)
 
-      assert %{
-               0 => %{
-                 idea_id: ["can&#39;t be blank"],
-                 label_ids: ["is invalid"]
-               }
-             } = errors
+      assert %{0 => %{base: ["invalid assignment data"]}} = errors
     end
 
     test "rejects non-list payloads" do
