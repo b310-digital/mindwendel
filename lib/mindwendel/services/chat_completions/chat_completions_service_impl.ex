@@ -1,7 +1,7 @@
 defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
   require Logger
 
-  alias Mindwendel.AI.Schemas.{IdeaLabelAssignment, LabelRename}
+  alias Mindwendel.AI.Schemas.IdeaLabelAssignment
   alias Mindwendel.AI.Schemas.IdeaResponse
   alias Mindwendel.AI.TokenTrackingService
   alias Mindwendel.Services.ChatCompletions.ChatCompletionsService
@@ -40,7 +40,7 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
 
   @impl ChatCompletionsService
   @spec classify_labels(String.t(), list(map()), list(map()), String.t()) ::
-          {:ok, [map()]} | {:error, atom()}
+          {:ok, [IdeaLabelAssignment.t()]} | {:error, atom()}
   def classify_labels(title, labels, ideas, locale \\ "en") do
     if enabled?() do
       with {:ok, :allowed} <- TokenTrackingService.check_limits(),
@@ -150,18 +150,33 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
 
     # System prompt must remain free of user-generated content to avoid prompt injection
     system_content =
-      "You are a creative brainstorming facilitator clustering idea cards into the existing labels provided. Respond ONLY with valid JSON. " <>
-        ~s|Format: {"assignments": [{"idea_id": "uuid", "label_ids": ["uuid"...]}], "renamed_labels": [{"id": "uuid", "name": "string"}]}. | <>
-        "Study the idea texts and available label names to understand the brainstorming theme before assigning ideas. " <>
-        "Assign each idea to the most suitable existing labels by referencing their ids exactly as listed. " <>
-        "Never invent or reference labels that are not in Available labels. " <>
-        "Use renamed_labels to propose refreshed names for labels you actually rely on so they feel specific to this brainstorm. " <>
-        "Every rename must include the label's id and a short replacement name (maximum 15 characters, at most two words) that is vivid and avoids generic terms like \"Misc\" or \"General\". " <>
-        "Do not repeat the original name or duplicate a renamed value across different labels. " <>
-        "Emit an empty array for renamed_labels only when every existing label name is already precise. " <>
-        "Across all label_ids, reference no more than 5 distinct label ids total. " <>
-        "Leave label_ids empty only when an idea truly has no matching label. " <>
-        "Do not include explanations or any text outside the JSON object."
+      [
+        "You are a clustering engine for brainstorming ideas.",
+        "Your sole goal: group ideas under the most semantically relevant existing labels.",
+        "",
+        "Respond ONLY with valid JSON — no comments, text, or markdown outside the JSON.",
+        "",
+        "Return an object that follows this schema:",
+        "{",
+        "  \"assignments\": Assignment[]  // list of all idea-to-label mappings",
+        "}",
+        "",
+        "Assignment {",
+        "  \"idea_id\": string      // copy exactly from the Ideas JSON input",
+        "  \"label_ids\": string[]  // use label ids from Available Labels JSON input; assign 1–3 best fits per idea",
+        "}",
+        "",
+        "Clustering Principles:",
+        "- Prefer conceptual similarity over surface wording (e.g., 'eco packaging' and 'recycled materials' → same cluster).",
+        "- Avoid assigning a label if the connection is weak or only keyword-based.",
+        "- Use at most 5 distinct labels total across all assignments.",
+        "- Never propose new labels or rename existing ones.",
+        "",
+        "Output Rules:",
+        "- Never invent or modify ids or field names.",
+        "- The response must be valid JSON — no markdown, no commentary, no formatting hints."
+      ]
+      |> Enum.join("\n")
 
     user_content =
       build_clustering_user_content(
@@ -175,13 +190,12 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
   end
 
   defp build_clustering_user_content(title, labels_payload, ideas_payload, language) do
-      [
+    [
       "Language: #{language}",
       "Brainstorming title: #{title}",
-      "Available labels JSON (each entry has id and name): #{Jason.encode!(labels_payload)}",
-      "Reuse the ids of matching labels from Available labels. Do not invent additional labels. When you want to rename a label that you used, add a single entry inside renamed_labels with that label id and a replacement name (<=15 characters, max two words) that is vivid and distinct from the current name. Keep the total number of distinct labels referenced across all assignments at 5 or fewer, and only skip rename suggestions when the existing label name is already precise.",
-      "Ideas JSON (each entry has id and text only): #{Jason.encode!(ideas_payload)}",
-      "Return the JSON object described above and nothing else."
+      "Available labels JSON (array of {\"id\", \"name\"}; reuse these ids for assignments): #{Jason.encode!(labels_payload)}",
+      "Ideas JSON (array of {\"id\", \"text\"}; copy each id into assignments.idea_id): #{Jason.encode!(ideas_payload)}",
+      "Keep the total number of distinct label ids across assignments at 5 or fewer and output JSON that conforms to the schema above—nothing else."
     ]
     |> Enum.join("\n\n")
   end
@@ -308,7 +322,7 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
         model: ai_config[:model],
         messages: messages,
         temperature: 0.0,
-        max_tokens: 1_200
+        max_tokens: 2_000
       )
 
     openai_client = build_openai_client(ai_config)
@@ -372,11 +386,9 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
     with content when is_binary(content) <- extract_content(response),
          cleaned_content <- strip_markdown_code_fences(content),
          {:ok, payload} when is_map(payload) <- Jason.decode(cleaned_content),
-         {:ok, %{assignments: assignments_data, renamed_labels: renamed_data}} <-
-           normalize_clustering_payload(payload),
-         {:ok, assignments} <- IdeaLabelAssignment.cast_assignments(assignments_data),
-         {:ok, renamed_labels} <- LabelRename.cast_label_renames(renamed_data) do
-      {:ok, %{assignments: assignments, renamed_labels: renamed_labels}}
+         {:ok, assignments_data} <- normalize_clustering_payload(payload),
+         {:ok, assignments} <- IdeaLabelAssignment.cast_assignments(assignments_data) do
+      {:ok, assignments}
     else
       nil ->
         Logger.error("LLM clustering response missing content")
@@ -399,7 +411,10 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
         {:error, :json_parse_error}
 
       {:error, :invalid_format} ->
-        Logger.error("LLM clustering response payload is missing assignments or uses an invalid structure")
+        Logger.error(
+          "LLM clustering response payload is missing assignments or uses an invalid structure"
+        )
+
         {:error, :invalid_format}
 
       {:error, validation_errors} when is_map(validation_errors) ->
@@ -416,17 +431,11 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
 
   defp normalize_clustering_payload(payload) when is_map(payload) do
     assignments = Map.get(payload, "assignments") || Map.get(payload, :assignments)
-    renamed_labels = Map.get(payload, "renamed_labels") || Map.get(payload, :renamed_labels) || []
 
-    cond do
-      not is_list(assignments) ->
-        {:error, :invalid_format}
-
-      not is_list(renamed_labels) ->
-        {:error, :invalid_format}
-
-      true ->
-        {:ok, %{assignments: assignments, renamed_labels: renamed_labels}}
+    if is_list(assignments) do
+      {:ok, assignments}
+    else
+      {:error, :invalid_format}
     end
   end
 

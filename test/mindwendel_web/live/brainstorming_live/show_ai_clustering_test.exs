@@ -10,6 +10,7 @@ defmodule MindwendelWeb.BrainstormingLiveAIClusteringTest do
   import Mindwendel.BrainstormingsFixtures
   import Ecto.Query
 
+  alias Mindwendel.AI.Schemas.IdeaLabelAssignment
   alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Idea
@@ -62,9 +63,9 @@ defmodule MindwendelWeb.BrainstormingLiveAIClusteringTest do
       |> expect(:classify_labels, fn _title, _labels, idea_payload, _locale ->
         {:ok,
          Enum.map(idea_payload, fn idea_map ->
-           %{
-             "idea_id" => idea_map.id,
-             "label_ids" => [label.id]
+           %IdeaLabelAssignment{
+             idea_id: idea_map.id,
+             label_ids: [label.id]
            }
          end)}
       end)

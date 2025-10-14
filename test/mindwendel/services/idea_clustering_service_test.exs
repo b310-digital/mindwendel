@@ -36,7 +36,7 @@ defmodule Mindwendel.Services.IdeaClusteringServiceTest do
   end
 
   describe "cluster_labels/1" do
-    test "returns assignments and persists label changes", %{
+    test "returns assignments and persists label selections", %{
       brainstorming: brainstorming,
       label: label,
       idea: idea
@@ -47,20 +47,50 @@ defmodule Mindwendel.Services.IdeaClusteringServiceTest do
         assert Enum.any?(ideas_payload, fn payload -> payload.id == idea.id end)
 
         {:ok,
-         %{
-           assignments:
-             Enum.map(ideas_payload, fn payload ->
-               %IdeaLabelAssignment{
-                 idea_id: payload.id,
-                 label_ids: [label.id]
-               }
-             end),
-           renamed_labels: []
-         }}
+         Enum.map(ideas_payload, fn payload ->
+           %IdeaLabelAssignment{
+             idea_id: payload.id,
+             label_ids: [label.id]
+           }
+         end)}
       end)
 
       assert {:ok, assignments} = IdeaClusteringService.cluster_labels(brainstorming)
       assert [%{idea_id: matched_idea_id, label_ids: matched_label_ids} | _] = assignments
+      assert matched_idea_id == idea.id
+      assert matched_label_ids == [label.id]
+
+      updated_idea =
+        Repo.one!(
+          from i in Idea,
+            where: i.id == ^idea.id,
+            preload: [:idea_labels]
+        )
+
+      assert Enum.any?(updated_idea.idea_labels, fn assoc -> assoc.id == label.id end)
+    end
+
+    test "persists assignments returned as JSON string", %{
+      brainstorming: brainstorming,
+      label: label,
+      idea: idea
+    } do
+      response_payload = ~s|{
+        "assignments": [
+          {"idea_id": "#{idea.id}", "label_ids": ["#{label.id}"]}
+        ]
+      }|
+
+      Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
+      |> stub(:enabled?, fn -> true end)
+      |> expect(:classify_labels, fn _title, _labels, ideas_payload, _locale ->
+        assert Enum.any?(ideas_payload, fn payload -> payload.id == idea.id end)
+        {:ok, response_payload}
+      end)
+
+      assert {:ok, [%{idea_id: matched_idea_id, label_ids: matched_label_ids}]} =
+               IdeaClusteringService.cluster_labels(brainstorming)
+
       assert matched_idea_id == idea.id
       assert matched_label_ids == [label.id]
 
@@ -79,7 +109,7 @@ defmodule Mindwendel.Services.IdeaClusteringServiceTest do
       assert {:ok, :skipped} = IdeaClusteringService.cluster_labels(brainstorming)
     end
 
-    test "ignores suggestions that lack an existing label id", %{
+    test "ignores label ids that do not exist in the brainstorming", %{
       brainstorming: brainstorming,
       idea: idea
     } do
@@ -89,17 +119,12 @@ defmodule Mindwendel.Services.IdeaClusteringServiceTest do
         assert Enum.any?(ideas_payload, fn payload -> payload.id == idea.id end)
 
         {:ok,
-         %{
-           assignments: [
-             %IdeaLabelAssignment{
-               idea_id: idea.id,
-               label_ids: []
-             }
-           ],
-           renamed_labels: [
-             %{id: Ecto.UUID.generate(), name: "Bird Label"}
-           ]
-         }}
+         [
+           %IdeaLabelAssignment{
+             idea_id: idea.id,
+             label_ids: [Ecto.UUID.generate()]
+           }
+         ]}
       end)
 
       assert {:ok, [%{idea_id: returned_id, label_ids: label_ids}]} =
@@ -117,58 +142,39 @@ defmodule Mindwendel.Services.IdeaClusteringServiceTest do
       assert length(labels_after) == length(brainstorming.labels)
     end
 
-    test "renames existing labels when suggestions target their ids", %{
+    test "matches label ids regardless of casing", %{
       brainstorming: brainstorming,
+      label: label,
       idea: idea
     } do
-      sorted_labels =
-        brainstorming.labels
-        |> Enum.sort_by(&(&1.position_order || 0))
-
-      existing_ids =
-        sorted_labels
-        |> Enum.map(& &1.id)
-        |> Enum.sort()
-
-      new_label_names =
-        sorted_labels
-        |> Enum.with_index(1)
-        |> Enum.map(fn {_label, index} -> "Renamed #{index}" end)
-
       Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
       |> stub(:enabled?, fn -> true end)
       |> expect(:classify_labels, fn _title, _labels, ideas_payload, _locale ->
         assert Enum.any?(ideas_payload, fn payload -> payload.id == idea.id end)
 
         {:ok,
-         %{
-           assignments: [
-             %IdeaLabelAssignment{
-               idea_id: idea.id,
-               label_ids: Enum.map(sorted_labels, & &1.id)
-             }
-           ],
-           renamed_labels:
-             Enum.map(Enum.zip(sorted_labels, new_label_names), fn {label, name} ->
-               %{id: label.id, name: name}
-             end)
-         }}
+         [
+           %IdeaLabelAssignment{
+             idea_id: String.upcase(idea.id),
+             label_ids: [String.upcase(label.id)]
+           }
+         ]}
       end)
 
-      assert {:ok, [%{label_ids: assigned_ids}]} =
+      assert {:ok, [%{idea_id: returned_id, label_ids: [returned_label_id]}]} =
                IdeaClusteringService.cluster_labels(brainstorming)
 
-      assert Enum.sort(assigned_ids) == existing_ids
+      assert returned_id == idea.id
+      assert returned_label_id == label.id
 
-      reloaded_labels =
-        Repo.all(
-          from l in IdeaLabel,
-            where: l.brainstorming_id == ^brainstorming.id,
-            order_by: [asc: l.position_order, asc: l.inserted_at]
+      updated_idea =
+        Repo.one!(
+          from i in Idea,
+            where: i.id == ^idea.id,
+            preload: [:idea_labels]
         )
 
-      assert Enum.map(reloaded_labels, & &1.id) |> Enum.sort() == existing_ids
-      assert Enum.map(reloaded_labels, & &1.name) == new_label_names
+      assert Enum.any?(updated_idea.idea_labels, fn assoc -> assoc.id == label.id end)
     end
 
     test "propagates classification errors", %{brainstorming: brainstorming} do

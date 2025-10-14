@@ -8,9 +8,9 @@ defmodule Mindwendel.Services.IdeaClusteringService do
 
   require Logger
 
+  alias Ecto.UUID
   alias Mindwendel.AI.Schemas.IdeaLabelAssignment
   alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.IdeaLabels
   alias Mindwendel.Ideas
   alias Mindwendel.Repo
@@ -59,14 +59,23 @@ defmodule Mindwendel.Services.IdeaClusteringService do
         label_payload = build_label_payload(brainstorming.labels)
         idea_payload = build_idea_payload(ideas)
 
-        with {:ok, %{assignments: assignments, renamed_labels: renamed_labels}} <-
+        with {:ok, raw_assignments} <-
                ChatCompletionsService.classify_labels(
                  brainstorming.name,
                  label_payload,
                  idea_payload,
                  locale
-               ) do
-          handle_assignments(brainstorming, ideas, assignments, renamed_labels)
+               ),
+             {:ok, assignments} <- normalize_assignments(raw_assignments) do
+          Logger.debug(fn ->
+            truncated =
+              raw_assignments
+              |> inspect(limit: 15, printable_limit: 300, width: 80)
+
+            "AI clustering raw assignments: #{truncated}"
+          end)
+
+          handle_assignments(brainstorming, ideas, assignments)
         else
           {:error, %{} = validation_errors} ->
             Logger.error(
@@ -82,18 +91,17 @@ defmodule Mindwendel.Services.IdeaClusteringService do
     end
   end
 
-  defp handle_assignments(brainstorming, ideas, assignments, renamed_labels) do
-    idea_ids = MapSet.new(Enum.map(ideas, & &1.id))
-    existing_label_ids = MapSet.new(Enum.map(brainstorming.labels, & &1.id))
-
-    log_ignored_label_suggestions(
-      renamed_labels,
-      brainstorming.id,
-      existing_label_ids
-    )
+  defp handle_assignments(brainstorming, ideas, assignments) do
+    idea_ids = build_uuid_set(Enum.map(ideas, & &1.id))
+    existing_label_ids = build_uuid_set(Enum.map(brainstorming.labels, & &1.id))
 
     case Repo.transaction(fn ->
-           persist_assignments(brainstorming, assignments, renamed_labels, idea_ids)
+           persist_assignments(
+             brainstorming,
+             assignments,
+             idea_ids,
+             existing_label_ids
+           )
          end) do
       {:ok, assignments} ->
         Logger.info(
@@ -107,13 +115,29 @@ defmodule Mindwendel.Services.IdeaClusteringService do
     end
   end
 
-  defp sanitize_assignment(%IdeaLabelAssignment{} = assignment, valid_label_ids) do
-    sanitized_label_ids =
-      assignment.label_ids
-      |> Enum.filter(&MapSet.member?(valid_label_ids, &1))
-      |> Enum.uniq()
+  defp sanitize_assignment(
+         %IdeaLabelAssignment{} = assignment,
+         valid_idea_ids,
+         valid_label_ids
+       ) do
+    sanitized_idea_id = normalize_uuid(assignment.idea_id)
 
-    %{assignment | label_ids: sanitized_label_ids}
+    cond do
+      is_nil(sanitized_idea_id) ->
+        nil
+
+      not MapSet.member?(valid_idea_ids, sanitized_idea_id) ->
+        nil
+
+      true ->
+        sanitized_label_ids =
+          assignment.label_ids
+          |> Enum.map(&normalize_label_id/1)
+          |> Enum.filter(&valid_label_id?(&1, valid_label_ids))
+          |> Enum.uniq()
+
+        %{assignment | idea_id: sanitized_idea_id, label_ids: sanitized_label_ids}
+    end
   end
 
   defp assignment_to_map(%IdeaLabelAssignment{} = assignment) do
@@ -122,6 +146,35 @@ defmodule Mindwendel.Services.IdeaClusteringService do
       label_ids: assignment.label_ids
     }
   end
+
+  defp build_uuid_set(values) do
+    Enum.reduce(values, MapSet.new(), fn value, acc ->
+      case normalize_uuid(value) do
+        nil -> acc
+        uuid -> MapSet.put(acc, uuid)
+      end
+    end)
+  end
+
+  defp normalize_uuid(%{"id" => id}), do: normalize_uuid(id)
+  defp normalize_uuid(%{id: id}), do: normalize_uuid(id)
+
+  defp normalize_uuid(value) when is_binary(value) do
+    trimmed = String.trim(value)
+
+    if trimmed == "" do
+      nil
+    else
+      case UUID.cast(trimmed) do
+        {:ok, uuid} -> uuid
+        :error -> nil
+      end
+    end
+  end
+
+  defp normalize_uuid(_value), do: nil
+
+  defp normalize_label_id(value), do: normalize_uuid(value)
 
   defp build_label_payload(labels) do
     Enum.map(labels, fn label ->
@@ -141,103 +194,18 @@ defmodule Mindwendel.Services.IdeaClusteringService do
     end)
   end
 
-  defp log_ignored_label_suggestions(renamed_labels, brainstorming_id, existing_label_ids) do
-    ignored =
-      renamed_labels
-      |> Enum.filter(fn
-        %{id: id} when is_binary(id) ->
-          not MapSet.member?(existing_label_ids, id)
-
-        _ ->
-          false
-      end)
-
-    case ignored do
-      [] ->
-        :ok
-
-      _ ->
-        Logger.info(
-          "AI clustering suggested #{length(ignored)} non-existent labels for brainstorming #{brainstorming_id}, ignoring: #{inspect(ignored)}"
-        )
-    end
-  end
-
   def clustering_enabled? do
     ChatCompletionsService.enabled?()
   end
 
-  defp ensure_label_resources(brainstorming, renamed_labels) do
-    existing_by_id =
-      brainstorming.labels
-      |> Enum.reduce(%{}, fn label, acc ->
-        Map.put(acc, label.id, label)
-      end)
-
-    case apply_label_renames(existing_by_id, renamed_labels) do
-      {:ok, updated_by_id} ->
-        valid_label_ids = updated_by_id |> Map.keys() |> MapSet.new()
-        {:ok, valid_label_ids}
-
-      {:error, reason} ->
-        {:error, reason}
-    end
-  end
-
-  defp apply_label_renames(existing_by_id, renamed_labels) do
-    renamed_labels
-    |> Enum.reduce_while({:ok, existing_by_id}, fn suggestion, {:ok, acc} ->
-      case rename_label(acc, suggestion) do
-        {:ok, updated_acc} -> {:cont, {:ok, updated_acc}}
-        :skip -> {:cont, {:ok, acc}}
-        {:error, reason} -> {:halt, {:error, reason}}
-      end
-    end)
-  end
-
-  defp rename_label(acc, %{id: id, name: name}) do
-    with true <- is_binary(id),
-         true <- String.trim(id) != "",
-         %IdeaLabel{} = label <- Map.get(acc, id),
-         trimmed_name when is_binary(trimmed_name) <- sanitize_label_name(name),
-         true <- trimmed_name != label.name do
-      case label |> IdeaLabel.changeset(%{name: trimmed_name}) |> Repo.update() do
-        {:ok, updated_label} ->
-          {:ok, Map.put(acc, id, updated_label)}
-
-        {:error, changeset} ->
-          {:error, {:label_update_failed, id, changeset}}
-      end
-    else
-      _ -> :skip
-    end
-  end
-
-  defp rename_label(_acc, _), do: :skip
-
-  defp sanitize_label_name(value) when is_binary(value) do
-    case String.trim(value) do
-      "" -> nil
-      trimmed -> trimmed
-    end
-  end
-
-  defp sanitize_label_name(_), do: nil
-
   defp preload_brainstorming(brainstorming), do: Repo.preload(brainstorming, :labels)
 
-  defp persist_assignments(brainstorming, assignments, renamed_labels, idea_ids) do
-    case ensure_label_resources(brainstorming, renamed_labels) do
-      {:ok, valid_label_ids} ->
-        assignments
-        |> Enum.filter(fn assignment -> MapSet.member?(idea_ids, assignment.idea_id) end)
-        |> Enum.map(&sanitize_assignment(&1, valid_label_ids))
-        |> Enum.map(&assignment_to_map/1)
-        |> apply_assignments(brainstorming.id)
-
-      {:error, reason} ->
-        Repo.rollback(reason)
-    end
+  defp persist_assignments(brainstorming, assignments, idea_ids, valid_label_ids) do
+    assignments
+    |> Enum.map(&sanitize_assignment(&1, idea_ids, valid_label_ids))
+    |> Enum.reject(&is_nil/1)
+    |> Enum.map(&assignment_to_map/1)
+    |> apply_assignments(brainstorming.id)
   end
 
   defp apply_assignments(assignments, brainstorming_id) do
@@ -245,5 +213,40 @@ defmodule Mindwendel.Services.IdeaClusteringService do
       {:ok, _count} -> assignments
       {:error, reason} -> Repo.rollback(reason)
     end
+  end
+
+  defp normalize_assignments(assignments) when is_list(assignments) do
+    if Enum.all?(assignments, &match?(%IdeaLabelAssignment{}, &1)) do
+      {:ok, assignments}
+    else
+      IdeaLabelAssignment.cast_assignments(assignments)
+    end
+  end
+
+  defp normalize_assignments(%{"assignments" => assignments}),
+    do: normalize_assignments(assignments)
+
+  defp normalize_assignments(%{assignments: assignments}),
+    do: normalize_assignments(assignments)
+
+  defp normalize_assignments(assignments) when is_binary(assignments) do
+    case String.trim(assignments) do
+      "" ->
+        {:error, :invalid_assignments_format}
+
+      trimmed ->
+        case Jason.decode(trimmed) do
+          {:ok, decoded} -> normalize_assignments(decoded)
+          {:error, _reason} -> {:error, :invalid_assignments_format}
+        end
+    end
+  end
+
+  defp normalize_assignments(_), do: {:error, :invalid_assignments_format}
+
+  defp valid_label_id?(nil, _valid_label_ids), do: false
+
+  defp valid_label_id?(label_id, valid_label_ids) do
+    MapSet.member?(valid_label_ids, label_id)
   end
 end
