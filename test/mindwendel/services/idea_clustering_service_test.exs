@@ -4,6 +4,7 @@ defmodule Mindwendel.Services.IdeaClusteringServiceTest do
 
   import Ecto.Query
 
+  alias Mindwendel.AI.Schemas.IdeaLabelAssignment
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
@@ -46,12 +47,16 @@ defmodule Mindwendel.Services.IdeaClusteringServiceTest do
         assert Enum.any?(ideas_payload, fn payload -> payload.id == idea.id end)
 
         {:ok,
-         Enum.map(ideas_payload, fn payload ->
-           %{
-             "idea_id" => payload.id,
-             "label_ids" => [label.id]
-           }
-         end)}
+         %{
+           assignments:
+             Enum.map(ideas_payload, fn payload ->
+               %IdeaLabelAssignment{
+                 idea_id: payload.id,
+                 label_ids: [label.id]
+               }
+             end),
+           renamed_labels: []
+         }}
       end)
 
       assert {:ok, assignments} = IdeaClusteringService.cluster_labels(brainstorming)
@@ -74,43 +79,6 @@ defmodule Mindwendel.Services.IdeaClusteringServiceTest do
       assert {:ok, :skipped} = IdeaClusteringService.cluster_labels(brainstorming)
     end
 
-    test "attaches existing labels referenced through new label ids", %{
-      brainstorming: brainstorming,
-      label: label,
-      idea: idea
-    } do
-      Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
-      |> stub(:enabled?, fn -> true end)
-      |> expect(:classify_labels, fn _title, _labels, ideas_payload, _locale ->
-        assert Enum.any?(ideas_payload, fn payload -> payload.id == idea.id end)
-
-        {:ok,
-         [
-           %{
-             "idea_id" => idea.id,
-             "label_ids" => [],
-             "new_labels" => [
-               %{"id" => label.id, "name" => label.name}
-             ]
-           }
-         ]}
-      end)
-
-      assert {:ok, [%{label_ids: label_ids}]} =
-               IdeaClusteringService.cluster_labels(brainstorming)
-
-      assert label.id in label_ids
-
-      reloaded_idea =
-        Repo.one!(
-          from i in Idea,
-            where: i.id == ^idea.id,
-            preload: [:idea_labels]
-        )
-
-      assert Enum.any?(reloaded_idea.idea_labels, fn assoc -> assoc.id == label.id end)
-    end
-
     test "ignores suggestions that lack an existing label id", %{
       brainstorming: brainstorming,
       idea: idea
@@ -121,15 +89,17 @@ defmodule Mindwendel.Services.IdeaClusteringServiceTest do
         assert Enum.any?(ideas_payload, fn payload -> payload.id == idea.id end)
 
         {:ok,
-         [
-           %{
-             "idea_id" => idea.id,
-             "label_ids" => [],
-             "new_labels" => [
-               %{"name" => "Bird Label"}
-             ]
-           }
-         ]}
+         %{
+           assignments: [
+             %IdeaLabelAssignment{
+               idea_id: idea.id,
+               label_ids: []
+             }
+           ],
+           renamed_labels: [
+             %{id: Ecto.UUID.generate(), name: "Bird Label"}
+           ]
+         }}
       end)
 
       assert {:ok, [%{idea_id: returned_id, label_ids: label_ids}]} =
@@ -171,16 +141,18 @@ defmodule Mindwendel.Services.IdeaClusteringServiceTest do
         assert Enum.any?(ideas_payload, fn payload -> payload.id == idea.id end)
 
         {:ok,
-         [
-           %{
-             "idea_id" => idea.id,
-             "label_ids" => [],
-             "new_labels" =>
-               Enum.map(Enum.zip(sorted_labels, new_label_names), fn {label, name} ->
-                 %{"id" => label.id, "name" => name}
-               end)
-           }
-         ]}
+         %{
+           assignments: [
+             %IdeaLabelAssignment{
+               idea_id: idea.id,
+               label_ids: Enum.map(sorted_labels, & &1.id)
+             }
+           ],
+           renamed_labels:
+             Enum.map(Enum.zip(sorted_labels, new_label_names), fn {label, name} ->
+               %{id: label.id, name: name}
+             end)
+         }}
       end)
 
       assert {:ok, [%{label_ids: assigned_ids}]} =
