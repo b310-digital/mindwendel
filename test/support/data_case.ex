@@ -16,6 +16,8 @@ defmodule Mindwendel.DataCase do
 
   use ExUnit.CaseTemplate
   import Mox
+  alias Ecto.Adapters.SQL.Sandbox
+  alias Mindwendel.Repo
 
   using do
     quote do
@@ -35,10 +37,10 @@ defmodule Mindwendel.DataCase do
   setup :setup_ai_disabled_stub
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Mindwendel.Repo)
+    :ok = Sandbox.checkout(Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Mindwendel.Repo, {:shared, self()})
+      Sandbox.mode(Repo, {:shared, self()})
     end
 
     :ok

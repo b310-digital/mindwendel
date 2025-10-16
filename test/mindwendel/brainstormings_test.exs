@@ -1,17 +1,17 @@
 defmodule Mindwendel.BrainstormingsTest do
-  alias Mindwendel.Brainstormings.IdeaIdeaLabel
   use Mindwendel.DataCase, async: true
-  alias Mindwendel.Factory
 
-  alias Mindwendel.Brainstormings
-  alias Mindwendel.Lanes
-  alias Mindwendel.IdeaLabels
-  alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.Idea
-  alias Mindwendel.Brainstormings.Like
-  alias Mindwendel.Brainstormings.Comment
-  alias Mindwendel.Attachments
   alias Mindwendel.Accounts.User
+  alias Mindwendel.Attachments
+  alias Mindwendel.Brainstormings
+  alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.Comment
+  alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Brainstormings.IdeaIdeaLabel
+  alias Mindwendel.Brainstormings.Like
+  alias Mindwendel.Factory
+  alias Mindwendel.IdeaLabels
+  alias Mindwendel.Lanes
 
   setup do
     user = Factory.insert!(:user)

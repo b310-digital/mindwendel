@@ -3,19 +3,21 @@ defmodule Mindwendel.Brainstormings.Brainstorming do
 
   import Ecto.Changeset
   use Gettext, backend: MindwendelWeb.Gettext
+  alias Mindwendel.Accounts.BrainstormingModeratingUser
+  alias Mindwendel.Accounts.BrainstormingUser
+  alias Mindwendel.Accounts.User
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Brainstormings.IdeaLabel
   alias Mindwendel.Brainstormings.Lane
-  alias Mindwendel.Accounts.BrainstormingModeratingUser
-  alias Mindwendel.Accounts.User
-  alias Mindwendel.Accounts.BrainstormingUser
 
   schema "brainstormings" do
     field :name, :string
     field :option_allow_manual_ordering, :boolean
     # credo:disable-for-next-line
-    # Todo: The following line can be changed `field :admin_url_id, Ecto.UUID, autogenerate: true`
-    # This will automatically generate a UUID for the admin_url_id which would make the method `gen_admin_url_id/2` obsolete.
+    # Todo: The following line can be changed
+    # `field :admin_url_id, Ecto.UUID, autogenerate: true`
+    # This will automatically generate a UUID for the admin_url_id which would make
+    # the method `gen_admin_url_id/2` obsolete.
     field :admin_url_id, :binary_id
     field :last_accessed_at, :utc_datetime
     field :filter_labels_ids, {:array, :binary_id}

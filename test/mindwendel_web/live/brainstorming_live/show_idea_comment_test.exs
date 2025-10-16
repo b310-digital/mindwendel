@@ -229,15 +229,15 @@ defmodule MindwendelWeb.BrainstormingLive.ShowIdeaCommentTest do
            |> has_element?
   end
 
-  defp html_selector_button_idea_show_link() do
+  defp html_selector_button_idea_show_link do
     ".card-body-mindwendel-idea > a:nth-child(3)"
   end
 
-  defp html_selector_button_delete() do
+  defp html_selector_button_delete do
     "a[phx-click='delete_comment']"
   end
 
-  defp html_selector_button_edit() do
+  defp html_selector_button_edit do
     "a[phx-click='edit_comment']"
   end
 end

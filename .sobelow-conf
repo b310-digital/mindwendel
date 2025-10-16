@@ -1,6 +1,1 @@
-[
-  exit: "high",
-  mark_skip_all: true,
-  skip: true,
-  verbose: true
-]
+[exit: false, format: "txt", ignore_files: [], ignore: [""], out: nil, private: false, router: nil, skip: true, threshold: :low, verbose: false, version: false]

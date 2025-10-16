@@ -1,7 +1,8 @@
 defmodule Mindwendel.PermissionsTest do
   use Mindwendel.DataCase, async: true
-  alias Mindwendel.Factory
+
   alias Mindwendel.Accounts
+  alias Mindwendel.Factory
   alias Mindwendel.Permissions
 
   describe "has_moderating_permission" do

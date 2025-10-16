@@ -11,7 +11,8 @@ defmodule MindwendelWeb.LabelLive.CaptionsComponent do
       # If the filter is already present, remove it as its toggled. If not, add it.
       toggled_filters = build_filter_labels(filtered_labels, idea_label_id)
 
-      # Brainstorming in socket might be outdated in terms of filter_labels_ids as we dont update the socket on every change.
+      # The brainstorming in the socket might be outdated in terms of
+      # filter_labels_ids because we do not update the socket on every change.
       {:ok, refreshed_brainstorming} = Brainstormings.get_brainstorming(brainstorming.id)
 
       Brainstormings.update_brainstorming(refreshed_brainstorming, %{

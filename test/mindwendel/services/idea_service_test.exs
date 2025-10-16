@@ -1,14 +1,16 @@
 defmodule Mindwendel.Services.IdeaServiceTest do
-  alias Mindwendel.Services.IdeaService
   use Mindwendel.DataCase, async: true
   use Mindwendel.ChatCompletionsCase, async: true
-  alias Mindwendel.Factory
-  alias Mindwendel.Brainstormings
+
   alias Mindwendel.Accounts.User
+  alias Mindwendel.Brainstormings
+  alias Mindwendel.Factory
+  alias Mindwendel.Services.IdeaService
 
   setup do
     brainstorming = Factory.insert!(:brainstorming)
     mock_ai_enabled?(true)
+
     %{brainstorming: brainstorming}
   end
 
@@ -16,6 +18,7 @@ defmodule Mindwendel.Services.IdeaServiceTest do
     test "returns the generated ideas successfully", %{brainstorming: brainstorming} do
       idea_count = 3
       mock_generate_ideas(idea_count)
+
       assert {:ok, ideas} = IdeaService.add_ideas_to_brainstorming(brainstorming)
       assert length(ideas) == idea_count
 
