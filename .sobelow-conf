@@ -1,1 +1,1 @@
-[verbose: false, private: false, skip: false, router: nil, exit: false, format: "txt", out: nil, threshold: :low, ignore: ["Config.CSP"], ignore_files: [], version: false]
+[exit: false, format: "txt", ignore_files: [], ignore: [""], out: nil, private: false, router: nil, skip: true, threshold: :low, verbose: false, version: false]
