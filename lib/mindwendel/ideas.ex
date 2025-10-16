@@ -6,10 +6,10 @@ defmodule Mindwendel.Ideas do
   import Ecto.Query, warn: false
   alias Mindwendel.Repo
 
-  alias Mindwendel.Lanes
   alias Mindwendel.Attachments
-  alias Mindwendel.Brainstormings.Like
   alias Mindwendel.Brainstormings.Idea
+  alias Mindwendel.Brainstormings.Like
+  alias Mindwendel.Lanes
 
   require Logger
 

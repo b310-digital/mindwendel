@@ -1,6 +1,6 @@
 defmodule Mindwendel.LocalStorage do
-  alias Mindwendel.Permissions
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Permissions
 
   @moduledoc """
   The LocalStorage context. It includes helpers to handle local storage data from clients.

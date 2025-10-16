@@ -16,6 +16,8 @@ defmodule MindwendelWeb.CoreComponents do
   """
   use Phoenix.Component
 
+  alias Phoenix.HTML.Form
+  alias Phoenix.HTML.FormField
   alias Phoenix.LiveView.JS
   use Gettext, backend: MindwendelWeb.Gettext
 
@@ -241,7 +243,7 @@ defmodule MindwendelWeb.CoreComponents do
   @doc """
   Renders an input with label and error messages.
 
-  A `Phoenix.HTML.FormField` may be passed as argument,
+  A `FormField` may be passed as argument,
   which is used to retrieve the input name, id, and values.
   Otherwise all attributes may be passed explicitly.
 
@@ -276,7 +278,7 @@ defmodule MindwendelWeb.CoreComponents do
 
   attr :form_group_wrapper, :boolean, default: nil
 
-  attr :field, Phoenix.HTML.FormField,
+  attr :field, FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
 
   attr :errors, :list, default: []
@@ -285,7 +287,7 @@ defmodule MindwendelWeb.CoreComponents do
 
   attr :options, :list,
     default: [],
-    doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+    doc: "the options to pass to Form.options_for_select/2"
 
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
 
@@ -295,7 +297,7 @@ defmodule MindwendelWeb.CoreComponents do
 
   attr :used?, :boolean, doc: "This field was actually used (set by compoenent itself)"
 
-  def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+  def input(%{field: %FormField{} = field} = assigns) do
     used? = Phoenix.Component.used_input?(field)
     errors = if used?, do: field.errors, else: []
 
@@ -311,7 +313,7 @@ defmodule MindwendelWeb.CoreComponents do
   def input(%{type: "checkbox"} = assigns) do
     assigns =
       assign_new(assigns, :checked, fn ->
-        Phoenix.HTML.Form.normalize_value("checkbox", assigns[:value])
+        Form.normalize_value("checkbox", assigns[:value])
       end)
 
     ~H"""
@@ -344,7 +346,7 @@ defmodule MindwendelWeb.CoreComponents do
       <.label for={@id}>{@label}</.label>
       <select id={@id} name={@name} class="form-control" , multiple={@multiple} {@rest}>
         <option :if={@prompt} value="">{@prompt}</option>
-        {Phoenix.HTML.Form.options_for_select(@options, @value)}
+        {Form.options_for_select(@options, @value)}
       </select>
       <.error :for={msg <- @errors}>{msg}</.error>
     </div>
@@ -358,7 +360,7 @@ defmodule MindwendelWeb.CoreComponents do
         type="hidden"
         name={@name}
         id={@id}
-        value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+        value={Form.normalize_value(@type, @value)}
         {@rest}
       />
     </div>
@@ -371,7 +373,7 @@ defmodule MindwendelWeb.CoreComponents do
       type="color"
       name={@name}
       id={@id}
-      value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+      value={Form.normalize_value(@type, @value)}
       {@rest}
     />
     """
@@ -389,7 +391,7 @@ defmodule MindwendelWeb.CoreComponents do
           error_class(@used?, @errors)
         ]}
         {@rest}
-      ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
+      ><%= Form.normalize_value("textarea", @value) %></textarea>
       <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
@@ -401,7 +403,7 @@ defmodule MindwendelWeb.CoreComponents do
       type={@type}
       name={@name}
       id={@id}
-      value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+      value={Form.normalize_value(@type, @value)}
       class={[
         "form-control",
         error_class(@used?, @errors)
@@ -420,7 +422,7 @@ defmodule MindwendelWeb.CoreComponents do
         type={@type}
         name={@name}
         id={@id}
-        value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+        value={Form.normalize_value(@type, @value)}
         class={[
           "form-control",
           error_class(@used?, @errors)

@@ -2,10 +2,10 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   use MindwendelWeb, :live_component
 
   alias MIME
-  alias Mindwendel.Ideas
   alias Mindwendel.Attachments
   alias Mindwendel.Brainstormings
   alias Mindwendel.IdeaLabels
+  alias Mindwendel.Ideas
 
   @whitelisted_file_extensions ~w(.jpg .jpeg .gif .png .pdf)
 
@@ -90,8 +90,10 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   defp save_idea(socket, :new, idea_params) do
     tmp_attachments = prepare_attachments(socket)
 
-    # This is a workaround to get the filtered labels for the idea without (!) passing them as a parameter to the form component.
-    # Unfortunatly, passing either the brainstorming or filter labels directly triggers a re-render of the form component when changing the filter labels and results in a stuck bootstrap modal.
+    # This is a workaround to get the filtered labels for the idea without passing
+    # them as a parameter to the form component. Passing the brainstorming or filter
+    # labels directly triggers a re-render of the form component when changing the
+    # filter labels and results in a stuck bootstrap modal.
     brainstorming = Brainstormings.get_bare_brainstorming!(socket.assigns.brainstorming_id)
     filtered_labels = brainstorming.filter_labels_ids
 
@@ -129,7 +131,8 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   defp prepare_attachments(socket) do
     files =
       consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
-        # The tmp uploaded file will be deleted directly after the ending of this function, therefore a copy in the tmp folder is made and then processed in the attachment changeset.
+        # The tmp uploaded file will be deleted directly after this function ends.
+        # Copy it to a tmp folder first so the attachment changeset can process it.
         # See also this discussion https://github.com/elixir-waffle/waffle/issues/71
         filename = "#{entry.uuid}.#{mime_ext(entry.client_type)}"
         dest = "#{Path.dirname(path)}/#{filename}"

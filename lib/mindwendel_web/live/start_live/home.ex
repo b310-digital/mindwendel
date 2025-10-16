@@ -3,13 +3,15 @@ defmodule MindwendelWeb.StartLive.Home do
 
   import MindwendelWeb.LiveHelpers
 
+  alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.LocalStorage
+  alias Mindwendel.Services.SessionService
 
   @impl true
   def mount(_, session, socket) do
-    current_user_id = Mindwendel.Services.SessionService.get_current_user_id(session)
+    current_user_id = SessionService.get_current_user_id(session)
 
     form =
       %Brainstorming{}
@@ -18,14 +20,15 @@ defmodule MindwendelWeb.StartLive.Home do
 
     {:ok,
      socket
-     |> assign(:current_user, Mindwendel.Accounts.get_user(current_user_id))
+     |> assign(:current_user, Accounts.get_user(current_user_id))
      |> assign(:form, form)
      |> assign(:brainstormings_stored, [])}
   end
 
   @impl true
   def handle_event("brainstormings_from_local_storage", brainstormings_stored, socket) do
-    # Brainstormings are used from session data and local storage. Session data can be removed later and is only used for a transition period.
+    # Brainstormings are used from session data and local storage. Session data can
+    # be removed later and is only used for a transition period.
     valid_stored_brainstormings =
       LocalStorage.brainstormings_from_local_storage_and_session(
         brainstormings_stored,

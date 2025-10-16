@@ -5,8 +5,8 @@ defmodule MindwendelWeb.BrainstormingLiveTest do
 
   alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
-  alias Mindwendel.Factory
   alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Factory
   alias Mindwendel.Repo
 
   setup do

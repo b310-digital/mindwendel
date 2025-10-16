@@ -3,10 +3,10 @@ defmodule Mindwendel.Accounts.User do
 
   import Ecto.Changeset
 
-  alias Mindwendel.Brainstormings.Brainstorming
-  alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Accounts.BrainstormingModeratingUser
   alias Mindwendel.Accounts.BrainstormingUser
+  alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Brainstormings.Idea
 
   schema "users" do
     field :username, :string, default: "Anonymous"

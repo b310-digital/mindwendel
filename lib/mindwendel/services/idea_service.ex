@@ -6,8 +6,8 @@ defmodule Mindwendel.Services.IdeaService do
   and automatically add them to brainstorming sessions.
   """
 
-  alias Mindwendel.Services.ChatCompletions.ChatCompletionsService
   alias Mindwendel.Ideas
+  alias Mindwendel.Services.ChatCompletions.ChatCompletionsService
 
   require Logger
 

@@ -3,9 +3,9 @@ defmodule MindwendelWeb.BrainstormingControllerTest do
 
   import Ecto.Query
 
-  alias Mindwendel.Repo
-  alias Mindwendel.Brainstormings.Brainstorming
   alias Mindwendel.Accounts.User
+  alias Mindwendel.Brainstormings.Brainstorming
+  alias Mindwendel.Repo
 
   describe "create" do
     @valid_attrs %{name: "How might we fix this?"}
