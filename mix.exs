@@ -53,7 +53,7 @@ defmodule Mindwendel.MixProject do
   defp deps do
     [
       {:phoenix, "1.8.1"},
-      {:phoenix_ecto, "4.6.5"},
+      {:phoenix_ecto, "4.7.0"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "1.6.1", only: :dev},
       {:phoenix_live_view, "~> 1.1.13"},
@@ -68,10 +68,10 @@ defmodule Mindwendel.MixProject do
       {:jason, "1.4.4"},
       {:oban, "2.20.1"},
       {:plug_cowboy, "2.7.4"},
-      {:cowboy, "2.14.1"},
+      {:cowboy, "2.14.2"},
       {:postgrex, "0.21.1"},
       {:sobelow, "0.14.1", only: [:dev, :test], runtime: false},
-      {:credo, "1.7.12", only: [:dev, :test], runtime: false},
+      {:credo, "1.7.13", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18"},
       {:telemetry_metrics, "1.1.0"},
       {:telemetry_poller, "1.3.0"},
@@ -84,7 +84,7 @@ defmodule Mindwendel.MixProject do
       {:ex_aws_s3, "2.5.8"},
       {:cloak, "1.1.4"},
       {:lazy_html, ">= 0.1.0", only: :test},
-      {:openai_ex, "0.9.17"},
+      {:openai_ex, "0.9.18"},
       {:mox, "1.2.0", only: :test}
     ]
   end
