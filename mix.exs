@@ -71,7 +71,7 @@ defmodule Mindwendel.MixProject do
       {:cowboy, "2.14.2"},
       {:postgrex, "0.21.1"},
       {:sobelow, "0.14.1", only: [:dev, :test], runtime: false},
-      {:credo, "1.7.13", only: [:dev, :test], runtime: false},
+      {:credo, "1.7.14", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18"},
       {:telemetry_metrics, "1.1.0"},
       {:telemetry_poller, "1.3.0"},
