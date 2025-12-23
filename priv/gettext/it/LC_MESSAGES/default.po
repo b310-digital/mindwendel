@@ -607,28 +607,28 @@ msgstr "Permesso negato"
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:319
 #, elixir-autogen, elixir-format
 msgid "AI clustering failed"
-msgstr ""
+msgstr "Clustering IA fallito"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:105
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:212
 #, elixir-autogen, elixir-format
 msgid "AI clustering is disabled"
-msgstr ""
+msgstr "Clustering IA disabilitato"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:51
 #, elixir-autogen, elixir-format
 msgid "Cluster"
-msgstr ""
+msgstr "Raggruppa"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:49
 #, elixir-autogen, elixir-format
 msgid "Cluster ideas"
-msgstr ""
+msgstr "Raggruppa idee"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:112
 #, elixir-autogen, elixir-format
 msgid "Clustering ideas..."
-msgstr ""
+msgstr "Raggruppamento idee in corso..."
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:96
 #, elixir-autogen, elixir-format, fuzzy
@@ -638,14 +638,14 @@ msgstr "Generazione di idee... in elaborazione..."
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:310
 #, elixir-autogen, elixir-format
 msgid "Ideas clustered into labels"
-msgstr ""
+msgstr "Idee raggruppate in etichette"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:308
 #, elixir-autogen, elixir-format
 msgid "No new clustering changes"
-msgstr ""
+msgstr "Nessuna nuova modifica al raggruppamento"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:315
 #, elixir-autogen, elixir-format
 msgid "Nothing to cluster right now"
-msgstr ""
+msgstr "Niente da raggruppare al momento"
