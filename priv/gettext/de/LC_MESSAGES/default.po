@@ -317,37 +317,37 @@ msgstr "Zurück"
 #: lib/mindwendel_web/components/core_components.ex:532
 #, elixir-autogen, elixir-format
 msgid "Actions"
-msgstr ""
+msgstr "Aktionen"
 
 #: lib/mindwendel_web/components/core_components.ex:160
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
-msgstr ""
+msgstr "Verbindung wird wiederhergestellt"
 
 #: lib/mindwendel_web/components/core_components.ex:151
 #, elixir-autogen, elixir-format
 msgid "Error!"
-msgstr ""
+msgstr "Fehler!"
 
 #: lib/mindwendel_web/components/core_components.ex:172
 #, elixir-autogen, elixir-format
 msgid "Hang in there while we get back on track"
-msgstr ""
+msgstr "Bitte warten, wir arbeiten daran"
 
 #: lib/mindwendel_web/components/core_components.ex:167
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
-msgstr ""
+msgstr "Etwas ist schiefgelaufen!"
 
 #: lib/mindwendel_web/components/core_components.ex:150
 #, elixir-autogen, elixir-format
 msgid "Success!"
-msgstr ""
+msgstr "Erfolg!"
 
 #: lib/mindwendel_web/components/core_components.ex:155
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
-msgstr ""
+msgstr "Keine Internetverbindung gefunden"
 
 #: lib/mindwendel_web/components/core_components.ex:75
 #: lib/mindwendel_web/components/core_components.ex:130
@@ -602,33 +602,33 @@ msgstr "Stündliches KI-Anfrage-Limit überschritten. Bitte versuchen Sie es sp�
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:209
 #, elixir-autogen, elixir-format
 msgid "Permission denied"
-msgstr ""
+msgstr "Zugriff verweigert"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:319
 #, elixir-autogen, elixir-format
 msgid "AI clustering failed"
-msgstr ""
+msgstr "KI-Clustering fehlgeschlagen"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:105
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:212
 #, elixir-autogen, elixir-format
 msgid "AI clustering is disabled"
-msgstr ""
+msgstr "KI-Clustering ist deaktiviert"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:51
 #, elixir-autogen, elixir-format
 msgid "Cluster"
-msgstr ""
+msgstr "Clustern"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:49
 #, elixir-autogen, elixir-format
 msgid "Cluster ideas"
-msgstr ""
+msgstr "Ideen clustern"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:112
 #, elixir-autogen, elixir-format
 msgid "Clustering ideas..."
-msgstr ""
+msgstr "Ideen werden geclustert..."
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:96
 #, elixir-autogen, elixir-format, fuzzy
@@ -638,14 +638,14 @@ msgstr "Ideen werden generiert... denke nach..."
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:310
 #, elixir-autogen, elixir-format
 msgid "Ideas clustered into labels"
-msgstr ""
+msgstr "Ideen wurden in Labels geclustert"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:308
 #, elixir-autogen, elixir-format
 msgid "No new clustering changes"
-msgstr ""
+msgstr "Keine neuen Clustering-Änderungen"
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:315
 #, elixir-autogen, elixir-format
 msgid "Nothing to cluster right now"
-msgstr ""
+msgstr "Derzeit nichts zum Clustern vorhanden"
