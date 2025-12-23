@@ -40,10 +40,3 @@ config :mindwendel, Oban, repo: Mindwendel.Repo, testing: :inline
 
 # Allow private IPs for URL preview in tests
 config :mindwendel, :allow_private_ips, true
-
-# Disable AI token tracking in tests
-config :mindwendel, :ai,
-  enabled: false,
-  token_limit_daily: nil,
-  token_limit_hourly: nil,
-  request_timeout: 60_000
