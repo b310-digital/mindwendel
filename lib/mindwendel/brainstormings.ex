@@ -153,7 +153,7 @@ defmodule Mindwendel.Brainstormings do
         %Brainstorming{} = brainstorming,
         %{filter_labels_ids: filter_labels_ids} = attrs
       ) do
-    if length(filter_labels_ids) != 0 do
+    unless Enum.empty?(filter_labels_ids) do
       Ideas.update_disjoint_idea_positions_for_brainstorming_by_labels(
         brainstorming.id,
         filter_labels_ids

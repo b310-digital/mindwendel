@@ -30,7 +30,7 @@ defmodule MindwendelWeb.LabelLive.CaptionsTest do
 
     # make sure that there is at least one label in the list:
 
-    assert length(preloaded_brainstorming.labels) > 0
+    refute Enum.empty?(preloaded_brainstorming.labels)
 
     Enum.each(preloaded_brainstorming.labels, fn label ->
       assert captions_component =~ label.name
