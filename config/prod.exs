@@ -32,14 +32,7 @@ config :mindwendel, MindwendelWeb.Endpoint,
   # For this to work, we tell the Phoenix endpoint Configuration (Plug.SSL) to parse the proper protocol from the x-forwarded-* header.
   # See https://hexdocs.pm/plug/Plug.SSL.html#module-x-forwarded
   # See https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#module-compile-time-configuration
-  force_ssl: [
-    hsts: true,
-    rewrite_on: [
-      :x_forwarded_host,
-      :x_forwarded_port,
-      :x_forwarded_proto
-    ]
-  ],
+  force_ssl: false,
   http: [
     transport_options: [
       socket_opts: [

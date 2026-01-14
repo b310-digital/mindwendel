@@ -32,7 +32,7 @@ if config_env() == :prod do
            "ERLANG_COOKIE"
          ]}
       ],
-      metadata: {:all_except, [:conn, :domain, :application]}
+      metadata: {:all_except, [:application, :mfa]}
     }
 end
 
