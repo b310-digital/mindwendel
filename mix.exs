@@ -66,12 +66,12 @@ defmodule Mindwendel.MixProject do
       {:gettext, "0.26.2"},
       {:httpoison, "2.3.0"},
       {:jason, "1.4.4"},
-      {:oban, "2.20.2"},
-      {:plug_cowboy, "2.7.5"},
+      {:oban, "2.20.3"},
+      {:plug_cowboy, "2.8.0"},
       {:cowboy, "2.14.2"},
       {:postgrex, "0.22.0"},
       {:sobelow, "0.14.1", only: [:dev, :test], runtime: false},
-      {:credo, "1.7.15", only: [:dev, :test], runtime: false},
+      {:credo, "1.7.16", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18"},
       {:telemetry_metrics, "1.1.0"},
       {:telemetry_poller, "1.3.0"},
@@ -84,7 +84,7 @@ defmodule Mindwendel.MixProject do
       {:ex_aws_s3, "2.5.9"},
       {:cloak, "1.1.4"},
       {:lazy_html, ">= 0.1.0", only: :test},
-      {:openai_ex, "0.9.18"},
+      {:openai_ex, "0.9.19"},
       {:mox, "1.2.0", only: :test}
     ]
   end
