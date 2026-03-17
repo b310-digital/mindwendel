@@ -172,7 +172,7 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: lib/mindwendel_web/live/start_live/home.html.heex:54
+#: lib/mindwendel_web/live/start_live/home.html.heex:49
 #, elixir-autogen
 msgid "Your latest brainstormings"
 msgstr ""
@@ -198,11 +198,6 @@ msgstr ""
 #: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:4
 #, elixir-autogen, elixir-format
 msgid "Administration for brainstorming: %{name}"
-msgstr ""
-
-#: lib/mindwendel_web/live/start_live/home.html.heex:37
-#, elixir-autogen, elixir-format
-msgid "Brainstormings will be deleted after %{days} days."
 msgstr ""
 
 #: lib/mindwendel/brainstormings/brainstorming.ex:75
@@ -298,7 +293,7 @@ msgstr ""
 msgid "Brainstorming will be deleted %{days}"
 msgstr ""
 
-#: lib/mindwendel_web/live/start_live/home.html.heex:68
+#: lib/mindwendel_web/live/start_live/home.html.heex:63
 #, elixir-autogen, elixir-format
 msgid "Attention: Brainstormings will be deleted %{available_until} after last access!"
 msgstr ""
@@ -535,13 +530,13 @@ msgstr ""
 msgid "Your comment"
 msgstr ""
 
-#: lib/mindwendel_web/live/start_live/home.html.heex:81
+#: lib/mindwendel_web/live/start_live/home.html.heex:76
 #: lib/mindwendel_web/templates/layout/app.html.heex:69
 #, elixir-autogen, elixir-format
 msgid "Legal Disclosure"
 msgstr ""
 
-#: lib/mindwendel_web/live/start_live/home.html.heex:82
+#: lib/mindwendel_web/live/start_live/home.html.heex:77
 #: lib/mindwendel_web/templates/layout/app.html.heex:65
 #, elixir-autogen, elixir-format
 msgid "Privacy"
@@ -647,4 +642,9 @@ msgstr ""
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:315
 #, elixir-autogen, elixir-format
 msgid "Nothing to cluster right now"
+msgstr ""
+
+#: lib/mindwendel_web/live/start_live/home.html.heex:37
+#, elixir-autogen, elixir-format
+msgid "Attention: We will shut down this offering at the end of May 2026! Please export your data."
 msgstr ""

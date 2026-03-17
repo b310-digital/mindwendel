@@ -173,7 +173,7 @@ msgstr "Editiere Brainstorming"
 msgid "Export"
 msgstr "Export"
 
-#: lib/mindwendel_web/live/start_live/home.html.heex:54
+#: lib/mindwendel_web/live/start_live/home.html.heex:49
 #, elixir-autogen
 msgid "Your latest brainstormings"
 msgstr "Deine letzten Brainstormings"
@@ -200,11 +200,6 @@ msgstr "Von"
 #, elixir-autogen, elixir-format
 msgid "Administration for brainstorming: %{name}"
 msgstr "Administration für: %{name}"
-
-#: lib/mindwendel_web/live/start_live/home.html.heex:37
-#, elixir-autogen, elixir-format
-msgid "Brainstormings will be deleted after %{days} days."
-msgstr "Brainstormings werden nach %{days} Tagen gelöscht."
 
 #: lib/mindwendel/brainstormings/brainstorming.ex:75
 #, elixir-autogen, elixir-format
@@ -299,7 +294,7 @@ msgstr "Leere das Brainstorming"
 msgid "Brainstorming will be deleted %{days}"
 msgstr "Brainstorming wird gelöscht %{days}"
 
-#: lib/mindwendel_web/live/start_live/home.html.heex:68
+#: lib/mindwendel_web/live/start_live/home.html.heex:63
 #, elixir-autogen, elixir-format
 msgid "Attention: Brainstormings will be deleted %{available_until} after last access!"
 msgstr "Achtung: Brainstormings werden %{available_until} nach dem letzten Zugriff gelöscht!"
@@ -536,13 +531,13 @@ msgstr "Zeige Idee"
 msgid "Your comment"
 msgstr "Kommentar"
 
-#: lib/mindwendel_web/live/start_live/home.html.heex:81
+#: lib/mindwendel_web/live/start_live/home.html.heex:76
 #: lib/mindwendel_web/templates/layout/app.html.heex:69
 #, elixir-autogen, elixir-format
 msgid "Legal Disclosure"
 msgstr "Impressum"
 
-#: lib/mindwendel_web/live/start_live/home.html.heex:82
+#: lib/mindwendel_web/live/start_live/home.html.heex:77
 #: lib/mindwendel_web/templates/layout/app.html.heex:65
 #, elixir-autogen, elixir-format
 msgid "Privacy"
@@ -649,3 +644,8 @@ msgstr "Keine neuen Clustering-Änderungen"
 #, elixir-autogen, elixir-format
 msgid "Nothing to cluster right now"
 msgstr "Derzeit nichts zum Clustern vorhanden"
+
+#: lib/mindwendel_web/live/start_live/home.html.heex:37
+#, elixir-autogen, elixir-format
+msgid "Attention: We will shut down this offering at the end of May 2026! Please export your data."
+msgstr "Achtung: Wir beenden diesen Dienst zu Ende Mai 2026. Bitte exportieren Sie ihre Daten."

@@ -173,7 +173,7 @@ msgstr "Modifica Brainstorming"
 msgid "Export"
 msgstr "Esporta"
 
-#: lib/mindwendel_web/live/start_live/home.html.heex:54
+#: lib/mindwendel_web/live/start_live/home.html.heex:49
 #, elixir-autogen
 msgid "Your latest brainstormings"
 msgstr "I tuoi ultimi brainstorming"
@@ -200,11 +200,6 @@ msgstr "Di"
 #, elixir-autogen, elixir-format
 msgid "Administration for brainstorming: %{name}"
 msgstr "Amministrazione per il brainstorming: %{name}"
-
-#: lib/mindwendel_web/live/start_live/home.html.heex:37
-#, elixir-autogen, elixir-format
-msgid "Brainstormings will be deleted after %{days} days."
-msgstr "I brainstorming verranno eliminati dopo %{days} giorni."
 
 #: lib/mindwendel/brainstormings/brainstorming.ex:75
 #, elixir-autogen, elixir-format
@@ -299,7 +294,7 @@ msgstr "Svuota brainstorming"
 msgid "Brainstorming will be deleted %{days}"
 msgstr "Il brainstorming verrà eliminato %{days}"
 
-#: lib/mindwendel_web/live/start_live/home.html.heex:68
+#: lib/mindwendel_web/live/start_live/home.html.heex:63
 #, elixir-autogen, elixir-format
 msgid "Attention: Brainstormings will be deleted %{available_until} after last access!"
 msgstr "Attenzione: I brainstorming verranno eliminati %{available_until} dopo l'ultimo accesso!"
@@ -536,13 +531,13 @@ msgstr "Mostra idea"
 msgid "Your comment"
 msgstr "Il tuo commento"
 
-#: lib/mindwendel_web/live/start_live/home.html.heex:81
+#: lib/mindwendel_web/live/start_live/home.html.heex:76
 #: lib/mindwendel_web/templates/layout/app.html.heex:69
 #, elixir-autogen, elixir-format
 msgid "Legal Disclosure"
 msgstr "Note legali"
 
-#: lib/mindwendel_web/live/start_live/home.html.heex:82
+#: lib/mindwendel_web/live/start_live/home.html.heex:77
 #: lib/mindwendel_web/templates/layout/app.html.heex:65
 #, elixir-autogen, elixir-format
 msgid "Privacy"
@@ -649,3 +644,8 @@ msgstr "Nessuna nuova modifica al raggruppamento"
 #, elixir-autogen, elixir-format
 msgid "Nothing to cluster right now"
 msgstr "Niente da raggruppare al momento"
+
+#: lib/mindwendel_web/live/start_live/home.html.heex:37
+#, elixir-autogen, elixir-format
+msgid "Attention: We will shut down this offering at the end of May 2026! Please export your data."
+msgstr ""
