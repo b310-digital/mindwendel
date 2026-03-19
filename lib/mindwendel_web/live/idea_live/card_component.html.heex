@@ -7,6 +7,15 @@
   data-lane-id={@idea.lane_id}
   data-position={@idea.position_order}
 >
+  <%= with image when not is_nil(image) <- Enum.find(@idea.files, fn f -> Attachments.simplified_attached_file_type(f.file_type) == "image" end) do %>
+    <div class="card-img-top-mindwendel">
+      <img
+        src={~p"/files/#{image.id}"}
+        alt={image.name || gettext("Attached image")}
+        class="card-img-top-mindwendel__img"
+      />
+    </div>
+  <% end %>
   <div class="card-body-mindwendel-idea">
     <%= if has_moderating_or_ownership_permission(@brainstorming.id, @idea, @current_user) do %>
       <.link

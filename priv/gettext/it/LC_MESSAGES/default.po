@@ -37,7 +37,7 @@ msgid "%{name} - New Idea"
 msgstr "%{name} - Nuova Idea"
 
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:22
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:17
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:26
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this idea?"
 msgstr "Sei sicuro di voler eliminare questa idea?"
@@ -191,7 +191,7 @@ msgstr "Nome utente"
 
 #: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:3
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:40
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:84
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:93
 #, elixir-autogen, elixir-format
 msgid "By"
 msgstr "Di"
@@ -447,13 +447,13 @@ msgstr "Categoria predefinita"
 msgid "No lanes available"
 msgstr "Nessuna categoria disponibile"
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:24
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:33
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Edit idea"
 msgstr "Modifica idea"
 
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:30
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:16
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:25
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Delete idea"
 msgstr "Elimina idea"
@@ -468,7 +468,7 @@ msgstr "Idea aggiornata"
 msgid "Additional Attachment"
 msgstr "Allegato aggiuntivo"
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:74
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:83
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:43
 #: lib/mindwendel_web/live/idea_live/show_component.html.heex:27
 #, elixir-autogen, elixir-format
@@ -525,8 +525,8 @@ msgstr "Elimina commento"
 msgid "No comments available"
 msgstr "Nessun commento disponibile"
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:32
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:137
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:41
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:146
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Show idea"
 msgstr "Mostra idea"
@@ -649,3 +649,8 @@ msgstr "Nessuna nuova modifica al raggruppamento"
 #, elixir-autogen, elixir-format
 msgid "Nothing to cluster right now"
 msgstr "Niente da raggruppare al momento"
+
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:14
+#, elixir-autogen, elixir-format
+msgid "Attached image"
+msgstr ""
