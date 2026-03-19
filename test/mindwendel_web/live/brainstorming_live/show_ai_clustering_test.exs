@@ -10,8 +10,8 @@ defmodule MindwendelWeb.BrainstormingLiveAIClusteringTest do
   import Mindwendel.BrainstormingsFixtures
   import Ecto.Query
 
-  alias Mindwendel.AI.Schemas.IdeaLabelAssignment
   alias Mindwendel.Accounts
+  alias Mindwendel.AI.Schemas.IdeaLabelAssignment
   alias Mindwendel.Brainstormings
   alias Mindwendel.Brainstormings.Idea
   alias Mindwendel.Ideas
