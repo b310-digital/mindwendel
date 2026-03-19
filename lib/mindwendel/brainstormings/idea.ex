@@ -70,24 +70,19 @@ defmodule Mindwendel.Brainstormings.Idea do
     end
   end
 
-  @newline_placeholder "___NEWLINE___"
-
   defp strip_html(text) when is_binary(text) do
-    # Preserve user-typed newlines through HTML stripping by using a placeholder
-    text_with_placeholders = String.replace(text, "\n", @newline_placeholder)
-
-    stripped =
-      case Floki.parse_document(text_with_placeholders) do
+    # Convert literal newlines to <br/> so Floki natively preserves them as \n
+    text
+    |> String.replace("\n", "<br/>")
+    |> then(fn html ->
+      case Floki.parse_document(html) do
         {:ok, parsed} ->
           Floki.text(parsed, sep: " ")
 
         {:error, _} ->
-          # If parsing fails, fall back to basic regex stripping
-          String.replace(text_with_placeholders, ~r/<[^>]*>/, "")
+          String.replace(html, ~r/<[^>]*>/, "")
       end
-
-    stripped
-    |> String.replace(@newline_placeholder, "\n")
+    end)
     |> normalize_whitespace()
   end
 
@@ -95,7 +90,8 @@ defmodule Mindwendel.Brainstormings.Idea do
 
   defp normalize_whitespace(text) do
     text
-    # Collapse horizontal whitespace (spaces, tabs) without affecting newlines
+    # Trim horizontal whitespace around newlines, then collapse remaining
+    |> String.replace(~r/[^\S\n]*\n[^\S\n]*/, "\n")
     |> String.replace(~r/[^\S\n]+/, " ")
     # Cap consecutive newlines at 2 (one blank line between paragraphs)
     |> String.replace(~r/\n{3,}/, "\n\n")
