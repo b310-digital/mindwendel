@@ -1,5 +1,5 @@
 defmodule Mindwendel.AI.TokenTrackingServiceTest do
-  use Mindwendel.DataCase, async: false
+  use Mindwendel.DataCase, async: true
 
   alias Mindwendel.AI.TokenTrackingService
   alias Mindwendel.AI.TokenUsage
@@ -36,21 +36,14 @@ defmodule Mindwendel.AI.TokenTrackingServiceTest do
 
   describe "check_limits/0" do
     setup do
-      # Mock config for test
-      Application.put_env(:mindwendel, :ai,
-        enabled: true,
-        token_limit_daily: 1000,
-        token_limit_hourly: 100,
-        token_reset_hour: 0
-      )
-
-      on_exit(fn ->
-        # Restore test config from config/test.exs
-        Application.put_env(:mindwendel, :ai,
-          enabled: false,
-          token_limit_daily: nil,
-          token_limit_hourly: nil
-        )
+      Mindwendel.AI.Config.Mock
+      |> stub(:fetch_ai_config!, fn ->
+        [
+          enabled: true,
+          token_limit_daily: 1000,
+          token_limit_hourly: 100,
+          token_reset_hour: 0
+        ]
       end)
 
       :ok

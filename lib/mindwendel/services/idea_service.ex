@@ -52,33 +52,7 @@ defmodule Mindwendel.Services.IdeaService do
                existing_ideas,
                locale
              ) do
-        # Build a map of valid lane IDs for quick lookup
-        valid_lane_ids = MapSet.new(Enum.map(brainstorming.lanes, & &1.id))
-
-        results =
-          Enum.map(generated_ideas, fn generated_idea ->
-            # Use the lane_id from AI if valid, otherwise fall back to default
-            lane_id = resolve_lane_id(generated_idea["lane_id"], valid_lane_ids, default_lane_id)
-
-            Ideas.create_idea(%{
-              username: @ai_username,
-              body: generated_idea["idea"],
-              brainstorming_id: brainstorming.id,
-              lane_id: lane_id
-            })
-          end)
-
-        # Filter out failed creations and return only successful ones
-        {successful, failed} = Enum.split_with(results, &match?({:ok, _}, &1))
-
-        unless Enum.empty?(failed) do
-          Logger.warning(
-            "Failed to create #{length(failed)} ideas for brainstorming #{brainstorming.id}: #{inspect(failed)}"
-          )
-        end
-
-        successful_ideas = Enum.map(successful, fn {:ok, idea} -> idea end)
-        {:ok, successful_ideas}
+        create_generated_ideas(brainstorming, generated_ideas, default_lane_id)
       else
         {:error, reason} ->
           Logger.warning("Failed to generate ideas: #{inspect(reason)}")
@@ -87,6 +61,33 @@ defmodule Mindwendel.Services.IdeaService do
     else
       {:ok, []}
     end
+  end
+
+  defp create_generated_ideas(brainstorming, generated_ideas, default_lane_id) do
+    valid_lane_ids = MapSet.new(Enum.map(brainstorming.lanes, & &1.id))
+
+    results =
+      Enum.map(generated_ideas, fn generated_idea ->
+        lane_id = resolve_lane_id(generated_idea["lane_id"], valid_lane_ids, default_lane_id)
+
+        Ideas.create_idea(%{
+          username: @ai_username,
+          body: generated_idea["idea"],
+          brainstorming_id: brainstorming.id,
+          lane_id: lane_id
+        })
+      end)
+
+    {successful, failed} = Enum.split_with(results, &match?({:ok, _}, &1))
+
+    unless Enum.empty?(failed) do
+      Logger.warning(
+        "Failed to create #{length(failed)} ideas for brainstorming #{brainstorming.id}: #{inspect(failed)}"
+      )
+    end
+
+    successful_ideas = Enum.map(successful, fn {:ok, idea} -> idea end)
+    {:ok, successful_ideas}
   end
 
   defp resolve_lane_id(nil, _valid_lane_ids, default_lane_id), do: default_lane_id
