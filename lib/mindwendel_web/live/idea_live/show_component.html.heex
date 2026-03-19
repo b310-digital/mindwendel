@@ -1,6 +1,6 @@
 <div>
   <%= unless @idea.link do %>
-    <p>{@idea.body}</p>
+    <p style="white-space: pre-line">{@idea.body}</p>
   <% end %>
 
   <%= if @idea.link do %>

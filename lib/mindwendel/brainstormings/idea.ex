@@ -70,29 +70,36 @@ defmodule Mindwendel.Brainstormings.Idea do
     end
   end
 
-  defp strip_html(text) when is_binary(text) do
-    # Strip all HTML tags by parsing with Floki and extracting text content
-    # This removes all tags, event handlers, and JavaScript
-    case Floki.parse_document(text) do
-      {:ok, parsed} ->
-        parsed
-        |> Floki.text(sep: " ")
-        |> normalize_whitespace()
+  @newline_placeholder "___NEWLINE___"
 
-      {:error, _} ->
-        # If parsing fails, fall back to basic regex stripping
-        text
-        |> String.replace(~r/<[^>]*>/, "")
-        |> normalize_whitespace()
-    end
+  defp strip_html(text) when is_binary(text) do
+    # Preserve user-typed newlines through HTML stripping by using a placeholder
+    text_with_placeholders = String.replace(text, "\n", @newline_placeholder)
+
+    stripped =
+      case Floki.parse_document(text_with_placeholders) do
+        {:ok, parsed} ->
+          Floki.text(parsed, sep: " ")
+
+        {:error, _} ->
+          # If parsing fails, fall back to basic regex stripping
+          String.replace(text_with_placeholders, ~r/<[^>]*>/, "")
+      end
+
+    stripped
+    |> String.replace(@newline_placeholder, "\n")
+    |> normalize_whitespace()
   end
 
   defp strip_html(text), do: text
 
   defp normalize_whitespace(text) do
     text
+    # Collapse horizontal whitespace (spaces, tabs) without affecting newlines
+    |> String.replace(~r/[^\S\n]+/, " ")
+    # Cap consecutive newlines at 2 (one blank line between paragraphs)
+    |> String.replace(~r/\n{3,}/, "\n\n")
     |> String.trim()
-    |> String.replace(~r/\s+/, " ")
   end
 
   defp maybe_put_idea_labels(changeset, attrs) do
