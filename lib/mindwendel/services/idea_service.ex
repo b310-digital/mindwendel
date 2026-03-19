@@ -38,54 +38,58 @@ defmodule Mindwendel.Services.IdeaService do
           {:ok, list(Mindwendel.Brainstormings.Idea.t())} | {:error, atom()}
   def add_ideas_to_brainstorming(brainstorming) do
     if idea_generation_enabled?() do
-      # Get current locale from Gettext for language-specific idea generation
-      locale = Gettext.get_locale(MindwendelWeb.Gettext)
-
-      # Get existing ideas to avoid duplicates
-      existing_ideas = Ideas.list_ideas_for_brainstorming(brainstorming.id)
-
-      with {:ok, default_lane_id} <- get_first_lane_id(brainstorming),
-           {:ok, generated_ideas} <-
-             ChatCompletionsService.generate_ideas(
-               brainstorming.name,
-               brainstorming.lanes,
-               existing_ideas,
-               locale
-             ) do
-        # Build a map of valid lane IDs for quick lookup
-        valid_lane_ids = MapSet.new(Enum.map(brainstorming.lanes, & &1.id))
-
-        results =
-          Enum.map(generated_ideas, fn generated_idea ->
-            # Use the lane_id from AI if valid, otherwise fall back to default
-            lane_id = resolve_lane_id(generated_idea["lane_id"], valid_lane_ids, default_lane_id)
-
-            Ideas.create_idea(%{
-              username: @ai_username,
-              body: generated_idea["idea"],
-              brainstorming_id: brainstorming.id,
-              lane_id: lane_id
-            })
-          end)
-
-        # Filter out failed creations and return only successful ones
-        {successful, failed} = Enum.split_with(results, &match?({:ok, _}, &1))
-
-        unless Enum.empty?(failed) do
-          Logger.warning(
-            "Failed to create #{length(failed)} ideas for brainstorming #{brainstorming.id}: #{inspect(failed)}"
-          )
-        end
-
-        successful_ideas = Enum.map(successful, fn {:ok, idea} -> idea end)
-        {:ok, successful_ideas}
-      else
-        {:error, reason} ->
-          Logger.warning("Failed to generate ideas: #{inspect(reason)}")
-          {:error, reason}
-      end
+      do_add_ideas_to_brainstorming(brainstorming)
     else
       {:ok, []}
+    end
+  end
+
+  defp do_add_ideas_to_brainstorming(brainstorming) do
+    # Get current locale from Gettext for language-specific idea generation
+    locale = Gettext.get_locale(MindwendelWeb.Gettext)
+
+    # Get existing ideas to avoid duplicates
+    existing_ideas = Ideas.list_ideas_for_brainstorming(brainstorming.id)
+
+    with {:ok, default_lane_id} <- get_first_lane_id(brainstorming),
+         {:ok, generated_ideas} <-
+           ChatCompletionsService.generate_ideas(
+             brainstorming.name,
+             brainstorming.lanes,
+             existing_ideas,
+             locale
+           ) do
+      # Build a map of valid lane IDs for quick lookup
+      valid_lane_ids = MapSet.new(Enum.map(brainstorming.lanes, & &1.id))
+
+      results =
+        Enum.map(generated_ideas, fn generated_idea ->
+          # Use the lane_id from AI if valid, otherwise fall back to default
+          lane_id = resolve_lane_id(generated_idea["lane_id"], valid_lane_ids, default_lane_id)
+
+          Ideas.create_idea(%{
+            username: @ai_username,
+            body: generated_idea["idea"],
+            brainstorming_id: brainstorming.id,
+            lane_id: lane_id
+          })
+        end)
+
+      # Filter out failed creations and return only successful ones
+      {successful, failed} = Enum.split_with(results, &match?({:ok, _}, &1))
+
+      unless Enum.empty?(failed) do
+        Logger.warning(
+          "Failed to create #{length(failed)} ideas for brainstorming #{brainstorming.id}: #{inspect(failed)}"
+        )
+      end
+
+      successful_ideas = Enum.map(successful, fn {:ok, idea} -> idea end)
+      {:ok, successful_ideas}
+    else
+      {:error, reason} ->
+        Logger.warning("Failed to generate ideas: #{inspect(reason)}")
+        {:error, reason}
     end
   end
 
