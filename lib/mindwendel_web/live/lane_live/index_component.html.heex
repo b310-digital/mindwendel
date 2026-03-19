@@ -24,13 +24,13 @@
                 class="btn-secondary dropdown-toggle btn-sm"
                 data-bs-toggle="dropdown"
                 type="button"
-                id={lane.name}
+                id={"lane-dropdown-#{lane.id}"}
                 aria-haspopup="true"
                 aria-expanded="false"
               >
                 ...
               </.button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div class="dropdown-menu" aria-labelledby={"lane-dropdown-#{lane.id}"}>
                 <% move_disabled =
                   unless has_move_permission(@brainstorming, @current_user),
                     do: "disabled",
