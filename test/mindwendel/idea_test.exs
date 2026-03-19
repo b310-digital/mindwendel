@@ -242,8 +242,35 @@ defmodule Mindwendel.IdeaTest do
           body: "<p>First paragraph</p><p>Second paragraph</p>"
         })
 
-      # Floki.text with sep: " " should preserve spaces
       assert changeset.changes.body == "First paragraph Second paragraph"
+    end
+
+    test "preserves newlines from plain text input", %{
+      brainstorming: brainstorming,
+      lane: lane
+    } do
+      changeset =
+        Idea.changeset(%Idea{}, %{
+          brainstorming_id: brainstorming.id,
+          lane_id: lane.id,
+          body: "First paragraph\n\nSecond paragraph"
+        })
+
+      assert changeset.changes.body == "First paragraph\n\nSecond paragraph"
+    end
+
+    test "collapses excessive blank lines", %{
+      brainstorming: brainstorming,
+      lane: lane
+    } do
+      changeset =
+        Idea.changeset(%Idea{}, %{
+          brainstorming_id: brainstorming.id,
+          lane_id: lane.id,
+          body: "Line 1\n\n\n\n\nLine 2"
+        })
+
+      assert changeset.changes.body == "Line 1\n\nLine 2"
     end
 
     test "strips HTML when updating an existing idea" do
