@@ -58,3 +58,4 @@ ca
 
 # devcontainer files:
 .devcontainer
+.mcp.json
