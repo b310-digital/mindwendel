@@ -71,28 +71,31 @@ defmodule Mindwendel.Brainstormings.Idea do
   end
 
   defp strip_html(text) when is_binary(text) do
-    # Strip all HTML tags by parsing with Floki and extracting text content
-    # This removes all tags, event handlers, and JavaScript
-    case Floki.parse_document(text) do
-      {:ok, parsed} ->
-        parsed
-        |> Floki.text(sep: " ")
-        |> normalize_whitespace()
+    # Convert literal newlines to <br/> so Floki natively preserves them as \n
+    text
+    |> String.replace("\n", "<br/>")
+    |> then(fn html ->
+      case Floki.parse_document(html) do
+        {:ok, parsed} ->
+          Floki.text(parsed, sep: " ")
 
-      {:error, _} ->
-        # If parsing fails, fall back to basic regex stripping
-        text
-        |> String.replace(~r/<[^>]*>/, "")
-        |> normalize_whitespace()
-    end
+        {:error, _} ->
+          String.replace(html, ~r/<[^>]*>/, "")
+      end
+    end)
+    |> normalize_whitespace()
   end
 
   defp strip_html(text), do: text
 
   defp normalize_whitespace(text) do
     text
+    # Trim horizontal whitespace around newlines, then collapse remaining
+    |> String.replace(~r/[^\S\n]*\n[^\S\n]*/, "\n")
+    |> String.replace(~r/[^\S\n]+/, " ")
+    # Cap consecutive newlines at 2 (one blank line between paragraphs)
+    |> String.replace(~r/\n{3,}/, "\n\n")
     |> String.trim()
-    |> String.replace(~r/\s+/, " ")
   end
 
   defp maybe_put_idea_labels(changeset, attrs) do
