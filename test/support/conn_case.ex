@@ -56,6 +56,17 @@ defmodule MindwendelWeb.ConnCase do
   # Provide default AI disabled stub for all ConnCase tests
   # This prevents Mox.UnexpectedCallError when LiveViews render
   defp setup_ai_disabled_stub(_context) do
+    Mindwendel.AI.Config.Mock
+    |> Mox.stub(:fetch_ai_config!, fn ->
+      [
+        enabled: false,
+        token_limit_daily: nil,
+        token_limit_hourly: nil,
+        token_reset_hour: 0,
+        request_timeout: 60_000
+      ]
+    end)
+
     Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
     |> Mox.stub(:enabled?, fn -> false end)
     |> Mox.stub(:generate_ideas, fn _title, _lanes, _existing_ideas, _locale ->

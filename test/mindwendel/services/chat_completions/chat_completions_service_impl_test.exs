@@ -6,38 +6,31 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImplTest do
 
   describe "generate_ideas/1" do
     setup do
-      # Configure AI for tests
-      Application.put_env(:mindwendel, :ai,
-        enabled: true,
-        provider: :openai,
-        model: "gpt-4o-mini",
-        api_key: "test-key",
-        token_limit_daily: 1000,
-        token_limit_hourly: 100,
-        request_timeout: 60_000
-      )
-
-      on_exit(fn ->
-        # Restore test config from config/test.exs
-        Application.put_env(:mindwendel, :ai,
-          enabled: false,
-          token_limit_daily: nil,
-          token_limit_hourly: nil,
+      Mindwendel.AI.Config.Mock
+      |> stub(:fetch_ai_config!, fn ->
+        [
+          enabled: true,
+          provider: :openai,
+          model: "gpt-4o-mini",
+          api_key: "test-key",
+          token_limit_daily: 1000,
+          token_limit_hourly: 100,
+          token_reset_hour: 0,
           request_timeout: 60_000
-        )
+        ]
       end)
 
       :ok
     end
 
     test "returns error when AI is not enabled" do
-      Application.put_env(:mindwendel, :ai, enabled: false)
+      Mindwendel.AI.Config.Mock
+      |> expect(:fetch_ai_config!, fn -> [enabled: false] end)
 
       assert {:error, :ai_not_enabled} = ChatCompletionsServiceImpl.generate_ideas("Test")
     end
 
     test "returns error when daily limit is exceeded" do
-      # Exceed daily limit
       {:ok, _} = TokenTrackingService.record_usage(%{total_tokens: 1001})
 
       assert {:error, :daily_limit_exceeded} =
@@ -45,7 +38,6 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImplTest do
     end
 
     test "returns error when hourly limit is exceeded" do
-      # Exceed hourly limit
       {:ok, _} = TokenTrackingService.record_usage(%{total_tokens: 101})
 
       assert {:error, :hourly_limit_exceeded} =
@@ -55,37 +47,21 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImplTest do
 
   describe "enabled?/0" do
     test "returns true when AI is enabled" do
-      Application.put_env(:mindwendel, :ai,
-        enabled: true,
-        token_limit_daily: nil,
-        token_limit_hourly: nil
-      )
+      Mindwendel.AI.Config.Mock
+      |> expect(:fetch_ai_config!, fn ->
+        [enabled: true, token_limit_daily: nil, token_limit_hourly: nil]
+      end)
 
       assert ChatCompletionsServiceImpl.enabled?() == true
     end
 
     test "returns false when AI is disabled" do
-      Application.put_env(:mindwendel, :ai,
-        enabled: false,
-        token_limit_daily: nil,
-        token_limit_hourly: nil
-      )
+      Mindwendel.AI.Config.Mock
+      |> expect(:fetch_ai_config!, fn ->
+        [enabled: false, token_limit_daily: nil, token_limit_hourly: nil]
+      end)
 
       assert ChatCompletionsServiceImpl.enabled?() == false
-    end
-
-    test "raises ArgumentError when AI config is missing" do
-      # Temporarily delete config to test error handling
-      original_config = Application.get_env(:mindwendel, :ai)
-      Application.delete_env(:mindwendel, :ai)
-
-      # enabled?() should raise because it calls fetch_ai_config!() which uses Application.fetch_env!
-      assert_raise ArgumentError, fn ->
-        ChatCompletionsServiceImpl.enabled?()
-      end
-
-      # Restore config
-      Application.put_env(:mindwendel, :ai, original_config || [enabled: false])
     end
   end
 
