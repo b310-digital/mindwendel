@@ -113,6 +113,72 @@ div[data-phx-session] {
   height: 100%;
 }
 
+.lanes-container-wrapper {
+  position: relative;
+
+  .lanes-container {
+    overflow-x: auto;
+    scrollbar-color: $gray-500 $gray-200;
+
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $gray-200;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $gray-500;
+      border-radius: 4px;
+
+      &:hover {
+        background-color: $gray-600;
+      }
+    }
+
+    > [class*="col-"] {
+      flex: 0 0 auto;
+      min-width: 300px;
+    }
+  }
+}
+
+.lanes-scroll-indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  &--right {
+    right: 0;
+  }
+
+  &--left {
+    left: 0;
+  }
+
+  .scroll-arrow {
+    position: sticky;
+    top: 50vh;
+    display: block;
+    font-size: 1.5rem;
+    color: $gray-600;
+    text-align: center;
+  }
+}
+
 .text-pre-line {
   white-space: pre-line;
 }
