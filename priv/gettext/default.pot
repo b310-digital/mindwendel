@@ -474,17 +474,17 @@ msgstr ""
 msgid "No filename"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:156
+#: lib/mindwendel_web/live/idea_live/form_component.ex:184
 #, elixir-autogen, elixir-format
 msgid "File type is not allowed"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:154
+#: lib/mindwendel_web/live/idea_live/form_component.ex:182
 #, elixir-autogen, elixir-format
 msgid "The selected file is too large"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:155
+#: lib/mindwendel_web/live/idea_live/form_component.ex:183
 #, elixir-autogen, elixir-format
 msgid "Too many files selected"
 msgstr ""
