@@ -24,5 +24,43 @@ defmodule MindwendelWeb.FileControllerTest do
 
       assert get(conn, ~p"/files/#{file.id}").resp_body == "test"
     end
+
+    test "sets x-content-type-options nosniff header", %{conn: conn} do
+      file =
+        Factory.insert!(:file,
+          path: "/uploads/encrypted-file-controller-test.jpg",
+          name: "test.jpg",
+          file_type: "image/jpeg"
+        )
+
+      response = get(conn, ~p"/files/#{file.id}")
+      assert get_resp_header(response, "x-content-type-options") == ["nosniff"]
+    end
+
+    test "serves allowed mime type as-is", %{conn: conn} do
+      file =
+        Factory.insert!(:file,
+          path: "/uploads/encrypted-file-controller-test.jpg",
+          name: "test.jpg",
+          file_type: "image/jpeg"
+        )
+
+      response = get(conn, ~p"/files/#{file.id}")
+      [content_type] = get_resp_header(response, "content-type")
+      assert content_type =~ "image/jpeg"
+    end
+
+    test "serves unknown mime type as application/octet-stream", %{conn: conn} do
+      file =
+        Factory.insert!(:file,
+          path: "/uploads/encrypted-file-controller-test.jpg",
+          name: "test.svg",
+          file_type: "image/svg+xml"
+        )
+
+      response = get(conn, ~p"/files/#{file.id}")
+      [content_type] = get_resp_header(response, "content-type")
+      assert content_type =~ "application/octet-stream"
+    end
   end
 end
