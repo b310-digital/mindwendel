@@ -19,9 +19,9 @@ defmodule Mindwendel.Brainstormings.Idea do
   @max_file_attachments 2
 
   schema "ideas" do
-    field :body, :string
+    field :body, :string, redact: true
     field :position_order, :integer
-    field :username, :string, default: "Anonymous"
+    field :username, :string, default: "Anonymous", redact: true
     field :comments_count, :integer
     has_one :link, Link
     belongs_to :user, User

@@ -29,14 +29,14 @@ defmodule Mindwendel.Lanes do
   """
   def get_lane!(id) do
     Repo.get!(Lane, id)
-    |> Repo.preload(
-      ideas: [
-        :link,
-        :likes,
-        :idea_labels,
-        :files
-      ]
-    )
+    |> preload_lane()
+  end
+
+  def get_lane(id) do
+    case Repo.get(Lane, id) do
+      nil -> nil
+      lane -> preload_lane(lane)
+    end
   end
 
   @doc """
@@ -100,6 +100,17 @@ defmodule Mindwendel.Lanes do
     lane_query
     |> Repo.all()
     |> Repo.preload(ideas: {ideas_advanced_query, [:link, :likes, :idea_labels, :files]})
+  end
+
+  defp preload_lane(lane) do
+    Repo.preload(lane,
+      ideas: [
+        :link,
+        :likes,
+        :idea_labels,
+        :files
+      ]
+    )
   end
 
   defp build_ideas_query_with_filter(%{filter_labels_ids: []}) do
