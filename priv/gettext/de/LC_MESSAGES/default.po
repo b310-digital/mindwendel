@@ -49,8 +49,8 @@ msgstr "Achtung: Hiermit löschst du das Brainstorming und alle dazugehörigen I
 
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:34
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:36
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:55
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:57
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:61
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:63
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:16
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:18
 #, elixir-autogen, elixir-format
@@ -118,14 +118,14 @@ msgid "Proceed to your brainstorming"
 msgstr "Weiter zu deinem Brainstorming"
 
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:39
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:60
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:66
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:21
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Speichern"
 
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:38
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:59
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:65
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:20
 #, elixir-autogen, elixir-format
 msgid "Saving..."
@@ -469,7 +469,7 @@ msgid "Additional Attachment"
 msgstr "Zusätzlicher Anhang"
 
 #: lib/mindwendel_web/live/idea_live/card_component.html.heex:83
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:43
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:49
 #: lib/mindwendel_web/live/idea_live/show_component.html.heex:27
 #, elixir-autogen, elixir-format
 msgid "No filename"

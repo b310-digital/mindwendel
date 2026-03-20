@@ -60,7 +60,7 @@ defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
 
       assert conn_response
              |> get_resp_header("content-security-policy")
-             |> List.first() =~ ~r/(img-src)\s+('self' data: https:) ;/
+             |> List.first() =~ ~r/(img-src)\s+('self' data: https: blob:) ;/
     end
   end
 
