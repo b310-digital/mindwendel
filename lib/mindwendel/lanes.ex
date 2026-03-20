@@ -39,6 +39,23 @@ defmodule Mindwendel.Lanes do
     )
   end
 
+  def get_lane(id) do
+    case Repo.get(Lane, id) do
+      nil ->
+        nil
+
+      lane ->
+        Repo.preload(lane,
+          ideas: [
+            :link,
+            :likes,
+            :idea_labels,
+            :files
+          ]
+        )
+    end
+  end
+
   @doc """
   Get max position order of lanes for a brainstorming
 
