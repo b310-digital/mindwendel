@@ -18,6 +18,12 @@
       </div>
     <% end %>
     <%= for entry <- @uploads.attachment.entries do %>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <%= if Attachments.simplified_attached_file_type(entry.client_type) == "image" do %>
+          <.live_img_preview entry={entry} width="60" height="60" />
+        <% end %>
+        <span class="text-muted">{entry.client_name}</span>
+      </div>
       <div :for={err <- upload_errors(@uploads.attachment, entry)} class="alert alert-danger">
         {error_to_string(err)}
       </div>
