@@ -153,23 +153,27 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
 
   @doc false
   def detect_mime_type(path) do
-    with {:ok, fd} <- File.open(path, [:read, :binary]),
-         {:ok, header} <- IO.binread(fd, 4) |> wrap_read_result(),
-         :ok <- File.close(fd) do
-      match_magic_bytes(header)
-    else
-      _ -> nil
+    case File.open(path, [:read, :binary]) do
+      {:ok, fd} ->
+        result =
+          case IO.binread(fd, 4) do
+            data when is_binary(data) -> match_magic_bytes(data)
+            _ -> nil
+          end
+
+        File.close(fd)
+        result
+
+      _ ->
+        nil
     end
   end
 
   defp match_magic_bytes(<<0xFF, 0xD8, 0xFF, _>>), do: "image/jpeg"
   defp match_magic_bytes(<<0x89, 0x50, 0x4E, 0x47>>), do: "image/png"
-  defp match_magic_bytes(<<0x47, 0x49, 0x46, _>>), do: "image/gif"
+  defp match_magic_bytes(<<0x47, 0x49, 0x46, 0x38>>), do: "image/gif"
   defp match_magic_bytes(<<0x25, 0x50, 0x44, 0x46>>), do: "application/pdf"
   defp match_magic_bytes(_), do: nil
-
-  defp wrap_read_result(data) when is_binary(data), do: {:ok, data}
-  defp wrap_read_result(_), do: :error
 
   defp mime_ext(client_type) do
     List.first(MIME.extensions(client_type))
