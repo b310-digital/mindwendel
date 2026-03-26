@@ -55,7 +55,7 @@ services:
     volumes:
       - ./:/home/elixir/app
       - /app/_build/
-      - /app/deps/
+      - deps:/app/deps
       - /app/assets/node_modules
 
   minio:
@@ -87,3 +87,4 @@ services:
 
 volumes:
   postgres_data:
+  deps:

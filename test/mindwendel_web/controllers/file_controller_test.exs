@@ -62,5 +62,16 @@ defmodule MindwendelWeb.FileControllerTest do
       [content_type] = get_resp_header(response, "content-type")
       assert content_type =~ "application/octet-stream"
     end
+
+    test "returns 404 for a non-existent file", %{conn: conn} do
+      non_existent_id = Ecto.UUID.generate()
+      conn = get(conn, ~p"/files/#{non_existent_id}")
+      assert conn.status == 404
+    end
+
+    test "returns 404 for an invalid file id", %{conn: conn} do
+      conn = get(conn, ~p"/files/invalid-id")
+      assert conn.status == 404
+    end
   end
 end
