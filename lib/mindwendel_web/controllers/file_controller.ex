@@ -28,8 +28,8 @@ defmodule MindwendelWeb.FileController do
          {:ok, decrypted_file} <-
            StorageService.get_file(attached_file.path) do
       conn
-        |> put_resp_header("x-content-type-options", "nosniff")
-        |> send_download({:binary, decrypted_file},
+      |> put_resp_header("x-content-type-options", "nosniff")
+      |> send_download({:binary, decrypted_file},
         filename: attached_file.name,
         content_type: safe_content_type(attached_file.file_type),
         disposition: :inline
