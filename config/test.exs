@@ -40,3 +40,8 @@ config :mindwendel, Oban, repo: Mindwendel.Repo, testing: :inline
 
 # Allow private IPs for URL preview in tests
 config :mindwendel, :allow_private_ips, true
+
+# Disable hackney's env-based proxy detection (HTTP_PROXY) in tests.
+# hackney has a bug where NO_PROXY host entries are not accumulated correctly,
+# causing requests to localhost (Bypass) to be routed through Squid.
+config :hackney, :no_proxy_env, true
