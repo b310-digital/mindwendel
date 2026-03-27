@@ -14,11 +14,12 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
     brainstorming =
       Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
       |> Mindwendel.Repo.preload(
-        lanes: {from(l in Mindwendel.Brainstormings.Lane, order_by: [asc: l.position_order]),
-         ideas:
-           {from(i in Mindwendel.Brainstormings.Idea,
-              order_by: [asc_nulls_last: i.position_order, asc: i.inserted_at]
-            ), [:link, :likes, :idea_labels, :comments, :files]}}
+        lanes:
+          {from(l in Mindwendel.Brainstormings.Lane, order_by: [asc: l.position_order]),
+           ideas:
+             {from(i in Mindwendel.Brainstormings.Idea,
+                order_by: [asc_nulls_last: i.position_order, asc: i.inserted_at]
+              ), [:link, :likes, :idea_labels, :comments, :files]}}
       )
 
     case get_format(conn) do

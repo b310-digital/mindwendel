@@ -26,24 +26,18 @@ defmodule Mindwendel.CSVFormatter do
   end
 
   defp format_labels(labels) do
-    labels
-    |> Enum.map(& &1.name)
-    |> Enum.join("; ")
+    Enum.map_join(labels, "; ", & &1.name)
   end
 
   defp format_comments(comments) do
-    comments
-    |> Enum.map(fn c ->
+    Enum.map_join(comments, " | ", fn c ->
       username = Gettext.gettext(MindwendelWeb.Gettext, c.username)
       "#{username}: #{c.body}"
     end)
-    |> Enum.join(" | ")
   end
 
   defp format_files(files) do
-    files
-    |> Enum.map(&"/files/#{&1.id}")
-    |> Enum.join("; ")
+    Enum.map_join(files, "; ", &"/files/#{&1.id}")
   end
 
   defp format_link(nil), do: ""

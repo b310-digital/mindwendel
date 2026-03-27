@@ -7,8 +7,9 @@
     <div style="margin-bottom: 1.5em; padding: 0.5em; border: 1px solid #ccc;">
       <p><strong>{idea.body}</strong></p>
       <p>
-        {gettext("By")} {Gettext.gettext(MindwendelWeb.Gettext, idea.username)},
-        {Likes.count_likes_for_idea(idea)} {gettext("likes")}
+        {gettext("By")} {Gettext.gettext(MindwendelWeb.Gettext, idea.username)}, {Likes.count_likes_for_idea(
+          idea
+        )} {gettext("likes")}
       </p>
 
       <%= if idea.idea_labels != [] do %>
