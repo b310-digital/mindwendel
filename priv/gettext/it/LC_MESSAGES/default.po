@@ -470,7 +470,7 @@ msgstr "Allegato aggiuntivo"
 
 #: lib/mindwendel_web/live/idea_live/card_component.html.heex:83
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:49
-#: lib/mindwendel_web/live/idea_live/show_component.html.heex:27
+#: lib/mindwendel_web/live/idea_live/show_component.html.heex:45
 #, elixir-autogen, elixir-format
 msgid "No filename"
 msgstr "Nessun nome file"
@@ -495,7 +495,7 @@ msgstr "Sono stati selezionati troppi file"
 msgid "Allowed files: JPG/GIF/PNG/PDF"
 msgstr "File consentiti: JPG/GIF/PNG/PDF"
 
-#: lib/mindwendel_web/live/idea_live/show_component.html.heex:52
+#: lib/mindwendel_web/live/idea_live/show_component.html.heex:70
 #, elixir-autogen, elixir-format
 msgid "Add a new comment"
 msgstr "Aggiungi un nuovo commento"
@@ -511,7 +511,7 @@ msgid "Comment updated"
 msgstr "Commento aggiornato"
 
 #: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:27
-#: lib/mindwendel_web/live/idea_live/show_component.html.heex:34
+#: lib/mindwendel_web/live/idea_live/show_component.html.heex:52
 #, elixir-autogen, elixir-format
 msgid "Comments"
 msgstr "Commenti"
@@ -521,7 +521,7 @@ msgstr "Commenti"
 msgid "Delete comment"
 msgstr "Elimina commento"
 
-#: lib/mindwendel_web/live/idea_live/show_component.html.heex:47
+#: lib/mindwendel_web/live/idea_live/show_component.html.heex:65
 #, elixir-autogen, elixir-format, fuzzy
 msgid "No comments available"
 msgstr "Nessun commento disponibile"
@@ -652,6 +652,7 @@ msgid "Nothing to cluster right now"
 msgstr "Niente da raggruppare al momento"
 
 #: lib/mindwendel_web/live/idea_live/card_component.html.heex:14
+#: lib/mindwendel_web/live/idea_live/show_component.html.heex:6
 #, elixir-autogen, elixir-format
 msgid "Attached image"
 msgstr ""
