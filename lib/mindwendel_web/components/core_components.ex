@@ -750,6 +750,7 @@ defmodule MindwendelWeb.CoreComponents do
   attr :filter_active, :boolean, default: false
   attr :class, :string, default: nil
 
+  attr :title, :string, default: nil
   attr :rest, :global, include: ~w(target disabled)
 
   slot :inner_block, required: true
@@ -760,10 +761,12 @@ defmodule MindwendelWeb.CoreComponents do
       <button
         type="button"
         class={[
-          "btn btn-sm text-light rounded-pill m-1",
+          "btn btn-sm text-light rounded-pill m-1 text-truncate",
           @filter_active && "border border-2 border-primary",
           @class
         ]}
+        style="max-width: 120px;"
+        title={@title}
         id={@id}
         data-testid={@label_id}
         data-color={@color}

@@ -46,9 +46,10 @@
     <%= for idea_label <- Enum.sort_by(@idea.idea_labels, &(&1.position_order)) do %>
       <span
         id={"idea-label-#{uuid()}"}
-        class="IndexComponent__IdeaLabelBadge mb-3 text-wrap text-break"
+        class="IndexComponent__IdeaLabelBadge mb-3 text-truncate"
         data-testid={idea_label.id}
         data-color={idea_label.color}
+        title={idea_label.name}
         phx-hook="SetIdeaLabelBackgroundColor"
       >
         {idea_label.name}
