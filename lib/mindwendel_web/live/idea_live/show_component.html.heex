@@ -1,4 +1,14 @@
 <div>
+  <%= with image when not is_nil(image) <- Enum.find(@idea.files, fn f -> Attachments.simplified_attached_file_type(f.file_type) == "image" end) do %>
+    <div class="show-idea-image-preview mb-3">
+      <img
+        src={~p"/files/#{image.id}"}
+        alt={image.name || gettext("Attached image")}
+        class="show-idea-image-preview__img"
+      />
+    </div>
+  <% end %>
+
   <%= unless @idea.link do %>
     <p class="text-pre-line">{@idea.body}</p>
   <% end %>
@@ -19,8 +29,10 @@
     </div>
   <% end %>
 
-  <%= if length(@idea.files) > 0 do %>
-    <%= for attachment <- @idea.files do %>
+  <% preview_image = Enum.find(@idea.files, fn f -> Attachments.simplified_attached_file_type(f.file_type) == "image" end) %>
+  <% non_preview_files = if preview_image, do: Enum.reject(@idea.files, &(&1.id == preview_image.id)), else: @idea.files %>
+  <%= if length(non_preview_files) > 0 do %>
+    <%= for attachment <- non_preview_files do %>
       <p class="text-muted">
         <.file_icon type={Attachments.simplified_attached_file_type(attachment.file_type)} />
         <.link href={~p"/files/#{attachment.id}"}>
