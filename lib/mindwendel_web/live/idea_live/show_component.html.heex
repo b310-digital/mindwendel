@@ -29,8 +29,14 @@
     </div>
   <% end %>
 
-  <% preview_image = Enum.find(@idea.files, fn f -> Attachments.simplified_attached_file_type(f.file_type) == "image" end) %>
-  <% non_preview_files = if preview_image, do: Enum.reject(@idea.files, &(&1.id == preview_image.id)), else: @idea.files %>
+  <% preview_image =
+    Enum.find(@idea.files, fn f ->
+      Attachments.simplified_attached_file_type(f.file_type) == "image"
+    end) %>
+  <% non_preview_files =
+    if preview_image,
+      do: Enum.reject(@idea.files, &(&1.id == preview_image.id)),
+      else: @idea.files %>
   <%= if length(non_preview_files) > 0 do %>
     <%= for attachment <- non_preview_files do %>
       <p class="text-muted">
