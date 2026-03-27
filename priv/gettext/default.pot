@@ -469,7 +469,7 @@ msgstr ""
 
 #: lib/mindwendel_web/live/idea_live/card_component.html.heex:83
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:49
-#: lib/mindwendel_web/live/idea_live/show_component.html.heex:27
+#: lib/mindwendel_web/live/idea_live/show_component.html.heex:45
 #, elixir-autogen, elixir-format
 msgid "No filename"
 msgstr ""
@@ -494,7 +494,7 @@ msgstr ""
 msgid "Allowed files: JPG/GIF/PNG/PDF"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/show_component.html.heex:52
+#: lib/mindwendel_web/live/idea_live/show_component.html.heex:70
 #, elixir-autogen, elixir-format
 msgid "Add a new comment"
 msgstr ""
@@ -509,7 +509,7 @@ msgstr ""
 msgid "Comment updated"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/show_component.html.heex:34
+#: lib/mindwendel_web/live/idea_live/show_component.html.heex:52
 #, elixir-autogen, elixir-format
 msgid "Comments"
 msgstr ""
@@ -519,7 +519,7 @@ msgstr ""
 msgid "Delete comment"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/show_component.html.heex:47
+#: lib/mindwendel_web/live/idea_live/show_component.html.heex:65
 #, elixir-autogen, elixir-format
 msgid "No comments available"
 msgstr ""
@@ -650,6 +650,7 @@ msgid "Nothing to cluster right now"
 msgstr ""
 
 #: lib/mindwendel_web/live/idea_live/card_component.html.heex:14
+#: lib/mindwendel_web/live/idea_live/show_component.html.heex:6
 #, elixir-autogen, elixir-format
 msgid "Attached image"
 msgstr ""

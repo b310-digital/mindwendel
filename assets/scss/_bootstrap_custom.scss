@@ -15,6 +15,20 @@
   }
 }
 
+.show-idea-image-preview {
+  text-align: center;
+  overflow: hidden;
+  max-height: 400px;
+
+  &__img {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+  }
+}
+
 .card-body-mindwendel-idea {
   @extend .card-body;
   padding: 0.5rem 0.5rem;
