@@ -7,6 +7,10 @@
   max-width: 120px;
 }
 
+.IndexComponent__FilterButton {
+  max-width: 120px;
+}
+
 // The following placeholder selectors are taken from `../node_modules/bootstrap-icons/font/bootstrap-icons.css`.
 // We are not able to @extend the bootstrap-icon css classes directly from the imported bootstrap-icons.css, because
 // SASS is not able to extend the pseudo selectors used by bootstrap-icons, e.g. `bi-check-circle-fill::before { ... }`.

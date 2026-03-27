@@ -761,11 +761,10 @@ defmodule MindwendelWeb.CoreComponents do
       <button
         type="button"
         class={[
-          "btn btn-sm text-light rounded-pill m-1 text-truncate",
+          "btn btn-sm text-light rounded-pill m-1 text-truncate IndexComponent__FilterButton",
           @filter_active && "border border-2 border-primary",
           @class
         ]}
-        style="max-width: 120px;"
         title={@title}
         id={@id}
         data-testid={@label_id}
