@@ -153,7 +153,7 @@ msgstr "Deine Brainstormings"
 msgid "Something went wrong when creating a brainstorming. Please try again."
 msgstr "Leider gab es einen Fehler beim Erstellen des Brainstormings. Bitte probiere es erneut."
 
-#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:35
+#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:52
 #, elixir-autogen, elixir-format
 msgid "Successfully deleted brainstorming."
 msgstr "Brainstorming erfolgreich gelöscht"
@@ -189,7 +189,7 @@ msgstr "Deine Idee"
 msgid "Username"
 msgstr "Nutzername"
 
-#: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:3
+#: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:10
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:40
 #: lib/mindwendel_web/live/idea_live/card_component.html.heex:93
 #, elixir-autogen, elixir-format
@@ -510,6 +510,7 @@ msgstr "Kommentar erfolgreich erstellt"
 msgid "Comment updated"
 msgstr "Kommentar aktualisiert"
 
+#: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:27
 #: lib/mindwendel_web/live/idea_live/show_component.html.heex:34
 #, elixir-autogen, elixir-format
 msgid "Comments"
@@ -653,4 +654,29 @@ msgstr "Derzeit nichts zum Clustern vorhanden"
 #: lib/mindwendel_web/live/idea_live/card_component.html.heex:14
 #, elixir-autogen, elixir-format
 msgid "Attached image"
+msgstr ""
+
+#: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:43
+#, elixir-autogen, elixir-format
+msgid "Attachment"
+msgstr ""
+
+#: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:41
+#, elixir-autogen, elixir-format
+msgid "Files"
+msgstr ""
+
+#: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:50
+#, elixir-autogen, elixir-format
+msgid "Link"
+msgstr ""
+
+#: lib/mindwendel_web/controllers/admin/brainstorming_html.ex:8
+#, elixir-autogen, elixir-format
+msgid "Untitled"
+msgstr ""
+
+#: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:12
+#, elixir-autogen, elixir-format
+msgid "likes"
 msgstr ""

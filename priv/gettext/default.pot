@@ -152,7 +152,7 @@ msgstr ""
 msgid "Something went wrong when creating a brainstorming. Please try again."
 msgstr ""
 
-#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:47
+#: lib/mindwendel_web/controllers/admin/brainstorming_controller.ex:52
 #, elixir-autogen, elixir-format
 msgid "Successfully deleted brainstorming."
 msgstr ""

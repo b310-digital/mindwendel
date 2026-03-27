@@ -40,7 +40,7 @@
         <div>
           <strong>{gettext("Files")}:</strong>
           <%= for file <- idea.files do %>
-            <a href={"/files/#{file.id}"}>{file.name || gettext("Attachment")}</a>&nbsp;
+            <a href={"#{MindwendelWeb.Endpoint.url()}/files/#{file.id}"}>{file.name || gettext("Attachment")}</a>&nbsp;
           <% end %>
         </div>
       <% end %>

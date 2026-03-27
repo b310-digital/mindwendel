@@ -24,11 +24,16 @@ defmodule MindwendelWeb.Admin.BrainstormingController do
 
     case get_format(conn) do
       "csv" ->
+        filename =
+          brainstorming.name
+          |> String.replace(~r/[^\w\s\-]/, "", global: true)
+          |> String.trim()
+
         send_download(
           conn,
           {:binary, CSVFormatter.brainstorming_to_csv(brainstorming)},
           content_type: "application/csv",
-          filename: "#{brainstorming.name}.csv"
+          filename: "#{filename}.csv"
         )
 
       "html" ->
