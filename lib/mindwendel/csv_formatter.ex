@@ -1,19 +1,61 @@
 defmodule Mindwendel.CSVFormatter do
   alias Mindwendel.Likes
 
-  def ideas_to_csv(ideas) do
-    [["idea", "username", "likes"]]
+  def brainstorming_to_csv(brainstorming) do
+    [["lane", "idea", "username", "likes", "labels", "comments", "files", "link_url"]]
     |> Stream.concat(
-      ideas
-      |> Stream.map(
-        &[
-          &1.body,
-          Gettext.gettext(MindwendelWeb.Gettext, &1.username),
-          Likes.count_likes_for_idea(&1)
-        ]
-      )
+      brainstorming.lanes
+      |> Stream.flat_map(fn lane ->
+        lane.ideas
+        |> Enum.map(fn idea ->
+          [
+            sanitize_csv_cell(lane.name || ""),
+            sanitize_csv_cell(idea.body),
+            sanitize_csv_cell(Gettext.gettext(MindwendelWeb.Gettext, idea.username)),
+            Likes.count_likes_for_idea(idea),
+            sanitize_csv_cell(format_labels(idea.idea_labels)),
+            sanitize_csv_cell(format_comments(idea.comments)),
+            format_files(idea.files),
+            format_link(idea.link)
+          ]
+        end)
+      end)
     )
     |> CSV.encode()
     |> Enum.to_list()
   end
+
+  defp format_labels(labels) do
+    labels
+    |> Enum.map(& &1.name)
+    |> Enum.join("; ")
+  end
+
+  defp format_comments(comments) do
+    comments
+    |> Enum.map(fn c ->
+      username = Gettext.gettext(MindwendelWeb.Gettext, c.username)
+      "#{username}: #{c.body}"
+    end)
+    |> Enum.join(" | ")
+  end
+
+  defp format_files(files) do
+    files
+    |> Enum.map(&"/files/#{&1.id}")
+    |> Enum.join("; ")
+  end
+
+  defp format_link(nil), do: ""
+  defp format_link(link), do: sanitize_csv_cell(link.url || "")
+
+  defp sanitize_csv_cell(value) when is_binary(value) do
+    if String.match?(value, ~r/^[=\+\-\|@\t\r]/) do
+      "'" <> value
+    else
+      value
+    end
+  end
+
+  defp sanitize_csv_cell(_), do: ""
 end
