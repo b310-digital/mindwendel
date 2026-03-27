@@ -3,6 +3,12 @@
 .IndexComponent__IdeaLabelBadge {
   @extend .badge;
   @extend .rounded-pill;
+  display: inline-block !important; // override Bootstrap badge's inline-flex; required for text-truncate
+  max-width: 120px;
+}
+
+.IndexComponent__FilterButton {
+  max-width: 120px;
 }
 
 // The following placeholder selectors are taken from `../node_modules/bootstrap-icons/font/bootstrap-icons.css`.
