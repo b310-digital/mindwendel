@@ -52,6 +52,10 @@ msgstr ""
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:63
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:16
 #: lib/mindwendel_web/live/lane_live/form_component.html.heex:18
+#: lib/mindwendel_web/templates/layout/app.html.heex:104
+#: lib/mindwendel_web/templates/layout/app.html.heex:117
+#: lib/mindwendel_web/templates/layout/app_static.html.heex:14
+#: lib/mindwendel_web/templates/layout/app_static.html.heex:27
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr ""

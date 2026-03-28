@@ -170,6 +170,92 @@ Hooks.RemoveMissingBrainstorming = {
   }
 };
 
+const FLASH_DISMISS_DELAY_MS = 5000;
+const FLASH_FADE_DURATION_MS = 500;
+
+Hooks.AutoDismissFlash = {
+  mounted() {
+    // Handle localStorage cleanup for missing brainstorming flash messages
+    const missingId = this.el.dataset.brainstormingId;
+    if (missingId) {
+      try {
+        const recentBrainstormings = JSON.parse(localStorage.getItem('brainstormings') || '{}');
+        delete recentBrainstormings[missingId];
+        localStorage.setItem('brainstormings', JSON.stringify(recentBrainstormings));
+      } catch (_) {
+        // Ignore malformed localStorage data
+      }
+    }
+
+    this._startTimer();
+
+    // Close button handler
+    const closeButton = this.el.querySelector('[data-dismiss-flash]');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => this._dismiss());
+    }
+
+    // Pause timer on hover
+    this.el.addEventListener('mouseenter', () => this._pauseTimer());
+    this.el.addEventListener('mouseleave', () => this._resumeTimer());
+  },
+
+  updated() {
+    // Reset timer when flash content changes (LiveView DOM patching)
+    this._clearTimer();
+    this.el.classList.remove('flash-fade-out');
+    this._startTimer();
+  },
+
+  destroyed() {
+    this._clearTimer();
+  },
+
+  _startTimer() {
+    this._startedAt = Date.now();
+    this._remaining = FLASH_DISMISS_DELAY_MS;
+    this._timer = setTimeout(() => this._dismiss(), this._remaining);
+  },
+
+  _clearTimer() {
+    if (this._timer) {
+      clearTimeout(this._timer);
+      this._timer = null;
+    }
+    if (this._fadeTimer) {
+      clearTimeout(this._fadeTimer);
+      this._fadeTimer = null;
+    }
+  },
+
+  _pauseTimer() {
+    if (this._timer) {
+      clearTimeout(this._timer);
+      this._timer = null;
+      this._remaining = Math.max(0, this._remaining - (Date.now() - this._startedAt));
+    }
+  },
+
+  _resumeTimer() {
+    if (this._remaining != null && !this._timer) {
+      this._startedAt = Date.now();
+      this._timer = setTimeout(() => this._dismiss(), this._remaining);
+    }
+  },
+
+  _dismiss() {
+    this._clearTimer();
+    this.el.classList.add('flash-fade-out');
+    const ALLOWED_KINDS = ['info', 'error'];
+    this._fadeTimer = setTimeout(() => {
+      const kind = this.el.dataset.flashKind;
+      if (ALLOWED_KINDS.includes(kind)) {
+        this.pushEvent('lv:clear-flash', { key: kind });
+      }
+    }, FLASH_FADE_DURATION_MS);
+  }
+};
+
 Hooks.LanesScrollIndicator = {
   mounted() {
     this.scrollContainer = this.el.querySelector('.lanes-container');

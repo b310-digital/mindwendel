@@ -90,15 +90,35 @@
   </div>
 </nav>
 <main role="main" class="container">
-  <%= if Phoenix.Flash.get(@flash, :info) do %>
-    <p id="alert-info" class="alert alert-info" role="alert">
-      {Phoenix.Flash.get(@flash, :info)}
-    </p>
-  <% end %>
-  <%= if Phoenix.Flash.get(@flash, :error) do %>
-    <p id="alert-error" class="alert alert-danger" role="alert">
-      {Phoenix.Flash.get(@flash, :error)}
-    </p>
+  <%= if Phoenix.Flash.get(@flash, :info) || Phoenix.Flash.get(@flash, :error) do %>
+    <div class="flash-container">
+      <%= if Phoenix.Flash.get(@flash, :info) do %>
+        <div
+          id="alert-info"
+          class="alert alert-info alert-dismissible"
+          role="alert"
+          phx-hook="AutoDismissFlash"
+          data-flash-kind="info"
+        >
+          {Phoenix.Flash.get(@flash, :info)}
+          <button type="button" class="btn-close" aria-label={gettext("Close")} data-dismiss-flash>
+          </button>
+        </div>
+      <% end %>
+      <%= if Phoenix.Flash.get(@flash, :error) do %>
+        <div
+          id="alert-error"
+          class="alert alert-danger alert-dismissible"
+          role="alert"
+          phx-hook="AutoDismissFlash"
+          data-flash-kind="error"
+        >
+          {Phoenix.Flash.get(@flash, :error)}
+          <button type="button" class="btn-close" aria-label={gettext("Close")} data-dismiss-flash>
+          </button>
+        </div>
+      <% end %>
+    </div>
   <% end %>
   {@inner_content}
 </main>

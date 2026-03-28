@@ -91,6 +91,36 @@ div[data-phx-session] {
   display: none;
 }
 
+/* Flash message overlay container */
+.flash-container {
+  position: fixed;
+  top: 70px;
+  right: 16px;
+  left: 16px;
+  z-index: 1090; // Above Bootstrap modals (1055) and backdrops (1050)
+  pointer-events: none;
+
+  .alert {
+    pointer-events: auto;
+    transition: opacity 0.5s ease-out;
+    max-width: 500px;
+    margin-left: auto;
+
+    &.flash-fade-out {
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 576px) {
+    right: 8px;
+    left: 8px;
+
+    .alert {
+      max-width: 100%;
+    }
+  }
+}
+
 .form-control-color {
   max-width: 50px;
 }

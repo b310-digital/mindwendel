@@ -1,25 +1,34 @@
 <main role="main" class="container h-100" id="main-container">
-  <%= if Phoenix.Flash.get(@flash, :info) do %>
-    <p
-      id="alert-info"
-      class="alert alert-info"
-      role="alert"
-      phx-hook="RemoveMissingBrainstorming"
-      data-brainstorming-id={Phoenix.Flash.get(@flash, :missing_brainstorming_id)}
-    >
-      {Phoenix.Flash.get(@flash, :info)}
-    </p>
-  <% end %>
-  <%= if Phoenix.Flash.get(@flash, :error) do %>
-    <p
-      id="alert-danger"
-      class="alert alert-danger"
-      phx-hook="RemoveMissingBrainstorming"
-      role="alert"
-      data-brainstorming-id={Phoenix.Flash.get(@flash, :missing_brainstorming_id)}
-    >
-      {Phoenix.Flash.get(@flash, :error)}
-    </p>
+  <%= if Phoenix.Flash.get(@flash, :info) || Phoenix.Flash.get(@flash, :error) do %>
+    <div class="flash-container">
+      <%= if Phoenix.Flash.get(@flash, :info) do %>
+        <div
+          id="alert-info"
+          class="alert alert-info alert-dismissible"
+          role="alert"
+          phx-hook="AutoDismissFlash"
+          data-flash-kind="info"
+          data-brainstorming-id={Phoenix.Flash.get(@flash, :missing_brainstorming_id)}
+        >
+          {Phoenix.Flash.get(@flash, :info)}
+          <button type="button" class="btn-close" aria-label={gettext("Close")} data-dismiss-flash>
+          </button>
+        </div>
+      <% end %>
+      <%= if Phoenix.Flash.get(@flash, :error) do %>
+        <div
+          id="alert-error"
+          class="alert alert-danger alert-dismissible"
+          role="alert"
+          phx-hook="AutoDismissFlash"
+          data-flash-kind="error"
+        >
+          {Phoenix.Flash.get(@flash, :error)}
+          <button type="button" class="btn-close" aria-label={gettext("Close")} data-dismiss-flash>
+          </button>
+        </div>
+      <% end %>
+    </div>
   <% end %>
   {@inner_content}
 </main>
