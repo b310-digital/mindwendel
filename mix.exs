@@ -66,7 +66,7 @@ defmodule Mindwendel.MixProject do
       {:gettext, "0.26.2"},
       {:httpoison, "2.3.0"},
       {:jason, "1.4.4"},
-      {:oban, "2.20.3"},
+      {:oban, "2.21.1"},
       {:plug_cowboy, "2.8.0"},
       {:cowboy, "2.14.2"},
       {:postgrex, "0.22.0"},
