@@ -39,12 +39,12 @@ defmodule Mix.Tasks.Benchmark.Ai do
     - `MW_AI_API_BASE_URL` — Required only for OpenAI-compatible providers
   """
 
+  @mix_env Mix.env()
   @valid_suites ~w(generation classification)
 
   @impl Mix.Task
   def run(args) do
-    # credo:disable-for-next-line Credo.Check.Warning.MixEnv
-    if Mix.env() == :prod do
+    if @mix_env == :prod do
       Mix.raise("mix benchmark.ai cannot be run in the production environment.")
     end
 
