@@ -36,12 +36,12 @@ msgid "%{name} - New Idea"
 msgstr ""
 
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:22
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:26
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:27
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this idea?"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:140
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:144
 #, elixir-autogen, elixir-format
 msgid "Attention: This will delete the brainstorming with all belonging ideas and other associated records to it. This cant be undone"
 msgstr ""
@@ -71,12 +71,12 @@ msgstr ""
 msgid "Create!"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:150
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:158
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:134
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:138
 #, elixir-autogen, elixir-format
 msgid "Delete Brainstorming"
 msgstr ""
@@ -101,7 +101,7 @@ msgstr ""
 msgid "New brainstorming"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:104
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:107
 #, elixir-autogen, elixir-format
 msgid "New idea"
 msgstr ""
@@ -190,7 +190,7 @@ msgstr ""
 
 #: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:10
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:40
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:94
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:105
 #, elixir-autogen, elixir-format
 msgid "By"
 msgstr ""
@@ -248,11 +248,12 @@ msgid "Mindwendel Brainstorming"
 msgstr ""
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:58
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:59
 #, elixir-autogen, elixir-format
 msgid "Share"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:188
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:191
 #, elixir-autogen, elixir-format
 msgid "Share brainstorming"
 msgstr ""
@@ -267,12 +268,7 @@ msgstr ""
 msgid "Download as svg"
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:146
-#, elixir-autogen, elixir-format
-msgid "Brainstorming delete are you sure"
-msgstr ""
-
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:155
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:158
 #, elixir-autogen, elixir-format
 msgid "Update idea"
 msgstr ""
@@ -282,13 +278,8 @@ msgstr ""
 msgid "Attention: This will delete all ideas in this brainstorming. The brainstorming itself and labels will be left unchanged. This cant be undone."
 msgstr ""
 
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:123
-#, elixir-autogen, elixir-format
-msgid "Brainstorming will be emptied - are you sure"
-msgstr ""
-
 #: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:109
-#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:125
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:129
 #, elixir-autogen, elixir-format
 msgid "Empty brainstorming"
 msgstr ""
@@ -396,13 +387,13 @@ msgstr ""
 
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:25
 #: lib/mindwendel_web/live/brainstorming_live/show.html.heex:27
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:138
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:141
 #: lib/mindwendel_web/live/lane_live/index_component.html.heex:137
 #, elixir-autogen, elixir-format
 msgid "New lane"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:172
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:175
 #, elixir-autogen, elixir-format
 msgid "Update lane"
 msgstr ""
@@ -446,13 +437,15 @@ msgstr ""
 msgid "No lanes available"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:33
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:34
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:35
 #, elixir-autogen, elixir-format
 msgid "Edit idea"
 msgstr ""
 
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:30
 #: lib/mindwendel_web/live/idea_live/card_component.html.heex:25
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:26
 #, elixir-autogen, elixir-format
 msgid "Delete idea"
 msgstr ""
@@ -467,7 +460,7 @@ msgstr ""
 msgid "Additional Attachment"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:84
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:95
 #: lib/mindwendel_web/live/idea_live/form_component.html.heex:49
 #: lib/mindwendel_web/live/idea_live/show_component.html.heex:45
 #, elixir-autogen, elixir-format
@@ -525,8 +518,10 @@ msgstr ""
 msgid "No comments available"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:41
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:147
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:43
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:44
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:158
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:159
 #, elixir-autogen, elixir-format
 msgid "Show idea"
 msgstr ""
@@ -548,7 +543,7 @@ msgstr ""
 msgid "Privacy"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:121
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:124
 #, elixir-autogen, elixir-format
 msgid "Idea details"
 msgstr ""
@@ -679,4 +674,37 @@ msgstr ""
 #: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:12
 #, elixir-autogen, elixir-format
 msgid "likes"
+msgstr ""
+
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:124
+#, elixir-autogen, elixir-format
+msgid "All ideas and lanes will be permanently deleted. This cannot be undone. Are you sure?"
+msgstr ""
+
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:179
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:180
+#, elixir-autogen, elixir-format
+msgid "Like"
+msgstr ""
+
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:68
+#: lib/mindwendel_web/live/brainstorming_live/show.html.heex:69
+#, elixir-autogen, elixir-format
+msgid "Settings"
+msgstr ""
+
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:69
+#, elixir-autogen, elixir-format
+msgid "Show more"
+msgstr ""
+
+#: lib/mindwendel_web/live/admin/brainstorming_live/edit.html.heex:151
+#, elixir-autogen, elixir-format
+msgid "This brainstorming and all its data will be permanently deleted. Are you sure?"
+msgstr ""
+
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:170
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:171
+#, elixir-autogen, elixir-format
+msgid "Unlike"
 msgstr ""

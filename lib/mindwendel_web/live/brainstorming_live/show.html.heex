@@ -56,6 +56,7 @@
         patch={~p"/brainstormings/#{@brainstorming.id}/share"}
         class="btn btn-secondary m-1"
         title={gettext("Share")}
+        aria-label={gettext("Share")}
       >
         <i class="bi-share-fill"></i>
       </.link>
@@ -64,6 +65,8 @@
         <.link
           href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}/edit"}
           class="btn btn-secondary m-1"
+          title={gettext("Settings")}
+          aria-label={gettext("Settings")}
         >
           <i class="bi-gear-fill"></i>
         </.link>

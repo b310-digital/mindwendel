@@ -120,7 +120,11 @@
           class="btn btn-danger"
           phx-click="empty"
           value={@brainstorming.admin_url_id}
-          data-confirm={gettext("Brainstorming will be emptied - are you sure")}
+          data-confirm={
+            gettext(
+              "All ideas and lanes will be permanently deleted. This cannot be undone. Are you sure?"
+            )
+          }
         >
           {gettext("Empty brainstorming")}
         </button>
@@ -143,7 +147,11 @@
         </p>
         <.link
           href={~p"/admin/brainstormings/#{@brainstorming.admin_url_id}"}
-          data-confirm={gettext("Brainstorming delete are you sure")}
+          data-confirm={
+            gettext(
+              "This brainstorming and all its data will be permanently deleted. Are you sure?"
+            )
+          }
           method="delete"
         >
           <.button class="btn btn-danger">

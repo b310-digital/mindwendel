@@ -182,3 +182,10 @@ div[data-phx-session] {
 .text-pre-line {
   white-space: pre-line;
 }
+
+.card-body-mindwendel-idea-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

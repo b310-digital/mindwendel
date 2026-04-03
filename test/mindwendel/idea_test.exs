@@ -85,6 +85,21 @@ defmodule Mindwendel.IdeaTest do
       refute Idea.changeset(idea, %{body: ""}).valid?
       assert Idea.changeset(idea, %{body: "More than two characters"}).valid?
     end
+
+    test "defaults empty username to Anonymous", %{idea: idea} do
+      changeset = Idea.changeset(idea, %{username: ""})
+      assert Ecto.Changeset.get_field(changeset, :username) == "Anonymous"
+    end
+
+    test "defaults whitespace-only username to Anonymous", %{idea: idea} do
+      changeset = Idea.changeset(idea, %{username: "   "})
+      assert Ecto.Changeset.get_field(changeset, :username) == "Anonymous"
+    end
+
+    test "preserves non-empty username", %{idea: idea} do
+      changeset = Idea.changeset(idea, %{username: "Alice"})
+      assert Ecto.Changeset.get_field(changeset, :username) == "Alice"
+    end
   end
 
   describe "HTML stripping (XSS prevention)" do
