@@ -74,6 +74,25 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
     ai_config[:enabled] || false
   end
 
+  @clustering_system_prompt """
+                            <role>You are a semantic clustering engine for brainstorming sessions.</role>
+
+                            <task>Assign each idea to the 1–3 most conceptually relevant labels from the provided list.</task>
+
+                            <constraints>
+                            - Prefer conceptual similarity over surface wording
+                            - Avoid weak or purely keyword-based connections
+                            - Use at most 5 distinct label IDs across all assignments
+                            - Copy idea_id and label_ids verbatim from input; never invent or rename
+                            </constraints>
+
+                            <output_format>
+                            {"assignments":[{"idea_id":"string","label_ids":["string"]}]}
+                            Return valid JSON only — no markdown, no commentary.
+                            </output_format>
+                            """
+                            |> String.trim()
+
   # Private functions
 
   defp build_prompt(title, lanes, existing_ideas, locale) do
@@ -150,34 +169,7 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
       |> Enum.map(&normalize_idea_payload/1)
 
     # System prompt must remain free of user-generated content to avoid prompt injection
-    system_content =
-      [
-        "You are a clustering engine for brainstorming ideas.",
-        "Your sole goal: group ideas under the most semantically relevant existing labels.",
-        "",
-        "Respond ONLY with valid JSON — no comments, text, or markdown outside the JSON.",
-        "",
-        "Return an object that follows this schema:",
-        "{",
-        "  \"assignments\": Assignment[]  // list of all idea-to-label mappings",
-        "}",
-        "",
-        "Assignment {",
-        "  \"idea_id\": string      // copy exactly from the Ideas JSON input",
-        "  \"label_ids\": string[]  // use label ids from Available Labels JSON input; assign 1–3 best fits per idea",
-        "}",
-        "",
-        "Clustering Principles:",
-        "- Prefer conceptual similarity over surface wording (e.g., 'eco packaging' and 'recycled materials' → same cluster).",
-        "- Avoid assigning a label if the connection is weak or only keyword-based.",
-        "- Use at most 5 distinct labels total across all assignments.",
-        "- Never propose new labels or rename existing ones.",
-        "",
-        "Output Rules:",
-        "- Never invent or modify ids or field names.",
-        "- The response must be valid JSON — no markdown, no commentary, no formatting hints."
-      ]
-      |> Enum.join("\n")
+    system_content = @clustering_system_prompt
 
     user_content =
       build_clustering_user_content(
@@ -323,7 +315,8 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
         model: ai_config[:model],
         messages: messages,
         temperature: 0.0,
-        max_tokens: 2_000
+        max_tokens: 1_500,
+        response_format: %{"type" => "json_object"}
       )
 
     openai_client = build_openai_client(ai_config)
