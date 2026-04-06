@@ -84,7 +84,7 @@ defmodule Mindwendel.MixProject do
       {:ex_aws_s3, "2.5.9"},
       {:cloak, "1.1.4"},
       {:lazy_html, ">= 0.1.0", only: :test},
-      {:openai_ex, "0.9.20"},
+      {:openai_ex, "0.9.21"},
       {:mox, "1.2.0", only: :test}
     ]
   end
