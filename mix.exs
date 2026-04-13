@@ -71,7 +71,7 @@ defmodule Mindwendel.MixProject do
       {:cowboy, "2.14.2"},
       {:postgrex, "0.22.0"},
       {:sobelow, "0.14.1", only: [:dev, :test], runtime: false},
-      {:credo, "1.7.17", only: [:dev, :test], runtime: false},
+      {:credo, "1.7.18", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18"},
       {:telemetry_metrics, "1.1.0"},
       {:telemetry_poller, "1.3.0"},
@@ -84,7 +84,7 @@ defmodule Mindwendel.MixProject do
       {:ex_aws_s3, "2.5.9"},
       {:cloak, "1.1.4"},
       {:lazy_html, ">= 0.1.0", only: :test},
-      {:openai_ex, "0.9.20"},
+      {:openai_ex, "0.9.21"},
       {:mox, "1.2.0", only: :test}
     ]
   end
