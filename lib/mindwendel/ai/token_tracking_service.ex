@@ -10,6 +10,7 @@ defmodule Mindwendel.AI.TokenTrackingService do
   """
 
   import Ecto.Query
+  alias Mindwendel.AI.Config
   alias Mindwendel.AI.TokenUsage
   alias Mindwendel.Repo
 
@@ -196,6 +197,6 @@ defmodule Mindwendel.AI.TokenTrackingService do
   end
 
   defp fetch_ai_config! do
-    Application.fetch_env!(:mindwendel, :ai)
+    Config.fetch_ai_config!()
   end
 end

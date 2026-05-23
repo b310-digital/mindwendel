@@ -1,29 +1,46 @@
 defmodule MindwendelWeb.Admin.BrainstormingController do
   use MindwendelWeb, :controller
 
+  import Ecto.Query
+
   alias Mindwendel.Accounts
   alias Mindwendel.Brainstormings
   alias Mindwendel.CSVFormatter
-  alias Mindwendel.Ideas
   alias Mindwendel.Services.SessionService
 
   plug :fetch_user
 
   def export(conn, %{"id" => id}) do
-    brainstorming = Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
-    ideas = Ideas.list_ideas_for_brainstorming(brainstorming.id)
+    brainstorming =
+      Brainstormings.get_brainstorming_by!(%{admin_url_id: id})
+      |> Mindwendel.Repo.preload(
+        lanes:
+          {from(l in Mindwendel.Brainstormings.Lane, order_by: [asc: l.position_order]),
+           ideas:
+             {from(i in Mindwendel.Brainstormings.Idea,
+                order_by: [asc_nulls_last: i.position_order, asc: i.inserted_at]
+              ), [:link, :likes, :idea_labels, :comments, :files]}}
+      )
 
     case get_format(conn) do
       "csv" ->
+        filename =
+          brainstorming.name
+          |> String.replace(~r/[^\w\s\-]/, "", global: true)
+          |> String.trim()
+
         send_download(
           conn,
-          {:binary, CSVFormatter.ideas_to_csv(ideas)},
+          {:binary, CSVFormatter.brainstorming_to_csv(brainstorming)},
           content_type: "application/csv",
-          filename: "#{brainstorming.name}.csv"
+          filename: "#{filename}.csv"
         )
 
       "html" ->
-        conn |> put_layout(false) |> put_root_layout(false) |> render("export.html", ideas: ideas)
+        conn
+        |> put_layout(false)
+        |> put_root_layout(false)
+        |> render("export.html", brainstorming: brainstorming)
     end
   end
 

@@ -55,39 +55,43 @@ defmodule Mindwendel.Services.IdeaClusteringService do
         {:ok, :skipped}
 
       true ->
-        locale = Gettext.get_locale(MindwendelWeb.Gettext)
-        label_payload = build_label_payload(brainstorming.labels)
-        idea_payload = build_idea_payload(ideas)
+        classify_and_assign(brainstorming, ideas)
+    end
+  end
 
-        with {:ok, raw_assignments} <-
-               ChatCompletionsService.classify_labels(
-                 brainstorming.name,
-                 label_payload,
-                 idea_payload,
-                 locale
-               ),
-             {:ok, assignments} <- normalize_assignments(raw_assignments) do
-          Logger.debug(fn ->
-            truncated =
-              raw_assignments
-              |> inspect(limit: 15, printable_limit: 300, width: 80)
+  defp classify_and_assign(brainstorming, ideas) do
+    locale = Gettext.get_locale(MindwendelWeb.Gettext)
+    label_payload = build_label_payload(brainstorming.labels)
+    idea_payload = build_idea_payload(ideas)
 
-            "AI clustering raw assignments: #{truncated}"
-          end)
+    with {:ok, raw_assignments} <-
+           ChatCompletionsService.classify_labels(
+             brainstorming.name,
+             label_payload,
+             idea_payload,
+             locale
+           ),
+         {:ok, assignments} <- normalize_assignments(raw_assignments) do
+      Logger.debug(fn ->
+        truncated =
+          raw_assignments
+          |> inspect(limit: 15, printable_limit: 300, width: 80)
 
-          handle_assignments(brainstorming, ideas, assignments)
-        else
-          {:error, %{} = validation_errors} ->
-            Logger.error(
-              "AI clustering returned invalid assignments for #{brainstorming.id}: #{inspect(validation_errors)}"
-            )
+        "AI clustering raw assignments: #{truncated}"
+      end)
 
-            {:error, {:invalid_assignments, validation_errors}}
+      handle_assignments(brainstorming, ideas, assignments)
+    else
+      {:error, %{} = validation_errors} ->
+        Logger.error(
+          "AI clustering returned invalid assignments for #{brainstorming.id}: #{inspect(validation_errors)}"
+        )
 
-          {:error, reason} ->
-            Logger.error("AI clustering failed for #{brainstorming.id}: #{inspect(reason)}")
-            {:error, reason}
-        end
+        {:error, {:invalid_assignments, validation_errors}}
+
+      {:error, reason} ->
+        Logger.error("AI clustering failed for #{brainstorming.id}: #{inspect(reason)}")
+        {:error, reason}
     end
   end
 

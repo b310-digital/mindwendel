@@ -1,6 +1,7 @@
 defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
   require Logger
 
+  alias Mindwendel.AI.Config
   alias Mindwendel.AI.Schemas.IdeaLabelAssignment
   alias Mindwendel.AI.Schemas.IdeaResponse
   alias Mindwendel.AI.TokenTrackingService
@@ -543,6 +544,6 @@ defmodule Mindwendel.Services.ChatCompletions.ChatCompletionsServiceImpl do
   end
 
   defp fetch_ai_config! do
-    Application.fetch_env!(:mindwendel, :ai)
+    Config.fetch_ai_config!()
   end
 end

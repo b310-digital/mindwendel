@@ -78,3 +78,8 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+# Disable hackney's env-based proxy detection (HTTP_PROXY).
+# hackney has a bug where NO_PROXY host entries are not accumulated correctly,
+# causing requests to minio to be routed through the proxy.
+config :hackney, :no_proxy_env, true

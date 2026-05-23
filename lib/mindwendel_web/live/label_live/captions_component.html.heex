@@ -8,6 +8,7 @@
       label_id={brainstorming_idea_label.id}
       phx-target={@myself}
       disabled={!has_moderating_permission(@brainstorming.id, @current_user)}
+      title={brainstorming_idea_label.name}
     >
       {brainstorming_idea_label.name}
     </.filter_button>

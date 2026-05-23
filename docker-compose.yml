@@ -53,9 +53,9 @@ services:
       - postgres
     # Mount the lib and test folder to increase development speed (do not use for prod setups!)
     volumes:
-      - ./:/home/elixir/app
+      - ./:/app
       - /app/_build/
-      - /app/deps/
+      - deps:/app/deps
       - /app/assets/node_modules
 
   minio:
@@ -87,3 +87,4 @@ services:
 
 volumes:
   postgres_data:
+  deps:

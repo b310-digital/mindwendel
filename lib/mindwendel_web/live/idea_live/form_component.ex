@@ -129,23 +129,51 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   end
 
   defp prepare_attachments(socket) do
-    files =
-      consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
-        # The tmp uploaded file will be deleted directly after this function ends.
-        # Copy it to a tmp folder first so the attachment changeset can process it.
-        # See also this discussion https://github.com/elixir-waffle/waffle/issues/71
-        filename = "#{entry.uuid}.#{mime_ext(entry.client_type)}"
-        dest = "#{Path.dirname(path)}/#{filename}"
-        File.cp!(path, dest)
-        {:ok, %{path: dest, name: entry.client_name, file_type: entry.client_type}}
-      end)
+    consume_uploaded_entries(socket, :attachment, fn %{path: path}, entry ->
+      # The tmp uploaded file will be deleted directly after this function ends.
+      # Copy it to a tmp folder first so the attachment changeset can process it.
+      # See also this discussion https://github.com/elixir-waffle/waffle/issues/71
+      case detect_mime_type(path) do
+        nil ->
+          {:ok, :rejected}
 
-    files
+        file_type ->
+          filename = "#{entry.uuid}.#{mime_ext(file_type)}"
+          dest = "#{Path.dirname(path)}/#{filename}"
+          File.cp!(path, dest)
+          {:ok, %{path: dest, name: entry.client_name, file_type: file_type}}
+      end
+    end)
+    |> Enum.reject(&(&1 == :rejected))
   end
 
   defp remove_tmp_attachments(tmp_attachments) do
     Enum.each(tmp_attachments, fn tmp_attachment -> File.rm(tmp_attachment.path) end)
   end
+
+  @doc false
+  def detect_mime_type(path) do
+    case File.open(path, [:read, :binary]) do
+      {:ok, fd} ->
+        result =
+          case IO.binread(fd, 4) do
+            data when is_binary(data) -> match_magic_bytes(data)
+            _ -> nil
+          end
+
+        File.close(fd)
+        result
+
+      _ ->
+        nil
+    end
+  end
+
+  defp match_magic_bytes(<<0xFF, 0xD8, 0xFF, _>>), do: "image/jpeg"
+  defp match_magic_bytes(<<0x89, 0x50, 0x4E, 0x47>>), do: "image/png"
+  defp match_magic_bytes(<<0x47, 0x49, 0x46, 0x38>>), do: "image/gif"
+  defp match_magic_bytes(<<0x25, 0x50, 0x44, 0x46>>), do: "application/pdf"
+  defp match_magic_bytes(_), do: nil
 
   defp mime_ext(client_type) do
     List.first(MIME.extensions(client_type))

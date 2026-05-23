@@ -58,3 +58,7 @@ ca
 
 # devcontainer files:
 .devcontainer
+.mcp.json
+.report
+.agents
+skills-lock.json

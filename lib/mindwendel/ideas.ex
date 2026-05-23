@@ -436,7 +436,7 @@ defmodule Mindwendel.Ideas do
   """
   def delete_idea(%Idea{} = idea) do
     {:ok, _} = delete_files(idea)
-    Repo.delete(idea)
+    Repo.delete(idea, allow_stale: true)
     Lanes.broadcast_lanes_update(idea.brainstorming_id)
   end
 

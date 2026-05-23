@@ -170,8 +170,50 @@ Hooks.RemoveMissingBrainstorming = {
   }
 };
 
+Hooks.LanesScrollIndicator = {
+  mounted() {
+    this.scrollContainer = this.el.querySelector('.lanes-container');
+    this.leftArrow = this.el.querySelector('#lanes-scroll-left');
+    this.rightArrow = this.el.querySelector('#lanes-scroll-right');
+
+    this.getColumnWidth = () => {
+      const col = this.scrollContainer.querySelector('[class*="col-"]');
+      return col ? col.offsetWidth : 300;
+    };
+
+    this.updateIndicators = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = this.scrollContainer;
+      const canScrollLeft = scrollLeft > 0;
+      const canScrollRight = scrollLeft + clientWidth < scrollWidth - 1;
+
+      this.leftArrow.classList.toggle('visible', canScrollLeft);
+      this.rightArrow.classList.toggle('visible', canScrollRight);
+    };
+
+    this.leftArrow.addEventListener('click', () => {
+      this.scrollContainer.scrollBy({ left: -this.getColumnWidth(), behavior: 'smooth' });
+    });
+
+    this.rightArrow.addEventListener('click', () => {
+      this.scrollContainer.scrollBy({ left: this.getColumnWidth(), behavior: 'smooth' });
+    });
+
+    this.scrollContainer.addEventListener('scroll', this.updateIndicators);
+    this.resizeObserver = new ResizeObserver(this.updateIndicators);
+    this.resizeObserver.observe(this.scrollContainer);
+
+    this.updateIndicators();
+  },
+  updated() {
+    this.updateIndicators();
+  },
+  destroyed() {
+    this.resizeObserver.disconnect();
+  }
+};
+
 // The brainstorming secret from the url ("#123") is added as well to the socket. The secret is not available on the server side by default.
-let liveSocket = new LiveSocket("/live", Socket, { 
+let liveSocket = new LiveSocket("/live", Socket, {
   hooks: Hooks, params: { _csrf_token: csrfToken, adminSecret: window.location.hash.substring(1) }
 })
 

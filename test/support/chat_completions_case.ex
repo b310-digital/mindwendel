@@ -36,6 +36,17 @@ defmodule Mindwendel.ChatCompletionsCase do
   end
 
   defp stub_ai_disabled do
+    Mindwendel.AI.Config.Mock
+    |> stub(:fetch_ai_config!, fn ->
+      [
+        enabled: false,
+        token_limit_daily: nil,
+        token_limit_hourly: nil,
+        token_reset_hour: 0,
+        request_timeout: 60_000
+      ]
+    end)
+
     Mindwendel.Services.ChatCompletions.ChatCompletionsServiceMock
     |> stub(:enabled?, fn -> false end)
     |> stub(:generate_ideas, fn _title, _lanes, _existing_ideas, _locale ->

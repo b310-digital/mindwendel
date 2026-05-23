@@ -102,11 +102,13 @@ defmodule Mindwendel.BrainstormingsTest do
 
   describe "list_brainstormings_for" do
     test "returns the 3 most recent brainstormings", %{brainstorming: brainstorming, user: user} do
+      Brainstormings.update_last_accessed_at(brainstorming)
+
       older_brainstorming =
-        Factory.insert!(:brainstorming, inserted_at: ~N[2021-01-10 15:04:30], users: [user])
+        Factory.insert!(:brainstorming, last_accessed_at: ~U[2021-01-10 15:04:30Z], users: [user])
 
       oldest_brainstorming =
-        Factory.insert!(:brainstorming, inserted_at: ~N[2021-01-05 15:04:30], users: [user])
+        Factory.insert!(:brainstorming, last_accessed_at: ~U[2021-01-05 15:04:30Z], users: [user])
 
       assert Brainstormings.list_brainstormings_for(user.id) |> Enum.map(fn b -> b.id end) == [
                brainstorming.id,
