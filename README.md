@@ -206,7 +206,7 @@ Then, object storage and the vault key need to be set:
 ```
 OBJECT_STORAGE_BUCKET: mindwendel
 OBJECT_STORAGE_SCHEME: "http://"
-OBJECT_STORAGE_HOST: minio
+OBJECT_STORAGE_HOST: rustfs
 OBJECT_STORAGE_PORT: 9000
 OBJECT_STORAGE_REGION: local
 OBJECT_STORAGE_USER: ...
@@ -214,7 +214,7 @@ OBJECT_STORAGE_PASSWORD: ...
 VAULT_ENCRYPTION_KEY_BASE64: ...
 ```
 
-There is an example given inside the `docker-compose.yml` with a docker compose minio setup.
+There is an example given inside the `docker-compose.yml` with a docker compose rustfs setup.
 
 To deactivate file storage, use `MW_FEATURE_IDEA_FILE_UPLOAD` (defaults to `true`) and set it to `false`.
 
