@@ -98,7 +98,7 @@ defmodule Mindwendel.AI.TokenTrackingService do
   @doc """
   Cleans up old usage records (older than 90 days).
   """
-  @spec cleanup_old_records() :: {:ok, integer()}
+  @spec cleanup_old_records() :: {:ok, integer()} | {:error, term()}
   def cleanup_old_records do
     cutoff = DateTime.utc_now() |> DateTime.add(-90, :day)
 
@@ -108,6 +108,8 @@ defmodule Mindwendel.AI.TokenTrackingService do
       |> Repo.delete_all()
 
     {:ok, count}
+  rescue
+    error -> {:error, error}
   end
 
   # Private functions

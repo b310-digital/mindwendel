@@ -51,12 +51,8 @@ services:
       - "${DOCKER_COMPOSE_APP_PORT_PUBLISHED:-4000}:${DOCKER_COMPOSE_APP_PORT_TARGET:-4000}"
     depends_on:
       - postgres
-    # Mount the lib and test folder to increase development speed (do not use for prod setups!)
     volumes:
-      - ./:/app
-      - /app/_build/
-      - deps:/app/deps
-      - /app/assets/node_modules
+      - ./:/home/elixir/app
 
   minio:
     image: minio/minio
