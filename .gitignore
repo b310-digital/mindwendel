@@ -1,3 +1,6 @@
+# Benchmark reports (generated, not committed)
+/benchmark/reports/*.json
+
 # The directory Mix will write compiled artifacts to.
 /_build/
 
