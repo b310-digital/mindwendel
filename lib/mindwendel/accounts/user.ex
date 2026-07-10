@@ -24,8 +24,27 @@ defmodule Mindwendel.Accounts.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:username])
-    |> shorten_username
+    |> default_anonymous_username()
+    |> shorten_username()
+    |> validate_required([:username])
     |> validate_length(:username, max: 50)
+  end
+
+  defp default_anonymous_username(changeset) do
+    case get_change(changeset, :username) do
+      nil ->
+        changeset
+
+      username when is_binary(username) ->
+        if String.trim(username) == "" do
+          put_change(changeset, :username, "Anonymous")
+        else
+          changeset
+        end
+
+      _ ->
+        changeset
+    end
   end
 
   defp shorten_username(changeset) do

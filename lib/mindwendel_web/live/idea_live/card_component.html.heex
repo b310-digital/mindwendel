@@ -23,6 +23,7 @@
         phx-click="delete_idea"
         phx-target={@myself}
         title={gettext("Delete idea")}
+        aria-label={gettext("Delete idea")}
         data-confirm={gettext("Are you sure you want to delete this idea?")}
       >
         <i class="bi bi-x text-secondary"></i>
@@ -31,6 +32,7 @@
         patch={~p"/brainstormings/#{@brainstorming.id}/ideas/#{@idea.id}/edit"}
         class="float-end ms-3 mb-3"
         title={gettext("Edit idea")}
+        aria-label={gettext("Edit idea")}
       >
         <i class="bi bi-pencil text-secondary"></i>
       </.link>
@@ -39,6 +41,7 @@
       patch={~p"/brainstormings/#{@brainstorming.id}/ideas/#{@idea.id}"}
       class="float-end ms-3 mb-3"
       title={gettext("Show idea")}
+      aria-label={gettext("Show idea")}
     >
       <i class="bi bi-eye text-secondary"></i>
     </.link>
@@ -58,6 +61,14 @@
 
     <%= unless @idea.link do %>
       <p class="card-body-mindwendel-idea-text text-pre-line">{@idea.body}</p>
+      <%= if String.length(@idea.body || "") > 200 do %>
+        <.link
+          patch={~p"/brainstormings/#{@brainstorming.id}/ideas/#{@idea.id}"}
+          class="small text-muted"
+        >
+          {gettext("Show more")}
+        </.link>
+      <% end %>
     <% end %>
 
     <%= if @idea.link do %>
@@ -145,6 +156,7 @@
           patch={~p"/brainstormings/#{@brainstorming.id}/ideas/#{@idea.id}"}
           class="text-decoration-none"
           title={gettext("Show idea")}
+          aria-label={gettext("Show idea")}
         >
           <span class="text-dark">{@idea.comments_count}</span>
           <i class="bi-chat"></i>
@@ -152,11 +164,21 @@
       </span>
       <span class="me-1 text-dark">{length(@idea.likes)}</span>
       <%= if Mindwendel.Likes.exists_user_in_likes?(@idea.likes, @current_user.id) do %>
-        <.link phx-click="unlike" phx-target={@myself} title="Unlike">
+        <.link
+          phx-click="unlike"
+          phx-target={@myself}
+          title={gettext("Unlike")}
+          aria-label={gettext("Unlike")}
+        >
           <i class="bi-star-fill"></i>
         </.link>
       <% else %>
-        <.link phx-click="like" phx-target={@myself} title="Like">
+        <.link
+          phx-click="like"
+          phx-target={@myself}
+          title={gettext("Like")}
+          aria-label={gettext("Like")}
+        >
           <i class="bi-star"></i>
         </.link>
       <% end %>

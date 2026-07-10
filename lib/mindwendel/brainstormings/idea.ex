@@ -47,6 +47,7 @@ defmodule Mindwendel.Brainstormings.Idea do
       :position_order,
       :comments_count
     ])
+    |> default_anonymous_username()
     |> validate_required([:username, :body, :brainstorming_id])
     |> strip_html_from_body()
     |> maybe_put_idea_labels(attrs)
@@ -54,6 +55,23 @@ defmodule Mindwendel.Brainstormings.Idea do
     |> add_position_order_if_missing()
     |> validate_attachment_count(attrs)
     |> maybe_put_attachments(idea, attrs)
+  end
+
+  defp default_anonymous_username(changeset) do
+    case get_change(changeset, :username) do
+      nil ->
+        changeset
+
+      username when is_binary(username) ->
+        if String.trim(username) == "" do
+          put_change(changeset, :username, "Anonymous")
+        else
+          changeset
+        end
+
+      _ ->
+        changeset
+    end
   end
 
   defp strip_html_from_body(changeset) do
