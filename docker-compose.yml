@@ -36,36 +36,38 @@ services:
       URL_PORT: ${DOCKER_COMPOSE_APP_URL_PORT:-4000}
       URL_SCHEME: ${DOCKER_COMPOSE_APP_URL_SCHEME:-http}
       MW_ENDPOINT_HTTP_PORT: ${DOCKER_COMPOSE_APP_MW_ENDPOINT_HTTP_PORT:-4000}
-      # Attention: Please note that you have to add minio in etc/hosts to make the links of signed urls work:
-      # Example: 127.0.0.1 minio
-      
+      # Attention: Please note that you have to add rustfs in etc/hosts to make the links of signed urls work:
+      # Example: 127.0.0.1 rustfs
+
       OBJECT_STORAGE_BUCKET: mindwendel
       OBJECT_STORAGE_SCHEME: "http://"
-      OBJECT_STORAGE_HOST: minio
+      OBJECT_STORAGE_HOST: rustfs
       OBJECT_STORAGE_PORT: 9000
       OBJECT_STORAGE_REGION: local
-      OBJECT_STORAGE_USER: ${DOCKER_COMPOSE_APP_OBJECT_STORAGE_USER}
-      OBJECT_STORAGE_PASSWORD: ${DOCKER_COMPOSE_APP_OBJECT_STORAGE_PASSWORD}
+      OBJECT_STORAGE_USER: ${DOCKER_COMPOSE_APP_OBJECT_STORAGE_USER:-rustfsadmin}
+      OBJECT_STORAGE_PASSWORD: ${DOCKER_COMPOSE_APP_OBJECT_STORAGE_PASSWORD:-rustfsadmin}
       VAULT_ENCRYPTION_KEY_BASE64: ${DOCKER_COMPOSE_APP_VAULT_ENCRYPTION_KEY_BASE64}
     ports:
       - "${DOCKER_COMPOSE_APP_PORT_PUBLISHED:-4000}:${DOCKER_COMPOSE_APP_PORT_TARGET:-4000}"
     depends_on:
       - postgres
+      - rustfs
     volumes:
       - ./:/home/elixir/app
 
-  minio:
-    image: minio/minio
-    container_name: minio
+  rustfs:
+    image: rustfs/rustfs:latest
+    environment:
+      RUSTFS_ACCESS_KEY: ${DOCKER_COMPOSE_APP_OBJECT_STORAGE_USER:-rustfsadmin}
+      RUSTFS_SECRET_KEY: ${DOCKER_COMPOSE_APP_OBJECT_STORAGE_PASSWORD:-rustfsadmin}
+      RUSTFS_CONSOLE_USERNAME: ${DOCKER_COMPOSE_RUSTFS_USER:-rustfsadmin}
+      RUSTFS_CONSOLE_PASSWORD: ${DOCKER_COMPOSE_RUSTFS_PASSWORD:-rustfsadmin}
+      RUSTFS_REGION: local
     ports:
       - "9000:9000"
       - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: ${DOCKER_COMPOSE_MINIO_USER:-ROOTNAME}
-      MINIO_ROOT_PASSWORD: ${DOCKER_COMPOSE_MINIO_PASSWORD:-CHANGEME123}
     volumes:
-      - ~/minio/data:/data
-    command: server /data --console-address ":9001"
+      - rustfs_data:/data
 
   postgres:
     image: postgres:15
@@ -83,4 +85,5 @@ services:
 
 volumes:
   postgres_data:
+  rustfs_data:
   deps:
