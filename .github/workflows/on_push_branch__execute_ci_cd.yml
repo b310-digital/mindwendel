@@ -41,7 +41,7 @@ jobs:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
     # Docker Hub image that `container-job` executes in
-    container: hexpm/elixir:1.20.3-erlang-27.3.4.14-debian-bookworm-20260713-slim
+    container: hexpm/elixir:1.20.2-erlang-27.3.4.14-debian-bookworm-20260713-slim
 
     needs: build_deps
 
