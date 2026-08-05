@@ -17,6 +17,8 @@ updates:
         exclude-patterns:
           - "phoenix"
           - "ecto"
+    cooldown:
+      default-days: 7
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/assets" # Location of package manifests
     schedule:
@@ -26,12 +28,17 @@ updates:
         dependency-type: "production"
       development-dependencies:
         dependency-type: "development"
+    cooldown:
+      default-days: 7
   - package-ecosystem: "docker" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
   - package-ecosystem: "github-actions" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
-      
+    cooldown:
+      default-days: 7
