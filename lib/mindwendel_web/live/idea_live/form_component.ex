@@ -73,6 +73,11 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
              idea_params_merged
            ) do
         {:ok, _idea} ->
+          {:ok, user} =
+            update_username(socket.assigns.current_user, idea_params_merged["username"])
+
+          send(self(), {:user_updated, user})
+
           {:noreply,
            socket
            |> put_flash(:info, gettext("Idea updated"))
