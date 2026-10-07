@@ -20,40 +20,74 @@ defmodule Mindwendel.UrlPreview do
   # Bytes allowed on top of max_body_size for the status line, headers and TLS
   @max_overhead_size 64_000
 
-  # Special-purpose ranges (RFC 6890 and the IANA special-purpose registries)
-  # that must never be fetched: loopback, private, link-local (incl. cloud
-  # metadata endpoints at 169.254.169.254), CGNAT, documentation, multicast, ...
+  # Address ranges that must never be fetched. Based on the IANA special-purpose
+  # address registries (RFC 6890):
+  # https://www.iana.org/assignments/iana-ipv4-special-registry
+  # https://www.iana.org/assignments/iana-ipv6-special-registry
+  #
+  # Ranges are `{network, prefix_length}`, i.e. the CIDR notation 10.0.0.0/8 is
+  # `{{10, 0, 0, 0}, 8}`: an address matches if its first `prefix_length` bits
+  # equal those of the network (see in_range?/2).
   @blocked_ipv4_ranges [
+    # 0.0.0.0/8 "this network", 0.0.0.0 often reaches localhost (RFC 791 §3.2)
     {{0, 0, 0, 0}, 8},
+    # 10.0.0.0/8 private network (RFC 1918)
     {{10, 0, 0, 0}, 8},
+    # 100.64.0.0/10 shared address space / carrier-grade NAT (RFC 6598)
     {{100, 64, 0, 0}, 10},
+    # 127.0.0.0/8 loopback (RFC 1122 §3.2.1.3)
     {{127, 0, 0, 0}, 8},
+    # 169.254.0.0/16 link-local (RFC 3927), includes the cloud metadata
+    # endpoint 169.254.169.254 (AWS, GCP, Azure) exposing credentials
     {{169, 254, 0, 0}, 16},
+    # 172.16.0.0/12 private network (RFC 1918)
     {{172, 16, 0, 0}, 12},
+    # 192.0.0.0/24 IETF protocol assignments (RFC 6890 §2.1)
     {{192, 0, 0, 0}, 24},
+    # 192.0.2.0/24 documentation TEST-NET-1 (RFC 5737)
     {{192, 0, 2, 0}, 24},
+    # 192.88.99.0/24 6to4 relay anycast (RFC 3068, deprecated by RFC 7526)
     {{192, 88, 99, 0}, 24},
+    # 192.168.0.0/16 private network (RFC 1918)
     {{192, 168, 0, 0}, 16},
+    # 198.18.0.0/15 network benchmarking (RFC 2544)
     {{198, 18, 0, 0}, 15},
+    # 198.51.100.0/24 documentation TEST-NET-2 (RFC 5737)
     {{198, 51, 100, 0}, 24},
+    # 203.0.113.0/24 documentation TEST-NET-3 (RFC 5737)
     {{203, 0, 113, 0}, 24},
+    # 224.0.0.0/4 multicast (RFC 5771)
     {{224, 0, 0, 0}, 4},
+    # 240.0.0.0/4 reserved (RFC 1112 §4), includes the limited broadcast
+    # address 255.255.255.255 (RFC 919 §7)
     {{240, 0, 0, 0}, 4}
   ]
 
-  # IPv4-mapped (::ffff:0:0/96), IPv4-translated (::ffff:0:0:0/96), NAT64 (64:ff9b::/96) and 6to4 (2002::/16)
-  # addresses are checked against the IPv4 ranges in public_address?/1.
+  # IPv6 addresses are tuples of eight 16-bit segments, so 0xFE80 is "fe80".
+  # Formats that embed an IPv4 address (IPv4-mapped, IPv4-translated, NAT64,
+  # 6to4) are not listed here, public_address?/1 checks the embedded IPv4
+  # address against @blocked_ipv4_ranges instead.
   @blocked_ipv6_ranges [
-    # unspecified, loopback and IPv4-compatible addresses
+    # ::/96 covers the unspecified address :: (RFC 4291 §2.5.2), the loopback
+    # ::1 (RFC 4291 §2.5.3) and the deprecated IPv4-compatible addresses
+    # ::a.b.c.d (RFC 4291 §2.5.5.1)
     {{0, 0, 0, 0, 0, 0, 0, 0}, 96},
+    # 64:ff9b:1::/48 local-use IPv4/IPv6 translation (RFC 8215)
     {{0x64, 0xFF9B, 1, 0, 0, 0, 0, 0}, 48},
+    # 100::/64 discard-only (RFC 6666)
     {{0x100, 0, 0, 0, 0, 0, 0, 0}, 64},
-    # IETF protocol assignments, includes Teredo (2001::/32)
+    # 2001::/23 IETF protocol assignments (RFC 2928), includes Teredo
+    # 2001::/32 (RFC 4380) which tunnels to arbitrary IPv4 addresses
     {{0x2001, 0, 0, 0, 0, 0, 0, 0}, 23},
+    # 2001:db8::/32 documentation (RFC 3849)
     {{0x2001, 0xDB8, 0, 0, 0, 0, 0, 0}, 32},
+    # fc00::/7 unique local addresses, the IPv6 private networks (RFC 4193)
     {{0xFC00, 0, 0, 0, 0, 0, 0, 0}, 7},
+    # fe80::/10 link-local (RFC 4291 §2.5.6)
     {{0xFE80, 0, 0, 0, 0, 0, 0, 0}, 10},
+    # fec0::/10 site-local, deprecated (RFC 3879)
     {{0xFEC0, 0, 0, 0, 0, 0, 0, 0}, 10},
+    # ff00::/8 multicast (RFC 4291 §2.7)
     {{0xFF00, 0, 0, 0, 0, 0, 0, 0}, 8}
   ]
 
@@ -76,16 +110,20 @@ defmodule Mindwendel.UrlPreview do
     * `:max_redirects` - maximum number of redirects to follow
     * `:max_body_size` - bytes to read at most, the rest of the body is dropped
     * `:allowed_ips` - addresses allowed even though they are not public
+    * `:allow_public_ips` - set to false to only allow `:allowed_ips` (used in tests)
     * `:resolver` - function resolving a hostname to `{:ok, [ip]}`
   """
   def fetch_body(url, opts \\ []) do
+    config = Application.get_env(:mindwendel, __MODULE__, [])
+
     opts =
       Keyword.merge(
         [
           timeout: 5_000,
           max_redirects: 3,
           max_body_size: 1_000_000,
-          allowed_ips: Application.get_env(:mindwendel, __MODULE__, [])[:allowed_ips] || []
+          allowed_ips: Keyword.get(config, :allowed_ips, []),
+          allow_public_ips: Keyword.get(config, :allow_public_ips, true)
         ],
         opts
       )
@@ -98,9 +136,21 @@ defmodule Mindwendel.UrlPreview do
     end
   end
 
+  @doc """
+  Returns true if the IPv4 or IPv6 address tuple is a public address, false for
+  addresses in @blocked_ipv4_ranges or @blocked_ipv6_ranges.
+  """
+  # IPv6 formats that embed an IPv4 address reach that IPv4 address (e.g.
+  # ::ffff:127.0.0.1 connects to 127.0.0.1), so the embedded address is checked.
+  # The IPv4 address spans two 16-bit segments (`high` and `low`).
+
+  # ::ffff:0:0/96 IPv4-mapped, ::ffff:a.b.c.d (RFC 4291 §2.5.5.2)
   def public_address?({0, 0, 0, 0, 0, 0xFFFF, high, low}), do: public_address?(ipv4(high, low))
+  # ::ffff:0:0:0/96 IPv4-translated, ::ffff:0:a.b.c.d (RFC 2765 §2.1)
   def public_address?({0, 0, 0, 0, 0xFFFF, 0, high, low}), do: public_address?(ipv4(high, low))
+  # 64:ff9b::/96 NAT64 well-known prefix, 64:ff9b::a.b.c.d (RFC 6052 §2.1)
   def public_address?({0x64, 0xFF9B, 0, 0, 0, 0, high, low}), do: public_address?(ipv4(high, low))
+  # 2002::/16 6to4, the IPv4 address follows the prefix: 2002:AABB:CCDD:: (RFC 3056 §2)
   def public_address?({0x2002, high, low, _, _, _, _, _}), do: public_address?(ipv4(high, low))
 
   def public_address?(ip) when tuple_size(ip) == 4,
@@ -111,8 +161,11 @@ defmodule Mindwendel.UrlPreview do
 
   def public_address?(_ip), do: false
 
+  # Splits two 16-bit segments into four bytes: 0x7F00, 0x0001 -> {127, 0, 0, 1}
   defp ipv4(high, low), do: {high >>> 8, high &&& 0xFF, low >>> 8, low &&& 0xFF}
 
+  # Compares the first `prefix_length` bits by dropping all other bits of the
+  # address and the network: 32 bits per IPv4 address, 128 bits per IPv6 address.
   defp in_range?(ip, {network, prefix_length}) do
     shift = tuple_size(ip) * segment_bits(ip) - prefix_length
     ip_to_integer(ip) >>> shift == ip_to_integer(network) >>> shift
@@ -178,7 +231,7 @@ defmodule Mindwendel.UrlPreview do
       end
 
     with {:ok, ips} <- ips do
-      if ips != [] and Enum.all?(ips, &(&1 in opts[:allowed_ips] or public_address?(&1))) do
+      if ips != [] and Enum.all?(ips, &allowed_address?(&1, opts)) do
         # Prefer IPv4, as all addresses are valid this does not weaken the check
         {:ok, Enum.sort_by(ips, &tuple_size/1)}
       else
@@ -186,6 +239,9 @@ defmodule Mindwendel.UrlPreview do
       end
     end
   end
+
+  defp allowed_address?(ip, opts),
+    do: ip in opts[:allowed_ips] or (opts[:allow_public_ips] and public_address?(ip))
 
   defp ip_literal(host), do: :inet.parse_strict_address(String.to_charlist(host))
 

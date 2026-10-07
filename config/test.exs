@@ -38,5 +38,11 @@ config :timex, :default_locale, "en"
 
 config :mindwendel, Oban, repo: Mindwendel.Repo, testing: :inline
 
-# Allow loopback addresses for URL preview in tests (Bypass listens on localhost)
-config :mindwendel, Mindwendel.UrlPreview, allowed_ips: [{127, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0, 1}]
+# URL previews in tests may only connect to loopback (Bypass listens on localhost),
+# so tests never send requests to real sites
+config :mindwendel, Mindwendel.UrlPreview,
+  allowed_ips: [{127, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0, 1}],
+  allow_public_ips: false
+
+# Don't check IANA for new timezone data during tests
+config :tzdata, :autoupdate, :disabled

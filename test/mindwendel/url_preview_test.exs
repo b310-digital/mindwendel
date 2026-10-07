@@ -136,7 +136,7 @@ defmodule MindwendelServices.UrlPreviewTest do
     end
 
     test "returns error for non-HTTP schemes" do
-      assert {:error, _} = UrlPreview.fetch_url("ftp://example.com")
+      assert {:error, _} = UrlPreview.fetch_url("ftp://127.0.0.1")
       assert {:error, _} = UrlPreview.fetch_url("file:///etc/passwd")
       assert {:error, _} = UrlPreview.fetch_url("javascript:alert(1)")
     end
@@ -162,17 +162,24 @@ defmodule MindwendelServices.UrlPreviewTest do
     end
 
     test "rejects a host if any resolved address is not public" do
-      resolver = fn "rebind.test" -> {:ok, [{93, 184, 216, 34}, {0, 0, 0, 0, 0, 0, 0, 1}]} end
+      # 127.0.0.1 is allowed here, the second address must still be rejected
+      resolver = fn "rebind.test" -> {:ok, [{127, 0, 0, 1}, {169, 254, 169, 254}]} end
 
       assert {:error, :forbidden_address} =
-               UrlPreview.fetch_body("http://rebind.test/", resolver: resolver, allowed_ips: [])
+               UrlPreview.fetch_body("http://rebind.test/",
+                 resolver: resolver,
+                 allowed_ips: [{127, 0, 0, 1}]
+               )
     end
 
     test "rejects a host with an internal AAAA record" do
-      resolver = fn "aaaa.test" -> {:ok, [{93, 184, 216, 34}, {0xFD00, 0, 0, 0, 0, 0, 0, 1}]} end
+      resolver = fn "aaaa.test" -> {:ok, [{127, 0, 0, 1}, {0xFD00, 0, 0, 0, 0, 0, 0, 1}]} end
 
       assert {:error, :forbidden_address} =
-               UrlPreview.fetch_body("http://aaaa.test/", resolver: resolver, allowed_ips: [])
+               UrlPreview.fetch_body("http://aaaa.test/",
+                 resolver: resolver,
+                 allowed_ips: [{127, 0, 0, 1}]
+               )
     end
 
     test "rejects hosts that do not resolve" do
@@ -313,7 +320,7 @@ defmodule MindwendelServices.UrlPreviewTest do
     test "includes DNS resolution in the total request time" do
       slow_resolver = fn _host ->
         Process.sleep(2_000)
-        {:ok, [{93, 184, 216, 34}]}
+        {:ok, [{127, 0, 0, 1}]}
       end
 
       {elapsed_us, result} =
@@ -326,8 +333,8 @@ defmodule MindwendelServices.UrlPreviewTest do
     end
 
     test "rejects invalid ports" do
-      assert {:error, :invalid_url} = UrlPreview.fetch_body("http://example.com:99999/")
-      assert {:error, :invalid_url} = UrlPreview.fetch_body("http://example.com:0/")
+      assert {:error, :invalid_url} = UrlPreview.fetch_body("http://127.0.0.1:99999/")
+      assert {:error, :invalid_url} = UrlPreview.fetch_body("http://127.0.0.1:0/")
     end
 
     test "skips informational responses before the final response" do

@@ -60,7 +60,7 @@ defmodule Mindwendel.CSVFormatterTest do
 
     test "idea with link", %{brainstorming: brainstorming, idea: idea} do
       Factory.insert!(:link,
-        url: "https://example.com",
+        url: "http://127.0.0.1/example",
         title: "Example",
         idea: idea
       )
@@ -68,7 +68,7 @@ defmodule Mindwendel.CSVFormatterTest do
       brainstorming = preload_brainstorming(brainstorming)
       csv = CSVFormatter.brainstorming_to_csv(brainstorming) |> Enum.join()
 
-      assert csv =~ "https://example.com"
+      assert csv =~ "http://127.0.0.1/example"
     end
 
     test "empty brainstorming has only headers" do
