@@ -14,26 +14,42 @@ defmodule Mindwendel.Lanes do
   require Logger
 
   @doc """
-  Gets a single lane.
+  Gets a single lane belonging to the given brainstorming.
 
-  Raises `Ecto.NoResultsError` if the Lane does not exist.
+  Raises `Ecto.NoResultsError` if the Lane does not exist within the brainstorming.
 
   ## Examples
 
-      iex> get_lane!(123)
+      iex> get_lane!(lane_id, brainstorming_id)
       %Lane{}
 
-      iex> get_lane!(456)
+      iex> get_lane!(lane_id_of_other_brainstorming, brainstorming_id)
       ** (Ecto.NoResultsError)
 
   """
-  def get_lane!(id) do
-    Repo.get!(Lane, id)
+  def get_lane!(id, brainstorming_id) do
+    Lane
+    |> where(brainstorming_id: ^brainstorming_id)
+    |> Repo.get!(id)
     |> preload_lane()
   end
 
-  def get_lane(id) do
-    case Repo.get(Lane, id) do
+  @doc """
+  Gets a single lane belonging to the given brainstorming.
+
+  Returns `nil` if the Lane does not exist within the brainstorming.
+
+  ## Examples
+
+      iex> get_lane(lane_id, brainstorming_id)
+      %Lane{}
+
+      iex> get_lane(lane_id_of_other_brainstorming, brainstorming_id)
+      nil
+
+  """
+  def get_lane(id, brainstorming_id) do
+    case Repo.get_by(Lane, id: id, brainstorming_id: brainstorming_id) do
       nil -> nil
       lane -> preload_lane(lane)
     end

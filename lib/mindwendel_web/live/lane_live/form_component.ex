@@ -25,9 +25,11 @@ defmodule MindwendelWeb.LaneLive.FormComponent do
   end
 
   def handle_event("save", %{"lane" => lane_params}, socket) do
-    %{current_user: current_user, brainstorming_id: brainstorming_id} = socket.assigns
+    # The lane is loaded scoped to the mounted brainstorming (or built for it), so
+    # permissions are checked against the brainstorming the lane belongs to.
+    %{current_user: current_user, lane: lane} = socket.assigns
 
-    if Permissions.has_moderating_permission(brainstorming_id, current_user) do
+    if Permissions.has_moderating_permission(lane.brainstorming_id, current_user) do
       save_lane(socket, socket.assigns.action, lane_params)
     else
       {:noreply, socket}
@@ -35,9 +37,7 @@ defmodule MindwendelWeb.LaneLive.FormComponent do
   end
 
   defp save_lane(socket, :update, lane_params) do
-    lane = Lanes.get_lane!(lane_params["id"])
-
-    %{brainstorming_id: brainstorming_id} = socket.assigns
+    %{lane: lane} = socket.assigns
 
     case Lanes.update_lane(lane, lane_params) do
       {:ok, _lane} ->
@@ -45,7 +45,7 @@ defmodule MindwendelWeb.LaneLive.FormComponent do
          socket
          |> put_flash(:info, gettext("Lane updated"))
          |> push_event("submit-success", %{to: "#lane-modal"})
-         |> push_navigate(to: ~p"/brainstormings/#{brainstorming_id}")}
+         |> push_navigate(to: ~p"/brainstormings/#{lane.brainstorming_id}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}

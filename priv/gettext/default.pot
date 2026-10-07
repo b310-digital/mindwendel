@@ -25,12 +25,12 @@ msgstr ""
 msgid "Ready?"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:388
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:380
 #, elixir-autogen, elixir-format
 msgid "%{name} - Edit"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:365
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:357
 #, elixir-autogen, elixir-format
 msgid "%{name} - New Idea"
 msgstr ""
@@ -48,10 +48,10 @@ msgstr ""
 
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:34
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:36
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:61
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:63
-#: lib/mindwendel_web/live/lane_live/form_component.html.heex:16
-#: lib/mindwendel_web/live/lane_live/form_component.html.heex:18
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:60
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:62
+#: lib/mindwendel_web/live/lane_live/form_component.html.heex:15
+#: lib/mindwendel_web/live/lane_live/form_component.html.heex:17
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr ""
@@ -91,7 +91,7 @@ msgstr ""
 msgid "Export to HTML"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:116
+#: lib/mindwendel_web/live/idea_live/form_component.ex:121
 #, elixir-autogen, elixir-format
 msgid "Idea created successfully"
 msgstr ""
@@ -117,15 +117,15 @@ msgid "Proceed to your brainstorming"
 msgstr ""
 
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:39
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:66
-#: lib/mindwendel_web/live/lane_live/form_component.html.heex:21
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:65
+#: lib/mindwendel_web/live/lane_live/form_component.html.heex:20
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr ""
 
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:38
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:65
-#: lib/mindwendel_web/live/lane_live/form_component.html.heex:20
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:64
+#: lib/mindwendel_web/live/lane_live/form_component.html.heex:19
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr ""
@@ -379,7 +379,7 @@ msgstr ""
 msgid "Type the label name"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:375
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:369
 #, elixir-autogen, elixir-format
 msgid "%{name} - New Lane"
 msgstr ""
@@ -389,7 +389,7 @@ msgstr ""
 msgid "Lane created successfully"
 msgstr ""
 
-#: lib/mindwendel_web/live/lane_live/form_component.html.heex:11
+#: lib/mindwendel_web/live/lane_live/form_component.html.heex:10
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr ""
@@ -457,7 +457,7 @@ msgstr ""
 msgid "Delete idea"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:78
+#: lib/mindwendel_web/live/idea_live/form_component.ex:83
 #, elixir-autogen, elixir-format
 msgid "Idea updated"
 msgstr ""
@@ -474,17 +474,17 @@ msgstr ""
 msgid "No filename"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:184
+#: lib/mindwendel_web/live/idea_live/form_component.ex:189
 #, elixir-autogen, elixir-format
 msgid "File type is not allowed"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:182
+#: lib/mindwendel_web/live/idea_live/form_component.ex:187
 #, elixir-autogen, elixir-format
 msgid "The selected file is too large"
 msgstr ""
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:183
+#: lib/mindwendel_web/live/idea_live/form_component.ex:188
 #, elixir-autogen, elixir-format
 msgid "Too many files selected"
 msgstr ""
@@ -559,13 +559,13 @@ msgid "Give moderating permissions"
 msgstr ""
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:58
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:226
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:236
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:228
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:238
 #, elixir-autogen, elixir-format
 msgid "Brainstorming not found"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:285
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:287
 #, elixir-autogen, elixir-format
 msgid "%{length} idea(s) generated"
 msgstr ""
@@ -576,41 +576,41 @@ msgstr ""
 msgid "AI"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:275
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:277
 #, elixir-autogen, elixir-format
 msgid "Failed to generate ideas"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:279
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:281
 #, elixir-autogen, elixir-format
 msgid "No ideas generated"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:258
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:260
 #, elixir-autogen, elixir-format
 msgid "Daily AI token limit exceeded. Please try again tomorrow."
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:269
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:271
 #, elixir-autogen, elixir-format
 msgid "Hourly AI request limit exceeded. Please try again later."
 msgstr ""
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:98
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:108
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:202
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:209
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:204
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:211
 #, elixir-autogen, elixir-format
 msgid "Permission denied"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:319
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:321
 #, elixir-autogen, elixir-format
 msgid "AI clustering failed"
 msgstr ""
 
 #: lib/mindwendel_web/live/brainstorming_live/show.ex:105
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:212
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:214
 #, elixir-autogen, elixir-format
 msgid "AI clustering is disabled"
 msgstr ""
@@ -635,17 +635,17 @@ msgstr ""
 msgid "Generating ideas..."
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:310
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:312
 #, elixir-autogen, elixir-format
 msgid "Ideas clustered into labels"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:308
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:310
 #, elixir-autogen, elixir-format
 msgid "No new clustering changes"
 msgstr ""
 
-#: lib/mindwendel_web/live/brainstorming_live/show.ex:315
+#: lib/mindwendel_web/live/brainstorming_live/show.ex:317
 #, elixir-autogen, elixir-format
 msgid "Nothing to cluster right now"
 msgstr ""

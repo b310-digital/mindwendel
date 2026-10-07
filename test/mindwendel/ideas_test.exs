@@ -517,4 +517,41 @@ defmodule Mindwendel.IdeasTest do
       assert reloaded_idea.body == "Bold updated text"
     end
   end
+
+  describe "scoping ideas to their brainstorming" do
+    setup do
+      other_brainstorming = Factory.insert!(:brainstorming)
+      other_lane = Enum.at(other_brainstorming.lanes, 0)
+
+      other_idea =
+        Factory.insert!(:idea, brainstorming: other_brainstorming, lane: other_lane)
+
+      %{other_brainstorming: other_brainstorming, other_lane: other_lane, other_idea: other_idea}
+    end
+
+    test "get_idea!/2 returns the idea of the given brainstorming", %{
+      brainstorming: brainstorming,
+      idea: idea
+    } do
+      assert Ideas.get_idea!(idea.id, brainstorming.id).id == idea.id
+    end
+
+    test "get_idea!/2 raises for an idea of another brainstorming", %{
+      brainstorming: brainstorming,
+      other_idea: other_idea
+    } do
+      assert_raise Ecto.NoResultsError, fn ->
+        Ideas.get_idea!(other_idea.id, brainstorming.id)
+      end
+    end
+
+    test "get_idea/2 returns nil for an idea of another brainstorming", %{
+      brainstorming: brainstorming,
+      idea: idea,
+      other_idea: other_idea
+    } do
+      assert Ideas.get_idea(idea.id, brainstorming.id).id == idea.id
+      assert Ideas.get_idea(other_idea.id, brainstorming.id) == nil
+    end
+  end
 end

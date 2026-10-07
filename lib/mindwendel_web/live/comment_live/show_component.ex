@@ -8,11 +8,11 @@ defmodule MindwendelWeb.CommentLive.ShowComponent do
   end
 
   def handle_event("delete_comment", _, socket) do
-    %{brainstorming_id: brainstorming_id, comment: comment, current_user: current_user} =
-      socket.assigns
+    %{comment: comment, idea: idea, current_user: current_user} = socket.assigns
 
-    if has_moderating_or_ownership_permission(brainstorming_id, comment, current_user) do
-      Comments.delete_comment(socket.assigns.comment)
+    if comment.idea_id == idea.id and
+         has_moderating_or_ownership_permission(idea.brainstorming_id, comment, current_user) do
+      Comments.delete_comment(comment)
     end
 
     {:noreply, socket}
