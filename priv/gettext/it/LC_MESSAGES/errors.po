@@ -88,3 +88,8 @@ msgstr "deve essere uguale a %{number}"
 
 msgid "idea label associated with idea"
 msgstr "Questa etichetta è associata a un'idea"
+
+#: lib/mindwendel/brainstormings/idea.ex:91
+#, elixir-autogen, elixir-format
+msgid "The lane of this idea does not exist anymore"
+msgstr "La categoria di questa idea non esiste più"

@@ -23,28 +23,29 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
         "change_position",
         %{
           "id" => id,
-          "brainstorming_id" => brainstorming_id,
           "lane_id" => lane_id,
           "new_position" => new_position,
           "old_position" => old_position
         },
         socket
       ) do
-    {:ok, brainstorming} = Brainstormings.get_brainstorming(brainstorming_id)
+    # Always use the mounted brainstorming. The idea and the target lane are scoped to it
+    # inside update_ideas_for_brainstorming_by_user_move/5.
+    {:ok, brainstorming} = Brainstormings.get_brainstorming(socket.assigns.brainstorming.id)
 
-    if has_move_permission(brainstorming, socket.assigns.current_user) do
-      Ideas.update_ideas_for_brainstorming_by_user_move(
-        brainstorming_id,
-        lane_id,
-        id,
-        new_position,
-        old_position
-      )
-
+    with true <- has_move_permission(brainstorming, socket.assigns.current_user),
+         {:ok, _} <-
+           Ideas.update_ideas_for_brainstorming_by_user_move(
+             brainstorming.id,
+             lane_id,
+             id,
+             new_position,
+             old_position
+           ) do
       {:noreply, socket}
     else
       # reset local move change
-      {:noreply, socket |> assign(:brainstorming, brainstorming)}
+      _ -> {:noreply, socket |> assign(:brainstorming, brainstorming)}
     end
   end
 

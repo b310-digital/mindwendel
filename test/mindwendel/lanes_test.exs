@@ -216,5 +216,17 @@ defmodule Mindwendel.LanesTest do
       assert Lanes.get_lane(lane.id, brainstorming.id).id == lane.id
       assert Lanes.get_lane(other_lane.id, brainstorming.id) == nil
     end
+
+    test "update_lane/2 does not move the lane into another brainstorming", %{
+      lane: lane,
+      brainstorming: brainstorming,
+      other_brainstorming: other_brainstorming
+    } do
+      {:ok, updated_lane} =
+        Lanes.update_lane(lane, %{name: "renamed", brainstorming_id: other_brainstorming.id})
+
+      assert updated_lane.name == "renamed"
+      assert Repo.reload!(lane).brainstorming_id == brainstorming.id
+    end
   end
 end

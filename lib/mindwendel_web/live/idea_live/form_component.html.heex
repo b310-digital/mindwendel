@@ -28,6 +28,9 @@
         {error_to_string(err)}
       </div>
     <% end %>
+    <div :for={error <- translate_errors(@form.errors, :lane_id)} class="alert alert-danger">
+      {error}
+    </div>
     <%= if @form.errors[:files] != nil do %>
       <div class="alert alert-danger">
         {@form.errors[:files] |> elem(0) |> String.to_atom() |> error_to_string()}
@@ -51,8 +54,6 @@
         </p>
       <% end %>
     <% end %>
-    <.input field={@form[:brainstorming_id]} type="hidden" />
-    <.input field={@form[:lane_id]} type="hidden" />
     <:actions>
       <.link
         patch={~p"/brainstormings/#{@brainstorming_id}"}

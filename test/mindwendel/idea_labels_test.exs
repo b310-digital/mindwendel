@@ -52,18 +52,19 @@ defmodule Mindwendel.IdeaLabelsTest do
       assert {:error, _changeset} = IdeaLabels.add_idea_label_to_idea(idea, idea_label.id)
     end
 
-    @tag :skip
     test "does not add an IdeaLabel from another brainstorming", %{idea: idea} do
       another_brainstorming = Factory.insert!(:brainstorming, %{labels: []})
 
       idea_label_from_another_brainstorming =
-        Factory.build(:idea_label, %{
+        Factory.insert!(:idea_label, %{
           name: "another idea_label",
           brainstorming: another_brainstorming
         })
 
-      {:error, _changeset} =
-        IdeaLabels.add_idea_label_to_idea(idea, idea_label_from_another_brainstorming.id)
+      assert {:error, :not_found} =
+               IdeaLabels.add_idea_label_to_idea(idea, idea_label_from_another_brainstorming.id)
+
+      assert Repo.count(IdeaIdeaLabel) == 0
     end
 
     @tag :skip

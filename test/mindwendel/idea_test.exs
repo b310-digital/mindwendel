@@ -31,7 +31,7 @@ defmodule Mindwendel.IdeaTest do
 
     test "adds a default position order", %{brainstorming: brainstorming, lane: lane} do
       changeset =
-        Idea.changeset(%Idea{}, %{
+        Idea.create_changeset(%Idea{}, %{
           brainstorming_id: brainstorming.id,
           lane_id: lane.id,
           body: "test"

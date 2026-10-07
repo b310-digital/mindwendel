@@ -99,3 +99,8 @@ msgstr ""
 
 msgid "idea label associated with idea"
 msgstr "This label is associated with an idea"
+
+#: lib/mindwendel/brainstormings/idea.ex:91
+#, elixir-autogen, elixir-format
+msgid "The lane of this idea does not exist anymore"
+msgstr ""

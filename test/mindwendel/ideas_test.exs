@@ -44,7 +44,7 @@ defmodule Mindwendel.IdeasTest do
          %{
            idea: idea
          } do
-      Ideas.update_idea(idea, %{comments_count: 1})
+      {:ok, _idea} = Ideas.increment_comment_count(idea.id)
       {:ok, idea} = Ideas.decrement_comment_count(idea.id)
       assert idea.comments_count == 0
     end
@@ -552,6 +552,102 @@ defmodule Mindwendel.IdeasTest do
     } do
       assert Ideas.get_idea(idea.id, brainstorming.id).id == idea.id
       assert Ideas.get_idea(other_idea.id, brainstorming.id) == nil
+    end
+
+    test "update_idea/2 does not move the idea into another brainstorming", %{
+      brainstorming: brainstorming,
+      idea: idea,
+      other_brainstorming: other_brainstorming
+    } do
+      Ideas.update_idea(idea, %{body: "changed", brainstorming_id: other_brainstorming.id})
+
+      assert Repo.reload!(idea).brainstorming_id == brainstorming.id
+    end
+
+    test "update_idea/2 rejects a lane of another brainstorming", %{
+      idea: idea,
+      lane: lane,
+      other_lane: other_lane
+    } do
+      assert {:error, changeset} = Ideas.update_idea(idea, %{lane_id: other_lane.id})
+      assert changeset.errors[:lane_id]
+      assert Repo.reload!(idea).lane_id == lane.id
+    end
+
+    test "create_idea/1 rejects a lane of another brainstorming", %{
+      brainstorming: brainstorming,
+      other_lane: other_lane
+    } do
+      assert {:error, changeset} =
+               Ideas.create_idea(%{
+                 body: "new idea",
+                 username: "someone",
+                 brainstorming_id: brainstorming.id,
+                 lane_id: other_lane.id
+               })
+
+      assert changeset.errors[:lane_id]
+    end
+
+    test "update_ideas_for_brainstorming_by_user_move/5 ignores ideas of another brainstorming",
+         %{
+           brainstorming: brainstorming,
+           lane: lane,
+           other_idea: other_idea,
+           other_lane: other_lane
+         } do
+      assert {:error, :not_found} =
+               Ideas.update_ideas_for_brainstorming_by_user_move(
+                 brainstorming.id,
+                 lane.id,
+                 other_idea.id,
+                 1,
+                 1
+               )
+
+      assert Repo.reload!(other_idea).lane_id == other_lane.id
+    end
+
+    test "update_ideas_for_brainstorming_by_user_move/5 ignores lanes of another brainstorming",
+         %{brainstorming: brainstorming, idea: idea, lane: lane, other_lane: other_lane} do
+      assert {:error, %Ecto.Changeset{}} =
+               Ideas.update_ideas_for_brainstorming_by_user_move(
+                 brainstorming.id,
+                 other_lane.id,
+                 idea.id,
+                 1,
+                 1
+               )
+
+      assert Repo.reload!(idea).lane_id == lane.id
+    end
+
+    test "update_ideas_for_brainstorming_by_user_move/5 rejects a missing lane",
+         %{brainstorming: brainstorming, idea: idea, lane: lane} do
+      assert {:error, %Ecto.Changeset{}} =
+               Ideas.update_ideas_for_brainstorming_by_user_move(
+                 brainstorming.id,
+                 nil,
+                 idea.id,
+                 1,
+                 1
+               )
+
+      assert Repo.reload!(idea).lane_id == lane.id
+    end
+  end
+
+  describe "update_idea/2 with internal fields" do
+    test "does not change comments_count and position_order", %{idea: idea} do
+      idea = Repo.reload!(idea)
+
+      {:ok, _idea} =
+        Ideas.update_idea(idea, %{body: "changed", comments_count: 9999, position_order: -5})
+
+      reloaded_idea = Repo.reload!(idea)
+      assert reloaded_idea.body == "changed"
+      assert reloaded_idea.comments_count == idea.comments_count
+      assert reloaded_idea.position_order == idea.position_order
     end
   end
 end
