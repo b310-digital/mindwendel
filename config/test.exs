@@ -38,5 +38,5 @@ config :timex, :default_locale, "en"
 
 config :mindwendel, Oban, repo: Mindwendel.Repo, testing: :inline
 
-# Allow private IPs for URL preview in tests
-config :mindwendel, :allow_private_ips, true
+# Allow loopback addresses for URL preview in tests (Bypass listens on localhost)
+config :mindwendel, Mindwendel.UrlPreview, allowed_ips: [{127, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0, 1}]
