@@ -25,13 +25,16 @@ services:
 
       # Variables for s3 file storage
       OBJECT_STORAGE_BUCKET: mindwendel
-      OBJECT_STORAGE_SCHEME: "https://"
-      OBJECT_STORAGE_HOST: minio
+      # The app talks to rustfs over the internal docker compose network, which is not reachable from outside.
+      # rustfs does not serve TLS without extra setup, so plain http is used here.
+      # Use "https://" only when pointing to an external s3 storage that serves TLS.
+      OBJECT_STORAGE_SCHEME: "http://"
+      OBJECT_STORAGE_HOST: rustfs
       OBJECT_STORAGE_PORT: 9000
       OBJECT_STORAGE_REGION: local
-      OBJECT_STORAGE_USER: ${DOCKER_COMPOSE_APP_PROD_OBJECT_STORAGE_USER}
-      OBJECT_STORAGE_PASSWORD: $DOCKER_COMPOSE_APP_PROD_OBJECT_STORAGE_PASSWORD}
-      VAULT_ENCRYPTION_KEY_BASE64: ${DOCKER_COMPOSE_APP_PROD_VAULT_ENCRYPTION_KEY_BASE64}
+      OBJECT_STORAGE_USER: ${DOCKER_COMPOSE_APP_PROD_OBJECT_STORAGE_USER:?}
+      OBJECT_STORAGE_PASSWORD: ${DOCKER_COMPOSE_APP_PROD_OBJECT_STORAGE_PASSWORD:?}
+      VAULT_ENCRYPTION_KEY_BASE64: ${DOCKER_COMPOSE_APP_PROD_VAULT_ENCRYPTION_KEY_BASE64:?}
 
       # Add a secret key base for mindwendel for encrypting the use session
       # NOTE: There are multiple commands you can use to generate a secret key base. Pick one command you like.
@@ -52,19 +55,23 @@ services:
       - "${DOCKER_COMPOSE_APP_PROD_PORT_PUBLISHED:-4000}:${DOCKER_COMPOSE_APP_PROD_PORT_TARGET:-4000}"
     depends_on:
       - postgres_prod
+      - rustfs
 
-  minio:
-    image: minio/minio
-    container_name: minio
-    ports:
-      - "9000:9000"
-      - "9001:9001"
+  # rustfs acts as an s3 compatible backend for file storage.
+  # It shares its credentials with the app, so there are no default credentials (rustfs would otherwise fall back to rustfsadmin:rustfsadmin).
+  # No ports are published: the app reaches rustfs over the internal docker compose network.
+  # If you need the api or console from the host (e.g. via an ssh tunnel), bind them to localhost only:
+  # ports:
+  #   - "127.0.0.1:9000:9000"
+  #   - "127.0.0.1:9001:9001"
+  rustfs:
+    image: rustfs/rustfs:latest
     environment:
-      MINIO_ROOT_USER: ${DOCKER_COMPOSE_MINIO_PROD_USER}
-      MINIO_ROOT_PASSWORD: ${DOCKER_COMPOSE_MINIO_PROD_PASSWORD}
+      RUSTFS_ACCESS_KEY: ${DOCKER_COMPOSE_APP_PROD_OBJECT_STORAGE_USER:?}
+      RUSTFS_SECRET_KEY: ${DOCKER_COMPOSE_APP_PROD_OBJECT_STORAGE_PASSWORD:?}
+      RUSTFS_REGION: local
     volumes:
-      - ~/minio/data:/data
-    command: server /data --console-address ":9001"
+      - rustfs_prod_data:/data
 
   # If you do not have another postgres database service in this docker-compose, you can add this postgres service.
   # Note: Please use other credentials when using this in production.
@@ -89,3 +96,4 @@ services:
 
 volumes:
   postgres_prod_data:
+  rustfs_prod_data:
