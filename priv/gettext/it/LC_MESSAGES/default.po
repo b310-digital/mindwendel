@@ -37,7 +37,7 @@ msgid "%{name} - New Idea"
 msgstr "%{name} - Nuova Idea"
 
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:22
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:26
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:25
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this idea?"
 msgstr "Sei sicuro di voler eliminare questa idea?"
@@ -49,10 +49,10 @@ msgstr "Attenzione: Questo cancellerà il brainstorming con tutte le idee associ
 
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:34
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:36
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:60
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:62
-#: lib/mindwendel_web/live/lane_live/form_component.html.heex:15
-#: lib/mindwendel_web/live/lane_live/form_component.html.heex:17
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:61
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:63
+#: lib/mindwendel_web/live/lane_live/form_component.html.heex:14
+#: lib/mindwendel_web/live/lane_live/form_component.html.heex:16
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr "Chiudi"
@@ -92,7 +92,7 @@ msgstr "Esporta in CSV"
 msgid "Export to HTML"
 msgstr "Esporta in HTML"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:121
+#: lib/mindwendel_web/live/idea_live/form_component.ex:126
 #, elixir-autogen, elixir-format
 msgid "Idea created successfully"
 msgstr "Idea creata con successo"
@@ -118,15 +118,15 @@ msgid "Proceed to your brainstorming"
 msgstr "Procedi al tuo brainstorming"
 
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:39
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:65
-#: lib/mindwendel_web/live/lane_live/form_component.html.heex:20
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:66
+#: lib/mindwendel_web/live/lane_live/form_component.html.heex:19
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Salva"
 
 #: lib/mindwendel_web/live/comment_live/form_component.html.heex:38
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:64
-#: lib/mindwendel_web/live/lane_live/form_component.html.heex:19
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:65
+#: lib/mindwendel_web/live/lane_live/form_component.html.heex:18
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr "Salvataggio..."
@@ -191,7 +191,7 @@ msgstr "Nome utente"
 
 #: lib/mindwendel_web/controllers/admin/brainstorming_html/export.html.heex:10
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:40
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:94
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:93
 #, elixir-autogen, elixir-format
 msgid "By"
 msgstr "Di"
@@ -390,7 +390,7 @@ msgstr "%{name} - Nuova Categoria"
 msgid "Lane created successfully"
 msgstr "Categoria creata con successo"
 
-#: lib/mindwendel_web/live/lane_live/form_component.html.heex:10
+#: lib/mindwendel_web/live/lane_live/form_component.html.heex:9
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr "Nome"
@@ -447,13 +447,13 @@ msgstr "Categoria predefinita"
 msgid "No lanes available"
 msgstr "Nessuna categoria disponibile"
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:33
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:32
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Edit idea"
 msgstr "Modifica idea"
 
 #: lib/mindwendel_web/live/comment_live/show_component.html.heex:30
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:25
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:24
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Delete idea"
 msgstr "Elimina idea"
@@ -468,24 +468,24 @@ msgstr "Idea aggiornata"
 msgid "Additional Attachment"
 msgstr "Allegato aggiuntivo"
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:84
-#: lib/mindwendel_web/live/idea_live/form_component.html.heex:49
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:83
+#: lib/mindwendel_web/live/idea_live/form_component.html.heex:52
 #: lib/mindwendel_web/live/idea_live/show_component.html.heex:45
 #, elixir-autogen, elixir-format
 msgid "No filename"
 msgstr "Nessun nome file"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:189
+#: lib/mindwendel_web/live/idea_live/form_component.ex:194
 #, elixir-autogen, elixir-format
 msgid "File type is not allowed"
 msgstr "Il tipo di file non è consentito"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:187
+#: lib/mindwendel_web/live/idea_live/form_component.ex:192
 #, elixir-autogen, elixir-format
 msgid "The selected file is too large"
 msgstr "Il file selezionato è troppo grande"
 
-#: lib/mindwendel_web/live/idea_live/form_component.ex:188
+#: lib/mindwendel_web/live/idea_live/form_component.ex:193
 #, elixir-autogen, elixir-format
 msgid "Too many files selected"
 msgstr "Sono stati selezionati troppi file"
@@ -526,8 +526,8 @@ msgstr "Elimina commento"
 msgid "No comments available"
 msgstr "Nessun commento disponibile"
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:41
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:145
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:40
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:144
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Show idea"
 msgstr "Mostra idea"
@@ -651,7 +651,7 @@ msgstr "Nessuna nuova modifica al raggruppamento"
 msgid "Nothing to cluster right now"
 msgstr "Niente da raggruppare al momento"
 
-#: lib/mindwendel_web/live/idea_live/card_component.html.heex:14
+#: lib/mindwendel_web/live/idea_live/card_component.html.heex:13
 #: lib/mindwendel_web/live/idea_live/show_component.html.heex:6
 #, elixir-autogen, elixir-format
 msgid "Attached image"

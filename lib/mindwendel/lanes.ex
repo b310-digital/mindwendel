@@ -56,6 +56,21 @@ defmodule Mindwendel.Lanes do
   end
 
   @doc """
+  Returns true if the lane belongs to the given brainstorming.
+
+  ## Examples
+
+      iex> lane_in_brainstorming?(lane_id, brainstorming_id)
+      true
+
+  """
+  def lane_in_brainstorming?(lane_id, brainstorming_id) do
+    Repo.exists?(
+      from lane in Lane, where: lane.id == ^lane_id and lane.brainstorming_id == ^brainstorming_id
+    )
+  end
+
+  @doc """
   Get max position order of lanes for a brainstorming
 
   ## Examples
@@ -161,7 +176,7 @@ defmodule Mindwendel.Lanes do
   def create_lane(attrs \\ %{}) do
     result =
       %Lane{}
-      |> Lane.changeset(attrs)
+      |> Lane.create_changeset(attrs)
       |> Repo.insert()
       |> Brainstormings.broadcast(:lane_created)
 

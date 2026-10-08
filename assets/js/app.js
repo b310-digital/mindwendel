@@ -43,7 +43,6 @@ Hooks.Sortable = {
       onEnd: (event) => {
         this.pushEventTo(this.el, "change_position", {
           id: event.item.dataset.id,
-          brainstorming_id: event.item.dataset.brainstormingId,
           lane_id: event.to.dataset.laneId || event.item.dataset.laneId,
           // on the server, positions start with 1 not 0
           new_position: event.newIndex + 1,

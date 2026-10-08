@@ -88,3 +88,8 @@ msgstr "muss gleich sein zu %{number}"
 
 msgid "idea label associated with idea"
 msgstr "Dieses Label ist mit einer Idee assoziiert"
+
+#: lib/mindwendel/brainstormings/idea.ex:91
+#, elixir-autogen, elixir-format
+msgid "The lane of this idea does not exist anymore"
+msgstr "Die Spalte dieser Idee existiert nicht mehr"

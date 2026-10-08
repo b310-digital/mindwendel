@@ -93,17 +93,22 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
   end
 
   defp save_idea(socket, :new, idea_params) do
+    # The brainstorming and lane are set server-side when the new idea is built
+    # in the LiveView, never taken from the submitted params.
+    %{idea: %{brainstorming_id: brainstorming_id, lane_id: lane_id}} = socket.assigns
     tmp_attachments = prepare_attachments(socket)
 
     # This is a workaround to get the filtered labels for the idea without passing
     # them as a parameter to the form component. Passing the brainstorming or filter
     # labels directly triggers a re-render of the form component when changing the
     # filter labels and results in a stuck bootstrap modal.
-    brainstorming = Brainstormings.get_bare_brainstorming!(socket.assigns.brainstorming_id)
+    brainstorming = Brainstormings.get_bare_brainstorming!(brainstorming_id)
     filtered_labels = brainstorming.filter_labels_ids
 
     idea_params_merged =
       idea_params
+      |> Map.put("brainstorming_id", brainstorming_id)
+      |> Map.put("lane_id", lane_id)
       |> Map.put("user_id", socket.assigns.current_user.id)
       |> Map.put(
         "idea_labels",
@@ -119,7 +124,7 @@ defmodule MindwendelWeb.IdeaLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Idea created successfully"))
-         |> push_patch(to: ~p"/brainstormings/#{idea_params_merged["brainstorming_id"]}")}
+         |> push_patch(to: ~p"/brainstormings/#{brainstorming_id}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         remove_tmp_attachments(tmp_attachments)

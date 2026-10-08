@@ -1,5 +1,6 @@
 defmodule Mindwendel.Brainstormings.Idea do
   use Mindwendel.Schema
+  use Gettext, backend: MindwendelWeb.Gettext
 
   import Ecto.Changeset
   alias Mindwendel.Accounts.User
@@ -14,6 +15,7 @@ defmodule Mindwendel.Brainstormings.Idea do
   alias Mindwendel.Brainstormings.Like
   alias Mindwendel.FeatureFlag
   alias Mindwendel.Ideas
+  alias Mindwendel.Lanes
   alias Mindwendel.UrlPreview
 
   @max_file_attachments 2
@@ -35,25 +37,62 @@ defmodule Mindwendel.Brainstormings.Idea do
     timestamps()
   end
 
-  @doc false
+  @doc """
+  Changeset for creating an idea. Only on creation the brainstorming of an idea is set.
+  """
+  def create_changeset(idea, attrs \\ %{}) do
+    idea
+    |> cast(attrs, [:brainstorming_id])
+    |> changeset(attrs)
+  end
+
+  @doc """
+  Changeset for updating an idea. The brainstorming of an existing idea cannot be changed.
+
+  The position and the comments count are maintained internally and cannot be set
+  through this changeset, see `position_changeset/2`.
+  """
   def changeset(idea, attrs \\ %{}) do
     idea
     |> cast(attrs, [
       :username,
       :body,
-      :brainstorming_id,
       :lane_id,
-      :user_id,
-      :position_order,
-      :comments_count
+      :user_id
     ])
     |> validate_required([:username, :body, :brainstorming_id])
+    |> validate_lane_belongs_to_brainstorming()
     |> strip_html_from_body()
     |> maybe_put_idea_labels(attrs)
     |> validate_length(:body, min: 1, max: 1023)
     |> add_position_order_if_missing()
     |> validate_attachment_count(attrs)
-    |> maybe_put_attachments(idea, attrs)
+    |> maybe_put_attachments(attrs)
+  end
+
+  @doc """
+  Changeset for moving an idea to a position within a lane of its brainstorming.
+  """
+  def position_changeset(idea, attrs) do
+    idea
+    |> cast(attrs, [:lane_id, :position_order])
+    |> validate_required([:lane_id, :position_order])
+    |> validate_lane_belongs_to_brainstorming()
+  end
+
+  defp validate_lane_belongs_to_brainstorming(changeset) do
+    lane_id = get_change(changeset, :lane_id)
+    brainstorming_id = get_field(changeset, :brainstorming_id)
+
+    if lane_id && brainstorming_id && !Lanes.lane_in_brainstorming?(lane_id, brainstorming_id) do
+      add_error(
+        changeset,
+        :lane_id,
+        dgettext_noop("errors", "The lane of this idea does not exist anymore")
+      )
+    else
+      changeset
+    end
   end
 
   defp strip_html_from_body(changeset) do
@@ -118,7 +157,7 @@ defmodule Mindwendel.Brainstormings.Idea do
     end
   end
 
-  defp maybe_put_attachments(changeset, idea, attrs) do
+  defp maybe_put_attachments(%Ecto.Changeset{data: idea} = changeset, attrs) do
     if FeatureFlag.enabled?(:feature_file_upload) and
          attrs["tmp_attachments"] != nil and Enum.empty?(changeset.errors) do
       new_files =

@@ -29,15 +29,29 @@ defmodule Mindwendel.IdeaLabels do
   end
 
   # As the broadcast results in a full reload of the ideas, we don't need to actually update
-  # the idea struct, a new association is enough
+  # the idea struct, a new association is enough.
+  # Only labels of the idea's brainstorming can be added, otherwise `{:error, :not_found}` is returned.
   def add_idea_label_to_idea(idea, idea_label_id) do
-    result =
-      %{idea_id: idea.id, idea_label_id: idea_label_id}
-      |> IdeaIdeaLabel.bare_creation_changeset()
-      |> Repo.insert()
+    if label_in_brainstorming?(idea_label_id, idea.brainstorming_id) do
+      result =
+        %{idea_id: idea.id, idea_label_id: idea_label_id}
+        |> IdeaIdeaLabel.bare_creation_changeset()
+        |> Repo.insert()
 
-    Lanes.broadcast_lanes_update(idea.brainstorming_id)
-    result
+      Lanes.broadcast_lanes_update(idea.brainstorming_id)
+      result
+    else
+      {:error, :not_found}
+    end
+  end
+
+  defp label_in_brainstorming?(idea_label_id, brainstorming_id) do
+    Repo.exists?(
+      from label in IdeaLabel,
+        where: label.id == ^idea_label_id and label.brainstorming_id == ^brainstorming_id
+    )
+  rescue
+    Ecto.Query.CastError -> false
   end
 
   def remove_idea_label_from_idea(%Idea{} = idea, idea_label_id) do

@@ -15,10 +15,21 @@ defmodule Mindwendel.Brainstormings.Lane do
     timestamps()
   end
 
-  @doc false
+  @doc """
+  Changeset for creating a lane. Only on creation the brainstorming of a lane is set.
+  """
+  def create_changeset(lane, attrs) do
+    lane
+    |> cast(attrs, [:brainstorming_id])
+    |> changeset(attrs)
+  end
+
+  @doc """
+  Changeset for updating a lane. The brainstorming of an existing lane cannot be changed.
+  """
   def changeset(lane, attrs) do
     lane
-    |> cast(attrs, [:name, :position_order, :brainstorming_id])
+    |> cast(attrs, [:name, :position_order])
     |> validate_required([:brainstorming_id])
     |> add_position_order_if_missing()
   end
