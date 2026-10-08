@@ -35,9 +35,10 @@ defmodule Mindwendel.Plugs.SetResponseHeaderContentSecurityPolicy do
       "font-src    'self' ;",
       "frame-src   'self' ;",
 
-      # We add csp sources https: to allow the browser to load the link preview image extracted from the idea body
+      # Link preview images are proxied through the app (LinkPreviewController), so
+      # browsers never load images from third-party servers
       # We add blob: to allow live_img_preview to display client-side upload previews
-      "img-src     'self' data: https: blob: ;",
+      "img-src     'self' data: blob: ;",
 
       # We need to add csp 'unsafe-eval', otherwise we get an error in development
       # because webpack js bundle uses `eval` for hot reloading.

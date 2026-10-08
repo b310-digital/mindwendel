@@ -43,6 +43,7 @@ defmodule MindwendelWeb.Router do
     pipe_through(:browser)
 
     get("/files/:id", FileController, :get_file)
+    get("/links/:id/preview_image", LinkPreviewController, :get_image)
 
     get("/legal", StaticPageController, :legal)
     get("/privacy", StaticPageController, :privacy)

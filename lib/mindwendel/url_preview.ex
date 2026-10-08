@@ -17,6 +17,7 @@ defmodule Mindwendel.UrlPreview do
 
   @empty_preview [title: "", description: "", img_preview_url: ""]
   @redirect_statuses [301, 302, 303, 307, 308]
+  @max_image_size 2_000_000
   # Bytes allowed on top of max_body_size for the status line, headers and TLS
   @max_overhead_size 64_000
 
@@ -92,11 +93,61 @@ defmodule Mindwendel.UrlPreview do
   ]
 
   def fetch_url(url \\ "", opts \\ []) do
-    case fetch_body(url, opts) do
-      {:ok, body} -> body |> Floki.parse_document() |> handle_parsing()
-      {:error, _reason} -> {:error, @empty_preview}
+    # Relative og:image urls are resolved against the final url after redirects
+    case fetch(url, opts) do
+      {:ok, {final_uri, _headers, body}} ->
+        body |> Floki.parse_document() |> handle_parsing(URI.to_string(final_uri))
+
+      {:error, _reason} ->
+        {:error, @empty_preview}
     end
   end
+
+  @doc """
+  Fetches an image with the same SSRF protection as fetch_body/2, so that
+  browsers never have to load preview images from third-party servers.
+
+  The image is only returned if the response declares an image content type,
+  is at most `:max_body_size` bytes (default #{@max_image_size}) and its magic
+  bytes match a JPEG, PNG, GIF or WebP image. The returned content type is
+  derived from the magic bytes, not from the response.
+  """
+  def fetch_image(url, opts \\ []) do
+    max_size = Keyword.get(opts, :max_body_size, @max_image_size)
+    # Read one byte more than allowed to detect (and reject) truncated images
+    opts =
+      Keyword.merge(opts,
+        max_body_size: max_size + 1,
+        accept: "image/jpeg,image/png,image/gif,image/webp"
+      )
+
+    with {:ok, {_uri, headers, body}} <- fetch(url, opts),
+         :ok <- check_image_size(body, max_size),
+         :ok <- check_image_content_type(headers) do
+      case image_type(body) do
+        nil -> {:error, :unsupported_image}
+        content_type -> {:ok, content_type, body}
+      end
+    end
+  end
+
+  defp check_image_size(body, max_size),
+    do: if(byte_size(body) > max_size, do: {:error, :response_too_large}, else: :ok)
+
+  defp check_image_content_type(headers) do
+    with {_, content_type} <- List.keyfind(headers, "content-type", 0),
+         "image/" <> _ <- content_type |> String.trim() |> String.downcase() do
+      :ok
+    else
+      _ -> {:error, :unsupported_image}
+    end
+  end
+
+  defp image_type(<<0xFF, 0xD8, 0xFF, _::binary>>), do: "image/jpeg"
+  defp image_type(<<0x89, "PNG\r\n", 0x1A, "\n", _::binary>>), do: "image/png"
+  defp image_type(<<"GIF8", v, "a", _::binary>>) when v in [?7, ?9], do: "image/gif"
+  defp image_type(<<"RIFF", _::binary-size(4), "WEBP", _::binary>>), do: "image/webp"
+  defp image_type(_body), do: nil
 
   @doc """
   Fetches the body of an http(s) url while protecting against SSRF.
@@ -111,9 +162,15 @@ defmodule Mindwendel.UrlPreview do
     * `:max_body_size` - bytes to read at most, the rest of the body is dropped
     * `:allowed_ips` - addresses allowed even though they are not public
     * `:allow_public_ips` - set to false to only allow `:allowed_ips` (used in tests)
-    * `:resolver` - function resolving a hostname to `{:ok, [ip]}`
+    * `:resolver` - function resolving a hostname to `{:ok, [ip]}`, defaults to
+      the `{module, function}` configured as `:resolver` or a DNS lookup
+    * `:accept` - value of the Accept header, defaults to `text/html`
   """
   def fetch_body(url, opts \\ []) do
+    with {:ok, {_uri, _headers, body}} <- fetch(url, opts), do: {:ok, body}
+  end
+
+  defp fetch(url, opts) do
     config = Application.get_env(:mindwendel, __MODULE__, [])
 
     opts =
@@ -122,6 +179,7 @@ defmodule Mindwendel.UrlPreview do
           timeout: 5_000,
           max_redirects: 3,
           max_body_size: 1_000_000,
+          accept: "text/html",
           allowed_ips: Keyword.get(config, :allowed_ips, []),
           allow_public_ips: Keyword.get(config, :allow_public_ips, true)
         ],
@@ -129,7 +187,14 @@ defmodule Mindwendel.UrlPreview do
       )
 
     deadline = System.monotonic_time(:millisecond) + opts[:timeout]
-    opts = Keyword.put_new(opts, :resolver, &resolve(&1, deadline))
+
+    opts =
+      Keyword.put_new_lazy(opts, :resolver, fn ->
+        case Keyword.get(config, :resolver) do
+          {module, function} -> &apply(module, function, [&1])
+          nil -> &resolve(&1, deadline)
+        end
+      end)
 
     with {:ok, uri} <- parse_url(url) do
       fetch_uri(uri, opts[:max_redirects], deadline, opts)
@@ -198,7 +263,7 @@ defmodule Mindwendel.UrlPreview do
          {:ok, {status, headers, body}} <- request(uri, ips, deadline, opts) do
       case status do
         200 ->
-          {:ok, body}
+          {:ok, {uri, headers, body}}
 
         status when status in @redirect_statuses ->
           redirect(uri, headers, redirects_left, deadline, opts)
@@ -272,7 +337,7 @@ defmodule Mindwendel.UrlPreview do
   defp request(uri, ips, deadline, opts) do
     with {:ok, conn} <- connect(uri, ips, deadline) do
       try do
-        headers = [{"host", host_header(uri)}, {"accept", "text/html"}]
+        headers = [{"host", host_header(uri)}, {"accept", opts[:accept]}]
 
         case Mint.HTTP.request(conn, "GET", request_target(uri), headers, nil) do
           {:ok, conn, ref} -> receive_response(conn, ref, {nil, [], [], 0}, deadline, opts)
@@ -433,16 +498,16 @@ defmodule Mindwendel.UrlPreview do
 
   defp remaining_time(deadline), do: max(deadline - System.monotonic_time(:millisecond), 0)
 
-  defp handle_parsing({:ok, parsed_document}) do
+  defp handle_parsing({:ok, parsed_document}, url) do
     {
       :ok,
       title: extract_title(parsed_document),
       description: extract_description(parsed_document),
-      img_preview_url: extract_img_preview(parsed_document)
+      img_preview_url: extract_img_preview(parsed_document, url)
     }
   end
 
-  defp handle_parsing({_, _}) do
+  defp handle_parsing({_, _}, _url) do
     {:error, @empty_preview}
   end
 
@@ -461,10 +526,28 @@ defmodule Mindwendel.UrlPreview do
     |> String.slice(0, 300)
   end
 
-  defp extract_img_preview(parsed_document) do
-    parsed_document
-    |> Floki.find("meta[property='og:image']")
-    |> Floki.attribute("content")
-    |> List.first() || ""
+  # Relative og:image urls are resolved against the page url, only http(s)
+  # urls are kept as only those can be fetched by fetch_image/2
+  defp extract_img_preview(parsed_document, url) do
+    img_url =
+      parsed_document
+      |> Floki.find("meta[property='og:image']")
+      |> Floki.attribute("content")
+      |> List.first("")
+      |> String.trim()
+
+    with true <- img_url != "",
+         {:ok, absolute_url} <- absolute_url(url, img_url),
+         {:ok, _uri} <- parse_url(absolute_url) do
+      absolute_url
+    else
+      _ -> ""
+    end
+  end
+
+  defp absolute_url(base, url) do
+    {:ok, base |> URI.merge(url) |> URI.to_string()}
+  rescue
+    _ -> :error
   end
 end

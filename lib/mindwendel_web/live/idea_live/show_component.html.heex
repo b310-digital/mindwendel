@@ -20,7 +20,12 @@
     <hr />
     <div class="row">
       <div class="col-md-3">
-        <img src={@idea.link.img_preview_url} class="preview-url" />
+        <img
+          :if={@idea.link.img_preview_url not in [nil, ""]}
+          src={~p"/links/#{@idea.link.id}/preview_image"}
+          alt=""
+          class="preview-url"
+        />
       </div>
       <div class="col-md-9">
         <p class="fw-bold">{@idea.link.title}</p>

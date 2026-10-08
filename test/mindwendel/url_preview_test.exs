@@ -9,21 +9,22 @@ defmodule MindwendelServices.UrlPreviewTest do
 
   describe "extract_url" do
     test "extracts the url with no other text" do
-      assert "http://myname.de" = UrlPreview.extract_url("http://myname.de")
+      assert "http://myname.test" = UrlPreview.extract_url("http://myname.test")
     end
 
     test "extracts the url with wrapping text" do
-      assert "http://myname.de" = UrlPreview.extract_url("Some text http://myname.de also here")
+      assert "http://myname.test" =
+               UrlPreview.extract_url("Some text http://myname.test also here")
     end
 
     test "extracts only the first url" do
-      assert "http://myname.de" =
-               UrlPreview.extract_url("http://myname.de http://someothername.de")
+      assert "http://myname.test" =
+               UrlPreview.extract_url("http://myname.test http://someothername.test")
     end
 
     test "extracts the url with query params" do
-      assert "http://myname.de/blog/1234sometest&query=test" =
-               UrlPreview.extract_url("http://myname.de/blog/1234sometest&query=test")
+      assert "http://myname.test/blog/1234sometest&query=test" =
+               UrlPreview.extract_url("http://myname.test/blog/1234sometest&query=test")
     end
 
     test "extracts empty string if no url is given" do
@@ -35,14 +36,14 @@ defmodule MindwendelServices.UrlPreviewTest do
     end
 
     test "extracts https urls" do
-      assert "https://secure.example.com" =
-               UrlPreview.extract_url("Check out https://secure.example.com")
+      assert "https://secure.example.test" =
+               UrlPreview.extract_url("Check out https://secure.example.test")
     end
 
     test "extracts urls with complex paths" do
-      assert "https://example.com/path/to/resource?foo=bar&baz=qux#anchor" =
+      assert "https://example.test/path/to/resource?foo=bar&baz=qux#anchor" =
                UrlPreview.extract_url(
-                 "https://example.com/path/to/resource?foo=bar&baz=qux#anchor"
+                 "https://example.test/path/to/resource?foo=bar&baz=qux#anchor"
                )
     end
   end
@@ -53,12 +54,78 @@ defmodule MindwendelServices.UrlPreviewTest do
         Plug.Conn.resp(
           conn,
           200,
-          "<html><title>Hi!</title><meta name='description' content='Some text'</meta><meta property='og:image' content='http//some.link.de'></meta></html>"
+          "<html><title>Hi!</title><meta name='description' content='Some text'</meta><meta property='og:image' content='https://some.link.test/image.png'></meta></html>"
         )
       end)
 
-      assert {:ok, title: "Hi!", description: "Some text", img_preview_url: "http//some.link.de"} =
+      assert {:ok,
+              title: "Hi!",
+              description: "Some text",
+              img_preview_url: "https://some.link.test/image.png"} =
                UrlPreview.fetch_url(endpoint_url(bypass.port) <> "/some_post")
+    end
+
+    test "resolves a relative og:image url against the page url", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/blog/post", fn conn ->
+        Plug.Conn.resp(conn, 200, "<html><meta property='og:image' content='/img.png'></html>")
+      end)
+
+      assert {:ok, title: "", description: "", img_preview_url: img_preview_url} =
+               UrlPreview.fetch_url("http://localhost:#{bypass.port}/blog/post")
+
+      assert img_preview_url == "http://localhost:#{bypass.port}/img.png"
+    end
+
+    test "resolves a relative og:image url against the url after redirects", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/old", fn conn ->
+        conn
+        |> Plug.Conn.put_resp_header("location", "/blog/post")
+        |> Plug.Conn.resp(301, "")
+      end)
+
+      Bypass.expect_once(bypass, "GET", "/blog/post", fn conn ->
+        Plug.Conn.resp(conn, 200, "<html><meta property='og:image' content='img.png'></html>")
+      end)
+
+      assert {:ok, title: "", description: "", img_preview_url: img_preview_url} =
+               UrlPreview.fetch_url("http://localhost:#{bypass.port}/old")
+
+      assert img_preview_url == "http://localhost:#{bypass.port}/blog/img.png"
+    end
+
+    test "resolves a protocol-relative og:image url with the scheme of the page", %{
+      bypass: bypass
+    } do
+      Bypass.expect_once(bypass, "GET", "/some_post", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          "<html><meta property='og:image' content='//cdn.test/x.png'></html>"
+        )
+      end)
+
+      assert {:ok, title: "", description: "", img_preview_url: "http://cdn.test/x.png"} =
+               UrlPreview.fetch_url(endpoint_url(bypass.port) <> "some_post")
+    end
+
+    test "drops og:image urls that are not http(s)", %{bypass: bypass} do
+      for img_url <- [
+            "javascript:alert(1)",
+            "data:image/png;base64,AAAA",
+            "ftp://host.test/a.png"
+          ] do
+        Bypass.expect_once(bypass, "GET", "/some_post", fn conn ->
+          Plug.Conn.resp(
+            conn,
+            200,
+            "<html><meta property='og:image' content='#{img_url}'></html>"
+          )
+        end)
+
+        assert {:ok, title: "", description: "", img_preview_url: ""} =
+                 UrlPreview.fetch_url(endpoint_url(bypass.port) <> "/some_post"),
+               img_url
+      end
     end
 
     test "fetches only the title", %{bypass: bypass} do
@@ -145,6 +212,87 @@ defmodule MindwendelServices.UrlPreviewTest do
       Bypass.down(bypass)
 
       assert {:error, _} = UrlPreview.fetch_url(endpoint_url(bypass.port) <> "/some_post")
+    end
+  end
+
+  describe "fetch_image" do
+    @png <<0x89, "PNG\r\n", 0x1A, "\n", "rest of the image">>
+
+    defp serve_image(bypass, content_type, body) do
+      Bypass.expect_once(bypass, "GET", "/image", fn conn ->
+        conn
+        |> Plug.Conn.put_resp_header("content-type", content_type)
+        |> Plug.Conn.resp(200, body)
+      end)
+
+      endpoint_url(bypass.port) <> "image"
+    end
+
+    test "returns the image and the content type detected from the magic bytes", %{
+      bypass: bypass
+    } do
+      images = [
+        {<<0xFF, 0xD8, 0xFF, 0xE0, "jpeg">>, "image/jpeg"},
+        {@png, "image/png"},
+        {"GIF89a gif", "image/gif"},
+        {"GIF87a gif", "image/gif"},
+        {"RIFF" <> <<0, 0, 0, 0>> <> "WEBPVP8 ", "image/webp"}
+      ]
+
+      for {body, content_type} <- images do
+        # The declared image type is not trusted, only the magic bytes are
+        url = serve_image(bypass, "image/svg+xml", body)
+        assert {:ok, ^content_type, ^body} = UrlPreview.fetch_image(url)
+      end
+    end
+
+    test "sends an image accept header", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/image", fn conn ->
+        assert Plug.Conn.get_req_header(conn, "accept") == [
+                 "image/jpeg,image/png,image/gif,image/webp"
+               ]
+
+        conn
+        |> Plug.Conn.put_resp_header("content-type", "image/png")
+        |> Plug.Conn.resp(200, @png)
+      end)
+
+      assert {:ok, "image/png", _} = UrlPreview.fetch_image(endpoint_url(bypass.port) <> "image")
+    end
+
+    test "accepts content type parameters and casing", %{bypass: bypass} do
+      url = serve_image(bypass, "Image/PNG; charset=binary", @png)
+      assert {:ok, "image/png", @png} = UrlPreview.fetch_image(url)
+    end
+
+    test "rejects responses without an image content type", %{bypass: bypass} do
+      url = serve_image(bypass, "text/html", @png)
+      assert {:error, :unsupported_image} = UrlPreview.fetch_image(url)
+    end
+
+    test "rejects images with unknown magic bytes", %{bypass: bypass} do
+      for body <- ["<svg onload='alert(1)'></svg>", "<html></html>", ""] do
+        url = serve_image(bypass, "image/png", body)
+        assert {:error, :unsupported_image} = UrlPreview.fetch_image(url), body
+      end
+    end
+
+    test "rejects images larger than max_body_size", %{bypass: bypass} do
+      url = serve_image(bypass, "image/png", @png <> String.duplicate("a", 1_000))
+      assert {:error, :response_too_large} = UrlPreview.fetch_image(url, max_body_size: 100)
+    end
+
+    test "accepts images of exactly max_body_size", %{bypass: bypass} do
+      url = serve_image(bypass, "image/png", @png)
+      size = byte_size(@png)
+      assert {:ok, "image/png", @png} = UrlPreview.fetch_image(url, max_body_size: size)
+    end
+
+    test "is protected against SSRF" do
+      assert {:error, :forbidden_address} =
+               UrlPreview.fetch_image("http://169.254.169.254/latest/meta-data", allowed_ips: [])
+
+      assert {:error, :invalid_url} = UrlPreview.fetch_image("file:///etc/passwd")
     end
   end
 
