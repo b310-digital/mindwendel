@@ -31,6 +31,7 @@ defmodule Mindwendel.Application do
       MindwendelWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Mindwendel.PubSub},
+      Mindwendel.RateLimiter,
       # Start the Endpoint (http/https)
       MindwendelWeb.Endpoint,
       Mindwendel.Services.Vault,

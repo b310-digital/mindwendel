@@ -51,7 +51,7 @@ defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
   end
 
   describe "csp directive 'img-src'" do
-    test "allows image resources via 'http' and 'https' and from anywhere to support preview link image feature",
+    test "allows images only from the app origin, data and blob urls",
          %{
            conn: conn,
            brainstorming: brainstorming
@@ -60,7 +60,7 @@ defmodule MindwendelWeb.ResponseHeaderContentSecurityPolicyTest do
 
       assert conn_response
              |> get_resp_header("content-security-policy")
-             |> List.first() =~ ~r/(img-src)\s+('self' data: https: blob:) ;/
+             |> List.first() =~ ~r/(img-src)\s+('self' data: blob:) ;/
     end
   end
 

@@ -1,6 +1,7 @@
 defmodule Mindwendel.Attachments do
   import Ecto.Query, warn: false
   alias Mindwendel.Attachments.File
+  alias Mindwendel.Attachments.Link
   alias Mindwendel.Repo
   alias Mindwendel.Services.StorageService
 
@@ -17,6 +18,19 @@ defmodule Mindwendel.Attachments do
   """
   def get_attached_file(id) do
     Repo.get(File, id)
+  end
+
+  @doc """
+  Gets a single link
+
+  ## Examples
+
+      iex> get_link("0323906b-b496-4778-ae67-1dd779d3de3c")
+      %Link{ ... }
+
+  """
+  def get_link(id) do
+    Repo.get(Link, id)
   end
 
   @doc """
