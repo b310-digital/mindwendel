@@ -55,7 +55,7 @@ defmodule Mindwendel.MixProject do
       {:phoenix, "1.8.9"},
       {:phoenix_ecto, "4.7.0"},
       {:phoenix_html, "~> 4.1"},
-      {:phoenix_live_reload, "1.6.2", only: :dev},
+      {:phoenix_live_reload, "1.7.0", only: :dev},
       {:phoenix_live_view, "~> 1.2.12"},
       {:esbuild, "0.10.0", runtime: Mix.env() == :dev},
       {:dart_sass, "0.7.0", runtime: Mix.env() == :dev},
@@ -65,14 +65,14 @@ defmodule Mindwendel.MixProject do
       {:floki, "0.38.4"},
       {:gettext, "0.26.2"},
       {:jason, "1.4.5"},
-      {:oban, "2.23.0"},
+      {:oban, "2.24.1"},
       {:plug_cowboy, "2.9.0"},
       {:cowboy, "2.19.0"},
       {:postgrex, "0.22.4"},
-      {:sobelow, "0.14.1", only: [:dev, :test], runtime: false},
+      {:sobelow, "0.16.0", only: [:dev, :test], runtime: false},
       {:credo, "1.7.19", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18"},
-      {:telemetry_metrics, "1.1.0"},
+      {:telemetry_metrics, "1.2.0"},
       {:telemetry_poller, "1.3.0"},
       {:timex, "3.7.13"},
       {:logger_json, "7.0.4"},
@@ -84,8 +84,8 @@ defmodule Mindwendel.MixProject do
       {:ex_aws_s3, "2.5.9"},
       {:cloak, "1.1.4"},
       {:lazy_html, ">= 0.1.0", only: :test},
-      {:openai_ex, "0.9.21"},
-      {:mox, "1.2.0", only: :test}
+      {:openai_ex, "0.9.22"},
+      {:mox, "1.3.2", only: :test}
     ]
   end
 
