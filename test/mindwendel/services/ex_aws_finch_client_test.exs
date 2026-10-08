@@ -1,7 +1,7 @@
-defmodule Mindwendel.Services.ExAwsMintClientTest do
+defmodule Mindwendel.Services.ExAwsFinchClientTest do
   use ExUnit.Case, async: true
 
-  alias Mindwendel.Services.ExAwsMintClient
+  alias Mindwendel.Services.ExAwsFinchClient
 
   # Accepts one connection, forwards the raw request to the test process and
   # answers with the given raw response
@@ -29,7 +29,7 @@ defmodule Mindwendel.Services.ExAwsMintClientTest do
       start_server("HTTP/1.1 200 OK\r\ncontent-length: 5\r\nx-amz-request-id: 1\r\n\r\nhello")
 
     assert {:ok, %{status_code: 200, headers: headers, body: "hello"}} =
-             ExAwsMintClient.request(
+             ExAwsFinchClient.request(
                :put,
                url <> "/bucket/key?acl=1",
                "data",
@@ -49,14 +49,14 @@ defmodule Mindwendel.Services.ExAwsMintClientTest do
       start_server("HTTP/1.1 100 Continue\r\n\r\nHTTP/1.1 204 No Content\r\nx-final: 1\r\n\r\n")
 
     assert {:ok, %{status_code: 204, headers: [{"x-final", "1"}], body: ""}} =
-             ExAwsMintClient.request(:delete, url <> "/bucket/key", "", [], [])
+             ExAwsFinchClient.request(:delete, url <> "/bucket/key", "", [], [])
   end
 
   test "accepts a body delimited by the server closing the connection" do
     url = start_server("HTTP/1.1 200 OK\r\nconnection: close\r\n\r\nuntil closed")
 
     assert {:ok, %{status_code: 200, body: "until closed"}} =
-             ExAwsMintClient.request(:get, url <> "/bucket/key", "", [], [])
+             ExAwsFinchClient.request(:get, url <> "/bucket/key", "", [], [])
   end
 
   test "returns a timeout when the storage does not answer in time" do
@@ -64,7 +64,7 @@ defmodule Mindwendel.Services.ExAwsMintClientTest do
 
     {time_us, result} =
       :timer.tc(fn ->
-        ExAwsMintClient.request(:get, url <> "/bucket/key", "", [], timeout: 100)
+        ExAwsFinchClient.request(:get, url <> "/bucket/key", "", [], timeout: 100)
       end)
 
     assert result == {:error, %{reason: :timeout}}
@@ -75,7 +75,7 @@ defmodule Mindwendel.Services.ExAwsMintClientTest do
     url = start_server("SECRET garbage\r\n\r\n")
 
     assert {:error, %{reason: :invalid_status_line}} =
-             ExAwsMintClient.request(:get, url <> "/bucket/key", "", [], [])
+             ExAwsFinchClient.request(:get, url <> "/bucket/key", "", [], [])
   end
 
   test "returns an error when the storage is unreachable" do
@@ -84,6 +84,6 @@ defmodule Mindwendel.Services.ExAwsMintClientTest do
     :gen_tcp.close(listen)
 
     assert {:error, %{reason: :econnrefused}} =
-             ExAwsMintClient.request(:get, "http://localhost:#{port}/bucket/key", "", [], [])
+             ExAwsFinchClient.request(:get, "http://localhost:#{port}/bucket/key", "", [], [])
   end
 end

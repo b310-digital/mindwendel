@@ -32,6 +32,10 @@ defmodule Mindwendel.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Mindwendel.PubSub},
       Mindwendel.RateLimiter,
+      # HTTP connection pool for the object storage (see ExAwsFinchClient).
+      # The request timeout there does not include connecting.
+      {Finch,
+       name: Mindwendel.Finch, pools: %{default: [conn_opts: [transport_opts: [timeout: 8_000]]]}},
       # Start the Endpoint (http/https)
       MindwendelWeb.Endpoint,
       Mindwendel.Services.Vault,

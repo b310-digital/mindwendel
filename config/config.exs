@@ -38,7 +38,7 @@ config :phoenix, :json_library, Jason
 # ExAws defaults to hackney, which is not a dependency. Retries are reduced so
 # a failing upload returns an error before the LiveView push times out.
 config :ex_aws,
-  http_client: Mindwendel.Services.ExAwsMintClient,
+  http_client: Mindwendel.Services.ExAwsFinchClient,
   retries: [max_attempts: 3, base_backoff_in_ms: 100, max_backoff_in_ms: 1_000]
 
 config :esbuild,
