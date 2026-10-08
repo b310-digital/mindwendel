@@ -146,11 +146,18 @@ mix gettext.extract --merge
   ```
 
 - Adjust all configs in `.env.prod`, e.g. database settings, ports, disable ssl env vars if necessary
+  - `DOCKER_COMPOSE_APP_PROD_OBJECT_STORAGE_USER`, `DOCKER_COMPOSE_APP_PROD_OBJECT_STORAGE_PASSWORD` and `DOCKER_COMPOSE_APP_PROD_VAULT_ENCRYPTION_KEY_BASE64` are required, docker compose refuses to start without them. The storage credentials are used by both mindwendel and rustfs, so pick a long random password. See [File Storage](#file-storage) for generating the vault key.
 
 - Start everything at once (including a forced build):
 
   ```bash
   docker compose --file docker-compose-prod.yml --env-file .env.prod up -d --build --force-recreate
+  ```
+
+- Create the storage bucket (only once). rustfs is only reachable inside the docker compose network, so the bucket is created through the app container:
+
+  ```bash
+  docker compose --file docker-compose-prod.yml --env-file .env.prod exec app_prod /app/bin/mindwendel rpc 'ExAws.S3.put_bucket("mindwendel", "local") |> ExAws.request!() |> IO.inspect()'
   ```
 
 - Open the browser and go to `http://${URL_HOST}`
@@ -160,6 +167,7 @@ mix gettext.extract --merge
 - The url has to match the env var `URL_HOST`; so http://localhost will not work when your `URL_HOST=0.0.0.0`
 - The mindwendel production configuration is setup to enforce ssl, see Mindwendel.Endpoint configuration in `config/prod.exs`
 - The mindwendel production configuration supports deployment behind a reverse porxy (load balancer) by parsing the proper protocol from the x-forwarded-\* header of incoming requests, see `config/prod.exs`
+- Upgrading from the former MinIO setup: rustfs uses a new docker volume and starts empty. Copy your existing objects (e.g. from `~/minio/data`) into the `mindwendel` bucket before switching, otherwise existing attachments can no longer be loaded.
 - If you are having troubles during setup, please raise an issue.
 
 ### Build release and production docker image
@@ -214,7 +222,7 @@ OBJECT_STORAGE_PASSWORD: ...
 VAULT_ENCRYPTION_KEY_BASE64: ...
 ```
 
-There is an example given inside the `docker-compose.yml` with a docker compose rustfs setup.
+There is an example given inside the `docker-compose.yml` (development) and `docker-compose-prod.yml` (production) with a docker compose rustfs setup. In production, rustfs publishes no ports and is only reachable by the app over the internal docker compose network, which is why `OBJECT_STORAGE_SCHEME` is `http://`. Use `https://` only for an external s3 storage that serves TLS.
 
 To deactivate file storage, use `MW_FEATURE_IDEA_FILE_UPLOAD` (defaults to `true`) and set it to `false`.
 

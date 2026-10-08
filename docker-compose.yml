@@ -64,8 +64,8 @@ services:
       RUSTFS_CONSOLE_PASSWORD: ${DOCKER_COMPOSE_RUSTFS_PASSWORD:-rustfsadmin}
       RUSTFS_REGION: local
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
     volumes:
       - rustfs_data:/data
 
@@ -79,7 +79,7 @@ services:
       POSTGRES_PASSWORD: ${DOCKER_COMPOSE_POSTGRES_PASSWORD:-mindwendel-user-password}
       POSTGRES_PORT: ${DOCKER_COMPOSE_POSTGRES_PORT:-5432}
     ports:
-      - "${DOCKER_COMPOSE_POSTGRES_PORT_PUBLISHED:-5432}:${DOCKER_COMPOSE_POSTGRES_PORT:-5432}"
+      - "127.0.0.1:${DOCKER_COMPOSE_POSTGRES_PORT_PUBLISHED:-5432}:${DOCKER_COMPOSE_POSTGRES_PORT:-5432}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
