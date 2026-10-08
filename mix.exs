@@ -77,6 +77,7 @@ defmodule Mindwendel.MixProject do
       {:timex, "3.7.13"},
       {:logger_json, "7.0.4"},
       {:mint, "1.11.0"},
+      {:finch, "0.24.0"},
       {:libcluster, "3.5.0"},
       {:tzdata, "1.2.2"},
       {:ex_aws, "2.7.0"},
