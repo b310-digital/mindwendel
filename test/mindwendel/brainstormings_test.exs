@@ -403,13 +403,13 @@ defmodule Mindwendel.BrainstormingsTest do
           lane: lane
         )
 
-      link = Factory.insert!(:link, idea: idea, url: "https://example.com")
+      link = Factory.insert!(:link, idea: idea, url: "http://127.0.0.1/example")
 
       preloaded_idea = Brainstormings.preload_idea_for_broadcast(idea)
 
       assert Ecto.assoc_loaded?(preloaded_idea.link)
       assert preloaded_idea.link.id == link.id
-      assert preloaded_idea.link.url == "https://example.com"
+      assert preloaded_idea.link.url == "http://127.0.0.1/example"
     end
 
     test "preloads associations for an idea with likes", %{
@@ -507,7 +507,7 @@ defmodule Mindwendel.BrainstormingsTest do
         )
 
       # Add all types of associations
-      link = Factory.insert!(:link, idea: idea, url: "https://example.com")
+      link = Factory.insert!(:link, idea: idea, url: "http://127.0.0.1/example")
       like = Factory.insert!(:like, idea: idea, user: user)
       label = Enum.at(brainstorming.labels, 0)
       {:ok, _idea_idea_label} = IdeaLabels.add_idea_label_to_idea(idea, label.id)
@@ -573,7 +573,7 @@ defmodule Mindwendel.BrainstormingsTest do
         )
 
       # Add associations
-      Factory.insert!(:link, idea: idea, url: "https://example.com")
+      Factory.insert!(:link, idea: idea, url: "http://127.0.0.1/example")
       Factory.insert!(:like, idea: idea, user: user)
       Factory.insert!(:comment, idea: idea, body: "Test comment")
 
