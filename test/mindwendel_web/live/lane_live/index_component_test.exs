@@ -4,8 +4,9 @@ defmodule MindwendelWeb.LaneLive.IndexComponentTest do
   import Phoenix.LiveViewTest
 
   alias Mindwendel.Accounts
+  alias Mindwendel.Brainstormings.Lane
   alias Mindwendel.Factory
-  alias Mindwendel.Lanes
+  alias Mindwendel.Repo
 
   setup %{conn: conn} do
     disable_ai()
@@ -37,7 +38,7 @@ defmodule MindwendelWeb.LaneLive.IndexComponentTest do
     |> element("a[title='Delete lane']")
     |> render_click()
 
-    assert Lanes.get_lane(lane.id) == nil
+    assert Repo.get(Lane, lane.id) == nil
   end
 
   test "moderator cannot delete a lane from another brainstorming", %{
@@ -60,6 +61,6 @@ defmodule MindwendelWeb.LaneLive.IndexComponentTest do
     |> render_click(%{"id" => other_lane.id})
 
     # The other lane must still exist
-    assert Lanes.get_lane(other_lane.id) != nil
+    assert Repo.get(Lane, other_lane.id) != nil
   end
 end

@@ -132,12 +132,14 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
   end
 
   @impl true
-  def handle_params(
-        params,
-        _uri,
-        socket
-      ) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  def handle_params(params, uri, socket) do
+    # A patch can point to another brainstorming than the mounted one. In that case
+    # remount the LiveView, so that the url and the shown brainstorming match.
+    if (params["id"] || params["brainstorming_id"]) == socket.assigns.brainstorming.id do
+      {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    else
+      {:noreply, push_navigate(socket, to: URI.parse(uri).path)}
+    end
   end
 
   @impl true
@@ -333,49 +335,39 @@ defmodule MindwendelWeb.BrainstormingLive.Show do
     end
   end
 
-  defp apply_action(
-         socket,
-         :edit_idea,
-         %{"brainstorming_id" => _brainstorming_id, "idea_id" => idea_id}
-       ) do
-    socket
-    |> assign(:idea, Ideas.get_idea!(idea_id))
+  # Records are always looked up within the mounted brainstorming. Ids of records
+  # belonging to other brainstormings result in an Ecto.NoResultsError (404).
+  defp apply_action(socket, :edit_idea, %{"idea_id" => idea_id}) do
+    assign(socket, :idea, Ideas.get_idea!(idea_id, socket.assigns.brainstorming.id))
   end
 
-  defp apply_action(
-         socket,
-         :show_idea,
-         %{"brainstorming_id" => _brainstorming_id, "idea_id" => idea_id}
-       ) do
-    socket
-    |> assign(:idea, Ideas.get_idea!(idea_id))
+  defp apply_action(socket, :show_idea, %{"idea_id" => idea_id}) do
+    assign(socket, :idea, Ideas.get_idea!(idea_id, socket.assigns.brainstorming.id))
   end
 
-  defp apply_action(
-         socket,
-         :edit_lane,
-         %{"brainstorming_id" => _brainstorming_id, "lane_id" => lane_id}
-       ) do
-    socket
-    |> assign(:lane, Lanes.get_lane!(lane_id))
+  defp apply_action(socket, :edit_lane, %{"lane_id" => lane_id}) do
+    assign(socket, :lane, Lanes.get_lane!(lane_id, socket.assigns.brainstorming.id))
   end
 
-  defp apply_action(socket, :new_idea, %{"id" => id, "lane_id" => lane_id}) do
+  defp apply_action(socket, :new_idea, %{"lane_id" => lane_id}) do
+    %{brainstorming: brainstorming, current_user: current_user} = socket.assigns
+    lane = Lanes.get_lane!(lane_id, brainstorming.id)
+
     socket
-    |> assign(:page_title, gettext("%{name} - New Idea", name: socket.assigns.brainstorming.name))
+    |> assign(:page_title, gettext("%{name} - New Idea", name: brainstorming.name))
     |> assign(:idea, %Idea{
-      brainstorming_id: id,
-      lane_id: lane_id,
-      username: socket.assigns.current_user.username
+      brainstorming_id: brainstorming.id,
+      lane_id: lane.id,
+      username: current_user.username
     })
   end
 
-  defp apply_action(socket, :new_lane, %{"id" => brainstorming_id}) do
+  defp apply_action(socket, :new_lane, _params) do
+    brainstorming = socket.assigns.brainstorming
+
     socket
-    |> assign(:page_title, gettext("%{name} - New Lane", name: socket.assigns.brainstorming.name))
-    |> assign(:lane, %Lane{
-      brainstorming_id: brainstorming_id
-    })
+    |> assign(:page_title, gettext("%{name} - New Lane", name: brainstorming.name))
+    |> assign(:lane, %Lane{brainstorming_id: brainstorming.id})
   end
 
   defp apply_action(socket, :show, _params) do

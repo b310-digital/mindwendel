@@ -19,7 +19,7 @@ defmodule Mindwendel.LanesTest do
     %{brainstorming: brainstorming, lane: lane, label: label}
   end
 
-  test "get_lane!/1 returns the lane with given id" do
+  test "get_lane!/2 returns the lane with given id" do
     lane =
       lane_fixture()
       |> Repo.preload(
@@ -31,7 +31,7 @@ defmodule Mindwendel.LanesTest do
         ]
       )
 
-    assert Lanes.get_lane!(lane.id) == lane
+    assert Lanes.get_lane!(lane.id, lane.brainstorming_id) == lane
   end
 
   test "get_lanes_for_brainstorming_with_labels_filtered/1 returns the lanes with filtered ideas",
@@ -153,7 +153,7 @@ defmodule Mindwendel.LanesTest do
   test "delete_lane/1 deletes the lane" do
     lane = lane_fixture()
     assert {:ok, %Lane{}} = Lanes.delete_lane(lane)
-    assert_raise Ecto.NoResultsError, fn -> Lanes.get_lane!(lane.id) end
+    assert_raise Ecto.NoResultsError, fn -> Repo.get!(Lane, lane.id) end
   end
 
   test "delete_lane/1 deletes ideas and attachments" do
@@ -178,5 +178,43 @@ defmodule Mindwendel.LanesTest do
   test "change_lane/1 returns a lane changeset" do
     lane = lane_fixture()
     assert %Ecto.Changeset{} = Lanes.change_lane(lane)
+  end
+
+  describe "scoping lanes to their brainstorming" do
+    setup %{brainstorming: brainstorming} do
+      other_brainstorming = Factory.insert!(:brainstorming)
+      other_lane = Enum.at(other_brainstorming.lanes, 0)
+
+      %{
+        brainstorming: brainstorming,
+        other_brainstorming: other_brainstorming,
+        other_lane: other_lane
+      }
+    end
+
+    test "get_lane!/2 returns the lane of the given brainstorming", %{
+      brainstorming: brainstorming,
+      lane: lane
+    } do
+      assert Lanes.get_lane!(lane.id, brainstorming.id).id == lane.id
+    end
+
+    test "get_lane!/2 raises for a lane of another brainstorming", %{
+      brainstorming: brainstorming,
+      other_lane: other_lane
+    } do
+      assert_raise Ecto.NoResultsError, fn ->
+        Lanes.get_lane!(other_lane.id, brainstorming.id)
+      end
+    end
+
+    test "get_lane/2 returns nil for a lane of another brainstorming", %{
+      brainstorming: brainstorming,
+      lane: lane,
+      other_lane: other_lane
+    } do
+      assert Lanes.get_lane(lane.id, brainstorming.id).id == lane.id
+      assert Lanes.get_lane(other_lane.id, brainstorming.id) == nil
+    end
   end
 end

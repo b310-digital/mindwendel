@@ -8,12 +8,10 @@ defmodule MindwendelWeb.LaneLive.IndexComponent do
 
   @impl true
   def handle_event("delete_lane", %{"id" => id}, socket) do
-    lane = Lanes.get_lane(id)
-
     %{current_user: current_user, brainstorming: brainstorming} = socket.assigns
+    lane = Lanes.get_lane(id, brainstorming.id)
 
-    if lane && lane.brainstorming_id == brainstorming.id &&
-         has_moderating_permission(brainstorming.id, current_user) do
+    if lane && has_moderating_permission(lane.brainstorming_id, current_user) do
       {:ok, _} = Lanes.delete_lane(lane)
     end
 

@@ -13,6 +13,8 @@ defmodule Mindwendel.Ideas do
 
   require Logger
 
+  @idea_preloads [:idea_labels, :files, :link, :comments]
+
   @doc """
   Returns the max position order for either ideas and given labels or a lane
 
@@ -284,7 +286,52 @@ defmodule Mindwendel.Ideas do
 
   """
   def get_idea!(id),
-    do: Repo.get!(Idea, id) |> Repo.preload([:idea_labels, :files, :link, :comments])
+    do: Repo.get!(Idea, id) |> Repo.preload(@idea_preloads)
+
+  @doc """
+  Gets a single idea belonging to the given brainstorming.
+
+  Use this function whenever the id originates from user input (URL or event params)
+  to make sure that ideas of other brainstormings cannot be accessed.
+
+  Raises `Ecto.NoResultsError` if the Idea does not exist within the brainstorming.
+
+  ## Examples
+
+      iex> get_idea!(idea_id, brainstorming_id)
+      %Idea{}
+
+      iex> get_idea!(idea_id_of_other_brainstorming, brainstorming_id)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_idea!(id, brainstorming_id) do
+    Idea
+    |> where(brainstorming_id: ^brainstorming_id)
+    |> Repo.get!(id)
+    |> Repo.preload(@idea_preloads)
+  end
+
+  @doc """
+  Gets a single idea belonging to the given brainstorming.
+
+  Returns `nil` if the Idea does not exist within the brainstorming.
+
+  ## Examples
+
+      iex> get_idea(idea_id, brainstorming_id)
+      %Idea{}
+
+      iex> get_idea(idea_id_of_other_brainstorming, brainstorming_id)
+      nil
+
+  """
+  def get_idea(id, brainstorming_id) do
+    case Repo.get_by(Idea, id: id, brainstorming_id: brainstorming_id) do
+      nil -> nil
+      idea -> Repo.preload(idea, @idea_preloads)
+    end
+  end
 
   @doc """
   Creates a idea.
