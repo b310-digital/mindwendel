@@ -27,18 +27,13 @@ defmodule Mindwendel.Services.StorageService do
             decrypt_response_body(response.body)
 
           _ ->
-            Logger.error(
-              "Issue while loading file. Response code: #{response.status_code} Response Body: #{response.body}"
-            )
+            Logger.error("Issue while loading file. Response code: #{response.status_code}")
 
             {:error, "Issue while loading file."}
         end
 
-      {:error, {error_type, http_status_code, response}} ->
-        Logger.error(
-          "Issue while loading file. Error type: #{error_type} Response code: #{http_status_code} Response Body: #{response.body}"
-        )
-
+      {:error, reason} ->
+        Logger.error("Issue while loading file: #{describe_error(reason)}")
         {:error, "Issue while loading file."}
     end
   end
@@ -49,11 +44,8 @@ defmodule Mindwendel.Services.StorageService do
         Logger.info("Successfully deleted file #{path}.")
         {:ok}
 
-      {:error, {error_type, http_status_code, response}} ->
-        Logger.error(
-          "Error type: #{error_type} Response code: #{http_status_code} Response Body: #{response.body}"
-        )
-
+      {:error, reason} ->
+        Logger.error("Issue while deleting file: #{describe_error(reason)}")
         {:error, "Files not deleted"}
     end
   end
@@ -72,14 +64,28 @@ defmodule Mindwendel.Services.StorageService do
       {:ok, _headers} ->
         {:ok, encrypted_file_path}
 
-      {:error, {error_type, http_status_code, response}} ->
+      {:error, reason} ->
         Logger.error(
-          "Error storing file in bucket: #{filename} Type: #{content_type}. Error type: #{error_type} Response code: #{http_status_code} Response Body: #{response.body}"
+          "Error storing file in bucket: #{filename} Type: #{content_type}. Reason: #{describe_error(reason)}"
         )
 
         {:error, "Issue while storing file."}
     end
   end
+
+  # Only log the error kind, since storage errors can contain response bodies
+  # and headers of the object storage
+  defp describe_error({:http_error, status, _response}), do: "HTTP #{status}"
+  defp describe_error(reason) when is_atom(reason), do: Atom.to_string(reason)
+
+  defp describe_error(reason) when is_tuple(reason) and is_atom(elem(reason, 0)),
+    do: Atom.to_string(elem(reason, 0))
+
+  # Typed AWS errors, e.g. {"ThrottlingException", message}
+  defp describe_error(reason) when is_tuple(reason) and is_binary(elem(reason, 0)),
+    do: String.slice(elem(reason, 0), 0, 100)
+
+  defp describe_error(_reason), do: "unknown error"
 
   defp decrypt_response_body(body) do
     case Vault.decrypt(body) do
