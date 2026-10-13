@@ -27,6 +27,7 @@
 !.git/refs
 
 # Common development/test artifacts
+/benchmark/
 /cover/
 /doc/
 /test/
