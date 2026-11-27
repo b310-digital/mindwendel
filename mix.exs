@@ -52,7 +52,7 @@ defmodule Mindwendel.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "1.8.9"},
+      {:phoenix, "1.8.17"},
       {:phoenix_ecto, "4.7.0"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "1.6.2", only: :dev},
@@ -67,7 +67,7 @@ defmodule Mindwendel.MixProject do
       {:jason, "1.4.5"},
       {:oban, "2.23.0"},
       {:plug_cowboy, "2.9.0"},
-      {:cowboy, "2.19.0"},
+      {:cowboy, "2.21.0"},
       {:postgrex, "0.22.4"},
       {:sobelow, "0.14.1", only: [:dev, :test], runtime: false},
       {:credo, "1.7.19", only: [:dev, :test], runtime: false},
@@ -80,8 +80,8 @@ defmodule Mindwendel.MixProject do
       {:finch, "0.24.0"},
       {:libcluster, "3.5.0"},
       {:tzdata, "1.2.2"},
-      {:ex_aws, "2.7.0"},
-      {:ex_aws_s3, "2.5.9"},
+      {:ex_aws, "2.8.2"},
+      {:ex_aws_s3, "2.6.1"},
       {:cloak, "1.1.4"},
       {:lazy_html, ">= 0.1.0", only: :test},
       {:openai_ex, "0.9.21"},
